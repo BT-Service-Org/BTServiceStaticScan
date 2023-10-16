@@ -1,0 +1,14 @@
+<template>
+    <template for:each={projects} for:item="project">
+        <c-solution-finder-project key={project.id} project={project} onselect={handleProjectSelected}></c-solution-finder-project>
+    </template>
+    <!--
+    <div slot="footer" class="slds-text-align_center slds-p-vertical_small">
+        <lightning-button-group>
+            <lightning-input type="Text" onkeyup={handleNewProjectKeyUp} variant="label-hidden"
+                placeholder="New Project Name" class="slds-m-right_small" style="width: 200px;"></lightning-input>
+            <lightning-button label="Create" onclick={handleCreateProjectClick}></lightning-button>
+        </lightning-button-group>
+    </div>
+    -->
+</template>

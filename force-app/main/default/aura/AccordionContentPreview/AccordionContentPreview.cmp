@@ -1,0 +1,31 @@
+<aura:component controller="AccordionContentPreviewController" access="global">
+    
+    <aura:attribute name="Preview" type="string" />
+    <aura:attribute name="ContentDocumentId" type="string" />
+    <aura:attribute name="ContentVersionId" type="string" />
+    <aura:attribute name="ContentDocumentExternalId" type="string" />
+    <aura:attribute name="IconPreviewUrl" type="string" />
+    <aura:attribute name="ImgSrc" type="string" />
+    <aura:handler name="init" value="{!this}" action="{!c.getPreviewFromServer}" />
+    <aura:attribute name="unknown" type="String" default="/Icons/UNKNOWN@2x.png"/>
+    
+    <aura:if isTrue="{!v.IconPreviewUrl}"> 
+        <div class="slds-col slds-size_12-of-12" style="text-align:center;">
+            <div style="padding-top:6px;padding-left:6px;padding-right:6px;padding-bottom:50px;width:100%;display:block;">
+                <img src="{!$Resource.The_Station_Icons + v.IconPreviewUrl}" class="preview" style="margin-bottom:15px;margin-top:15px;max-width:600px;max-height:340px;width:auto;height:auto;" alt="" onerror="this.style.display='none'"/>
+                <br/>
+                <div>No Preview Available :( <br/>
+                    Click <b>View Content</b> to open
+                </div>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.ImgSrc}">
+                <img src="{!v.ImgSrc}" class="preview" style="max-width:600px;max-height:340px;display:block;width:auto;height:auto;" alt="" onerror="this.style.display='none'"/>
+                <aura:set attribute="else">
+                    <img src="{!$Resource.The_Station_Icons + v.unknown}" class="preview" style="width:auto !important;height:auto !important;max-width:600px;max-height:340px;" alt="" onerror="this.style.display='none'"/>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

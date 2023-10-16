@@ -1,0 +1,28 @@
+<aura:component controller="The_Station_ContentFavoriteController">
+
+    <aura:attribute name="divStyle" type="String" default="float:left;margin-right:6px;margin-bottom:6px;" />
+    <aura:attribute name="showButton" type="boolean" default="true" />
+    <aura:attribute name="iconName" type="String" default="custom:custom1" />
+    <aura:attribute name="contentName" type="String" />
+    <aura:attribute name="contentRecordId" type="String" />
+    <aura:attribute name="contentFavoriteState" type="boolean" default="false" />
+    <aura:attribute name="buttonAltText" type="String" default="Favorite" />
+    <aura:attribute name="runningUserInput" type="String" />        
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />            
+    <aura:attribute name="buttonStyle" type="String" />
+    
+    <aura:registerEvent name="appEvent" type="c:The_Station_ContentFavoriteEvent"/>
+    <aura:handler event="c:The_Station_ContentFavoriteEvent" action="{!c.handleApplicationEvent}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div style="{!v.divStyle}">
+        <aura:if isTrue="{!v.showButton}">
+            <lightning:buttonIconStateful style="{!v.buttonStyle}" class="{!v.buttonTheme}" iconName="{!v.iconName}" name="{!v.contentRecordId}" value="{!v.contentRecordId}" selected="{!v.contentFavoriteState}" onclick="{!c.handleFavoriteButtonClick}" alternativeText="{!v.buttonAltText}" />
+            <aura:set attribute="else">
+                <lightning:buttonIconStateful style="{!v.buttonStyle}" class="{!v.buttonThemeDisabled}" iconName="{!v.iconName}" alternativeText="{!v.buttonAltText}" disabled="true"/>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

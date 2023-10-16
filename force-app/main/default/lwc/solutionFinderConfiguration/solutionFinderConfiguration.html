@@ -1,0 +1,13 @@
+<template>
+    
+    <lightning-input if:true={property.displayOnKeyUpInput} data-id="keyup" key={property.name} type={property.dataType}
+        label={property.title} value={defaultValue} onkeyup={handleKeyUp}></lightning-input>
+    <lightning-input if:true={property.displayOnChangeInput} data-id="change" key={property.name} type={property.dataType}
+        label={property.title} value={defaultValue} onchange={handleChange}></lightning-input>
+    <div if:true={property.displayCheckedInput} class="slds-p-vertical_x-small">
+        <lightning-input data-id="checkbox" key={property.name} type={property.dataType}
+            label={property.title} checked={isChecked} onchange={handleCheck}></lightning-input>
+    </div>
+    <lightning-textarea if:true={property.displayTextarea} data-id="textarea" key={property.name} label={property.title}
+        value={defaultValue} onkeyup={handleKeyUp}></lightning-textarea>
+</template>

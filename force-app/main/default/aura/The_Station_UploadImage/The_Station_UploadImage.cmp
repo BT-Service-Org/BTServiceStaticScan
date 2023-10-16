@@ -1,0 +1,113 @@
+<aura:component controller="StationindividualProfileController" 
+                implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:actionOverride" 
+                access="global" >
+    
+    
+    
+    <aura:attribute name="visibilityMap" type="Map"/>
+    <aura:attribute name="contentTypeMap" type="Map"/>
+    
+    <aura:attribute name="accept" type="List" default="['.ppt']"/>
+    <aura:attribute name="multiple" type="Boolean" default="true"/>
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+
+    
+  
+    <aura:attribute name="content" type="Station_Content__c" default="{'sobjectType': 'Station_Content__c',
+                                                                      'Name':'',
+                                                                      'Content_URL__c':'',
+                                                                      'Content_Type__c':'',
+                                                                      'Visibility__c':'',
+                                                                      'Description__c ':'',
+                                                                      'Primary_Contact__c ':'',
+                                                                      'Display_Image_URL__c ':''}" access="GLOBAL"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <article class="slds-card"> 
+        <div class="inlineTitle slds-p-top--large slds-p-horizontal--medium slds-p-bottom--medium slds-text-heading--medium slds-border_bottom" style="text-align: center">
+            New Station Content
+        </div>
+        <div class="slds-box slds-box_x-small" style="background-color: #f8f8f8">
+            <strong>Information</strong>
+        </div>
+        <lightning:layoutItem padding="around-small" size="12">
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small" size="6">
+                    <div class="slds-form-element slds-is-required" style="margin-top:5px">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">*</abbr>Content Name</label>
+                        
+                        
+                        <ui:inputText class="slds-input" value="{!v.content.Name}"/>
+                    </div>
+                    <div class="slds-form-element" style="margin-top:2px">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">*</abbr>Content URL</label>
+                        
+                        <ui:inputText class="slds-input" value="{!v.content.Content_URL__c}"/>
+                    </div>
+                    
+                    
+                    
+                    
+                    <div class="form-group">
+                        <lightning:select aura:id="contentTypePicklist" value="{!v.content.Content_Type__c}" onchange="{!c.handleCompanyOnChange}" name="contentTypePicklist" label="Content Type" required="true">
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.contentTypeMap}" var="ind" indexVar="key">
+                                <option text="{!ind.value}" value="{!ind.key}" selected="{!ind.key==v.content.Content_Type__c}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    
+                    
+                    
+                    <div class="form-group">
+                        <lightning:select aura:id="visibilityPicklist" value="{!v.content.Visibility__c}" onchange="{!c.handleCompanyOnChange}" name="visibilityPicklist" label="Visibility" required="true">
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.visibilityMap}" var="ind" indexVar="key">
+                                <option text="{!ind.value}" value="{!ind.key}" selected="{!ind.key==v.content.Visibility__c}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    
+                    
+                    
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="6">
+                    <div class="slds-form-element" style="margin-top:2px">
+                        <label class="slds-form-element__label">Description</label>
+                        <ui:inputText class="slds-input" value="{!v.content.Description__c}"/>
+                    </div>
+                    <div class="slds-form-element" style="margin-top:2px">
+                        <label class="slds-form-element__label">Primary Contact</label>
+                        <ui:inputText class="slds-input" value="{!v.content.Primary_Contact__c}"/>
+                    </div>
+                    <div class="slds-form-element" style="margin-top:2px">
+                        <label class="slds-form-element__label">Display Image URL</label>
+                        <ui:inputText class="slds-input" value="{!v.content.Display_Image_URL__c}"/>
+                    </div>
+                    
+                    
+                    <lightning:fileUpload  name="fileUploader"
+                           label= "Demo Upload"
+                           multiple="{!v.multiple}"
+                           accept="{!v.accept}"
+                           disabled="{!v.disabled}"
+                           recordId="{!v.recordId}"
+                           onuploadfinished="{! c.handleUploadFinished }"/>
+    
+                    
+                    
+                    
+                    
+                    
+                    <div class="col-md-4 text-center" style="margin-top:15px">
+                        <ui:button class="slds-button slds-button--brand" press="{!c.create}">Create</ui:button>
+                    </div> 
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+    </article>
+    
+    
+</aura:component>

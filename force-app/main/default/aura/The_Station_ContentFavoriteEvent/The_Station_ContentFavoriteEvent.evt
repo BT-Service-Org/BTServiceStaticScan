@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="The Station Content Favorite Event">
+    <aura:attribute name="stationContentRecordId" type="String"/>
+    <aura:attribute name="changeState" type="Boolean"/>
+</aura:event>

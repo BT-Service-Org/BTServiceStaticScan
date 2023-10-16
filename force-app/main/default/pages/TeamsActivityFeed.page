@@ -1,0 +1,280 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamsActivityFeedController">
+
+	<!-- Javascript -->
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<!-- Common css for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamMemberList.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />	
+	
+	<style>
+		.box_round div.header_blue {
+			background: #297B9C url({!URLFOR($Resource.TeamsResources, 'images/layout/rc_boxes/rc_header_topborder_blue.gif')}) repeat-x scroll center top!important;
+			position:relative;
+			width:100%;
+		}
+		
+		div.box_round div.header_blue div div h4 {
+			font-size:12px;
+			margin-left:13px;
+			padding-bottom: 3px;
+		}
+		
+		div.box_round div.header_blue div {
+			background:url({!URLFOR($Resource.TeamsResources, 'images/layout/rc_boxes/rc_header_leftborder_lightblue.gif')}) no-repeat scroll left top!important;
+			overflow:hidden;
+			width:100%;
+		}
+		
+		div.box_round div.header_blue div div {
+			background:url({!URLFOR($Resource.TeamsResources, 'images/layout/rc_boxes/rc_header_rightborder_lightblue.gif')})  no-repeat scroll right top!important;
+			color:#FFFFFF;
+			padding-top:7px;
+			width:100%;
+		}
+		
+		div.rightCol{
+			top:95px !important;
+		}
+		
+		div.linkAction{
+			text-align: right;
+			font-size: 10px;
+			margin-right: 2px;
+		}
+		
+		div.linkAction a{
+			color: #656566;
+		}
+		
+		div.rightCol div.rightWidget div.rightWidgetContent div.membersDescription,
+		div.sidebar div.membersDescription{
+			font-size: 11px;
+			width:145px;
+			font-weight:bold;
+		}
+		
+		div.sidebar div.membersDescription {
+			padding-top:10px;	
+			width:110px !important;
+			float:left;
+		}
+		
+		div.rightCol div.rightWidget div.rightWidgetContent div.membersDescription a {
+			color:#333333;	
+		}
+		
+		div.sidebar div.membersDescription a {
+			color:#666666;
+		}
+		
+		div.rightCol div.rightWidget div.rightWidgetContent div.membersImageHolder,
+		div.sidebar div.membersImageHolder{
+			float:left;
+			margin: 3px 10px 5px 10px;
+			width: 25px;
+		}
+		
+		/*
+		div.sidebar div.membersImageHolder {
+			margin: 3px 10px 5px 20px !important;
+		}
+		*/
+		div.rightCol div.rightWidget div.rightWidgetContent div.membersDescription span,
+		div.sidebar div.membersDescription span{
+			font-size: 10px;	
+			color: #C3C2C2;
+		}
+		
+		/*
+		table.minifeeds td.feed_type a.status{
+			background:url({!URLFOR($Resource.TeamsResources, 'images/layout/icons/minifeed_status.gif')}) no-repeat;
+		}
+		*/			
+		
+		table.minifeeds td.feed_type a:hover {
+			text-decoration: none;
+		}
+						
+	</style>
+	<script>
+		function markCheckboxes (bool){
+			var inputs = document.getElementsByTagName('input');
+			for(var it=0; it < inputs.length; it++){
+				if(inputs[it].type == 'checkbox'){
+					inputs[it].checked = bool;
+				}
+			}
+			reloadEvent.onclick();
+		}
+	</script>
+	
+	
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>
+		</div>
+		
+		
+		
+        <!-- Search Box Container (always Centered) -->
+        <div class="searchBox">
+            <div>
+                <div>
+                    <!-- Search Form -->
+                    <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+                        <div class="search_box_input f_left">
+                            <div class="legend">
+                                Find Teams 
+                            </div>
+                            <input type="text" value="Enter keyword or name" name="key"  onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+                        </div><input type="submit" value="Search" class="search_btn f_left"/>
+                    </form><!-- Advanced Search Link -->
+                    <!-- <div class="advanced_search_cont">
+                        <a href="javascript:;">Advanced Search</a>
+                    </div> -->
+                </div>
+            </div>
+        </div>		
+		
+		
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}"  alt=""/>
+			</div>
+		</div>
+	</div><!-- Header End -->
+	
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Quick links & Admin widget -->
+		<c:TeamAdminQuickLinks />
+
+		<!-- MyTeams Widget -->
+		<c:TeamsMyTeamsWidget />
+	</div>
+	
+	<!-- Main Content Div -->
+	<div class="main_content">		
+		<div class="centerCol">
+			<div class="holder">
+			<!-- Start Main Content -->
+				<!-- Section Title -->
+				<div class="teamsTitleBlue">
+					Recent Activity
+				</div> 
+				<apex:outputPanel layout="block" id="theFeeds">
+					<table class="minifeeds activity_page" cellpadding="0" cellspacing="0">
+						<apex:repeat value="{!feedsList}" var="miniFeed" >
+							<tr style="{!IF((miniFeed.FeedDateClass == 'miniFeedDate_empty'),'display:none', '' )}">
+								<td class="date blue weight_bold" colspan="2">{!miniFeed.FeedDateString}</td>
+							</tr>
+							<tr>
+								<td class="feed_type {!miniFeed.TypeOfFeed}"></td>
+								<td>
+									<a href="/apex/PeopleProfileDisplay?id={!miniFeed.User}" class="weight_bold">
+										<apex:outputText escape="false" value="{!miniFeed.Name}" />
+									</a>&nbsp;<apex:outputText escape="false" value="{!miniFeed.Message}" />
+								</td>						
+							</tr>				 
+						</apex:repeat>
+					</table>
+				</apex:outputPanel>
+			<!-- End Main Content -->
+			</div>
+		</div>
+	</div>
+	<!-- Right Col -->
+	<div class="rightCol">		
+		<!-- Activity Feeds filter BOX -->
+		<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+			<!-- Header -->
+			<div class="header_blue">
+				<div><div><h4>Filter</h4></div></div>
+			</div>
+			<!-- Rounded Box Content -->
+			<div class="box_content">
+				<div class="small_links">
+					<a href="javascript:;" onclick="markCheckboxes(true)">Show All</a>
+					&nbsp;|&nbsp;
+					<a href="javascript:;" onclick="markCheckboxes('')">None</a>
+				</div>
+				<div class="minifeeds_container">
+					<apex:form >
+						<table class="minifeeds" cellpadding="0" cellspacing="0">
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterStatus}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type status"><a class="status" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Status Updates</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterFollow}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type following"><a class="following" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Following</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterEducation}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type education"><a class="education" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Education History</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterCompetencies}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type competency"><a class="competency" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Competencies</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterMember}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type teamspace"><a class="teamspace" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Teamspace Member</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterDiscussion}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type DiscussionNewTopic"><a class="discussion" href="javascript:;"></a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Discussion Thread</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterAnnoncements}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type announcement"><a class="announcement" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Annoncements</a></td>
+							</tr>
+							<tr>
+								<td>
+									<apex:inputCheckbox value="{!filterProject}" onclick="reloadEvent.onclick();" />
+								</td>
+								<td class="feed_type project_task"><a class="project_task" href="javascript:;">&nbsp;</a>&nbsp;</td><td align="left"><a href="javascript:;" class="weight_bold">Project Task</a></td>
+							</tr>
+						</table>
+						<apex:commandButton action="{!getMiniFeeds}" rerender="theFeeds" id="refreshFeeds" value="Refresh" style="display:none;" />
+						<script>
+							var reloadEvent = $('{!$Component.refreshFeeds}');
+						</script>
+					</apex:form>
+				</div>
+			</div>
+			<div class="bottom_borders"><div><div></div></div></div>
+		</div>	
+	</div>	
+</apex:page>

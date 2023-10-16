@@ -1,0 +1,47 @@
+<aura:component controller="The_Station_TrailheadInfoController" implements="forceCommunity:availableForAllPageTypes" extends="c:The_Station_Profile_Overview_Tab" access="global" >
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <aura:set attribute="title" value="In-progress Trails &amp; Trailmixes" />
+    <aura:set attribute="titleLogo" value="{!$Resource.trailhead_progress_assets + '/trailhead_progress_logo.png' }"/>
+    <aura:set attribute="backgroundImageURL" value="{!$Resource.trailhead_progress_assets + '/trailhead_progress_background.png' }"/>
+    <aura:set attribute="showMoreURL" value="https://readiness.lightning.force.com/lightning/n/slj__Dashboard_Home"/>
+
+    <aura:attribute name="noBadgesToDisplay" type="Boolean" default="false"/>
+    <aura:attribute name="badgesProgress" type="List"/>
+    <aura:attribute name="astroCharacterImage" type="String" default="{!$Resource.TrailheadAstroCharacter}"/>
+   
+    <aura:if isTrue="{!v.noBadgesToDisplay}">
+        <div class="slds-card no-data-message slds-p-around_medium slds-m-top_medium">
+            1. Sign into Trailhead &#38; go to 'Settings' <br/> 
+            2. Click 'Connect' under Connected Accounts <br/> 
+            3. Click 'Use Custom Domain' <br/> 
+            4. Enter 'sfservices.my.salesforce.com' <br/> 
+            5. Click 'Link Account' <br/>
+            <lightning:button class="tutorial-button" variant="brand-outline" label="Watch Tutorial" title="Watch Tutorial" onclick="{! c.openTutorial }"/>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <lightning:button class="slds-col slds-size_6-of-12 connect-account-button" variant="brand" label="Connect your Trailhead Account" title="Connect your Trailhead Account" onclick="{! c.connectTrailheadAccount }"/>
+        </div>
+        <aura:set attribute="else"> 
+            <aura:iteration items="{! v.badgesProgress }" var="badgeProgress">
+                <div class="slds-m-around_medium">
+                    <c:The_Station_Trailhead_Badge_Progress progress="{! badgeProgress.progress }"
+                                                            type="{! badgeProgress.type }"
+                                                            icon="{! badgeProgress.icon }"
+                                                            name="{! badgeProgress.name }" 
+                                                            description="{! badgeProgress.description }"
+                                                            tags="{! badgeProgress.tags }"
+                                                            url="{! badgeProgress.url }"/>
+                </div>     
+            </aura:iteration>
+        </aura:set>
+    </aura:if>
+    <aura:if isTrue="{!v.noBadgesToDisplay}">
+     <div class="slds-media__figure">
+            <span>
+                <img src="{!v.astroCharacterImage}" class="astro-character"/> 
+            </span>
+        </div>
+    </aura:if>
+</aura:component>

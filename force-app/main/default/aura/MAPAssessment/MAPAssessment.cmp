@@ -1,0 +1,57 @@
+<aura:component >
+
+	<!--Attributes-->
+    <aura:attribute name="interviews" type="Object[]" access="public"/>
+    <aura:attribute name="onViewInterview" type="Aura.Action" access="public"/>
+    <aura:attribute name="onCreateInterview" type="Aura.Action" access="public"/>
+    <aura:attribute name="onCancel" type="Aura.Action" access="public"/>
+	
+	<!--Content-->
+	<div class="slds-text-heading_large slds-text-title_caps slds-p-vertical_small"> 
+		<b>Interviews</b> 
+	</div>
+	<aura:if isTrue="{!!empty(v.interviews)}">
+		<table class="slds-table slds-no-row-hover" style="display:inline-block;">
+	        <tbody>
+	        	<tr class="slds-box slds-text-title_caps">
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Name</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Created By</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Created At</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Level</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Score</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Status</b> </td>
+	            </tr>
+	        	<aura:iteration items="{!v.interviews}" var="interview"> 
+		            <tr class="slds-box">
+		            	<td class="td-padding slds-text-align_center">
+		            		<a href="javascript:void(0);" data-interviewId="{!interview.id}" onclick="{!v.onViewInterview}">
+		                       <ui:outputText value="{!interview.name}"/>
+		                    </a>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputText value="{!interview.createdBy}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		                    <ui:outputDateTime value="{!interview.createdAt}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputText value="{!interview.level}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputText value="{!interview.score}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center" style="{!'color:'+(interview.completed?'maroon':'darkgreen')}">
+		            		<ui:outputText value="{!interview.completed?'Completed':'In Progress'}"/>
+		            	</td>
+		            </tr>
+		        </aura:iteration>
+	        </tbody>
+	    </table>
+	    <aura:set attribute="else"> No records to display </aura:set>
+	</aura:if>
+    <div class="slds-p-vertical_large">
+    	<lightning:button class="slds-button_outline-brand" label="See All Assessments" onclick="{!v.onCancel}"/>
+    	<lightning:button class="slds-button_brand" label="New Interview" onclick="{!v.onCreateInterview}"/>
+    </div>
+
+</aura:component>

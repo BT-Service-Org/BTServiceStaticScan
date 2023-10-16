@@ -1,0 +1,82 @@
+<apex:page docType="html-5.0" sidebar="false" showHeader="false" standardStylesheets="false" controller="sh_PracticeController">
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" dir="ltr" lang="en-US"><!--<![endif]-->
+<head profile="http://gmpg.org/xfn/11">
+   <title>{!practice.Practice_Name__c}</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+   <apex:stylesheet value="{!URLFOR($Resource.ServicesHubCSS, 'css/sfServicesStyle.css')}" />
+   <apex:stylesheet value="{!URLFOR($Resource.ServicesHubCSS, 'css/sfServices.style.min.css')}" />
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'jquery1.11.1.js')}"/>
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'javascript.min_1.22.js')}"/>
+   
+
+   <!-- Google Analytics Tracker -->
+   <c:sh_GATracker />
+
+   <link rel="Shortcut Icon" href="{!URLFOR($Resource.ServicesHubContent, 'Content/images/favicon.ico')}" type="image/x-icon" />
+   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+   <style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+</head>
+<body class="single single-sf_practice postid-1536 header-full-width full-width-content">
+  <a class="skip-to-main-content btn btn-large btn-danger" href="#main-content-container">skip to main content</a>
+
+  <!-- SEACH & NAVIGATION -->
+  <c:sh_searchNavigation domainVar="{!domainVariable}" />
+
+  <apex:pageMessages ></apex:pageMessages>
+
+  <div class="site-container">
+  
+    <!-- HEADER.HTML -->
+    <c:sh_practiceHeader practiceName="{!practice.Name}"
+                         practiceTitle="{!practice.Practice_Title__c}"
+                         practiceInfo="{!practice.Practice_Info__c}"
+                         org62ChatterGroupId="{!practice.Org62_Chatter_Group_ID__c}"
+                         overviewVideoJS="{!practice.Overview_Video_JS__c}"
+                         overviewVideoJSFunc="{!practice.Overview_Video_JS_Function__c}"
+                         heroImage="{!practice.Hero_Image__c}"
+                         heroImageAlt="{!practice.Hero_Image__c}"
+                         externalVideoLink="{!practice.External_Video_Link__c}"
+                         haveTwoHeroImages="false"
+                         domainVariable="{!domainVariable}"
+    />
+    
+    <div class="site-inner container">
+      <div class="content-sidebar-wrap row">
+        
+        <!-- QUICK FACTS -->
+        <!-- Removed Quick Facts section on 16-Jul-2016
+        <c:sh_quickFacts quickFact1="{!quickFact1Id}"
+                         quickFact2="{!quickFact2Id}"
+                         quickFact3="{!quickFact3Id}"
+                         quickFact4="{!quickFact4Id}"
+                         factSheet="{!factSheetId}"
+        />
+         -->
+        
+        <!-- PRESENTATIONS HTML -->
+        <c:sh_presentations practiceId="{!practice.id}" title="Key Presentations and Offerings" showLocation="top"/>
+        
+        <div  style="font-family:salesforceSans,Arial,sans-serif !important;" >
+          <apex:outputText escape="false" value="{!practice.Header_HTML__c}" rendered="{!practice.Header_HTML__c != ''}" />
+        </div>
+          
+     
+        <!-- LEADERSHIP TEAM HTML -->
+        <c:sh_practiceLeadership practiceCode="{!practice.Practice_Name__c}" />
+     
+        <!-- PROJECTS HTML -->
+        <c:sh_projects practiceId="{!practice.id}"/>
+        
+      </div> <!-- End content-sidebar-wrap -->
+    </div> <!-- End site-inner -->
+            
+    <!-- FOOTER.HTML -->
+    <c:sh_footer domainVar="{!domainVariable}"/>
+  </div> <!-- End site-container -->
+</body>
+</html>
+</apex:page>

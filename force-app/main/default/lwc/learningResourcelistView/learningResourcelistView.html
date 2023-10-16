@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="" >
+        
+           <lightning-input 
+                type="search" 
+                onchange={handleKeyChange} 
+                class="slds-m-bottom_small"           
+                placeholder="Search"
+                value={searchKey}>
+            </lightning-input>
+        
+            <template if:false={resMsg}>
+            <lightning-datatable
+                key-field="id"
+                data={data}
+                columns={columns}
+                hide-checkbox-column
+                show-row-number-column
+                sorted-by={sortBy}        
+                sorted-direction={sortDirection}    
+                onsort={sortLDT}
+                 >
+                </lightning-datatable>
+
+            </template>
+
+            <template if:true={resMsg}>
+                <br>
+                <br>
+                <div class="slds-text-body_medium slds-align_absolute-center">
+                    <lightning-formatted-rich-text  value={NoLRMsg}>
+
+                    </lightning-formatted-rich-text>
+                </div>
+          </template>
+            
+        </lightning-card>
+</template>

@@ -1,0 +1,21 @@
+<template>
+    <div class="productheader productheader--big" if:true={imageUrl}>
+        <img src={imageUrl} alt="Page Banner" if:true={imageUrl} />
+        <div class="product product--lit">
+            <h1 class="productheader__text ITC_font" tabindex="0" aria-label={pageTitle} if:true={pageTitle}>
+                {pageTitle}
+            </h1>
+            <lightning-formatted-rich-text value={pageDesc} class="productheader__title salesforce_font"
+                if:true={pageDesc}></lightning-formatted-rich-text>
+
+            <template if:true={isCommunity}>
+                <template if:false={userIsMember}>
+                    <div role="button" class="header__button request_content ITC_font" tabindex="0"
+                        onclick={onJoinCommunity}>
+                        Become Member
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

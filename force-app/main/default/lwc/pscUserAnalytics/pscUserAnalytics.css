@@ -1,0 +1,156 @@
+.user_analytics {
+    padding-top: 8px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+}
+
+.tabset {
+    width: 60%;
+    margin: auto;
+}
+
+.red {
+    background: red;
+    width: 300px;
+    height: 300px;
+}
+
+.blue {
+    background: blue;
+    width: 300px;
+    height: 300px;
+}
+
+.tab {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    margin: auto;
+    padding: 20px;
+    background: aliceblue;
+}
+
+.tab-item {
+    width: 20%;
+    background: white;
+    min-height: 290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 35px;
+    border-radius: 52px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+    background-color: white;
+}
+
+.tab-item img {
+    margin-left: 10px;
+    width: 130px;
+}
+
+.analytics_count {
+    font-size: 24px;
+    text-align: center;
+    color: #032D60;
+    margin-top: 10px;
+}
+
+.analytics_desc {
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+    color: #032D60;
+    word-break: break-word;
+}
+
+.slds-tabs_default__link {
+    font-size: 16px;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    color: #032D60;
+}
+
+
+
+@media screen and (max-width:1336px) {
+
+    .tab-item {
+        width: 28%;
+        margin-top: 30px;
+    }
+}
+
+@media screen and (max-width:920px) {
+
+
+    .tab-item {
+        width: 28%;
+        margin: 20px;
+        min-height: 173px;
+    }
+
+    .tab-item img {
+        width: 95px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .tab {
+        justify-content: space-evenly;
+    }
+
+    .tab-item {
+        width: 40%;
+        margin: 15px;
+        min-height: 190px;
+    }
+
+    .tab-item img {
+        width: 95px;
+    }
+}
+
+@media screen and (max-width:620px) {
+
+    .tab-item {
+        width: 45%;
+        margin: auto;
+        margin: 10px;
+        min-height: 190px;
+    }
+
+    .tab-item img {
+        width: 110px;
+    }
+
+    .analytics_count {
+        font-size: 21px;
+    }
+}
+
+@media screen and (max-width:539px) {
+    .tab {
+        flex-direction: column;
+    }
+
+    .tab-item {
+        width: 100%;
+        margin: auto;
+        margin-top: 30px;
+        min-height: 246px;
+    }
+
+    .tab-item img {
+        width: 110px;
+    }
+
+    .analytics_count {
+        font-size: 21px;
+    }
+}

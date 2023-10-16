@@ -1,0 +1,775 @@
+<apex:page id="WikiPage" tabStyle="WikiPage__c" controller="WikiPageController" sidebar="false" >
+	<script>
+		var wikiResourcePath = '{!URLFOR($Resource.WikiResource)}';
+		var apiSession = '{!$Api.Session_ID}';
+	</script>
+	 
+	<!-- Scripts -->
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<script src="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"></script>
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/WikiPage.js')}"></script>
+	
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPage.css')}" />	
+	
+	<!-- 		  Overlay		-->
+	<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
+	</div>
+	<!-- 		  Overlay		-->
+	
+	<!-- 		  Loader		-->
+	<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+	<!-- 		  Loader		-->
+	
+	<apex:outputpanel rendered="{!userPermissions.canCreate}">
+		<c:WikiNewPageWidget />
+	</apex:outputpanel>
+	
+	<style>
+		.saving {
+			margin: 30px; 
+			font-size: 15px; 
+			font-weight: bold; 
+			color: #566A22;
+		}
+		
+		.attachmentTable {
+			margin-left:10px;
+			border: 0px;
+		}
+		
+		.attachmentTable th,
+		.attachmentTable td {
+			padding: 3px 10px;
+		}
+		
+		.attachmentTable .name {
+			width: 410px;
+			overflow: hidden;
+		}
+		
+		.attachmentTable .date {
+			width: 130px;
+		}
+		
+		.attachmentTable .delete {
+			width: 37px;
+		}
+		
+		.attachmentTable .user {
+			width: 250px;
+			overflow: hidden;
+		}
+	</style>
+	<apex:outputpanel id="formsOverlays">
+		<!-- 		 Delete Page Form 		-->
+		<apex:outputpanel id="deletePageOverlay" rendered="{!userPermissions.canManage}" style="display:none;">
+			<div class="attach__Overlay" id="DeletePageForm">	
+				<div class="formsHeader">
+					<table>
+						<tr>
+							<td>Detele Page</td>
+							<td align="right"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" onclick="modal.close();" /></td>
+						</tr>
+					</table>
+				</div>
+				<div id="deleting" class="saving" style="display:none;">
+					Deleting...
+				</div>
+				<apex:form id="deleteOvlyForm">
+					<div class="overlayBody">
+						<br><br>
+						<b>Are you sure you want to delete this page?</b><br>
+						<span class="infoText">Once a page is deleted, it is not recoverable.</span><br>
+						<br><br>
+					</div>
+					<div class="separateLine"></div>
+					<div align="center">
+						<apex:commandButton styleclass="deleteBtn" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
+						<input type="button" class="cancelBtn" value="Cancel" onclick="modal.close();"/>
+					</div>
+				</apex:form>
+			</div>
+		</apex:outputpanel>
+	
+	
+		<!-- 		 New Attachment Form 		-->
+		<apex:outputpanel style="display:none;" id="newAttachmentOverlay" rendered="{!userPermissions.canManage}">
+			<div class="attach__Overlay" id="UFP__contentForm__">	
+				<div class="formsHeader">
+					<table>
+						<tr>
+							<td>Add Attachment</td>
+							<td align="right"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" onclick="modal.close();" /></td>
+						</tr>
+					</table>
+				</div>
+				<form action="/p/attach/NoteAttach" enctype="multipart/form-data" onsubmit="if (window.ffInAlert) { return false; }" name="editPage" method="post" id="editPage_1"  target="iframeUpload">
+					<input type="hidden" name="added" id="done_added" value="1" />
+					<input type="hidden" name="pid" id="done_pid" value="{!idWikiPage}" />
+					<div class="overlayBody">
+						<br>
+						<b>Select the File</b><br>
+						<span class="infoText">Type the path of the file or click the Browse button to find the file.</span><br>
+						<input id="file" name="file" size="26" title="Type the path of the file or click the Browse button to find the file." type="file" /><br/>
+						<span id="uploadP__"></span>
+			    	</div>
+					<div class="separateLine"></div>
+					<div align="center">
+						<input class="saveBtn" name="Attach" type="submit" value="Done" onclick="UPF__loader__(); UPF__success__();" />
+						<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+					</div>
+					<iframe name="iframeUpload" style="display:none;"></iframe>
+				</form>
+			</div>
+		</apex:outputpanel>
+	
+		<!-- 		 Edit Page Information Form 		-->
+		<apex:outputpanel id="editPageInfoOverlay" rendered="{!userPermissions.canManage}" style="display:none;">
+			<div class="forms__Overlay" id="EditInfoForm" >	
+				<div class="formsHeader">
+					<table>
+						<tr>
+							<td>Edit page information</td>
+							<td align="right"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" onclick="modal.close();" /></td>
+						</tr>
+					</table>
+				</div>
+				<div class="AddChildFormDiv">
+					<div id="savingEditInfo" class="saving" style="display:none;">
+						Saving...
+					</div>
+					<form action="">
+						<br>
+						<span class="requiredInfoRight">= Required Information</span>
+						<table>
+							<tr>
+								<td align="right" style="width:85px;"><span class="inputLabel">Page Name</span></td>
+								<td class="requiredTD"><span class="requiredInput"></span></td>
+								<td><input type="text" value="{!infoWiki.Name}" style="width:98%" /></td>
+							</tr>
+							<tr>
+								<td align="right" valign="top"><span class="inputLabel">Description</span></td>
+								<td></td>
+								<td class="descriptionInput">
+									<textarea>{!infoWiki.ShortDescription}</textarea>
+									<span class="infoText">250 character limit</span>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<div class="separateLine"></div>
+						<div align="center">
+							<input class="saveBtn" type="button" value="Save" onclick="modal.close();" />
+							<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</apex:outputpanel>
+		
+		<!-- 		 New Comment Form 		-->
+		<apex:outputpanel id="newCommentOverlay" rendered="{!userPermissions.canComment}"  style="display:none;">
+			<div class="forms__Overlay" id="NewCommentForm">	
+				<div class="formsHeader">
+					<table>
+						<tr>
+							<td>Add Comment</td>
+							<td align="right"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" onclick="modal.close();" /></td>
+						</tr>
+					</table>
+				</div>
+				<div class="AddChildFormDiv">
+					<div id="savingComment" class="saving" style="display:none;">
+						Saving...
+					</div>
+					<apex:form id="addCommentForm">
+						<br>
+						<span class="requiredInfoRight">= Required Information</span>
+						<table>
+							<tr>
+								<td align="right" style="width:85px;"><span class="inputLabel">Title</span></td>
+								<td class="requiredTD"><span class="requiredInput"></span></td>
+								<td><apex:inputtext id="commentTitle" value="{!commentName}" style="width:98%"/></td>
+							</tr>
+							<tr>
+								<td align="right" valign="top"><span class="inputLabel">Comment</span></td>
+								<td valign="top" class="requiredTD"><span class="requiredTextArea"></span></td>
+								<td class="descriptionInput">
+									<apex:inputtextarea id="commentTextArea" value="{!commentBody}"/>
+									<span class="infoText">250 character limit</span>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<div class="separateLine"></div>
+						<div align="center">
+							<apex:commandButton styleclass="saveBtn" onclick="savingShowWP('{!$Component.addCommentForm}', 'savingComment');" oncomplete="modal.close();" action="{!saveComment}" value="Save" rerender="commentsPanel,NewCommentForm"/>
+							<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+						</div>
+					</apex:form>
+				</div>
+			</div>
+		</apex:outputpanel>
+	</apex:outputpanel>
+	
+	
+	<script>
+		function newChildPreField (wikiName) {
+			var newChildField = $('WikiPage:formNew:nameNew');
+			newChildField.value = wikiName;
+		}
+		
+		var inputSearch;
+					
+		// Begin the search box with the text:
+		// "Enter keyword, name, company or title" at top search box
+		////////////////////////////////////////////
+		function resetSearchInput(){
+			
+			var inputs = $$('.search_box_input input');
+			inputSearch = inputs[0];		
+			inputSearch.style.color = '#999999';
+			inputSearch.value = 'Enter keyword or name';
+		}
+		
+		// Once a user begins to type at top search box, change the font color to   #333333. 
+		function ActionSearchInput(){
+			inputSearch.style.color = '#333333';
+			inputSearch.value = '';
+		}
+		
+		function savingShowWP(formDiv, savingDiv) {
+			$(savingDiv).style.display='';	
+			$(formDiv).style.display='none';
+		}
+	</script>	
+	<div class="BodyPage">
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   HEADER    - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Wiki</h1>
+					<h2 class="arial_black">Pages</h2>
+				</div>		
+			</div>		
+			<!-- Search Box Container (always Centered) -->
+			<div class="searchBox">
+				<div>
+					<div>
+						<!-- Search Form -->
+						<form action="">
+							<div class="search_box_input f_left">
+								<div class="legend">Find Wiki pages</div>
+								<input type="text" value="Enter keyword or name" name="" onclick="ActionSearchInput();" onfocus="setValue('');" onblur="setValue('Enter keyword or name');" />								
+							</div>
+							<input type="button" value="Search" class="search_btn f_left" /> 								
+						</form>
+						<!-- Advanced Search Link -->
+						<!-- <div class="advanced_search_cont">							
+							<a href="javascript:;" >Advanced Search</a>
+						</div> -->							
+					</div>
+				</div>
+			</div>
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>	
+		<apex:outputpanel id="breadCrumbringPanel"> 
+			<div  class="breadCrumbring">
+				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing}" /><apex:outputLabel value="{!wikiPageName}"/><br>
+			</div>
+		</apex:outputpanel>
+		
+		<div class="MainPage">
+			<div class="PageBlock">	
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - - PAGE HEADER - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->
+				<apex:outputpanel id="pageHeaderPanel">
+					<div class="UpdatedInfo"> 
+						<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,true,false)}">
+							This page hasn't been updated
+						</apex:outputpanel>
+						<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,false,true)}">
+							Updated {!infoWiki.LastModifiedDate} by <a href="/apex/PeopleProfileDisplay?id={!infoWiki.LastModifiedById}">{!infoWiki.LastModifiedBy}</a> (<a href="javascript:;" class="WikiLink">more...</a>)
+						</apex:outputpanel>
+					</div>
+				</apex:outputpanel>
+				
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - - 	 BUTTONS   - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->
+				<apex:outputpanel id="bodyPageHeader">
+					<div class="bodyPageHeader">
+						<table>
+							<tr>
+								<td>
+									<span class="bodyPageHeaderName">{!infoWiki.Name}</span>
+								</td>
+								<td class="buttons" align="rigth">
+									<form action="" class="btnActionForm">
+										<apex:outputpanel rendered="{!userPermissions.canManage}">
+											<input type="button" value="Edit" onclick="location.href='https://na1.salesforce.com/apex/WikiPageEdit?id={!wikiBody.Id}';" class="btnEdit" />
+										</apex:outputpanel>
+										<apex:outputpanel rendered="{!userPermissions.canCreate}">
+											<input type="button" value="Add" onclick="createOverlay('','AddChildForm','305','');" class="btnAdd" />
+										</apex:outputpanel>
+										<apex:outputpanel rendered="{!userPermissions.canManage}">
+											<input type="button" onclick="createOverlay('','WikiPage:deletePageOverlay','180','');" value="Delete" class="btnDelete" />
+										</apex:outputpanel>
+										<!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
+									</form>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</apex:outputpanel>
+				
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - - 	PAGE BODY  - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->
+				
+				<div class="bodyPage">
+					<apex:outputpanel id="saveFavoritePanel">
+						<apex:form id="saveFavoriteForm">
+							<apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}" rendered="{!isFav}" />
+							<apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOff.gif')}" rendered="{!NOT(isFav)}" />
+							&nbsp;<apex:commandLink style="font-size:11px;"
+								value="Favorite"
+								action="{!save_del_fav}"									
+								rerender="saveFavoritePanel, rightSidebarPanel">
+								<apex:param name="idWP2" value="{!idWikiPage}" />
+							</apex:commandLink>
+						</apex:form>
+					</apex:outputpanel>
+					<br>
+					<table border="0" style="width:100%;">
+						<tr>
+							<td valign="top">
+								<apex:outputpanel id="bodyPagePanel" layout="block">
+									<br>
+									<apex:outputText escape="false" value="{!html}">									
+									</apex:outputText>
+									<br>
+								</apex:outputpanel>
+							</td>
+							<td valign="top" width="200px">
+								
+								<!-- - - - - - - - - - - - - - - - - - - - - -->	
+								<!-- - - - - - - RIGHT SIDEBAR - - - - - - - -->
+								<!-- - - - - - - - - - - - - - - - - - - - - -->
+								<apex:outputpanel id="rightSidebarPanel">
+									<div class="rightSideBar">
+										<div class="box_round">
+											<div class="top_borders"><div><div></div></div></div>
+											<!-- Rounded Box Content -->
+											<div class="box_content">
+												<div class="contentHolder">
+													<div style="font-weight:bold; margin-bottom:8px;border-bottom:1px solid #989999;">My Favorites Pages</div>
+													
+													<apex:form id="formFavorite">
+														<table border="0">
+															<apex:repeat id="favoriteRepeat"
+																value="{!favorite}" 
+																var="item" >
+																	<tr>
+																		<td valign="top"><apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}"/></td>
+																		<td>
+																			<a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}" class="WikiLink" >{!item.WikiPage__r.Name}</a>
+																		</td>
+																	</tr>
+															</apex:repeat>
+														</table>
+													</apex:form>
+													<apex:outputPanel layout="block" style="width:100%;text-align:center; padding:5px 5px 5px 0px;" rendered="{!IF(cntFav == 0 , true, false)}">
+														No Favorites Yet 
+													</apex:outputPanel>	
+													
+													<br>
+													<div style="font-weight:bold; margin-bottom:8px;border-bottom:1px solid #989999;">Recent Changes</div>
+													
+													<apex:form id="formRecentlyUpdate">
+														<ul class="sideBarList">
+															<apex:repeat value="{!recentlyUpdated}" var="item">
+																<li>
+																	<a href="/apex/WikiPage?idWP={!item.id}" class="WikiLink" >{!item.name}</a>
+																</li>
+															</apex:repeat>
+														</ul>
+													</apex:form>
+													<br>
+													<div style="font-weight:bold; margin-bottom:8px;border-bottom:1px solid #989999;">What's Popular</div>
+													
+													<apex:form id="formMostPopular2">
+														<ul class="cloud">
+															<apex:repeat value="{!linkCount}" 
+																var="item"> 
+																<li> 
+																	<a href="/apex/WikiPage?idWP={!item.linkId}" class="{!item.linkClass}">{!item.linkName}</a>
+																</li>
+															</apex:repeat>
+														</ul>
+														<apex:outputpanel layout="block" id="noPopular" style="width:100%;text-align:center; padding:5px 5px 0px 0px;" rendered="{!IF(linksNum == 0 , true, false)}" >
+															No Popular Wikis Yet
+														</apex:outputpanel> 
+													</apex:form>
+													<br>
+												</div>
+											</div>
+											<div class="bottom_borders"><div><div></div></div></div>
+										</div>	
+									</div>
+								</apex:outputpanel>						
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - - 	 BUTTONS   - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->
+				<div class="bodyPageHeader">
+					<table>
+						<tr>
+							<td>
+							</td>
+							<td class="buttons" align="rigth">
+								<form action="" class="btnActionForm">
+									<apex:outputpanel rendered="{!userPermissions.canManage}">
+										<input type="button" value="Edit" onclick="location.href='https://na1.salesforce.com/apex/WikiPageEdit?id={!wikiBody.Id}';" class="btnEdit" />
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!userPermissions.canCreate}">
+										<input type="button" value="Add" onclick="createOverlay('','AddChildForm','305','');" class="btnAdd" />
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!userPermissions.canManage}">
+										<input type="button" onclick="createOverlay('','WikiPage:deletePageOverlay','180','');" value="Delete" class="btnDelete" />
+									</apex:outputpanel>
+									<!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
+								</form>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - -  PAGE INFORMATION - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->
+				<apex:outputpanel id="informationPanel">
+					<div class="pageInformation">
+						<table class="infoTable" border="0" style="width:100%">
+							<tr>
+								<td class="tdImg"><apex:image styleclass="twistImg" onclick="hideSection(this,'informationDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_up.gif')}" title="Show Section" alt="Show Section" /></td>
+								<td>
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!-- 				INFORMATION 			 -->
+									<apex:outputpanel id="infoPanel">
+										<div class="infoSection">
+											<span class="infoTitle">Page Information</span>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}"><a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');" class="WikiLink">Edit information</a></apex:outputpanel>&nbsp;<span class="infoText">| Outgoing links ({!cntOutgoing}) | Incoming links ({!cntIncoming})</span>
+										</div>
+										<div id="informationDiv" class="infoExpanded" style="display:none;">
+											<br>
+											<table border="0" style="margin-left:10px; width:100%">
+												<tr>
+													<td valign="top" class="dashed" style="width:25%">
+														<span class="infoText">Page Name:</span>&nbsp; {!infoWiki.Name}<br>
+														<span class="infoText">Page Description:</span><br>
+														{!infoWiki.ShortDescription}
+													</td>
+													<td valign="top" class="dashed" style="padding-left:7px; width:25%">
+														<span class="infoText">Created By:</span>&nbsp;<a href="/apex/PeopleProfileDisplay?id={!infoWiki.createdById}">{!infoWiki.CreatedBy}</a><br>
+														<span class="infoText">Created Date:</span>&nbsp; {!infoWiki.CreatedDate}
+													</td>
+													<td valign="top" class="dashed" style="padding-left:7px; width:25%">
+														<table border="0">
+															<tr>
+																<td colspan="2"><b>Outgoing links ({!cntOutgoing})</b></td>
+															</tr>
+															<apex:repeat value="{!outgoing}" 
+																var="out">
+																<tr>
+																	<td><span class="infoLink">{!out.ToLink__r.Name}</span></td>
+																	<td><span class="infoText"> - {!out.ToLink__r.ShortDescription__c}</span></td>
+																</tr>
+															</apex:repeat>
+														</table>
+													</td>
+													<td valign="top"  style="padding-left:7px; width:25%">
+														<apex:form id="incomingForm">
+															<table border="0">
+																<tr>
+																	<td colspan="2"><b>Incoming links ({!cntIncoming})</b></td>
+																</tr>
+																<apex:repeat value="{!incoming}" 
+																	var="in">
+																	<tr>
+																		<td>
+																			<a href="/apex/WikiPage?idWP={!in.FromLink__r.Id}" class="infoLink">{!in.FromLink__r.Name}</a>
+																		</td>
+																		<td><span class="infoText"> - {!in.FromLink__r.ShortDescription__c}</span></td>
+																	</tr>
+																</apex:repeat>
+															</table>
+														</apex:form>
+													</td>
+												</tr>
+											</table>
+											<br>
+										</div>
+									</apex:outputpanel>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdImg"><apex:image styleclass="twistImg" onclick="hideSection(this,'childrenDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_up.gif')}" title="Show Section" alt="Show Section" /></td>
+								<td>
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!-- 				CHILDREN	 			 -->
+									<apex:outputpanel id="childrenPanel">
+										<div class="infoSection">
+											<span class="infoTitle">Children ({!childsCount})</span>&nbsp;<apex:outputpanel rendered="{!userPermissions.canCreate}"><span style="font-weight:bold;color:#000000;">+</span>&nbsp;<a href="javascript:;" onclick="createOverlay('','AddChildForm','305','');" class="WikiLink">New Child</a></apex:outputpanel>
+										</div>
+										<div id="childrenDiv" class="infoExpanded" style="display:none;">
+											<div style="margin-left:10px">
+												<br>
+												<apex:outputpanel rendered="{!IF(ChildsCount = 0,true,false)}">
+													<span class="infoText">There are no children wiki pages.</span>
+												</apex:outputpanel>
+												<apex:outputpanel rendered="{!IF(ChildsCount = 0,false,true)}">
+													<apex:form id="formChildren">
+														<ul class="sideBarList">
+														<apex:repeat value="{!childs}" 
+															var="item3">
+																<li>
+																	<span style="font-size:12px;">
+																		<a href="/apex/WikiPage?idWP={!item3.id}">{!item3.name}:</a>
+																		&nbsp;
+																		<span class="infoText">{!item3.ShortDescription__c}</span>
+																	</span>
+																</li>
+														</apex:repeat>
+													</apex:form>
+												</apex:outputpanel>
+												<br>
+											</div>
+										</div>
+									</apex:outputpanel>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdImg"><apex:image styleclass="twistImg" onclick="hideSection(this,'attachDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_up.gif')}" title="Show Section" alt="Show Section" /></td>
+								<td>
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!-- 				ATTACHMENTS 			 -->
+									<apex:outputpanel id="attachmentsPanel">
+										<div class="infoSection">
+											<span class="infoTitle">Attachments ({!attachCount})</span>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}"><span style="font-weight:bold;color:#000000;">+</span>&nbsp;<a href="javascript:;" onclick="createOverlay('','WikiPage:newAttachmentOverlay','180','');" class="WikiLink">New Attachment</a></apex:outputpanel>
+										</div>
+										<div id="attachDiv" class="infoExpanded" style="display:none;">
+											<br>
+											<apex:form id="auxAttachForm">
+												<apex:commandButton id="auxAttachLink" value="auxAttachLink" style="display:none;" rerender="attachmentsPanel" />
+											</apex:form>
+											<apex:form id="formAttach" onsubmit="if(!confirm('Do you really want to delete this file?')){return false}else{return true;};">
+												<table class="attachmentTable">
+													<tr>
+														<th></th>
+														<th>Name</th>
+														<th>Created Date</th>
+														<th>Last Modified By</th>
+														<th>Last Modified Date</th>
+													</tr>
+													<apex:repeat value="{!attachments}" 
+														var="item5"> 									
+															<tr>
+																<td class="delete">
+																	<apex:commandLink action="{!DeleteAttach}" 
+																		onclick="switchOverlay(true);" 
+																		oncomplete="switchOverlay(false);" 
+																		rerender="attachmentsPanel"
+																		value="Delete">
+																		<apex:param name="idAttach" value="{!item5.Id}"/>
+																	</apex:commandLink>
+																</td>
+																<td class="name">
+																	<img style="vertical-align:bottom;" src="https://na1.salesforce.com{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}"/> &nbsp;
+																	<a href="#" onclick="window.open('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item5.Id}')" > {!item5.Name} </a>
+																</td>
+																<td class="date">
+																	<apex:outputtext value="{!item5.createdDate}" />
+																</td>
+																<td class="user">
+																	<a href="/apex/PeopleProfileDisplay?id={!item5.lastModifiedById}">{!item5.lastModifiedBy}</a>
+																</td>
+																<td class="date">
+																	<apex:outputtext value="{!item5.lastModifiedDate}" />
+																</td>
+															</tr>
+													</apex:repeat>
+												</table>
+												<apex:outputpanel rendered="{!IF(attachCount = 0,true,false)}">
+													<span class="infoText">There are no Attach for this wiki page.</span>		
+												</apex:outputpanel>
+											</apex:form>
+											<br>
+										</div>
+									</apex:outputpanel>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdImg"><apex:image styleclass="twistImg" onclick="hideSection(this,'commentDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_up.gif')}" title="Show Section" alt="Show Section" /></td>
+								<td>
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!-- 				COMMENTS	 			 -->
+									<apex:outputpanel id="commentsPanel">
+										<div class="infoSection">
+											<span class="infoTitle">Comment ({!cntComments})</span>&nbsp;<apex:outputpanel rendered="{!userPermissions.canComment}"><span style="font-weight:bold;color:#000000;">+</span>&nbsp;<a href="javascript:;" onclick="createOverlay('','WikiPage:newCommentOverlay','302','');" class="WikiLink">New Comment</a></apex:outputpanel>
+										</div>
+										<div id="commentDiv" class="infoExpanded" style="display:none;">
+											<br>
+											<apex:outputpanel id="noCommentPanel" rendered="{!IF(cntComments = 0,true,false)}">
+												<span class="infoText" style="padding-left:10px;">No Comment yet </span>
+											</apex:outputpanel>
+											<apex:outputpanel id="showCommentPanel" rendered="{!IF(cntComments = 0,false,true)}">
+												<apex:form id="formComments">
+													<apex:repeat value="{!comments}" 
+														var="item">
+															<table cellspacing="0" border="0" style="width:85%">
+																<tr>
+																	<td valign="top" style="padding-top:15px; width:180px;">
+																		<table border="0" align="right">
+																			<tr>
+																				<td valign="top">
+																					<div align="right">
+																						<b>{!item.commentBy}</b><br>
+																						<span class="infoText">{!item.commentDate}</span>
+																					</div>
+																				</td>
+																				<td valign="top">
+																					<apex:image style="width:25px;" value="/servlet/servlet.FileDownload?file={!item.commentPicture}" />
+																					<!-- <apex:image value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/user_2.jpg')}" /> -->
+																				</td>
+																			</tr>
+																		</table>
+																	</td>
+																	<td style="margin-right:0px;padding-right:0px">
+																		<apex:image styleclass="commentImg" value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/arrow_comment.gif')}" />
+																	</td>
+																	<td style="margin-left:0px;padding-left:0px">
+																		<div style="width:553px;padding:20px;background-color: #E1E2E1;">
+																			{!item.comment}
+																		</div>
+																	</td>
+																</tr>
+															</table>
+															<br>
+													</apex:repeat>
+												</apex:form>
+												<br><br>
+											</apex:outputpanel>					
+										</div>
+									</apex:outputpanel>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</apex:outputpanel>		
+			</div>
+			<br>
+			<br>
+		</div>
+	</div>
+	<apex:form id="auxForm" style="display:none;" ><!-- style="display:none;"> -->
+		<apex:commandLink id="auxLink"
+			value="AuxLink" 
+			rerender="formsOverlays, bodyPageHeader, breadCrumbringPanel, pageHeaderPanel, saveFavoritePanel, bodyPagePanel, informationPanel"
+			action="{!getWiki}"
+			onclick="switchOverlay(true);" 
+			oncomplete="switchOverlay(false);">
+			<apex:param name="idWP2" value="a0w30000000CefdAAC"/>
+		</apex:commandLink>
+		<apex:actionFunction name="refreshAttachments" action="{!refreshAttachs}" rerender="attachmentsPanel" />
+	</apex:form>
+	<apex:outputpanel id="auxPanel" />
+		<script>
+			resetSearchInput();
+		</script>
+		<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->
+		
+	<script>
+		
+		var contentPanel = $('WikiPage:bodyPagePanel');
+		var contentPanelTables = contentPanel.getElementsByTagName('table');
+		
+		var contentPanelTrs = contentPanel.getElementsByTagName('tr');
+		
+		
+		for (var i= 0; i< contentPanelTables.length; i++) {
+			var itemTable = contentPanelTables[i];
+			var oldColor = itemTable.style.color;
+			if (oldColor != "" && oldColor != null) {
+				var contentPanelTds = itemTable.getElementsByTagName('td');
+				var contentPanelThs = itemTable.getElementsByTagName('th');
+				var contentPanelCaption = itemTable.getElementsByTagName('caption');
+				
+				for (var j= 0; j< contentPanelTds.length; j++) {
+					var itemTd = contentPanelTds[j];
+					if (itemTd.style.color == "" || itemTd.style.color == null || itemTd.style.color == '#333333') {
+						itemTd.style.color = oldColor;
+					}
+				}
+				
+				for (var j= 0; j< contentPanelThs.length; j++) {
+					var itemTh = contentPanelThs[j];
+					if (itemTh.style.color == "" || itemTh.style.color == null || itemTh.style.color == '#333333') {
+						itemTh.style.color = oldColor;
+					}
+				}
+				
+				for (var j= 0; j< contentPanelCaption.length; j++) {
+					var itemCaption = contentPanelCaption[j];
+					if (itemCaption.style.color == "" || itemCaption.style.color == null || itemCaption.style.color == '#333333') {
+						itemCaption.style.color = oldColor;
+					}
+				}
+			}
+		}
+		
+		for (var i= 0; i< contentPanelTrs.length; i++) {
+			var itemTr = contentPanelTrs[i];
+			var oldColor = itemTr.style.color;
+			if (oldColor != "" && oldColor != null) {
+				var contentPanelTds = itemTr.getElementsByTagName('td');
+				var contentPanelThs = itemTr.getElementsByTagName('th');
+				
+				for (var j= 0; j< contentPanelTds.length; j++) {
+					var itemTd = contentPanelTds[j];
+					if (itemTd.style.color == "" || itemTd.style.color == null || itemTd.style.color == '#333333') {
+						itemTd.style.color = oldColor;
+					}
+				}
+				
+				for (var j= 0; j< contentPanelThs.length; j++) {
+					var itemTh = contentPanelThs[j];
+					if (itemTh.style.color == "" || itemTh.style.color == null || itemTh.style.color == '#333333') {
+						itemTh.style.color = oldColor;
+					}
+				}
+			}
+		}
+
+	</script>  
+</apex:page>

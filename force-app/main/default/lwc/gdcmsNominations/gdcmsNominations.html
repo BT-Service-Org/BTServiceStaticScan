@@ -1,0 +1,131 @@
+<template>
+    <!-- <lightning-card> -->
+        <div>
+            <lightning-tabset active-tab-value="Nominations">
+                <lightning-tab label="Nominations" value="Nominations" onactive={handleTabClickedNominee}>
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="groupLeader" label="Select Group Leader"
+                            value={selectedGroupLeader} placeholder="Select Group Leader"
+                            options={groupleaderOptions} onchange={handleGroupLeaderChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="Period" label="Select Period"
+                            value={selectedPeriod} placeholder="Select Period"
+                            options={periodOptions} onchange={handlePeriodChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="Status" label="Award Category"
+                                value={selectedAwardCategory} placeholder="Select Award Category"
+                                options={awardCategoryOptions} onchange={handleAwardCategoryChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="2"
+                            medium-device-size="2" small-device-size="12" class="slds-m-top_large horizontal-center"
+                            style="justify-content: left;">
+                                <span class="slds-m-top_large slds-p-horizontal_xx-small">
+                                    <lightning-button if:true={isSmallDevice} variant="brand" label="Reset Filters" title="Reset"
+                                        onclick={resetSearchedResultFilters}>
+                                    </lightning-button>
+                                    <lightning-button-icon if:false={isSmallDevice} variant="brand" title="Reset Filters"
+                                        icon-name="utility:refresh" onclick={resetSearchedResultFilters}>
+                                    </lightning-button-icon>
+                                </span>
+                            </lightning-layout-item>
+                    </lightning-layout>
+                    <template if:false={loaded}>
+                        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                    </template>
+                    <template if:true={loaded}>
+                        <lightning-card title="">
+                            <div class="nomination-list">
+                                <!--p class="slds-p-horizontal_small"-->
+                                <lightning-layout multiple-rows>
+                                        <template if:true={isDataAvailable}>
+                                            <template for:each={filteredData} for:item="nomination">
+                                                <lightning-layout-item size="12" key={nomination.Id}>
+                                                    <c-gdcms-Nomination-Tile nomination={nomination} onselected={recordSelected} ondiselected={recordDiselected}></c-gdcms-Nomination-Tile>
+                                                </lightning-layout-item>
+                                            </template>
+                                        </template>
+                                    <template if:false={isDataAvailable}>
+                                        <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-align_absolute-center noResult">
+                                            <p>Sorry, there are no Nominations found. <br />
+                                            </p>
+                                        </div>
+                                    </template>
+                                </lightning-layout>
+                            </div>
+                            <p slot="footer">
+                                <lightning-button variant="destructive" label="Save Winner" icon-name="utility:identity" class="slds-m-left_x-small" onclick={handleMarkedWinner}></lightning-button>
+                            </p>
+                        </lightning-card>
+                    </template>
+                </lightning-tab>
+                <lightning-tab label="Winners" value="Winners" onactive={handleTabClicked}>
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="groupLeader" label="Select Group Leader"
+                            value={selectedGroupWinnerLeader} placeholder="Select Group Leader"
+                            options={groupleaderOptions} onchange={handleGroupLeaderWinnerChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="Period" label="Select Period"
+                            value={selectedWinnerPeriod} placeholder="Select Period"
+                            options={periodOptions} onchange={handleWinnerPeriodChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                            <lightning-combobox class="slds-m-left_x-small" name="Status" label="Award Category"
+                                value={selectedWinnerAwardCategory} placeholder="Select Award Category"
+                                options={awardCategoryOptions} onchange={handleWinnerAwardCategoryChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="2"
+                            medium-device-size="2" small-device-size="12" class="slds-m-top_large horizontal-center"
+                            style="justify-content: left;">
+                                <span class="slds-m-top_large slds-p-horizontal_xx-small">
+                                    <lightning-button if:true={isSmallDevice} variant="brand" label="Reset Filters" title="Reset"
+                                        onclick={resetSearchedResultWinnerFilters}>
+                                    </lightning-button>
+                                    <lightning-button-icon if:false={isSmallDevice} variant="brand" title="Reset Filters"
+                                        icon-name="utility:refresh" onclick={resetSearchedResultWinnerFilters}>
+                                    </lightning-button-icon>
+                                </span>
+                            </lightning-layout-item>
+                    </lightning-layout>
+                    <template if:false={winnerLoaded}>
+                        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                    </template>
+                    <template if:true={winnerLoaded}>
+                        <lightning-card title="">
+                            <div class="nomination-list">
+                            <lightning-layout multiple-rows>
+                                <template if:true={winnerShow}>
+                                    <template for:each={winnerlist} for:item="winner">
+                                        <lightning-layout-item size="12" key={winner.Id}>
+                                            <c-gdcms-winner-tile winner={winner} onselectedwinner={recordRemovedFromWinner} ondiselectedwinner={recordDiselectFromRemoveLst}></c-gdcms-winner-tile>
+                                        </lightning-layout-item>
+                                    </template>
+                                </template>
+                                <template if:false={winnerShow}>
+                                    <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-align_absolute-center noResult">
+                                        <p>Sorry, there are no winners found. <br />
+                                        </p>
+                                    </div>
+                                </template>
+                            </lightning-layout>
+                            </div>
+                            <p slot="footer">
+                                <lightning-button variant="destructive" label="Remove Winner" icon-name="utility:identity" class="slds-m-left_x-small" onclick={handleDiselectWinner}></lightning-button>
+                            </p>
+                        </lightning-card>
+                    </template>
+                </lightning-tab>
+            </lightning-tabset>
+        </div>
+    <!-- </lightning-card> -->
+</template>

@@ -1,0 +1,18 @@
+<aura:component implements="forceCommunity:layout" access="global">
+    <aura:attribute name="contentHeader" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="content" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="sidebar" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="contentFooter" type="Aura.Component[]" required="false"></aura:attribute>
+    {!v.contentHeader}
+          <div class="two_column_page">
+            <div class="left-col">
+              <span>{!v.content}</span>
+            </div>
+    
+              <div class="right-col">
+                <span>{!v.sidebar}</span>
+              </div>
+             
+            </div>
+    {!v.contentFooter}
+</aura:component>

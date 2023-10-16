@@ -1,0 +1,22 @@
+<template>
+    <div>
+        <img src={footerImage} alt="Footer Image" width=100%; height=auto />
+    </div>
+    <footer>
+        <div class="Footer_Logo">
+            <img src={footerLogo} alt="Salesforce Logo" width="100%" height=auto />
+        </div>
+        <div class="footer-content salesforce_font">
+            <p>&#169; {currentYear} salesforce.com, inc. All rights reserved.</p>
+            <template for:each={menuItems} for:item="item">
+                <span key={item.url} onclick={clickMenuItemHandler}>
+                    <a href={item.url} target={item.target}>
+                        <p>{item.title}</p>
+                    </a>
+                </span>
+            </template>
+        </div>
+
+
+    </footer>
+</template>

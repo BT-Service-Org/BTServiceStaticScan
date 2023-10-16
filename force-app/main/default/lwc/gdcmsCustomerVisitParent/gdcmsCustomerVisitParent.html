@@ -1,0 +1,63 @@
+<template>
+    <div class="TextContainer">
+        <div class = "bodyContainer">
+            <div style="background-image: url(/gdcIndia/file-asset/GDCMSHomeGDCAtGlanceBackgroundImgpng?v=1);background-repeat:round;background-origin: content-box;background-size: contain;background-position: revert;padding-bottom: 30px;">
+                <h1 class="slds-m-bottom--large title-class">Customer Visits</h1>
+
+                <div class="slds-grid slds-gutters slds-m-horizontal_large">
+                    <div class="slds-col" style="width:70%">
+                            <!-- child component goes here -->
+                            <c-gdcms-custom-carousel slides-data={sliderData} auto-scroll={autoScroll}></c-gdcms-custom-carousel>
+                    </div>
+
+                    <div class="slds-col" style="width:30%;height:350px">
+                        <div class="slds-grid  slds-gutters">
+                            <div class="slds-col">
+                                <div class="slds-grid slds-grid_vertical" style="height:350px">
+                                    <div class="slds-col">
+                                        <div
+                                            style="display:flex;justify-content: center;height: 320px;">
+                                            <div class="contentbox">
+                                                <div class="slds-col slds-p-horizontal_large" style="display:flex;width: 100%;padding: 10px;">
+                                                    <div class="slds-box"
+                                                        style="background:#AAA2D2F7;color:#032D60;border-radius:120px;height:60px;width:60px">
+                                                        <span class="slds-align_absolute-center">{label.gdcmsGlobalCustomerVisits}</span>
+                                                    </div>
+                                                    <div class="slds-align_absolute-center" style="font-size: 12px;font-weight: 700;text-align:left;margin: 5px;">
+                                                        <span># of Global Customer Visits</span>
+                                                    </div>
+                                                    <!-- # of Global Customer Visits -->
+                                                </div>
+                                                <div class="slds-col slds-p-horizontal_large" style="display:flex;width: 100%;padding: 10px;">
+                                                    <div class="slds-box"
+                                                        style="background:#AAA2D2F7;color:#032D60;border-radius:120px;height:60px;width:60px">
+                                                        <span class="slds-align_absolute-center">{label.gdcmsGICLeadershipConnects}</span>
+                                                    </div>
+                                                    <div class="slds-align_absolute-center" style="font-size: 12px;font-weight: 700;text-align:left;margin: 5px;">
+                                                        <span># of GIC Leadership Connects</span>
+                                                    </div>
+                                                    <!-- # of Global Customer Visits -->
+                                                </div>
+                                                <div class="slds-col slds-p-horizontal_large" style="display:flex;width: 100%;padding: 10px;">
+                                                    <div class="slds-box"
+                                                        style="background:#AAA2D2F7;color:#032D60;border-radius:120px;height:60px;width:60px">
+                                                        <span class="slds-align_absolute-center">{label.gdcmsUpcomingVisits}</span>
+                                                    </div>
+                                                    <div class="slds-align_absolute-center" style="font-size: 12px;font-weight: 700;text-align:left;margin: 5px;">
+                                                        <span># of Upcoming Visits</span>
+                                                    </div>
+                                                    <!-- # of Global Customer Visits -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

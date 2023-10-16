@@ -1,0 +1,163 @@
+<template>
+    <lightning-record-edit-form object-api-name="Reusable_Asset__c" record-id={reusableAssetId}
+        record-type-id={reusableAssetRecTypeId} onload={handleLoad} onsuccess={handleReusableAssetSuccess}
+        onerror={handleError} onsubmit={handleReusableAssetSubmit} style="width:100%">
+        <template if:true={showSpinner}>
+            <lightning-spinner alternative-text="Loading......" size="medium" variant="brand">
+            </lightning-spinner>
+        </template>
+        <!-- Reusable Page One -->
+
+        <div if:true={reusableAssetPageOne}>
+            <h3 class="sub-heading slds-m-top_medium slds-m-bottom_small">Information</h3>
+            <div class="sub-section">
+                <lightning-input-field field-name="Title__c" required> </lightning-input-field>
+                <lightning-input-field field-name="Description__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <h3 class="sub-heading slds-m-top_large slds-m-bottom_small" if:true={showButtons}>Asset Links</h3>
+            <div class="sub-section">
+            <div class="slds-grid slds-wrap">
+                <lightning-input-field field-name="Design_Link__c" variant="label-stacked" class="slds-size_1-of-2">
+                </lightning-input-field>
+                <lightning-input-field field-name="Repository_Link__c" required variant="label-stacked" class="slds-size_1-of-2">
+                </lightning-input-field>
+                <lightning-input-field field-name="Demo_Link__c" variant="label-stacked" class="slds-size_1-of-2">
+                </lightning-input-field>
+                <lightning-input-field field-name="Github_Handle__c" variant="label-stacked" class="slds-size_1-of-2">
+                </lightning-input-field>
+            </div>
+            </div>
+
+            <div class="action_button" if:true={showButtons}>
+                <lightning-button label="Previous" variant="Neutral" onclick={reusableFirstPrevious}>
+                </lightning-button>
+                <lightning-button label="Next" type="submit" variant="brand" style="display: inline-block;">
+                </lightning-button>
+            </div>
+        </div>
+        <!-- Reusable Page Two -->
+        <div if:true={reusableAssetPageTwo}>
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading......" size="medium" variant="brand">
+                </lightning-spinner>
+            </template>
+            <h3 class="sub-heading slds-m-top_large slds-m-bottom_small">Additional Information</h3>
+                     <div class="sub-section">
+                        <div class="additional_info">
+                           <template if:true={productData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={productData.recordList} label={productData.key}
+                                    search-field-name="Name" onselected={handleProductChange}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/browse-all?name=Products" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       products</a>
+                                 </p>
+                              </div>
+                           </template>
+                           <template if:true={industryData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={industryData.recordList}
+                                    label={industryData.key} search-field-name="Name"
+                                    onselected={handleIndustriesChange}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/industries" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       industries</a>
+                                 </p>
+                              </div>
+                           </template>
+                           <template if:true={roleData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={roleData.recordList} label={roleData.key}
+                                    search-field-name="Name" onselected={handleRoleChange}  show-help-text =true help-text={targetAudienceHelpText}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/target-audience" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       target
+                                       audience</a>
+                                 </p>
+                              </div>
+                           </template>
+                        </div>
+                     </div>
+            <c-psc-modal show-footer="true">
+                <div if:true={tags_modal}>
+                   <h2 slot="header" id="modal-heading-02"
+                      class="slds-text-heading_medium slds-hyphenate header ITC_font">Add Tags
+                   </h2>
+                   <lightning-record-edit-form record-type-id={articleTagRecTypeId}
+                      object-api-name="Article_Tags__c" onload={handleTagLoad} onsubmit={handleAddTagsSubmit}
+                      onerror={handleTagError}>
+                      <div if:true={errorFound} class="salesforce_font errormsg">
+                         <span if:true={errorMsg}>{errorMsg}</span>
+                      </div>
+                      <lightning-input-field field-name="Tag__c" class="tag"> </lightning-input-field>
+                      <lightning-input type="text" label="Enter New Tag Name" placeholder="Type here..."
+                         variant="label-inline" value={tagText} onchange={handleTagChange}></lightning-input>
+                      <div class="slds-m-top_medium">
+                         <lightning-button class="slds-p-vertical_small slds-float_right" type="submit"
+                            label="Submit" variant="brand"></lightning-button>
+                      </div>
+                   </lightning-record-edit-form>
+                </div>
+             </c-psc-modal>
+            <h3 class="sub-heading slds-m-top_large slds-m-bottom_small">Tags & Attachments</h3>
+                     <div class="sub-section">
+                        <div class="modal_buttons">
+                           <lightning-button variant="brand" label="Add Tags" title="Add Tags"
+                              onclick={openAddTagsModal} icon-name="utility:attach"
+                              style="display:block;margin-top:12px">
+                           </lightning-button>
+                           <lightning-file-upload name="KnowlegdeFile" onuploadfinished={handleUploadFinished}>
+                           </lightning-file-upload>
+                        </div>
+                        <div
+                           class="slds-form-element__control slds-input-has-icon slds-input-has-icon slds-input-has-icon_left-right records"
+                           role="none">
+                           <p class="salesforce_font attachment_label" if:true={articleTagsToInsert.length}>
+                              Tags
+                           </p>
+                           <template for:each={articleTagsToInsert} for:item="tag" if:true={articleTagsToInsert}>
+                              <span key={tag.Tag__c}>
+                                 <lightning-pill label={tag.Name} name={tag.Name} onclick={removeRecord}
+                                    class="bubble"></lightning-pill>
+                              </span>
+                           </template>
+                        </div>
+                     </div>
+
+            <p class="sub-heading slds-m-bottom_small" style="margin-top: 20px;">Guidance for Success</p>
+            <p class="salesforce_font">
+                <strong>Before submitting for review please ensure you have a Github username, support
+                  documentation and complete the mandatory fields</strong><br>
+                1. You have your Github username available<br>
+                2. Repository link<br>
+                3. The Asset and Project information is finalized<br>
+                4. Solution Design documentation<br>
+                5. Link to Demo of solution<br>
+                6. Details on how the asset will benefit the customer<br><br>
+                <strong>Exit Criteria:</strong><br>
+                1. The Github repo handle and Asset Link fields have been updated<br>
+                2. Your files are uploaded to the repository and you have included an asset design documentation and a demo video, if available<br>
+                3. Submit the record for approval</p>
+
+            <div class="slds-grid help_text">
+                <lightning-input data-id="submitForReview" type="checkbox" name="Submit For Review"
+                    class="slds-col slds-grow-none slds-text-title_bold" onchange={handleSubmitRAReview}>
+                </lightning-input>
+                <p class="salesforce_font review_label">{pscContributeSubmitForReviewRALabel}</p>
+                <lightning-helptext class="slds-col help_text_icon" content={submitForReviewRAHelpText}>
+                </lightning-helptext>
+            </div>
+            <div class="action_button" if:true={showButtons}>
+                <lightning-button label="Previous" variant="Neutral" onclick={reusableSecondPrevious}>
+                </lightning-button>
+                <lightning-button label={submitButtonLabel} variant="brand" onclick={handleReusableAssetFinalNext}
+                    style="display: inline-block;">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-record-edit-form>
+</template>

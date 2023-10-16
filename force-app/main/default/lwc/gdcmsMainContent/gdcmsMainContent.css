@@ -1,0 +1,259 @@
+.container {
+  background-color: #001639;
+  min-height: 360px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+.card {
+  background-color: #2980b9;
+  transition: transform 0.3s;
+  width: 200px;
+  height: 200px;
+  margin: 30px;
+}
+.card:hover {
+  transform: scale(1.1);
+}
+.back-screen {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(180deg, rgba(0, 22, 57, 0) 0%, #001639 100%);
+}
+.image-holder {
+  width: 100%;
+  height: 400px;
+}
+.headline {
+  font-family: "ITC Avant Garde", sans-serif;
+  font-size: 40px;
+  line-height: 46px;
+  letter-spacing: -0.85px;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  padding: 20px;
+}
+
+.about-us{
+  /* anu background: #d8edff;*/
+  padding: 1rem;
+  color: #080707;
+  /* anu position: relative;*/
+  margin-bottom: 50px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.about-us-heading{
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.about-us-content{
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.about-us-para{
+  color: #080707;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.image-overlay{
+  position: absolute;
+  bottom: -121px;
+  right: 0;
+}
+
+.accentImg{
+  opacity: 0.5;
+}
+
+.container-shadow {
+  box-Shadow: 0px 0px 6px 0px;
+  padding: 16px;
+  border-radius: 6px;
+  height: 100%;
+}
+.gdc-overview-detail{
+  width: 50%;
+  
+}
+.gdc-overview-text {
+  padding: 5px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+
+.s-blue {
+  color: #0b5cab;
+}
+
+.list-style-square {
+  list-style-type: square;
+  padding-left: 30px;
+  line-height: 2;
+}
+.list-style-round{
+ list-style-type: circle;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col-half {
+  flex: 0 0 auto;
+  width: 50%;
+  padding: 0 16px;
+}
+
+.d-flex {
+  display: flex!important;
+  flex-wrap: wrap;
+}
+.d-block {
+  display: block;
+}
+
+.home-container {
+  margin-bottom: 48px;
+  /*font-weight: 300;*/
+  font-size: 18px;
+  max-width: 1350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.font-weight-300{
+  font-weight: 300;
+}
+.home-sub-heading {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* flip container, keeps always perspective */
+.flip-container.flipper-id-gdc {
+perspective: 1000px;
+}
+/* flip the pane after hovered */
+.flip-container.flipper-id-gdc {
+margin: 0 16px 40px 16px;
+float: left;
+  overflow: hidden;
+}
+.flipper-id-gdc .back-tile a {
+display: block;
+color: #ffffff; 
+padding-top: 5px;
+/*font-weight: 400 !important;*/
+font-size: 16px;
+}
+.flip-container.flipper-id-gdc, .flipper-id-gdc .front-tile, .flipper-id-gdc .back-tile, .flipper-id-gdc .back-tile {
+width: 193px;
+height: 210px;
+}
+.flip-container.flipper-id-gdc .back-tile, .flip-container.flipper-id-gdc .front-tile {
+box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;      
+}
+.flip-container.flipper-id-gdc, .flipper-id-gdc .flip {
+overflow: visible !important;
+}
+/* css for flip speed */
+.flipper-id-gdc .flip {
+transition: 0.6s;
+transform-style: preserve-3d;
+position: relative;
+  overflow: hidden;
+}
+/* hide back pane during swap */
+.flipper-id-gdc .front-tile, .flipper-id-gdc .back-tile {
+backface-visibility: hidden;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+right: 0; 
+      border-top: 3px solid #032d60;
+box-sizing: border-box;
+  overflow: hidden;
+}
+/* front pane, must be above back */
+.flipper-id-gdc .front-tile {
+background-color: #f5f2f2;
+z-index: 2;
+/* for firefox */
+transform: rotateY(0deg);  
+padding: 10px;       
+}
+.flipper-id-gdc .front-tile p { 
+font-size: 12px; 
+}
+/* hidden pane on init */
+.flipper-id-gdc .back-tile {
+background-color: #032d60;
+transform: rotateY(180deg);    
+color: #ffffff;  
+text-align: center;  
+padding-top: 5px;        
+}
+.flipper-id-gdc .back-tile p {
+padding: 20px;
+font-size: 15px;
+font-family: 'Salesforce-Sans'; 
+color: #ffffff; 
+/*font-weight: initial;*/
+
+}
+
+
+.flip-container.flipper-id-gdc:hover .flip {
+transform: rotateY(180deg); 
+}
+
+.w-100 {width : 100% }
+
+.home-sub-heading2{
+  margin-bottom: 16px;
+}
+
+.col-one-third {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 768px) {
+  .col-one-third {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 0 16px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .col-one-third {
+    flex: 0 0 auto;
+    width: 33.33%;
+    padding: 0 16px;
+    margin-bottom: 0;
+  }
+}

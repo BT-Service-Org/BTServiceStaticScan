@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+     <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+     <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="header" type="String" label="Slack Header Text" required="true" default="Have Comments or Questions?" />
+            <property name="helpText" type="String" label="Slack Help text" required="true" default="Get in on the conversation. Please post questions and comments or feedback into the Slack Channel"/>
+            <property name="slackUrl" type="String" label="Slack Channel Url" default="https://salesforce-internal.slack.com/archives/C04EK9KBFNF"/>
+            <property name="buttonName" type="String" label="Slack Button Name" default="Submit Feedback in Slack" />
+        </targetConfig>
+     </targetConfigs> 
+</LightningComponentBundle>

@@ -1,0 +1,17 @@
+.parent > lightning-button-icon {
+  opacity: 0.3;
+  position:relative;
+  float: right;
+  left:1000px;
+  bottom:250px;
+  transition: 0.5s;
+}
+.parent > lightning-button-icon {
+  opacity: 1;
+}
+
+.about-us-para{
+  color: #080707;
+  margin-bottom: 10px;
+  font-weight: 300;
+}

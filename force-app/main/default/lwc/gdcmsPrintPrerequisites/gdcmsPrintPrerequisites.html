@@ -1,0 +1,24 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <template if:true={showPrereq}>
+        <div class="slds-notify" role="alert">
+            <div class="slds-no-print">
+                <div class="slds-container_large slds-p-horizontal_small slds-p-vertical_medium print-banner">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-12">
+                            <lightning-icon class="info-icon" icon-name="utility:info_alt" title="Info" size="small">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-col slds-size_10-of-12">
+                            <lightning-formatted-rich-text value={bannerMessage}></lightning-formatted-rich-text>
+                        </div>
+                        <div class="slds-col slds-col_bump-left slds-size_1-of-12">
+                            <lightning-button-icon icon-name="utility:close" variant="brand" size="x-small" alternative-text="Close"
+                                class="slds-float_right" title="Close" onclick={closePrereq}></lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

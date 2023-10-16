@@ -1,0 +1,22 @@
+<apex:page id="badgeAssessmentStep3"  showHeader="true" controller="BadgeAssessmentController" title="Badge Assessment Process">
+    <head>
+   </head>
+    <script>
+    </script>  
+        <apex:sectionHeader title="Badge Assessment Process" subtitle="Step 3 of 3"/>
+        <apex:form id="AssessmentForm" forceSSL="true">
+            <apex:pageMessages id="error"/>
+                        
+            <apex:pageBlock title="Your Badge Assessment Request is complete." mode="view">
+                <apex:pageBlockButtons location="bottom" >
+                    <apex:commandButton value="OK" action="{!cancel}" immediate="true"/>                           
+                </apex:pageBlockButtons>
+               <apex:panelGrid columns="1" id="profileGrid">  
+                   <apex:outputText value="Your judge assigned is {!judge.Name} ({!judge.User__r.Email}) and please work with them to schedule a session." id="judge"/>
+                   <apex:outputText value="Instructions for the badging session will be sent to you via email. Included in that will be the scenario that you will need to present to a judge. If you do not receive this email, please contact your judge for further instructions."/>
+                   <apex:outputLink value="{!URLFOR($Action.Case.View, createdCase.Id)}">Link to Case {!createdCase.CaseNumber}</apex:outputLink> 
+           </apex:panelGrid>
+                  <apex:outputLink target="_Blank" value="https://org62.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F930000000HBdn">Click here to learn more about the Badging Process</apex:outputLink> 
+      </apex:pageBlock>
+    </apex:form>
+</apex:page>

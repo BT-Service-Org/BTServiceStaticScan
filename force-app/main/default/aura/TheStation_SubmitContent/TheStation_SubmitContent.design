@@ -1,0 +1,5 @@
+<design:component label="TheStationHub - Submit SI Record">
+    <design:attribute name="recordId" label="Record Id" default="{!recordId}" required="true"/>
+    <design:attribute name="buttonLabel" label="Button Label" default="Request/Submit Content" required="true"/>
+    <design:attribute name="align" label="Align" datasource="Left,Right,Center" default="Right" required="true"/>
+</design:component>

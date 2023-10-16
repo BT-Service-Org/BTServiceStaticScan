@@ -1,0 +1,3 @@
+<design:component label="TheStation: User Details Component">
+    <design:attribute name="builderUrl" label="Builder Url" description="This url is used in the button Community Builder" />
+</design:component>

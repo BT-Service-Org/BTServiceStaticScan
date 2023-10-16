@@ -1,0 +1,28 @@
+<apex:page standardController="PA_Onboarding__c" showheader="false" extensions="LPChartController" > 
+<apex:pageBlock > 
+    <apex:pageBlockSection title="Badge Progress for: " >
+         <apex:pageBlockSectionItem >
+         <apex:outputText value="{!resname}" />
+         </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    
+    
+
+    <apex:chart height="400" width="700" legend="true" data="{!data}"> 
+    
+    <apex:legend position="right"/>
+    
+          <apex:axis type="Numeric" position="left" fields="actual,planned" 
+            title="#Badges" grid="true"/>
+            
+          <apex:axis type="Category" position="bottom" fields="name" 
+            title="#Weeks">
+          </apex:axis>
+          <apex:lineSeries axis="left" fill="true" xField="name" yField="actual"
+              markerType="cross" markerSize="4" markerFill="#FF0000"/>
+          <apex:lineSeries axis="left" xField="name" yField="planned" 
+            markerType="circle" markerSize="4" markerFill="#8E35EF" >
+            </apex:lineSeries>
+    </apex:chart>
+    </apex:pageBlock>
+</apex:page>

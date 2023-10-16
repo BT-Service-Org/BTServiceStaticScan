@@ -1,0 +1,36 @@
+<template>
+    <lightning-layout multiple-rows="true">
+        <lightning-layout-item padding="around-small" size="12">
+            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                <span class="slds-assistive-text">info</span>
+            <h2>
+
+                    <template if:true={displayHeader}>
+                        <p>
+                        Each quarter, only one nomination for trailblazer and customer success can be made for each
+                        manager. You can change the nomination during the Nomination period, but it will only consider
+                        the most recent one and will overwrite the prior one if entered in this quarter</p>.<p>The following
+                        will be considered final submission at the end date. <a href={label_gdcmsRewardsAndRecognitionLink}>Click here for knowing the Process</a></p>
+                    </template>
+                    <template if:false={displayHeader}>
+                       <p>The following will be considered final submission at the end date. <a href={label_gdcmsRewardsAndRecognitionLink}>Click here for knowing the Process</a></p>
+                    </template>
+
+            </h2>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" class="slds-var-p-vertical_x-small">
+            <div class="slds-grid slds-gutters slds-var-p-around_large" style="font-size: larger;">
+                <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                    <p style="font-weight: bolder;">Start Date : {gdc_ms_QuarterStartDate__c}</p>
+                </div>
+                <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                    <p style="font-weight: bolder;">Quarter : {gdc_ms_Quarter__c}</p>
+                </div>
+                <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                    <p style="font-weight: bolder;">End Date : {gdc_ms_QuarterEndDate__c}</p>
+                </div>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

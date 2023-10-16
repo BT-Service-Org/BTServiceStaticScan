@@ -1,0 +1,69 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="label" type="String" access="public"/>
+	<aura:attribute name="placeholder" type="String" access="public"/>
+	<aura:attribute name="items" type="Object[]" access="public"/>
+	<aura:attribute name="selection" type="Object[]" default="[]" access="public"/>
+	<aura:attribute name="showLabel" type="Boolean" access="public"/>
+	<aura:attribute name="show" type="Boolean" default="false" access="public"/>
+
+	<!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-form-element">
+		<aura:if isTrue="{!v.showLabel}">
+			<label class="slds-form-element__label" for="combobox-unique-id-3">{!v.label}</label>
+		</aura:if>
+		<div class="slds-form-element__control">
+			<div class="slds-combobox_container">
+				<div class="{!'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click '+if(v.show,'slds-is-open','')}" aria-expanded="{!v.show}" aria-haspopup="listbox" role="combobox">
+					<div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+						<input class="slds-input slds-combobox__input slds-combobox__input-value" id="combobox-unique-id-3" aria-controls="listbox-unique-id" autocomplete="off" role="textbox" type="text" placeholder="{!v.placeholder}" readonly="true" value="{!if(v.selection.length,v.selection.length+' '+v.label+'(s) Selected','')}" onclick="{!c.showHidePanel}"/>
+						<span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+							<lightning:icon iconName="utility:down" size="x-small"/>
+						</span>
+					</div>
+					<div id="listbox-unique-id" role="listbox">
+						<ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation">
+							<aura:iteration items="{!v.items}" var="item">
+								<li role="presentation" class="slds-listbox__item" data-value="{!item.value}" onclick="{!c.onChange}">
+									<div id="listbox-option-unique-id-01" class="{!'slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-media_center '+if(item.selected,'slds-is-selected','')}" role="option">
+										<span class="slds-media__figure">
+											<aura:if isTrue="{!item.selected}">
+												<lightning:icon iconName="utility:check" size="x-small" class="slds-listbox__icon-selected"/>
+												<aura:set attribute="else">
+													<lightning:icon iconName="" size="x-small"/>
+												</aura:set>
+											</aura:if>
+										</span>
+										<span class="slds-media__body">
+						                    <span class="slds-truncate" title="{!item.label}">
+					                      	<span class="slds-assistive-text">Current Selection :</span> {!item.label}</span>
+					                  	</span>
+									</div>
+								</li>
+							</aura:iteration>
+						</ul>
+					</div>
+				</div>
+				<div id="listbox-selections-unique-id" role="listbox" aria-orientation="horizontal">
+					<ul class="slds-listbox slds-listbox_horizontal slds-p-top_xxx-small" role="group" aria-label="Selected Options:">
+						<aura:iteration items="{!v.selection}" var="item">
+							<li role="presentation" class="slds-listbox__item">
+								<span class="slds-pill" role="option" tabindex="0" aria-selected="true">
+									<span class="slds-pill__label" title="{!item}">{!item}</span>
+									<span class="slds-icon_container slds-pill__remove" title="Remove" data-value="{!item}" onclick="{!c.removeItem}">
+										<lightning:buttonIcon iconName="utility:close" size="x-small"/>
+									</span>
+								</span>
+							</li>
+						</aura:iteration>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

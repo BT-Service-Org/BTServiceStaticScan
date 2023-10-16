@@ -1,0 +1,93 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="PreworkTemplateController">
+
+  <head>
+    <meta charset="utf-8"/>
+    <title>Platform Academy : Candidate Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!-- Le styles -->
+    <link href="{!URLFOR($Resource.Bootstrap,'css/bootstrap.css')}" rel="stylesheet"/>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+
+      @media (max-width: 980px) {
+        /* Enable use of floated navbar text */
+        .navbar-text.pull-right {
+          float: none;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Platform Academy</a>
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+              Logged in as <a href="#" class="navbar-link">{!$User.FirstName} {!$User.LastName}</a>&nbsp;(<a href="/secur/logout.jsp">Logout</a>)
+            </p>
+            <ul class="nav">
+              <li class="active"><a href="{!URLFOR($Page.PlatformAcademyHome)}">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <apex:repeat value="{!preworkTopics}" var="topic">
+              <li class="{!IF(topic.Id=$CurrentPage.parameters.id,'active','')}">
+                  <a href="{!URLFOR($Page.PlatformAcademyTopic)}?id={!topic.Id}">{!topic.Subject_Area__c}&nbsp;[{!topic.Pct_Complete__c}%]</a>
+                  <div class="progress progress-warning progress-striped" style="height:5px;">
+                      <div class="bar" style="width: {!topic.Pct_Complete__c}%;"></div>
+                  </div>
+              </li>
+              </apex:repeat>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+            <apex:insert name="mainContent"/>
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr/>
+
+      <footer>
+        <p>&copy; salesforce.com 2013</p>
+      </footer>
+
+    </div>
+    
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Bootstrap,'js/bootstrap.js')}"></script>
+
+  </body>
+
+</apex:page>

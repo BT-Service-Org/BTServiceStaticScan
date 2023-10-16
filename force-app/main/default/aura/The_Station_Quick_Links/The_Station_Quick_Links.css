@@ -1,0 +1,317 @@
+.THIS input {
+    color: black !important;
+}
+
+/*.THIS.backgroundColor-light1 {
+    background-color: #FFFFFF;
+    color: #21466F;
+	position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.THIS.backgroundColor-light2 {
+	background-color: #F8F8F8;
+    color: #21466F;
+	position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.THIS.backgroundColor-dark1 {
+	background-color: #54698D !important;
+	color: #FFFFFF;
+	position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.THIS.backgroundColor-dark2 {
+	background-color: #21466F !important;
+	color: #FFFFFF;
+	position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}*/
+
+.THIS.backgroundColor-light1 {
+    background-color: #FFFFFF;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-light2 {
+	background-color: #F8F8F8;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark1 {
+	background-color: #54698D !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark2 {
+	background-color: #21466F !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS .buttonTheme-light1 {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light2 {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark1 {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #54698D !important;
+	color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark2 {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #21466F !important;
+	color: #FFFFFF;
+}
+
+.THIS .slds-button_neutral {
+    font-weight: bold;
+    border: var(--buttonBorder);
+    background-color: var(--buttonBackground);
+    height: var(--buttonHeight);
+    color: #FFFFFF;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+.THIS .slds-button_icon-border {
+    width: var(--buttonHeight);
+    height: var(--buttonHeight);
+    border-width: 2px;
+}
+
+.THIS .main-container {
+    margin-bottom: 1.5rem;
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+
+.THIS .main-title {
+    margin-left: 20px;
+    margin-right: 20px;
+    background: none;
+    padding-top: 20px;
+}
+
+.THIS .column-outer-container {
+    padding-top: 2rem;
+    vertical-align: top;
+    margin-left: 20;
+    margin-right: 20;
+    background: none;
+}
+
+.THIS .item-left-padding {
+    padding-left: 1rem;
+}
+
+.THIS .item-left-padding_large {
+    padding-left: 2rem;
+}
+
+.THIS .item-right-padding {
+    padding-right: 1rem;
+}
+
+.THIS .item-right-padding_large {
+    padding-right: 2rem;
+}
+
+.THIS .item-container {
+    background: none;
+    margin-bottom: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.THIS .column-title {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    background: none;
+	line-height: 2.0;
+    padding-bottom: 20px;
+}
+
+.THIS .item-image {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    margin-bottom:1rem;
+    border-radius: 6px;
+    position: relative;
+    /* aspect clamp if needed */
+    display: flex;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+}
+
+.THIS .item-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.THIS .item-copy {
+    background: none;
+}
+
+.THIS .item-title {
+    font-size: 21px;
+    font-family: "Salesforce Sans";
+    line-height: 36px;
+    background: none;
+    margin-bottom: 12px;
+}
+
+.THIS .item-subtitle {
+    line-height: 30px;
+    letter-spacing: 0.61px;
+    font-size: 22px;
+    font-family: "Salesforce Sans";
+    font-weight: bold;
+    background: none;
+    margin-bottom: 8px;
+}
+
+.THIS .item-description {
+    font-size: 15px;
+    letter-spacing: 0.56px;
+    line-height: 24px;
+    background: none;
+    margin-bottom: 14px;
+}
+
+.THIS .button-container {
+    background: none;
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+.THIS .item-richtext-container {
+    display:flex;
+    align-items:center;
+    height: 100%
+}
+
+
+
+/* Adding CSS for Tag */
+.THIS .flag {
+    position: relative;   
+    top:-15px;                                                          
+  }
+  
+  .THIS .flag-text {
+    z-index: 12;
+    position: absolute;
+    color: white;
+    font-size: .75rem;
+    height: 25px;
+    right:7px;
+    margin-left: 10px;
+    max-width: 125px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /*
+  .THIS .flag:hover .flag-popover {
+    display: block
+  }
+  */
+  .THIS .flag-popover {
+  max-width: 190px;
+  margin-top: 15px;
+  background: #16315F;
+  color: #FFFFFF;
+  display: none;                                                                        
+  }
+  
+  .THIS .shape {
+    width: 90px;
+    height: 25px;
+    right:0;
+    background-color: #66AB48;
+    position: absolute;
+    z-index: 12;
+    display: inline-block;
+  }
+  
+  .THIS .shape::after {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-top: 25px solid #66AB48;
+    border-left: 25px solid transparent;
+    position: absolute;
+    left: -25px;
+  }
+  
+  .THIS .shape::before {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-bottom: 25px solid #66AB48;
+    border-left: 25px solid transparent;
+    position: absolute;
+    left: -25px;
+  }
+  /* Adding CSS for Tag*/

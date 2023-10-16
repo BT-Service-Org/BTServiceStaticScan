@@ -1,0 +1,208 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="StationSPController" access="global">
+
+    <ltng:require styles="{!join(',',
+        $Resource.slick + '/slick-1.8.1/slick/slick-theme.css' ,
+        $Resource.slick +'/slick-1.8.1/slick/slick.css')}" scripts="{!join(',',$Resource.jquery,
+        $Resource.slick + '/slick-1.8.1/slick/slick.js')}" afterScriptsLoaded="{!c.afterLoad}" />
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="globalId" type="String" />
+    <aura:attribute name="areLibrariesLoaded" type="boolean" default="false" />
+    <aura:attribute name="isSlickInitialized" type="boolean" default="false" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="subTitle" type="String" default="" />
+
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="42px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="intSubTitleFontSize" type="String" default="30px" />
+    <aura:attribute name="intSubTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="carouselNavigationColor" type="String" />
+
+    <aura:attribute name="dataSeparator" type="String" default="|;;|" />
+    <aura:attribute name="emailSubject" type="String" />
+    <aura:attribute name="emailRecipient" type="String" />
+    <aura:attribute name="emailBody" type="String" />
+    <aura:attribute name="sharedUrl" type="String" />
+    <aura:attribute name="buttonBorder" type="String" default="2px solid #FFFFFF;"/>
+    <aura:attribute name="buttonBackground" type="String" default="#018EDA !important;"/>	
+    <aura:attribute name="buttonHeight" type="String" default="34px;"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="isFullScreenWidth" type="boolean" default="true"/>
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="subTitleFontSize" type="Integer" default="30" />
+    <aura:attribute name="subTitleAlignment" type="String" default="Center" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isLoading" type="boolean" default="true"/>
+
+
+    <div aura:id="parent">
+        <div class="main-container">
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.title}
+                </div>
+                <aura:if isTrue="{!v.subTitle != undefined}">
+                    <div class="sub-title" style="{!v.intSubTitleFontSize + v.intSubTitleAlignment}">
+                        {!v.subTitle}
+                    </div>
+                </aura:if>
+            </aura:if>
+            <div class="wrapper">
+                <aura:if isTrue="{!v.isLoading}">
+                    <!-- Loading Spinner -->
+                    <div class="exampleHolder">
+                        <lightning:spinner variant="brand" alternativeText="Loading" size="medium" />
+                    </div>
+                    <!-- Loading Spinner -->
+                </aura:if>
+                <div class="{! v.isSlickInitialized ? 'slds-show' : 'slds-hide'}">
+                    <div id="{! 'carousel-' + v.globalId }" class="carousel">
+                        <aura:iteration var="section" items="{!v.groupList}" indexVar="index">
+                            <div style="{! '--buttonBorder:' + v.buttonBorder + ';' + '--buttonBackground:' + v.buttonBackground + ';' + '--buttonHeight:' + v.buttonHeight}">
+                                <aura:if isTrue="{!section.content.freshContent}">
+                                    
+                                    <div class="flag">
+                                        <span class="shape"></span>
+                                        <span class="flag-text">New/Updated!</span>
+                                        <!--<section class="flag-popover slds-popover slds-nubbin_top-left" role="dialog">
+                                            <div class="slds-popover__body">
+                                                <p>Unapproved Content is only visible in a collection. To upgrade to Approved, submit this content to the appropriate Product/Offering page.</p>
+                                            </div>
+                                        </section>-->
+                                    </div>
+                                </aura:if>
+                                <div class="item-image">
+                                    <aura:if isTrue="{!section.content.Upload_Image__c != null}">
+                                        <div class="uiOutputRichText item-img" linkify="true">
+                                            <div class="item-richtext-container">
+                                                <aura:unescapedHtml value="{!section.content.Upload_Image__c}" />
+                                            </div>
+                                        </div>
+                                        <aura:set attribute="else">
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                <c:The_Station_Component_Image_Preview>
+                                                    <aura:set attribute="ContentDocumentId"
+                                                        value="{!section.contentPiece.ContentDocumentId__c}" />
+                                                    <aura:set attribute="ContentDocumentExternalId"
+                                                        value="{!section.contentPiece.ExternalDocumentInfo2__c}" />
+                                                    <aura:set attribute="ContentVersionId"
+                                                        value="{!section.contentPiece.ExternalId}" />
+                                                    <aura:set attribute="IconPreviewUrl"
+                                                        value="{!section.previewIcon}" />
+                                                </c:The_Station_Component_Image_Preview>
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.File_Type__c == 'URL'}">
+                                                <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                    class="item-img" />
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.File_Type__c == 'App Exchange'}">
+                                                <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                                    class="item-img" />
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                                <div class="item-copy">
+                                    <div class="item-title">
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                            <aura:if isTrue="{!section.contentPiece.FileType__c == 'PDF'}">
+                                                <div class="item-title-url">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!'https://org62.lightning.force.com/'+section.contentPiece.ContentDocumentId__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <aura:if isTrue="{!section.contentPiece.ContentUrl__c != null}">
+                                                        <div class="item-title-url">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!section.contentPiece.ContentUrl__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                        </div>
+                                                        <aura:set attribute="else">
+                                                            <div class="item-title-url">
+
+                                                                <a style="{!v.hrefColorStyle}"
+                                                                    href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+section.contentPiece.ExternalId+'&amp;operationContext=S1'}"
+                                                                    target="_blank">{!section.content.Name}</a>
+                                                            </div>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                            <div class="item-title-url">
+                                                <a style="{!v.hrefColorStyle}"
+                                                    href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+section.contentPiece.ExternalId+'/view'}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                            <div class="item-title-url">
+                                                <a style="{!v.hrefColorStyle}"
+                                                    href="{!section.contentPiece.Trailhead_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                            <div class="item-title-url">
+                                                <a style="{!v.hrefColorStyle}" href="{!section.content.Content_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                            <div class="item-title-url">
+                                                <a style="{!v.hrefColorStyle}" href="{!section.content.Content_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <section aura:id="sendEmailPopup" role="dialog" tabindex="-1" class="slds-modal slds-modal_medium"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close">
+
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Email Content Link</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input aura:id="field" type="email" class="slds-p-vertical_xx-small" name="recipient" label="To"
+                        value="{! v.emailRecipient }" placeholder="Type the recipient's email here..." required="true" />
+                    <lightning:input aura:id="field" class="slds-p-vertical_xx-small" name="subject" label="Subject"
+                        value="{! v.emailSubject }" placeholder="Type the subject here..." required="true" />
+                    <lightning:inputRichText class="slds-p-vertical_medium" value="{! v.emailBody }"
+                        placeholder="Type the content you would like to send here..."/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.onCancelClick }">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{! c.onSendClick }">Send</button>
+                </footer>
+            </div>
+        </section>
+        <div aura:id="backdrop" class="slds-backdrop"></div>
+    </div>
+
+</aura:component>

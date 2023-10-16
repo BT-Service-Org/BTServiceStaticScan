@@ -1,0 +1,24 @@
+.item {
+  width:97%;
+  background-color:#EDF1FF;
+  margin:10px;
+  box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding:5px;
+  /* border: 0.5px solid black; */
+}
+:host {
+  --sds-c-card-color-background: #EDF1FF;
+}
+.myimg{
+  width:110px;
+    /* height: 125px; */
+    object-fit:cover;
+    padding-left: 2px;
+}
+
+.curvedBorder{
+  border-radius: 26px;
+}
+.paraHeight{
+  max-height: 13rem;
+}

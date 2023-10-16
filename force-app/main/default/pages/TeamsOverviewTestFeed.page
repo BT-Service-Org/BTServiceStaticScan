@@ -1,0 +1,273 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamsOverviewTestFeedController">
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	<!-- Overview CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />	
+	<style>
+	div.main_content {
+		clear:both;
+	} 
+	
+	<!--		background:url(../../images/layout/icons/minifeed_discussion.gif) no-repeat; -->
+	div.rightWidget div.rightWidgetContent a.DiscussionNewTopic
+	{
+		background:url( {!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')} ) no-repeat;
+		padding-left: 20px;	
+		text-decoration:none;
+	}	
+	
+	</style>
+	<script>
+		 
+		var inputSearch;
+					
+		// Begin the search box with the text:
+		// "Enter keyword, name, company or title" at top search box
+		////////////////////////////////////////////
+		function resetSearchInput(){
+			var inputs = $$('.search_box_input input');
+			inputSearch = inputs[0];		
+			inputSearch.style.color = '#999999';
+			inputSearch.value = 'Enter keyword or name';
+		}
+		
+		// Once a user begins to type at top search box, change the font color to   #333333. 
+		function ActionSearchInput(){
+			inputSearch.style.color = '#333333';
+			inputSearch.value = '';
+		}
+		
+		/**
+		* Switch tabs
+		*@param String id element
+		*/
+		function switchTab (element){
+			var currentTab = $(element);
+			if(currentTab.className != 'selected' && currentTab.id == 'myTeamTab'){
+				currentTab.className = 'selected';
+				$('allTeamTab').className = '';
+			}else if (currentTab.className != 'selected' && currentTab.id == 'allTeamTab'){
+				currentTab.className = 'selected';
+				$('myTeamTab').className = '';			
+			}
+			
+		}
+		
+		/**
+		* Team Overview Redimension
+		*/
+		
+		function redimTeams(){
+			var centerColHeightFinal;
+			 var rightcol = $$('.rightCol');
+			 var rightDim = rightcol[0].getDimensions();
+			 var sidebar = $$('.sidebar');
+			 var leftDim = sidebar[0].getDimensions();
+			 var centercol = $$('.centerCol');			 
+			 var centerDim = centercol[0].getDimensions();
+			
+			// centercol[0].style.height = '';
+			// alert('Right col: '+ rightDim.height +', Center Col: '+ centerDim.height +', Left Col:'+  leftDim.height);
+
+
+			 if((centerDim.height > rightDim.height) && (centerDim.height > leftDim.height)){
+				//center wins, use that height to set your bar at bottom
+				centerColHeightFinal = centerDim.height;				
+			}
+			
+
+			 else if((rightDim.height > centerDim.height ) && (rightDim.height > leftDim.height)){
+				//right wins, use that height to set your bar at bottom
+				centerColHeightFinal = rightDim.height;
+			}
+
+			 else if((leftDim.height > centerDim.height ) && (leftDim.height > rightDim.height)){
+				//left wins, use that height to set your bar at bottom
+				centerColHeightFinal = leftDim.height;
+			}
+
+/*
+			 if((centerDim.height < rightDim.height) || (centerDim.height < leftDim.height)){
+			 	
+			 	
+			 	if((rightDim.height < leftDim.height)){	
+			 			 		
+			 		if(centerDim.height < rightDim.height){			 			
+			 			centerColHeightFinal = rightDim.height;
+			 		}else{
+			 			centerColHeightFinal = leftDim.height;
+			 		}
+			 						 	
+				 } else {				 	
+				 	centerColHeightFinal = rightDim.height ;
+				 }
+				 
+			 } else {
+			 	if((centerDim.height > rightDim.height) && (centerDim.height > leftDim.height))
+			 	{ centerColHeightFinal = centerDim.height; }			 	
+			 	
+			 }
+			 */
+				 
+			 // safe border
+			 centerColHeightFinal = centerColHeightFinal + 60;
+		
+		 // Much more safe border
+			 if(Prototype.Browser.IE){
+			 	centerColHeightFinal = centerColHeightFinal + 90;
+			 }
+			 
+			centercol[0].style.height = centerColHeightFinal + 'px';
+		 }
+ 
+	</script>
+		
+		 <!-- Initialize the overlay box for modal.js -->
+		<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+		<div id="modal_container"></div>
+		<script>createOverlay('initializeModal')</script>
+		
+		
+		<!-- Header -->
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Team</h1>
+					<h2 class="arial_black">Overview</h2>
+				</div>		
+			</div>		
+			
+			<!-- Search Box Container (always Centered) -->
+	        <div class="searchBox">
+	            <div>
+	                <div>
+	                    <!-- Search Form -->
+	                    <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                        <div class="search_box_input f_left">
+	                            <div class="legend">
+	                                Find Teams 
+	                            </div>
+	                            <input type="text" value="Enter keyword or name" name="key"  onfocus="setValue('');" onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                        </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                    </form><!-- Advanced Search Link -->
+	                    <!-- <div class="advanced_search_cont">
+	                        <a href="javascript:;">Advanced Search</a>
+	                    </div> -->
+	                </div>
+	            </div>
+	        </div>			
+			
+			
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>
+		<div class="grayFooter">
+			<div class="black_buttons">
+				<a href="/apex/TeamsCreateNewTeam">Create new team</a>
+			</div>
+		</div>
+		
+		<!-- Sidebar -->
+		<div class="sidebar">
+
+			<!-- Quick links & Admin widget -->
+			<c:TeamAdminQuickLinks />
+
+			<!-- MyTeams Widget -->
+			<c:TeamsMyTeamsWidget />
+		</div>
+
+		<!-- Main Content Div -->
+		<div class="main_content">		
+			<div class="centerCol CenterOverview" style="height:500">
+				<div class="tabContainer">
+					<apex:form >
+						<ul class="tabs">
+							<li class="selected" id="myTeamTab">
+								<apex:commandLink action="{!getFeeds}" value="My Teams" 
+													onclick="switchTab('myTeamTab');" 
+													rerender="feeds" 
+													oncomplete="setTimeout('redimTeams()', 1000);">
+									<apex:param name="isAllFeeds" value="false" />
+								</apex:commandLink>
+							</li>
+							<li id="allTeamTab">
+								<apex:commandLink action="{!getFeeds}" value="All Teams" 
+													onclick="switchTab('allTeamTab');" 
+													rerender="feeds" 
+													oncomplete="setTimeout('redimTeams() ', 1000);">
+									<apex:param name="isAllFeeds" value="true" />
+								</apex:commandLink>
+							</li>					
+						</ul>
+					</apex:form>
+				</div>
+				<div class="tabBorder">&nbsp;</div>
+				<div class="holder" id="holder">			
+					<div class="teamBlockTitle">
+						Recent Activity
+					</div>
+					<div class="linkAction">
+						<a href="/apex/TeamsActivityFeed" class="topRightLinks" >
+							See More&#187;
+						</a>
+					</div>
+					<apex:outputPanel id="feeds" layout="block" style="overflow:hidden;position:relative;clear:both;">
+						<table class="minifeeds activity_page" cellpadding="0" cellspacing="0">
+							<apex:repeat value="{!minifeeds}" var="m" rows="25">				
+								<tr>
+									<td class="feed_type {!m.TypeOfFeed}"></td>
+									<td>
+										<a href="/apex/PeopleProfileDisplay?id={!m.User}" class="weight_bold">
+											<apex:outputText escape="false" value="{!m.Name}" />
+										</a>&nbsp;<apex:outputText escape="false" value="{!m.Message}" />
+										<div class="date">{!m.formatedDate}</div>
+									</td>
+								</tr>
+							</apex:repeat>
+						</table>
+					</apex:outputPanel>  
+				</div>	
+			</div>	
+			
+		<!-- Widget Col -->
+		<div class="rightCol RightOverview">
+			<!-- Recently Created Teams -->
+			<c:TeamsRecentlyCreated />  
+			 
+			<!--  -->
+			<c:RecentTeamsMemberJoined /> 						
+		</div>		
+
+	</div>
+	<div class="grayFooter">	
+		<div class="black_buttons">
+			<a href="/apex/TeamsCreateNewTeam">Create new team</a>
+		</div>
+	</div>
+	<script>
+		/* scripts to reset the hieght of the lower bar so that it show correctly at the bottom of it all */
+		var n =$('holder');
+		var hdim = n.getDimensions();
+		
+		var centercol = $$('.centerCol');
+		centercol[0].style.height = hdim.height;
+	</script>
+</apex:page>

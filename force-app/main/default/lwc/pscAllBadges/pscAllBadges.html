@@ -1,0 +1,15 @@
+<template>
+    <div class="user_analytics">
+        <lightning-tabset class="tabset">
+            <lightning-tab label="Earned Badges" class="tab">
+                <c-psc-badges-data badge-key={myBadges} show-modal={showModal}></c-psc-badges-data>
+            </lightning-tab>
+            <lightning-tab label="Available Badges" class="tab">
+                <c-psc-badges-data badge-key={targetBadges} show-modal={showModal}></c-psc-badges-data>
+            </lightning-tab>
+            <lightning-tab label="Levels" class="tab">
+                <c-psc-badges-data badge-key={level} show-modal={showModal}></c-psc-badges-data>
+            </lightning-tab>
+        </lightning-tabset>
+    </div>
+</template>

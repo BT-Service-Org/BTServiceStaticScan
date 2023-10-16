@@ -1,0 +1,12 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="StationSPController" access="global">
+    <aura:attribute name="backgroundColor" type="string" default="Light 1"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="SourceUrl" type="String" default="blank" />
+    <aura:attribute name="ButtonName" type="String" default="Home" />
+    
+    <div class="slds-sourceurl-display">
+        <lightning:button label="{!v.ButtonName}" class="buttonTheme-light1" title="srcAction" iconName="utility:back" onclick="{!c.navigateToUrlClick}"/>
+    </div>
+   
+
+</aura:component>

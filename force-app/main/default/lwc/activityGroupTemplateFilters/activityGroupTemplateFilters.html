@@ -1,0 +1,215 @@
+<!-- sldsValidatorIgnore -->
+<template>
+
+    <!--FILTER SECTION START-->
+      <div class="slds-card_boundary slds-form_horizontal">
+        <!-- HEADER START -->
+        <div class="slds-card__header slds-grid slds-border_bottom">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:filterList" alternative-text="Activities" title="Activities" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-text-heading_small slds-truncate">Filter Activities</span></h2>
+                </div>
+                
+                <div class="actions-container">
+                    <slot name="actions">
+
+                        <lightning-layout >
+                            <lightning-layout-item size="8" >
+                                <!--<lightning-input type="checkbox" label="Only show activities in this group" name="currentGroupFilter"
+                                    onchange={filterThisGroup}></lightning-input>-->
+                                <lightning-combobox name="showFilter" label="" value={selectedShowOption}
+                                    options={showOptions} onchange={handleChangeShowOptions} > </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="4" class="right-align slds-p-top_xx-small">
+                                <lightning-button variant="base" label="Clear" title="Clear"
+                                            onclick={handleClearFilter} class="slds-m-right_x-small"></lightning-button>
+            
+                                <lightning-button variant="brand" label="Apply" title="Apply"
+                                            onclick={handleFilterAction} class="slds-m-left_x-small"></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        
+                    </slot>
+                </div>
+            </header>
+        </div>
+        <!-- HEADER END -->
+
+        <!-- BODY START -->
+        <div class="slds-card__body">
+            <slot>
+                <div class="c-container slds-form_horizontal">
+                    
+
+                    <!--ROW 1-->
+                    <lightning-layout horizontal-align="space">
+                        <lightning-layout-item padding="horizontal-large" size="6" >
+                            <lightning-combobox name="templateFilter" label="Enablement Template" value={selectedTemplate}
+                                options={templateOptions} onchange={handleChangeTemplate} disabled={allFiltersDisabled}
+                                field-level-help="Select either an Enablement Template or an Enablement Journey"></lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="horizontal-large" size="6" >
+                            <lightning-combobox name="domainFilter" label="Domain Name" value={selectedDomain}
+                                options={domainOptions} onchange={handleChangeDomain} disabled={allFiltersDisabled}></lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <!--ROW 2-->
+                    <lightning-layout horizontal-align="space">
+                        <lightning-layout-item padding="horizontal-large" size="6" >
+                            <lightning-record-edit-form object-api-name="Enablement_Activity_Group__c">
+                                <lightning-input-field field-name="Enablement_Journey_for_LWC__c" onchange={handleChangeTemplate} 
+                                    value={selectedJourney} disabled={allFiltersDisabled}> </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="horizontal-large" size="6" >
+                            <lightning-combobox name="filter4" label="Category" value={selectedCategory}
+                                options={categoryOptions} onchange={handleChangeCategory} disabled={allFiltersDisabled}></lightning-combobox>
+                           
+                        </lightning-layout-item>
+                    </lightning-layout>
+        
+
+                    <!--ROW 3-->
+                    <lightning-layout horizontal-align="space">
+                        <lightning-layout-item padding="horizontal-large" size="6" >
+                            <lightning-combobox name="filter2" label="Activity Group" value={selectedActivityGroup}
+                                options={groupOptions} onchange={handleChangeGroup} disabled={actGroupDisabled}
+                                field-level-help="Dependent on the Enablement Template or the Enablement Journey"></lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="horizontal-large" size="6" > 
+                            <lightning-combobox name="filter5" label="Priority" value={selectedPriority}
+                            options={priorityOptions} onchange={handleChangePriority} disabled={actGroupDisabled}
+                            field-level-help="Dependent on the Enablement Template or the Enablement Journey"></lightning-combobox>
+                            
+                        </lightning-layout-item>
+                    </lightning-layout>
+              
+                </div>
+            </slot>
+        </div>
+        <!-- BODY END -->
+    </div>
+    <!--FILTER SECTION END-->
+
+
+    <!-- ACTIVITIES SECTION START -->
+    <div class="slds-card_boundary slds-form_horizontal slds-m-top_small">
+        <!-- HEADER START -->
+        <div class="slds-card__header slds-grid slds-border_bottom">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:relationship" alternative-text="Activities" title="Activities" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-text-heading_small slds-truncate">{activitySectionTitle}</span></h2>
+                </div>
+                
+                <div class="actions-container">
+                    <slot name="actions">
+                        <template if:false={hideTable}>
+                            <lightning-layout >
+                                <lightning-layout-item size="10" ></lightning-layout-item>
+                                <template if:false={allFiltersDisabled}>
+                                    <lightning-layout-item size="2" class="right-align">
+                                        <lightning-button label="Add" variant="brand" onclick={addActivitiesToTheGroup}></lightning-button>
+                                    </lightning-layout-item>
+                                </template>
+                                <template if:true={allFiltersDisabled}>
+                                    <lightning-layout-item size="2" class="right-align">
+                                        <lightning-button label="Remove" variant="brand" onclick={removeActivitiesFromTheGroup}></lightning-button>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </template>
+                    </slot>
+                </div>
+            </header>
+        </div>
+        <!-- HEADER END -->
+
+        <!-- BODY START -->
+        <template if:false={hideTable}>
+            <div class="slds-card__body">
+                <template if:false={allFiltersDisabled}>
+                    <slot>
+                        <!-- ACTIVITIES DATATABLE -->
+                        <p class="slds-p-horizontal_small" style="margin-top: 15px;">
+                            <lightning-datatable key-field="Id" 
+                                data={data} 
+                                columns={columns} 
+                                sorted-by={sortBy} 
+                                sorted-direction={sortDirection} 
+                                onsort={handleSortActivityData}
+                                onsave={handleSaveAction} 
+                                draft-values={draftValues}>
+                            </lightning-datatable>
+                        </p>
+                        
+                    </slot>
+                </template>
+                <template if:true={allFiltersDisabled}>
+                    <slot>
+                        <!-- ACTIVITIES DATATABLE -->
+                        <p class="slds-p-horizontal_small" style="margin-top: 15px;">
+                            <lightning-datatable key-field="Id" 
+                                data={data} 
+                                columns={columnsEditable} 
+                                sorted-by={sortBy} 
+                                sorted-direction={sortDirection} 
+                                onsort={handleSortActivityData}
+                                onsave={handleSaveAction} 
+                                draft-values={draftValues}>
+                            </lightning-datatable>
+                        </p>
+                        
+                    </slot>
+                </template>
+            </div>
+        </template>
+
+        <template if:true={hideTable}>
+            <div class="slds-card__body slds-align_absolute-center"> No record to display. Please select appropriate filters and click Apply.</div>
+        </template>
+        <!-- BODY END -->
+    </div>
+    <!-- ACTIVITIES SECTION END -->
+
+    <template if:true={showLoader}>
+        <div class="backgroundInverse"> <lightning-spinner alternative-text="Loading" variant="inverse"></lightning-spinner> </div>
+    </template>
+
+    <!--MODAL WINDOW START--> 
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium slds-text-align_center" id="modal-content-id-1">
+                    <p>{messageForUpdate}</p>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand-outline" label="Cancel" title="Cancel" onclick={closeModal} ></lightning-button>
+                    <template if:false={isInvalidForUpdate}>
+                        <lightning-button variant="brand" label={buttonLabel} title={buttonLabel} onclick={submitDetails} class="slds-m-left_x-small"></lightning-button>
+                    </template>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--MODAL WINDOW End--> 
+</template>

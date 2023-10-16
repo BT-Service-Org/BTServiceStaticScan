@@ -1,0 +1,325 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__body">
+            <div class="slds-grid slds-p-bottom_xxx-small slds-m-around_x-small">
+                <div class="slds-col slds-size_3-of-12 slds-p-left_medium">
+                    <lightning-combobox label="Category" value={selectedCategory} required placeholder="Select Category" options={categoryOptions} onchange={handleCategoryChange}></lightning-combobox>   
+                </div>
+                <div class="slds-col slds-size_9-of-12 slds-p-top_large">
+                    <span style="float: right;" class="slds-p-right_large">
+                        <template if:true={resultsFound}>
+                            <lightning-button-group>
+                                    <lightning-button label="Rearrange" title="Rearrange the Questions" onclick={handleRearrange}></lightning-button>
+                                    <lightning-button label="Preview" title="preview" onclick={handlePreview}></lightning-button>
+                                    <template if:true={boolShowAddQuestion}>
+                                        <lightning-button variant="brand" label="Add Question" title="add" icon-name="utility:add" onclick={handleAddQuestion}></lightning-button>
+                                    </template>
+                            </lightning-button-group>
+                        </template>
+                        <template if:false={resultsFound}>
+                            <template if:true={boolShowAddQuestion}>
+                                <lightning-button variant="brand" label="Add Question" title="add" icon-name="utility:add" onclick={handleAddQuestion} class="slds-float_right"></lightning-button>
+                            </template>
+                        </template> 
+                        <span if:true={resultsFound}>
+                            <span>
+                                <lightning-button-icon title="Previous" onclick={onPrevious} icon-name="utility:chevronleft"
+                                    variant="brand" disabled={disablePreviousButton} class="slds-p-right_x-small slds-p-left_x-small">
+                                </lightning-button-icon>
+                            </span>
+                            <span>
+                                <span class="slds-badge slds-badge_lightest slds-p-top_xxx-small">
+                                    {currentPage} of {noOfPages}
+                                </span>
+                            </span>
+                            <span>
+                                <lightning-button-icon title="Next" onclick={onNext} icon-name="utility:chevronright"
+                                    variant="brand"  disabled={disableNextButton} class="slds-p-left_x-small"> 
+                                </lightning-button-icon>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap slds-grid--vertical-stretch padstyl">
+                <template if:true={boolShowSpinner}>
+                    <div class="slds-spinner_container">
+                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+                <template for:each={paginatedResult} for:item="ques">
+                    <div class="slds-box slds-m-around_x-small card" key={ques.Id}>
+                        <article class="slds-card">
+                            <header class="slds-p-around_xxx-small">
+                                <div>
+                                    <lightning-button-icon icon-name="utility:edit" variant="border-filled"
+                                        alternative-text="Edit" class="slds-float_right editicn-clr slds-p-right_xx-small" title="Edit Question" data-id={ques.Id}
+                                        onclick={handleEditQuestion}>
+                                    </lightning-button-icon>
+                                </div>
+                            </header>
+                            <div class="slds-card__body">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_7-of-12">
+                                        <div class="slds-col">
+                                            <span>
+                                                <strong class="fieldclr">Question </strong>
+                                                <template if:false={ques.gdc_ms_Is_Active__c}>
+                                                    <Strong class="inactiveclr">(Inactive)</Strong>
+                                                </template>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col">
+                                            <span class="questionCls">{ques.gdc_ms_Question__c}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_5-of-12">
+                                        <div class="slds-col slds-p-bottom_x-small">
+                                           <span>
+                                               <strong class="fieldclr">Required Field : </strong> 
+                                               <template if:true={ques.gdc_ms_Required__c}>
+                                                    Yes
+                                               </template>
+                                               <template if:false={ques.gdc_ms_Required__c}>
+                                                    No
+                                                </template>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col slds-p-bottom_x-small">
+                                            <span><strong class="fieldclr">Type : </strong> {ques.gdc_ms_Type__c}</span>
+                                        </div>
+                                        <div class="slds-col">
+                                            <template if:true={ques.gdc_ms_Options__c}>
+                                                <span><strong class="fieldclr">Values : </strong> {ques.gdc_ms_Options__c}</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </article>
+
+    <!--Modal for Editing Question-->
+    <div class="slds-m-around--xx-medium">
+        <template if:true={boolShowEditModal}>
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button--icon-inverse"
+                            title="Close" onclick={handleCancel}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant = "inverse"
+                                size="small" >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">
+                            Edit Question
+                        </h2>
+                    </div>
+
+                    <!--Modal Box Content-->
+                    <div class="slds-modal__content modalheight slds-p-around_small">
+                        <div class="slds-p-around_medium">
+                            <lightning-input type="text" label="Question" value={editQuestion.gdc_ms_Question__c} name="editQuestionfield" placeholder="Enter Question..." onchange={handleEditChanges} required></lightning-input>
+                            
+                            <div class="slds-grid slds-p-top_xx-small slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_2-of-8 slds-p-top_large">
+                                    <lightning-input type="checkbox" label="Required Question?" name="editRequiredField" checked={editQuestion.gdc_ms_Required__c} onchange={handleEditChanges}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_2-of-8">
+                                    <lightning-combobox label="Type" dropdown-alignment="auto" value={editQuestion.gdc_ms_Type__c} name="editTypeField" required placeholder="Select Type" options={typeOptions} onchange={handleEditChanges}></lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_4-of-8">
+                                    <template if:true={boolShowValuesField}>
+                                        <lightning-textarea label="Options (Semicolon(;) Separated)" name="editOptionsField" placeholder="Enter Values..." value={editQuestion.gdc_ms_Options__c} onchange={handleEditChanges} required></lightning-textarea>
+                                    </template>
+                                </div>
+                                <div class="slds-col slds-size_2-of-8 slds-p-top_small">
+                                    <lightning-input type="checkbox" label="Active Question?" checked={editQuestion.gdc_ms_Is_Active__c} name="editActiveField" onchange={handleEditChanges}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_6-of-8 slds-p-top_small">
+                                </div>
+                            </div>
+                        </div>
+                        </br>
+                    </div>
+
+                    <!--Modal Box Footer-->
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"
+                            onclick={handleCancel}>Cancel</button>
+                        <button class="slds-button slds-button_brand"
+                            onclick={handleSave}>Save</button>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </div>
+
+
+    <!--Modal for Adding Question-->
+    <div class="slds-m-around--xx-medium">
+        <template if:true={boolShowAddModal}>
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button--icon-inverse"
+                            title="Close" onclick={closeAddQuestionModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant = "inverse"
+                                size="small" >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate">
+                            Add Questions
+                        </h2>
+                    </div>
+
+                    <!--Modal Box Content-->
+                    <div class="slds-modal__content slds-p-around_small">
+                        <div class="modalheight">
+                            <lightning-accordion active-section-name={activeSectionName}>
+                                <template for:each={lstQuestions} for:item="ques">
+                                    <lightning-accordion-section key={ques.number} name={ques.sectionName} label={ques.label}>
+                                        <template if:true={boolShowDeleteQuestion}>
+                                            <lightning-button-icon icon-name="utility:delete" variant="border-filled"
+                                                alternative-text="Delete" class="slds-float_right deleteicn-clr" title="Delete Question" data-id={ques.number}
+                                                onclick={handleDeleteQuestion}>
+                                            </lightning-button-icon>
+                                        </template>
+                                        <div class="slds-p-around_medium">
+                                            <lightning-input type="text" label="Question" value={ques.question} name={ques.number} placeholder="Enter Question..." onchange={handleQuestionChange} required></lightning-input>
+                                            <div class="slds-grid slds-p-top_xx-small slds-wrap slds-gutters">
+                                                <div class="slds-col slds-size_2-of-8 slds-p-top_large">
+                                                    <lightning-input type="checkbox" label="Required Question?" name={ques.number} checked={ques.required} onchange={handleRequiredChange}></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_2-of-8">
+                                                    <lightning-combobox label="Type" dropdown-alignment="auto" value={ques.typeValue} name={ques.number} required placeholder="Select Type" options={typeOptions} onchange={handleTypeChange}></lightning-combobox>
+                                                </div>
+                                                <div class="slds-col slds-size_4-of-8">
+                                                    <template if:true={ques.boolShowValuesField}>
+                                                        <lightning-textarea label="Options (Semicolon(;) Separated)" name={ques.number} placeholder="Enter Values..." value={ques.values} onchange={handleValuesChange} required></lightning-textarea>
+                                                </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </lightning-accordion-section>
+                                </template>
+                            </lightning-accordion>
+                        </div>
+                        
+                    </div>
+                    
+                    <!--Modal Box Footer-->
+                    <footer class="slds-modal__footer">
+                        <template if:true={boolShowAddButtononModal}>
+                            <lightning-button variant="brand" label="Add Question" title="add" icon-name="utility:add" 
+                                class="slds-p-right_x-small" onclick={handleAddQuestion}>
+                            </lightning-button>
+                        </template>
+                        <template if:false={boolShowAddButtononModal}>
+                            <h2 class="slds-float_left" style="color: red;">Can add maximum of 5 questions at a time</h2>
+                        </template>
+                        <button class="slds-button slds-button_neutral"
+                            onclick={closeAddQuestionModal}>Cancel</button>
+                        <button class="slds-button slds-button_success"
+                            onclick={submitQuestionnaire}>Submit Questions</button>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </div>
+
+
+    <!--Modal for ordering Question-->
+    <div class="slds-m-around--xx-medium">
+        <template if:true={boolShowOrderingModal}>
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button--icon-inverse"
+                            title="Close" onclick={handleOrderCancel}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant = "inverse"
+                                size="small" >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-04" class="slds-modal__title slds-hyphenate">
+                            Order Questions
+                        </h2>
+                    </div>
+
+                    <!--Modal Box Content-->
+                    <div class="slds-modal__content">
+                        <lightning-datatable
+                            key-field="Id"
+                            data={existingQuestions}
+                            columns={columns}
+                            onsave={handleOrderSave}
+                            draft-values={draftValues}
+                            hide-checkbox-column="true">
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </div>
+
+
+
+    <!--Modal for previewing Question-->
+    <div class="slds-m-around--xx-medium">
+        <template if:true={boolPreview}>
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container preview-modal-height">
+
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button--icon-inverse"
+                            title="Close" onclick={handlePreviewCancel}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant = "inverse"
+                                size="small" >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+
+                    <!--Modal Box Content-->
+                    <div class="slds-modal__content">
+                        <c-gdcms-question-answer-form bool-show-preview=true object-name={objectName}></c-gdcms-question-answer-form>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </div>
+</template>

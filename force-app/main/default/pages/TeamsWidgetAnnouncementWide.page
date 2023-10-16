@@ -1,0 +1,166 @@
+<apex:page sidebar="false" showHeader="false" controller="TeamsWidgetAnnouncementWideController">
+
+	<style type="text/css">
+	
+	/******************************************/
+	/*******Announcement Content Center *******/
+	/******************************************/
+	
+	.announcement_actualDate
+	{
+		xborder-bottom:3px solid #CBCBCB;
+		font-size:16px;
+		color:#C66005;
+		margin-top:10px;
+	    font-weight:bold;
+		float: left;
+	}
+	
+	.announcement_detail_title
+	{
+		margin-top:15px;
+	    text-decoration: underline;
+	    color:#393939;
+	}
+	
+	.rss_title_right
+	{
+		margin-top: 10px;
+		float: right;
+	}
+	
+	.announcement_detail_description {
+		color:#393939;
+		font-size:11px;
+		margin-top: 10px;
+		/*float:right;*/
+	}
+	
+	.announcement_detail {
+		color:#393939;
+		font-size:11px;
+		margin-top: 10px;
+	}
+	
+	.img_announcement_detail {
+		float:left;
+		/*margin-top: 10px;*/
+	}
+	
+	.announcement_detail_line {
+		border-bottom:1px inset #CBCBCB;
+		margin-top:10px;
+		width:99%;
+	}
+	
+	.announcement_detail_wraperoverflow {
+		overflow:hidden;	
+		width:540px;
+	}
+	
+	.announcement_detail_postInfo {
+		margin-top:5px;
+		font-size:10px;
+		color:#636768;
+		float:left;
+	}
+	.announcement_detail_postBy {
+		color:#636363;
+		font-size:10px;
+		font-weight:bold;
+	}
+	
+	.announcement_detail_teamName{ 
+		/*margin-top:5px;*/
+		font-size:10px;
+		color:#636768;
+		float:left;
+	}
+	
+	.announcement_detail_team {
+			
+	}
+	
+	.announcement_content_top
+	{
+		margin-left:10px;
+		margin-bottom: 30px;
+		margin-top: 10px;
+	}
+	
+	.announcement_text {
+		float: right;
+		margin-right: 20px;
+		margin-top: 5px;
+	}
+	.announcement_photo {
+		float: right;
+		margin-right: 5px;
+		margin-top: 7px;
+	}
+	.announcement_photo_comment {
+		float: right;
+		margin-right: 5px;
+		margin-top: 5px;
+	}
+	
+	.smallLink {
+		font-size:10px;
+		font-weight:bold;	
+		color:#636768;
+	}
+	
+	.announcement_separator {
+		border-bottom: 3px solid #CBCBCB; 
+		height:1px; 
+		clear:both; 
+		overflow:hidden;
+	}
+	
+	</style>
+	
+	<!-- Project Items Widget -->
+	<div class="teamBlockTitle">
+		<h4>Recent Blog Posts</h4>
+	</div>
+	
+	<div class="linkAction">
+		<a href="javascript:viewOverlayForm('NewTitleForm');SaveNewObjectAnnouncement();" class="topRightLinks">New</a> |
+		<a href="/apex/AnnouncementTeamOverview?id={!teamspace.Id}" class="topRightLinks">See More&#187;</a>
+	</div>
+	<apex:repeat value="{!recentAnnouncements}" var="announcement">
+		<div class="announcement_content_top" style="overflow:hidden;">
+			<h2 class="announcement_detail_title">
+				<a href="/apex/AnnouncementDetails?id={!announcement.detail.Id}">
+					<apex:outputText value="{!announcement.detail.Title__c}"/>
+				</a>
+			</h2>
+			<div class="announcement_detail">
+				<span class="announcement_detail_description">
+					<apex:outputText value="{!announcement.detail.Message__c}" escape="false"/>
+				</span>
+			</div>
+			<div class="announcement_detail_line"></div>
+			<div class="announcement_detail_wraperoverflow">
+				<div style="width:320px;" class="announcement_detail_postInfo">
+					<span>Posted by </span>
+					<span class="announcement_detail_postBy"><apex:outputField value="{!announcement.detail.CreatedById}"/></span>
+					<span>on&nbsp;<apex:outputText value="{!announcement.formatedPostDate}"/>&nbsp;at&nbsp;<apex:outputText value="{!announcement.formatedPostTime}"/> </span>
+				</div>
+				<div class="announcement_text">
+					<a class= "smallLink" href="/{!announcement.detail.Id}"><apex:outputField value="Comment not found"/>&nbsp;Comments</a>
+				</div>
+				<div class="announcement_photo_comment">
+				    <img src="{!URLFOR($Resource.AnnoucementResourceFiles, 'images/announcement_overview/comments.gif')}"  />    
+				</div>										
+				<div class="announcement_text">
+					<a class= "smallLink" href="mailto:someone@salesforce.com">Email</a>
+				</div>
+				<div class="announcement_photo">
+				    <img src="{!URLFOR($Resource.AnnoucementResourceFiles, 'images/announcement_overview/mail.gif')}"  />    
+				</div>
+			</div>			
+		</div>
+	</apex:repeat>
+
+</apex:page>

@@ -1,0 +1,12 @@
+/* basic positioning */
+.legend { list-style: none; }
+.legend li { float: left; margin-right: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+/* your colors */
+.legend .available { background-color: green; }
+.legend .expired { background-color: lightgray; }
+.legend .booked { background-color: rgb(55, 136, 216); }
+.legend .emergency { background-color: red; }
+.legend .hiringevent{ background-color: orange; }
+.legend .today{ background-color: rgb(251, 243, 224); }
+.legend .gcal{ background-color: white; border: 1px solid; border-color: #039BE5;}

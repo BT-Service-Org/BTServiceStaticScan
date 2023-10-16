@@ -1,0 +1,65 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamsDetailController">
+	<apex:include pageName="TeamDetailMarkupTop"></apex:include>
+	<!-- Main Content Div -->
+	<div class="main_content">		
+		<div class="centerCol"> 
+			<div class="holder">					
+				
+				<!-- RecentBlogs 
+				<c:TeamsWidgetRecentBlogs teamId="{!teamIdParam}" />-->
+				
+				<!-- Active Discussions
+				<c:TeamsWidgetActiveDiscussions team="{!teamIdParam}" />-->
+		
+				
+				
+				<!-- Tasks
+				<c:TeamsWidgetTasksMain team="{!teamIdParam}" /> -->
+				
+				<!-- Milestones
+				<c:TeamsWidgetMilestones team="{!teamIdParam}" /> -->
+				
+				<!-- Recent Bookmark -/->
+				
+				<c:TeamWidgetRecentBookmarksWidgets teamId="{!teamIdParam}"/>	
+				<!-- TeamsWidgetRecentActivities -/->
+				
+				<c:TeamsWidgetRecentActivities teamId="{!teamIdParam}" />	
+				
+
+				
+				
+			</div>		
+		</div>	 
+	</div>			
+	<!-- Widget Cool -->
+	<div class="rightCol" id="rightCol"> 
+		
+		<!-- Attachment widget -->
+		<c:TeamsWidgetTemplate team="{!teamIdParam}" permission="{!UserPermissionsWiki}" /> 
+				
+		<!-- RecentBlogs 
+		<c:TeamsWidgetRecentBlogs teamId="{!teamIdParam}" />-->
+		
+		<!-- Active Discussions 
+		<c:TeamsWidgetActiveDiscussions teamId="{!teamIdParam}" />-->
+		
+		<!-- Wiki Pages widget 
+		<c:TeamsWidgetWikiDirectory team="{!teamIdParam}"  />-->	
+		
+		<!-- Milestones
+		<c:TeamsWidgetMilestones team="{!teamIdParam}" /> --> 
+		
+		<!-- Tasks 
+		<c:TeamsWidgetTasksMain team="{!teamIdParam}" />  -->
+		
+		<!-- Recent Bookmark -/->
+		<c:TeamWidgetRecentBookmarksWidgets teamId="{!teamIdParam}"/>	
+		
+		<!-- TeamsWidgetRecentActivities -/->
+		<c:TeamsWidgetRecentActivities teamId="{!teamIdParam}" />	-->
+		
+	</div>
+	<!-- Bottom -->
+	<apex:include pageName="TeamDetailMarkupBottom"></apex:include>	
+</apex:page>

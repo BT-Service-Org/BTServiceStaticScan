@@ -1,0 +1,8 @@
+<template>
+    <c-psc-modal onclosedialog={closeModal}>
+        <h2 slot="header" id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate header ITC_font">My Badges</h2>
+        <p slot="tagline" class="salesforce_font">This page lists all the badges you achieved.</p>
+       
+        <c-psc-badges-data badge-key={badgeKey}></c-psc-badges-data>
+    </c-psc-modal>
+</template>

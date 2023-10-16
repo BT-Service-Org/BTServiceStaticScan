@@ -1,0 +1,13 @@
+<apex:page sidebar="false" showHeader="false" standardController="MAPPersona__c">
+    
+    <apex:includeLightning />
+
+    <div id="lightning"/>
+    
+    <script>
+        $Lightning.use("c:MAPApp", function() {
+            $Lightning.createComponent("c:MAPHome", { recordId: "{!MAPPersona__c.Id}" }, "lightning");
+        });
+    </script>
+
+</apex:page>

@@ -1,0 +1,28 @@
+<template >
+    <lightning-card variant="Narrow"  title="Skills & Expertise" icon-name="standard:skill">
+        <!-- <div>
+            <lightning-button variant="base" label="Test Data Update" title="Modify Skills" onclick={testDataUpdate}></lightning-button>
+        </div> -->
+        <div class="slds-p-around_medium lgc-bg" style="height: 300px;">
+            <lightning-datatable
+                key-field="id"
+                data={userSkills}
+                columns={columns}
+                is-loading={tableLoadingState}
+                hide-checkbox-column=true
+                onsort={updateColumnSorting}
+                sorted-by="expertiseRating"
+                sorted-direction={sortedDirection}
+                default-sort-direction="desc"
+                >
+            </lightning-datatable>
+        </div>
+    <p slot="footer">
+        <template if:true={onBoarding.data}>
+                <template if:true={testCurrentUser}>
+                        <lightning-button variant="base" label="Modify Skills" title="Modify Skills" onclick={navigateToSkillsApp}></lightning-button>
+                </template>
+        </template>
+    </p>
+    </lightning-card>
+</template>

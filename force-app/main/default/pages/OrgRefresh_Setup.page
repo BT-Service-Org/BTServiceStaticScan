@@ -1,0 +1,140 @@
+<apex:page controller="OrgRefresh_SetupController" showHeader="true" sidebar="true" tabStyle="Org_Refresh_Profile__c" id="PAOnboard" action="{!fetchAccessToken}">
+<apex:form id="adminInput">
+	<apex:sectionHeader title="Data Refresh Setup" subtitle="PA Onboarding" />
+
+	<apex:actionRegion >
+	   <apex:actionFunction name="authFlowRefresh" action="{!updateAuthFlowFields}" reRender="oauthFields">
+	      <apex:param name="authFlow" assignTo="{!authFlowSelected}" value="" />
+       </apex:actionFunction>
+
+    </apex:actionRegion>
+
+  <apex:actionFunction name="refreshOrgInfo" action="{!changeOrg}" reRender="adminInput">
+	      <apex:param name="orgName" assignTo="{!selectedOrg}" value="" />
+   </apex:actionFunction>
+
+   <apex:actionFunction name="refreshAppInfo" action="{!changeApp}" reRender="adminInput">
+	      <apex:param name="appName" assignTo="{!selectedApp}" value="" />
+   </apex:actionFunction>
+
+   <apex:actionRegion >
+       <apex:actionFunction name="refreshSchedInfo" action="{!changeSchedFreq}" reRender="cronExp">
+	      <apex:param name="schedFreq" assignTo="{!selectedSchedFreq}" value="" />
+       </apex:actionFunction>
+   </apex:actionRegion>
+
+	<apex:pageBlock title="Orgs" id="orgsSection">
+	   <apex:pageBlockSection columns="2">
+	   <apex:pageBlockSectionItem >
+	       <apex:outputLabel value="Orgs : " for="orgsList"/>
+	       <apex:selectList value="{!selectedOrg}" size="1" onchange="javascript:refreshOrgInfo(this.options[this.selectedIndex].text);">
+              <apex:selectOptions value="{!orgSelections}"/>
+           </apex:selectList>
+       </apex:pageBlockSectionItem>
+
+
+       
+       <apex:pageBlockSectionItem >
+           <apex:outputPanel style="width:40%;">
+                   <apex:outputLabel value="New Org Name : " for="newOrgName"/>
+		           <apex:inputText value="{!newOrgName}" id="newOrgName"/>
+		    </apex:outputPanel>
+		    <apex:commandButton value="Start Org Profile" action="{!createNewOrgProfile}" id="createOrgProfile" reRender="adminInput"/>
+	   </apex:pageBlockSectionItem>
+
+
+	   </apex:pageBlockSection>
+	</apex:pageBlock>
+
+	<apex:pageBlock title="Apps" id="appsSection"  >
+	  <apex:pageBlockSection columns="2">
+	   <apex:pageBlockSectionItem >
+	       <apex:outputLabel value="Apps : " for="appsList"/>
+	       <apex:selectList value="{!selectedApp}" size="1" onchange="javascript:refreshAppInfo(this.options[this.selectedIndex].text);">
+              <apex:selectOptions value="{!appSelections}"/>
+           </apex:selectList>
+       </apex:pageBlockSectionItem>
+
+
+       
+       <apex:pageBlockSectionItem >
+           <apex:outputPanel style="width:40%;">
+                   <apex:outputLabel value="New App Name : " for="newAppName"/>
+		           <apex:inputText value="{!newAppName}" id="newAppName" maxlength="10"/>
+		    </apex:outputPanel>
+		    <apex:commandButton value="Create App" action="{!createAppForSelectedOrg}" id="createAppForSelectedOrg" reRender="adminInput"/>
+	   </apex:pageBlockSectionItem>
+
+
+	   </apex:pageBlockSection>
+	</apex:pageBlock>
+	
+	<apex:pageBlock title="Actions" id="oauthSect" rendered="{!NOT(ISNULL(selectedApp))}">
+		<apex:pageBlockSection title="Notifications" rendered="{!hasMessages}" columns="4">
+		   <apex:pageMessages />
+		</apex:pageBlockSection>
+
+		<apex:pageBlockButtons location="top" id="buttons">
+			<apex:commandButton action="{!modifyOauthDetails}" value="Modify Oauth" rendered="{!oauthDefined}" rerender="oauthSect"/>
+			<apex:commandButton action="{!modifyOrgDetails}" value="Modify Org Info" rendered="{!orgSettingsDefined}" rerender="oauthSect"/>
+			<apex:commandButton action="{!authenticateUser}" value="Authorize OAuth App" disabled="{!NOT(oauthDefined||orgSettingsDefined)}" rendered="{!NOT(authFlowSelected)}"/>
+			<apex:commandButton action="{!save}" value="Save" rendered="{!NOT(oauthDefined)}" rerender="oauthSect"/>	
+			<apex:commandButton action="{!save}" value="Save Org Info" rendered="{!oauthDefined}" rerender="oauthSect"/>
+			<apex:commandButton action="{!cancel}" value="Cancel" rerender="oauthSect" immediate="true"/>
+			<apex:commandButton action="{!onDemandRefresh}" value="On-Demand Refresh" rerender="oauthSect" disabled="{!NOT(canFetchData)}"/>
+			<apex:commandButton action="{!scheduleRefresh}" value="Schedule Refresh" rerender="oauthSect" disabled="{!(NOT(canFetchData) || refreshScheduled)}"/>
+		</apex:pageBlockButtons>
+
+		
+	   <apex:pageBlockSection title="OAuth Details" id="oauthFields" rendered="{!NOT(oauthDefined) || modifyOauth}" columns="1">
+	      <apex:pageBlockSectionItem >
+	         <apex:outputLabel value="Username Password Flow: " for="unamePassword" style="font-weight: bold;"/>
+		     <apex:inputCheckbox id="unamePassword" value="{!authFlowSelected}"  onchange="javascript:authFlowRefresh(this.checked);"></apex:inputCheckbox>
+	
+		</apex:pageBlockSectionItem>
+
+	   <apex:pageBlockSectionItem rendered="{!authFlowSelected}">
+	       <apex:outputLabel value="Username: " for="userName" style="font-weight: bold;"/>
+		   <apex:selectList value="{!userName}" size="1">
+              <apex:selectOptions value="{!definedUserNames}"/>
+           </apex:selectList>
+	   </apex:pageBlockSectionItem>
+
+      <apex:inputField id="consumerKey" value="{!refreshProfInstance.Consumer_Key__c}" style="width:70%" ></apex:inputField>
+			     <apex:inputField id="consumerSecret" value="{!refreshProfInstance.Consumer_Secret__c}" ></apex:inputField>
+			     <apex:inputField id="callbackURL" value="{!refreshProfInstance.Callback_URL__c}" style="width:70%" rendered="{!NOT(authFlowSelected)}"></apex:inputField>
+		     <apex:inputField id="endpoint" value="{!refreshProfInstance.Endpoint__c}" style="width:70%"></apex:inputField>
+		</apex:pageBlockSection>
+
+		<apex:pageBlockSection title="Refresh and Query Settings" id="orgFields" rendered="{!NOT(orgSettingsDefined) || modifyOrgInfo}" columns="1">
+		    <apex:inputField id="isProdOrg" value="{!refreshProfInstance.IsProduction__c}"></apex:inputField>
+		    <apex:inputField id="autoRefresh" value="{!refreshProfInstance.Auto_Refresh__c}"></apex:inputField>
+		    <apex:inputField id="StDt" value="{!refreshProfInstance.Start_Date__c}"></apex:inputField>
+		    <apex:inputField id="EndDt" value="{!refreshProfInstance.End_Date__c}"></apex:inputField>
+		    <apex:inputField id="LastRefresh" value="{!refreshProfInstance.Last_Refreshed__c}"></apex:inputField>
+		    <apex:inputField id="BatchScheduleClass" value="{!refreshProfInstance.Batch_Class__c}"></apex:inputField>
+		    <apex:inputField id="BatchSz" value="{!refreshProfInstance.Batch_Size__c}"></apex:inputField>
+
+		    <apex:pageBlockSectionItem >
+		        <apex:outputLabel value="Schedule Options : " for="scheduleOptions"/>
+	            <apex:selectList value="{!selectedSchedFreq}" size="1" onchange="javascript:refreshSchedInfo(this.options[this.selectedIndex].text);">
+                    <apex:selectOptions value="{!scheduleOptions}"/>
+                </apex:selectList>
+		    </apex:pageBlockSectionItem>
+
+		    <apex:inputField id="cronExp" value="{!refreshProfInstance.Cron_Expression__c}"></apex:inputField>
+
+
+		    <apex:inputField id="queryExp" value="{!refreshProfInstance.Query__c}" style="width:80%;"></apex:inputField>
+
+		    <apex:inputField id="additionalQueryExp" value="{!refreshProfInstance.Query_Condition__c}" style="width:80%;"></apex:inputField>
+
+		    
+	    </apex:pageBlockSection>
+
+		 
+
+	</apex:pageBlock>
+ 
+</apex:form>
+</apex:page>

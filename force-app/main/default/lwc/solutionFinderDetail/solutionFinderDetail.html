@@ -1,0 +1,12 @@
+<template>
+    <div class="slds-grid content-row">
+        <template for:each={columns} for:item="column">
+            <div key={column.name} class={column.classes}>
+                <c-solution-finder-detail-field detail={detail} property={column.name} onchange={handleChange}></c-solution-finder-detail-field>
+            </div>
+        </template>
+        <div class="slds-col slds-size_1-of-12 slds-p-around_x-small text-align_center">
+            <lightning-button-icon icon-name="utility:close" onclick={handleDeleteClick}></lightning-button-icon>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>CSCDirectors</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>CSC - Directors</label>
+        <sharedTo>
+            <group>CSCDirectors</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>CSCManagers</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>CSCDirectors790111</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>CSC - Directors</label>
+        <sharedTo>
+            <group>CSCDirectors</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>CSCConsultants</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>CSCManagers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>CSC- Managers</label>
+        <sharedTo>
+            <group>CSCManagers</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>CSCConsultants</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>USEMsEnterprise790111</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>US EM&apos;s - Enterprise</label>
+        <sharedTo>
+            <group>USEMsEnterprise</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>USConsultantsEnterprise</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>USMgmtTeamEnterprise790112</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>US Mgmt Team - Enterprise</label>
+        <sharedTo>
+            <group>USMgmtTeamEnterprise</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>USConsultantsEnterprise</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>USMgmtTeamEnterprise790113</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>US Mgmt Team - Enterprise</label>
+        <sharedTo>
+            <group>USMgmtTeamEnterprise</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>USEMsEnterprise</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>USOpsMgrs790111</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>US Ops Mgrs</label>
+        <sharedTo>
+            <group>USOpsMgrs</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>USRegionSVPs</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

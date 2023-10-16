@@ -1,0 +1,89 @@
+.THIS.slds-context-bar {
+  border: none;
+}
+
+.THIS .nav-links {
+  border-bottom: none;
+  height: 2rem;
+  margin-bottom: -0.75rem;
+  padding: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.THIS .navbar {
+  overflow: hidden;
+  z-index: 20000;
+}
+
+.THIS .dropdown {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+  min-width: 0;
+  color: inherit;
+  font-size: 0.8125rem;
+  z-index: 1;
+}
+
+.THIS .dropdown .dropbtn {
+  font-size: 0.8rem;
+  border: none;
+  outline: none;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  transition: background-color 0.25s cubic-bezier(0.39, 0.575, 0.565, 1);
+  cursor: pointer;
+}
+
+.THIS .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.THIS .dropdown:hover .dropbtn {
+  background: #f3f8fc;
+}
+
+.THIS .dropdown-content {
+  background-color: #fff;
+  border-radius: 0 0 5px 5px;
+  border-top: 2px solid #1589ee;
+  box-shadow: 0 5px 9px 0 hsla(0, 0%, 46.7%, 0.4);
+  -moz-column-count: 4;
+  column-count: 4;
+  -moz-column-rule: 1px solid rgba(0, 0, 0, 0.15);
+  column-rule: 1px solid rgba(0, 0, 0, 0.15);
+  display: none;
+  left: 0;
+  min-height: 100px;
+  position: absolute;
+  right: 0;
+  top: 32px;
+  width: 100%;
+  z-index: 7000;
+}
+
+.THIS .dropdown-content .parent a,
+.THIS .dropdown-content .parent {
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.THIS .dropdown-content .child a,
+.THIS .dropdown-content .child {
+  cursor: pointer;
+}
+
+.THIS .dropdown-content .grouping {
+  page-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.THIS .text-bold {
+  font-weight: 700;
+  font-family: 'StationWOFFFontsBold';
+}

@@ -1,0 +1,27 @@
+<template>
+    <div class="slds-grid slds-p-horizontal_small slds-p-vertical_xx-small slds-border_top">
+        <div class="slds-col slds-size_10-of-12" style={style}>
+            {item.label}
+        </div>
+        <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+            <span if:true={displayViewRole} class={roleClass} onclick={handleRoleClick}>{role}</span>
+            <div if:true={displayEditRole}>
+                <lightning-combobox
+                    name="role"
+                    variant="label-hidden"
+                    value={selectedRole}
+                    options={roleOptions}
+                    onchange={handleRoleSelected}></lightning-combobox>
+                <a onclick={handleCancelEdit}>Cancel</a>
+            </div>
+        </div>
+    </div>
+    <!--
+      This is supported, but currently disabled
+      
+    <template for:each={children} for:item="child">
+        <c-solution-finder-assignment key={child.name} item={child} assignments={assignments} parent-role={role}
+            indent={nextIndent} onchange={handleRoleChange}></c-solution-finder-assignment>
+    </template>
+    -->
+</template>

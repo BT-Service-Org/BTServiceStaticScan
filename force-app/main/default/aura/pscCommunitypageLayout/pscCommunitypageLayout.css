@@ -1,0 +1,64 @@
+.THIS .left-col {
+    width: 66%;
+}
+
+.THIS .right-col {
+    width: 32%;
+}
+
+
+.THIS .page {
+    width: 95% !important;
+    width: auto !important;
+    margin-top: 15px;
+}
+
+
+@media screen and (max-width:1300px) and (min-width:720px) {
+    .THIS .right-col {
+        width: 100%;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .THIS .left-col {
+        width: 100%;
+        margin: auto;
+    }
+
+    .THIS .right-col>span>div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .THIS .right-col>span>div>div {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:720px) {
+    .THIS .right-col {
+        width: 100%;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .THIS .left-col {
+        width: 100%;
+        margin: auto;
+    }
+}
+
+@media screen and (max-width:720px) {
+    .THIS .tw
+    .THIS .right-col {
+       margin-top: 0px;
+    }
+
+    .THIS .left-col {
+        width: 100%;
+        margin: auto;
+    }
+}

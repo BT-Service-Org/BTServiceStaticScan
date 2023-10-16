@@ -1,0 +1,46 @@
+.mybadges {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge_category {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    border-bottom: var(--lwc-borderWidthThin, 1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder, #D4D4D4));
+}
+
+.badge_activity {
+    font-size: 16px;
+    margin-bottom: 20px;
+    letter-spacing: .04em;
+}
+
+.badges {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    margin-bottom: 20px;
+    align-items: center;
+
+}
+
+.badgetitle {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.badgetitle p {
+    font-size: 14px;
+}
+
+.badgeImg {
+    width: 100px;
+    height: 100px;
+}
+
+.badgelist {
+    display: flex;
+    flex-wrap: wrap;
+}

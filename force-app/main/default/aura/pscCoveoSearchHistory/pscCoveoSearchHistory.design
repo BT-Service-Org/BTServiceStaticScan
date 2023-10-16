@@ -1,0 +1,4 @@
+<design:component label="PSC Coveo Search History">
+    <design:attribute name="searchHub" label="Search Hub" />
+    <design:attribute name="debug" label="Debug" />
+</design:component>

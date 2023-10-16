@@ -1,0 +1,24 @@
+.THIS .feedback-widget{
+    position: fixed;
+    width: 100px;
+    margin: 0;
+    top: 80%;
+    right: 0;
+    z-index: 10000000;
+    padding: 10px 0px 10px 1px;
+    text-align: center;
+    background-color: #032e61;
+    border-color: #032e61;
+    font-size: 16px;
+    color: #ffffff;
+    line-height: normal;
+}
+
+.THIS .feedback-widget:hover{
+    width: 200px;
+    margin: 0;
+    padding: 10px 100px 10px 0;}
+
+.THIS .writing-mode {
+    writing-mode: horizontal-tb;
+}

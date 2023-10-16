@@ -1,0 +1,419 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="c-container">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item padding="around-small" size="12">
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small" size="3">
+                        <lightning-vertical-navigation selected-item={selectedItem} onselect={handleSelect}
+                            class="navigation">
+                            <lightning-vertical-navigation-section>
+                                <lightning-vertical-navigation-item label="Trailblazer Nomination"
+                                    name="trailblazer_nomination"></lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label="Customer Success Team Nomination"
+                                    name="customer_success_team_nomination"></lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label="Achiever Nomiantion"
+                                    name="achiever_nomination"></lightning-vertical-navigation-item>
+                            </lightning-vertical-navigation-section>
+                        </lightning-vertical-navigation>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="9">
+                        <template if:true={trailblazerNomination}>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-heading_medium slds-text-align_center">Trailblazer Nomination</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <c-gdcms-nomination-header display="false"></c-gdcms-nomination-header>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <template if:true={displayTrailblazerTable}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div class="slds-float_right">
+                                            <lightning-button variant="brand" label="New" title="New"
+                                                onclick={handleNewTrailBlazer}
+                                                class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div style="height: 300px;">
+                                            <lightning-datatable key-field="trailblazer_id" data={trailblazerRecords}
+                                                columns={columns_Trailblazer} onrowaction={handleRowAction}
+                                                hide-checkbox-column show-row-number-column>
+                                            </lightning-datatable>
+                                        </div>
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+                            </template>
+                            <template if:true={trailblazerNomination_newCreations}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={trailblazerNomination_Id} onsuccess={handleSuccess_Trailblazer}>
+                                            <lightning-messages> </lightning-messages>
+                                            <lightning-input-field field-name="gdc_ms_Nominee__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_DriveGDCGoalsAsPerVision__c"></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_TeamPlayerRecognisedMentor__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_MeasurableContributionToGDC__c"></lightning-input-field>
+                                            <div style="display: none;">
+                                                <lightning-input-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Trailblazer Award"></lightning-input-field>
+                                                <lightning-input-field field-name="gdc_ms_Manager__c"
+                                                    value={teamMemberId}></lightning-input-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-p-around_medium" label="Cancel"
+                                                    onclick={handleReset_Trailblazer}></lightning-button>
+                                                <lightning-button class="slds-p-around_medium" variant="brand"
+                                                    type="submit" label="Submit"></lightning-button>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+                            <template if:true={trailblazerNomination_readOnly}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div class="slds-float_right">
+                                            <lightning-button variant="brand" label="Back" title="Back"
+                                                onclick={handleBackTrailBlazer}
+                                                class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <lightning-record-view-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={trailblazerNomination_Id}>
+                                            <lightning-messages> </lightning-messages>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_Nominee__c"></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_DriveGDCGoalsAsPerVision__c"></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_TeamPlayerRecognisedMentor__c"></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_MeasurableContributionToGDC__c"></lightning-output-field>
+                                            <div style="display: none;">
+                                                <lightning-output-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Trailblazer Award"></lightning-output-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-var-m-top_small" variant="brand"
+                                                    label="Edit" onclick={enableEdit_Trailblazer}></lightning-button>
+                                            </div>
+                                        </lightning-record-view-form>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+                        </template>
+                        <template if:true={CustomerSuccessNomination}>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-heading_medium slds-text-align_center">Customer Success Team Nomination</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <c-gdcms-nomination-header display="false"></c-gdcms-nomination-header>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <template if:true={displayCustomerTable}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div class="slds-float_right">
+                                            <lightning-button variant="brand" label="New" title="New"
+                                                onclick={handleNewCustomerSuccess}
+                                                class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div style="height: 300px;">
+                                            <lightning-datatable key-field="customer_id" data={customerSuccessRecords}
+                                                columns={columns_CustomerSuccess} onrowaction={handleRowAction_customerSuccess}
+                                                hide-checkbox-column show-row-number-column>
+                                            </lightning-datatable>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+                            <template if:true={CustomerSuccess_newCreations}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={CustomerSuccessNomination_Id}
+                                            onsuccess={handleSuccess_CustomerSuccess} onsubmit={handleSubmit}>
+                                            <lightning-messages> </lightning-messages>
+
+                                            <lightning-layout multiple-rows="true">
+                                                <lightning-layout-item padding="around-small" size="11">
+                                                    <lightning-input-field field-name="gdc_ms_SuccessTeamName__c"
+                                                    required></lightning-input-field>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="around-small" size="1">
+                                                    <lightning-icon icon-name="utility:add" alternative-text="Add Success Stories" title="Add Success Stories" class="slds-float_right" onclick={handleSuccessStories}></lightning-icon>
+                                                    <template if:true={addSuccessStories}>
+                                                        <section role="dialog" tabindex="-1" aria-modal="true"
+                                                        aria-labelledby="modal-heading-01"
+                                                        class="slds-modal slds-fade-in-open slds-modal_medium">
+                                                            <div class="slds-modal__container">
+                                                                <header class="slds-modal__header">
+                                                                    <lightning-icon icon-name="utility:close"
+                                                                            alternative-text="close"
+                                                                            variant="inverse"
+                                                                            size="small" class="slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleSuccessStories}></lightning-icon>
+                                                                        <span class="slds-assistive-text">Close</span>
+                                                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Success Stories</h2>
+                                                                </header>
+                                                                <div class="slds-modal__content slds-p-around_medium"
+                                                                    id="modal-content-id-2">
+                                                                    <lightning-record-form object-api-name={objectApiName}
+                                                                    fields={fields} columns="2" onsuccess={handleCreateSuccessStories} oncancel ={handleSuccessStories}>
+                                                                    </lightning-record-form>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                                                    </template>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="around-small" size="6">
+                                                    <template if:false={uploadImage}>
+                                                        <div>
+                                                            <lightning-button variant="brand" label="Upload Company Image"
+                                                                name="compnayImageButton" onclick={handleUploadImagePopup}
+                                                                class=" slds-float_right"></lightning-button>
+                                                        </div>
+                                                    </template>
+                                                    <template if:true={uploadImage}>
+                                                        <section role="dialog" tabindex="-1" aria-modal="true"
+                                                            aria-labelledby="modal-heading-01"
+                                                            class="slds-modal slds-fade-in-open slds-modal_medium">
+                                                            <div class="slds-modal__container">
+                                                                <div class="slds-modal__content slds-p-around_medium"
+                                                                    id="modal-content-id-1">
+                                                                    <c-gdcms-upload-company-logo record-id={CustomerSuccessNomination_Id}
+                                                                        show-cancel="false"></c-gdcms-upload-company-logo>
+                                                                </div>
+                                                                <div class="slds-modal__footer">
+                                                                    <button class="slds-button slds-button_neutral"
+                                                                        aria-label="Cancel and close"
+                                                                        onclick={handleUploadImagePopup}>Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                                                    </template>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="around-small" size="6">
+                                                    <div>
+                                                        <lightning-button variant="brand" label="Add Team Members"
+                                                            name="compnayImageButton" onclick={handleAddTeamMembers}
+                                                            class=" slds-float_left"></lightning-button>
+                                                    </div>
+                                                    <template if:true={addTeamMembers}>
+                                                        <section role="dialog" tabindex="-1" aria-modal="true"
+                                                        aria-labelledby="modal-heading-01"
+                                                        class="slds-modal slds-fade-in-open slds-modal_medium">
+                                                            <div class="slds-modal__container">
+                                                                <header class="slds-modal__header">
+                                                                    <lightning-icon icon-name="utility:close"
+                                                                            alternative-text="close"
+                                                                            variant="inverse"
+                                                                            size="small" class="slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleAddTeamMembers}></lightning-icon>
+                                                                        <span class="slds-assistive-text">Close</span>
+                                                                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">New Success Story Members</h2>
+                                                                </header>
+                                                                <div class="slds-modal__content slds-p-around_medium"
+                                                                    id="modal-content-id-3">
+                                                                    <lightning-record-form object-api-name={teamMemberObj}
+                                                                    fields={teamMemberFields} columns="2" onsuccess={handleAddSuccessStoryMembers} oncancel ={handleAddTeamMembers}>
+                                                                    </lightning-record-form>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+
+                                            <lightning-input-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_CustomerAppreciationHighCSATScore__c"></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_ProjectComplexityValueDelivered__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_TeamOwner__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_TeamSize__c"
+                                                required></lightning-input-field>
+                                            <div style="display: none;">
+                                                <lightning-input-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Customer Success Team Award"></lightning-input-field>
+                                                <lightning-input-field field-name="gdc_ms_Manager__c"
+                                                    value={teamMemberId}></lightning-input-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-p-around_medium" label="Cancel"
+                                                    onclick={handleReset_Customer}></lightning-button>
+                                                <lightning-button class="slds-p-around_medium" variant="brand"
+                                                    type="submit" label="Submit"></lightning-button>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+                            <template if:true={customerSuccessNomination_readOnly}>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <div class="slds-float_right">
+                                            <lightning-button variant="brand" label="Back" title="Back"
+                                                onclick={handleBackTrailBlazer}
+                                                class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="12">
+                                        <lightning-record-view-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={CustomerSuccessNomination_Id}>
+                                            <lightning-messages> </lightning-messages>
+                                            <lightning-output-field field-name="gdc_ms_SuccessTeamName__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_CustomerAppreciationHighCSATScore__c"></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_ProjectComplexityValueDelivered__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_TeamOwner__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_TeamSize__c"
+                                                required></lightning-output-field>
+                                            <div style="display: none;">
+                                                <lightning-output-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Customer Success Team Award"></lightning-output-field>
+                                                <lightning-output-field field-name="gdc_ms_Manager__c"
+                                                    value={teamMemberId}></lightning-output-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-var-m-top_small" variant="brand"
+                                                    label="Edit" onclick={enableEdit_Customer}></lightning-button>
+                                            </div>
+                                        </lightning-record-view-form>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+
+
+
+
+                            <!-- <lightning-layout>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <template if:false={customerSuccessNomination_readOnly}>
+                                        <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={CustomerSuccessNomination_Id}
+                                            onsuccess={handleSuccess_CustomerSuccess}>
+                                            <lightning-messages> </lightning-messages>
+                                            <lightning-input-field field-name="gdc_ms_SuccessTeamName__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_CustomerAppreciationHighCSATScore__c"></lightning-input-field>
+                                            <lightning-input-field
+                                                field-name="gdc_ms_ProjectComplexityValueDelivered__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_TeamOwner__c"
+                                                required></lightning-input-field>
+                                            <lightning-input-field field-name="gdc_ms_TeamSize__c"
+                                                required></lightning-input-field>
+                                            <div style="display: none;">
+                                                <lightning-input-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Customer Success Team Award"></lightning-input-field>
+                                                <lightning-input-field field-name="gdc_ms_Manager__c"
+                                                    value={teamMemberId}></lightning-input-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-var-m-top_small" variant="brand"
+                                                    type="submit" label="Submit"></lightning-button>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                    <template if:true={customerSuccessNomination_readOnly}>
+                                        <lightning-record-view-form object-api-name="gdc_ms_Nomination__c"
+                                            record-id={CustomerSuccessNomination_Id}>
+                                            <lightning-messages> </lightning-messages>
+                                            <lightning-output-field field-name="gdc_ms_SuccessTeamName__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_CustomerAppreciationHighCSATScore__c"></lightning-output-field>
+                                            <lightning-output-field
+                                                field-name="gdc_ms_ProjectComplexityValueDelivered__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_TeamOwner__c"
+                                                required></lightning-output-field>
+                                            <lightning-output-field field-name="gdc_ms_TeamSize__c"
+                                                required></lightning-output-field>
+                                            <div style="display: none;">
+                                                <lightning-output-field field-name="gdc_ms_AwardCategory__c"
+                                                    value="Customer Success Team Award"></lightning-output-field>
+                                                <lightning-output-field field-name="gdc_ms_Manager__c"
+                                                    value={teamMemberId}></lightning-output-field>
+                                            </div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-button class="slds-var-m-top_small" variant="brand"
+                                                    label="Edit" onclick={enableEdit_Customer}></lightning-button>
+                                            </div>
+                                        </lightning-record-view-form>
+                                    </template>
+                                </lightning-layout-item>
+                            </lightning-layout> -->
+                            <template if:false={displayCustomerTable}>
+                                <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div>
+                                        <lightning-card  title="Success Stories Members">
+                                        <lightning-datatable key-field="id" data={teamMemberList} columns={columns} hide-checkbox-column="true" show-row-number-column="true" padding="around-small"> </lightning-datatable>
+                                    </lightning-card>
+                                    </div>
+                                </lightning-layout-item></lightning-layout>
+                            </template>
+                        </template>
+                        <template if:true={AchiverNomination}>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-heading_medium slds-text-align_center">Achiver Nomination</div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c"
+                                onsuccess={handleSuccess_Achievers}>
+                                <lightning-messages> </lightning-messages>
+                                <lightning-input-field field-name="gdc_ms_Nominee__c" required></lightning-input-field>
+                                <lightning-input-field field-name="gdc_ms_CustomerGeoFeedback__c"
+                                    required></lightning-input-field>
+                                <lightning-input-field
+                                    field-name="gdc_ms_PersonalAchievements__c"></lightning-input-field>
+                                <lightning-input-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                                    required></lightning-input-field>
+                                <div style="display: none;">
+                                    <lightning-input-field field-name="gdc_ms_AwardCategory__c"
+                                        value="Achievers Award"></lightning-input-field>
+                                    <lightning-input-field field-name="gdc_ms_Manager__c"
+                                        value={teamMemberId}></lightning-input-field>
+                                </div>
+                                <div class="slds-align_absolute-center">
+                                    <lightning-button class="slds-var-m-top_small" variant="brand" type="submit"
+                                        label="Submit"></lightning-button>
+                                </div>
+                            </lightning-record-edit-form>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

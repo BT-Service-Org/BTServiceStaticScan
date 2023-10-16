@@ -1,0 +1,69 @@
+<apex:component controller="TeamsWidgetPopularDiscussionsController" >
+<style>
+.popDiscussions {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+.popDiscussions li{
+	background: transparent url('{!URLFOR($Resource.commonResources, 'images/icons/minifeeds/minifeed_discussion.gif')}') no-repeat scroll 1px 4px;
+	margin-bottom:5px;
+	margin-left:9px;
+	overflow:hidden;
+	padding:3px 0 3px 25px;
+	position:relative;
+	width:155px;
+}
+.cont_links a{
+	color:#999999;
+	font-size:10px;
+	font-weight:bold;
+}
+
+.cont_links {
+	text-align: right;
+	padding-right: 5px;
+}
+
+.grayColor {
+		color: #00233A;
+		font-size: 11px;
+		margin-top: 14px;
+}
+
+.noitems {
+		text-align: center;
+		padding: 5px;
+		font-weight: bold;
+}
+
+</style>
+
+ <div class="box_round forwidget mySmallWidget" style="width: 216px;">
+        <div class="header_blue">
+            <div><div><h4>Popular Discussions</h4></div></div>
+        </div>
+        <div class="box_content">
+            <div style="{!IF(popularDiscussionsSize > 0, 'display:none', '')}; ">
+				<div class="grayColor noitems" >No discussion topics have been created yet.</div> 
+			</div>
+            <div style="{!IF(popularDiscussionsSize > 0, '', 'display:none')};">
+                <ul class="popDiscussions">        
+	                <apex:repeat value="{!Discussions}" var="t">                 
+	                   <li>
+	                   		<a href="/apex/DiscussionDetail?id={!t.Id}">
+								{!t.Subject__c} 
+							</a>
+						</li>
+	                </apex:repeat>
+                </ul>  
+            </div>   
+        </div>
+        <div class="bottom_borders">
+            <div><div></div></div>
+        </div>
+    </div>
+</apex:component>

@@ -1,0 +1,565 @@
+<apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="WikiPage__c" sidebar="false" >
+	
+	<!-- Scripts -->
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<script src="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"></script>
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"></script>
+	
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	
+	<style>
+		.noWikisYet {
+			text-align: center;
+			margin: 40px;
+		}
+	</style>
+	
+	<div class="BodyPage">
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		<!-- 		  Overlay		-->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
+		</div>
+		<!-- 		  Overlay		-->
+	
+		<!-- 		  Loader		-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+		<!-- 		  Loader		-->
+		
+		<script>
+			var version;
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				version = navigator.appVersion;
+				if (version.indexOf("MSIE 6") != -1) {
+					document.getElementById('loader__').className = 'loaderIE6__';
+					document.getElementById('loader__').style.position = 'absolute';
+				}
+			}
+		</script>		
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   HEADER    - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Wiki</h1>
+					<h2 class="arial_black">Overview</h2>
+				</div>		
+			</div>		
+			<!-- Search Box Container (always Centered) -->
+			<div class="searchBox">
+				<div>
+					<div>
+						<!-- Search Form -->
+						<form action="">
+							<div class="search_box_input f_left">
+								<div class="legend">Find Wiki pages</div>
+								<input type="text" value="Enter keyword or name" name="" onclick="ActionSearchInput();" onfocus="setValue('');" onblur="setValue('Enter keyword or name');"/>								
+							</div>
+							<input type="button" value="Search" class="search_btn f_left" /> 								
+						</form>
+						<!-- Advanced Search Link -->
+						<!-- <div class="advanced_search_cont">							
+							<a href="javascript:;" >Advanced Search</a>
+						</div> -->							
+					</div>
+				</div>
+			</div>
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>	
+		
+		<div class="MainPage">
+			<div class="PageBlock">	
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - LEFT SIDEBAR  - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<table border="0" class="bodyTable">
+					<tr>
+						<td valign="top" class="sideBarTD">
+							<!-- Sidebar -->
+							<div class="sidebar">
+								<!-- - - - - - - - - - - - - - - - - - - - - -->	
+								<!-- 			THIS WEEK'S POPULAR			 
+								<div class="box_round_blue">
+									<div class="top_borders"><div><div></div></div></div>
+									<!-- Rounded Box Content 
+									<div class="box_content">
+										<div class="contentHolder">
+											<!-- This week popular section 
+											<h3 style="font-size: 8px;">THIS WEEK'S</h2>
+											<h2 style="margin-bottom:8px;">Popular Wiki pages</h2>
+											<table border="0">
+												<apex:form id="formThisWeekPopular">
+													<apex:repeat value="{!thisWeekPopular}" var="item">
+														<tr>
+															<td valign="top"><apex:image value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/pic_1.jpg')}" /></td>
+															<td>
+																<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}';"
+																	value="{!item.Name}" 
+																	styleclass="WikiLink"
+																	rerender="auxPanel">
+																</apex:commandLink><br>
+																<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.parentId}';"
+																	value="{!item.parentName}" 
+																	styleclass="WikiSite"
+																	rerender="auxPanel">
+																</apex:commandLink>
+															</td>
+														</tr>	
+													</apex:repeat>
+												</apex:form>																							
+											</table>
+										</div>
+									</div>
+									<div class="bottom_borders"><div><div></div></div></div>
+								</div>	-->
+								<!-- - - - - - - - - - - - - - - - - - - - - -->	
+								<!-- 				MY FAVORITES			 -->
+								<div class="box_round_blue">
+									<!-- Rounded Box Content -->
+									<div class="header">
+										<div><div><h3>My Favorites</h3></div></div>
+									</div>
+									<div class="box_content">
+										<div class="contentHolder">
+											<apex:outputpanel rendered="{!IF(cntFav == 0 , false, true)}">
+												<div class="linkAction">
+													+ <a href="javascript:;">Expand to show all</a>
+												</div>
+											</apex:outputpanel>
+											
+											<apex:form id="formFavorite">
+												<table width="100%" style="margin-top:7px;" border="0">
+													<apex:repeat value="{!favorite}" var="item">
+														<tr>
+															<td width="17px" valign="top"><apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}"/></td>
+															<td>
+																<apex:commandLink onclick="location.href='/apex/WikiPage?idWP={!item.WikiPage__r.Id}';"
+																	value="{!item.WikiPage__r.Name}" 
+																	styleclass="WikiLink"
+																	rerender="auxPanel">
+																</apex:commandLink><br>
+																<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.WikiPage__r.Team__r.Id}';"
+																	value="{!item.WikiPage__r.Team__r.Name}" 
+																	styleclass="WikiSite"
+																	rerender="auxPanel">
+																</apex:commandLink>
+															</td>
+														</tr> 
+													</apex:repeat>
+													
+													<apex:outputPanel layout="block" rendered="{!IF(cntFav == 0 , true, false)}">
+														<tr>
+															<td style="padding:5px;" align="center" valign="middle">No Favorites Yet </td>
+														</tr>
+													</apex:outputPanel>	
+												</table>
+											</apex:form>
+										</div>
+									</div>
+									<div class="bottom_borders"><div><div></div></div></div>
+								</div>	
+								<!-- - - - - - - - - - - - - - - - - - - - - -->	
+								<!-- 			MY RECENT CHANGES			 -->
+								<div class="box_round_blue">
+									<!-- Rounded Box Content -->
+									<div class="header">
+										<div><div><h3>My Recent Changes</h3></div></div>
+									</div>
+									<div class="box_content">
+										<div class="contentHolder">
+											<apex:outputpanel rendered="{!IF(cntMyRecentChanges == 0 , false, true)}">
+												<div class="linkAction">
+													<a href="javascript:;" class="topRightLinks" >See More&#187</a>
+												</div>
+											</apex:outputpanel>
+											<apex:form id="formMyRecentChanges">
+												<table width="100%" style="margin-top:7px;" border="0">
+													<apex:repeat value="{!myRecentChanges}" var="item">
+														<tr>
+															<td width="28px" valign="top"><apex:image value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/pic_5.jpg')}" /></td>
+															<td>
+																<apex:commandLink onclick="location.href='/apex/WikiPage?idWP={!item.Id}';"
+																	value="{!item.Name}" 
+																	styleclass="WikiLink"
+																	rerender="auxPanel">
+																</apex:commandLink><br>
+																<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.parentId}';"
+																	value="{!item.parentName}" 
+																	styleclass="WikiSite"
+																	rerender="auxPanel">
+																</apex:commandLink>
+															</td>
+														</tr> 
+													</apex:repeat>
+													
+													<apex:outputPanel layout="block" rendered="{!IF(cntMyRecentChanges == 0 , true, false)}">
+														<tr>
+															<td style="padding:5px;" align="center" valign="middle">No Recent Changes </td>
+														</tr>
+													</apex:outputPanel>
+												</table>
+											</apex:form>
+										</div>
+									</div>
+									<div class="bottom_borders"><div><div></div></div></div>
+								</div>											
+							</div>	
+						</td>
+						<td valign="top" class="mainContentTD">
+							<!-- - - - - - - - - - - - - - - - - - - - - -->	
+							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
+							<!-- - - - - - - - - - - - - - - - - - - - - --> 
+							<div class="MainContent">	
+											
+								<div class="tabContainer">
+									<apex:form >
+										<ul class="tabs">
+											<li class="selected" id="myTeamTab">
+												<apex:commandLink action="{!refreshTab}" value="My Teams" 
+																	onclick="switchTab('myTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="false" />
+												</apex:commandLink>
+											</li>
+											<li id="allTeamTab">
+												<apex:commandLink action="{!refreshTab}" value="All Teams" 
+																	onclick="switchTab('allTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="true" />
+												</apex:commandLink>
+											</li>					
+										</ul>
+									</apex:form>
+								</div>
+								
+								<div class="tabBorder"></div>
+								
+								<apex:outputpanel id="myTeamsAllTeamsPanel">
+																
+									<table border="0" cellspacing="8" style="width:100%;">
+										<tr>
+											<td width="50%" valign="top">
+												<div class="teamBlockTitle">
+													<h4>Team Wikis</h4>
+												</div>
+												<br>
+												<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
+												<a href="javascript:;" onclick="hideSection(document.getElementById('WikiOverview:twistImage'),'filterDiv')" style="text-decoration:none;font-weight:bold;">Filter</a>
+												
+												<!-- - - - - - - - - - - - - - - - - - - - - -->	
+												<!-- 				LETTER FILTER			 -->
+												<div class="filter" id="filterDiv"  style="">
+													<div align="center">
+														<apex:form id="filterForm">
+															<ul class="letterFilter">
+																<li>
+																
+																	<apex:commandLink id="ALL"
+																		action="{!filterSites}" 
+																		value="ALL" 
+																		onmouseover="gainFocus(this);" 
+																		onmouseout="looseFocus(this);" 
+																		onclick="setFoo(this); switchOverlay(true);" 
+																		oncomplete="switchOverlay(false);" 
+																		styleclass="AllBtnSet"
+																		rerender="wikiSitesPanel">
+																		
+																		<apex:param name="ltr" value="ALL" />
+																	</apex:commandLink>
+																	
+																	<!-- <div id="foo" style="display:none;" >{!$Component.ALL}</div>-->
+																</li>
+																<apex:repeat id="letterFilterRepeat" value="{!letterFilter}" var="item">
+																	<li>
+																		<apex:outputpanel rendered="{!item.containSites}">
+																		
+																			<apex:commandLink styleclass="contains"
+																				action="{!filterSites}"
+																				onmouseover="gainFocus(this);"
+																				onmouseout="looseFocus(this);"
+																				onclick="setFoo(this); switchOverlay(true);"
+																				oncomplete="switchOverlay(false);" 
+																				value="{!item.letter}"
+																				rerender="wikiSitesPanel">
+																				
+																				<apex:param name="ltr" value="{!item.letter}" />
+																			</apex:commandLink>
+																		</apex:outputpanel>
+																		<apex:outputpanel rendered="{!NOT(item.containSites)}">
+																			{!item.letter}
+																		</apex:outputpanel>
+																	</li>
+																</apex:repeat>
+															</ul>
+															<br style="clear:both; font-size:3px;" />
+														</apex:form>
+													</div>
+												</div>
+												<hr class="filterHR">
+												
+												<apex:outputpanel styleclass="noWikisYet" layout="block" rendered="{!IF(cntPagination == 0, true, false)}">
+													No Team Wikis Yet.
+												</apex:outputpanel>
+												
+												<apex:outputpanel id="wikiSitesPanel" rendered="{!IF(cntPagination == 0, false, true)}">
+													<!-- - - - - - - - - - - - - - - - - - - - - -->	
+													<!-- 				  PAGINATION			 -->
+													<div class="pagination">
+														<apex:outputpanel id="paginationPanelTop">
+															<apex:form id="paginationFormTop">
+																<div class="pages">
+																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1,NOT(cntPagination == currentPagination)), true, false)}">
+																		<ul>
+																			<li class="prev disabled">Previous Page</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																			</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1, cntPagination == currentPagination), true, false)}">
+																		<ul>
+																			<li class="prev disabled">Previous Page</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next disabled">Next Page</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),NOT(cntPagination == currentPagination)), true, false)}">
+																		<ul>
+																			<li class="prev">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																			</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																			</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),cntPagination == currentPagination), true, false)}">
+																		<ul>
+																			<li class="prev">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																			</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next disabled">Next Page</li>
+																		</ul>
+																	</apex:outputpanel>
+																</div>
+															</apex:form>
+														</apex:outputpanel>
+													</div>
+													
+													<hr style="border: 0px solid ; background-color: #333434; height: 1px;">
+													
+													<!-- - - - - - - - - - - - - - - - - - - - - -->	
+													<!-- - - - - - - - - WIKI SITES  - - - - - - -->
+													<!-- - - - - - - - - - - - - - - - - - - - - -->
+													
+													<apex:form id="wikiSitesForm">
+														<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
+															<div class="recentlyUpdated">
+																<table border="0" style="width:100%;">
+																	<tr>
+																		<td width="110px" valign="top">
+																			<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
+																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																			</apex:outputpanel>
+																			<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
+																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																			</apex:outputpanel>
+																			<!-- <apex:image styleclass="teamPicture" value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/pic_big.jpg')}" /> -->
+																		</td>
+																		<td valign="top">
+																			<table border="0" style="width:99%;">
+																				<tr>
+																					<td valign="top" align="left">
+																						<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';"
+																							value="{!item.name}"
+																							styleclass="WikiLink"
+																							rerender="auxPanel">
+																						</apex:commandLink>
+																					</td>
+																					<td valign="top" align="right">
+																						<!-- <a href="javascript:;" class="SiteMap">SITE MAP</a> -->
+																					</td>
+																				</tr>
+																				<tr>
+																					<td valign="top" colspan="2">
+																						<div class="description">
+																							<apex:outputText escape="false" value="{!item.description}" />
+																						</div>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</table>
+															</div>
+														</apex:repeat>
+													</apex:form>
+													
+													<!-- - - - - - - - - - - - - - - - - - - - - -->	
+													<!-- 				  PAGINATION			 -->
+													<div class="pagination">
+														<apex:outputpanel id="paginationPanelBottom">
+															<apex:form id="paginationFormBottom">
+																<div class="pages">
+																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1,NOT(cntPagination == currentPagination)), true, false)}">
+																		<ul>
+																			<li class="prev disabled">Previous Page</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																			</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1, cntPagination == currentPagination), true, false)}">
+																		<ul>
+																			<li class="prev disabled">Previous Page</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next disabled">Next Page</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),NOT(cntPagination == currentPagination)), true, false)}">
+																		<ul>
+																			<li class="prev">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																			</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																			</li>
+																		</ul>
+																	</apex:outputpanel>
+																	
+																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),cntPagination == currentPagination), true, false)}">
+																		<ul>
+																			<li class="prev">
+																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																			</li>
+																			<li>({!currentPagination}</li>
+																			<li>-</li>
+																			<li>{!cntPagination})</li>
+																			<li class="next disabled">Next Page</li>
+																		</ul>
+																	</apex:outputpanel>
+																</div>
+															</apex:form>
+														</apex:outputpanel>
+													</div>
+												</apex:outputpanel>											
+											</td>
+											<td style="width:3px;"></td>
+											<td width="50%" valign="top">
+												<!-- - - - - - - - - - - - - - - - - - - - - -->	
+												<!-- - - - - - - RECENTLY UPDATED  - - - - - -->
+												<!-- - - - - - - - - - - - - - - - - - - - - -->
+												<div class="teamBlockTitle">
+													<h4>Recently Updated Pages</h4>
+												</div>
+												<div class="linkAction">
+													<a href="#" class="topRightLinks" >See More&#187</a>
+												</div>
+												
+												<apex:outputpanel id="updatedPanel">
+													<apex:form id="formRecentlyUpdate">
+														<apex:repeat value="{!recentlyUpdated}" var="item">
+															<div class="recentlyUpdated">
+																<table border="0">
+																	<tr>
+																		<td valign="top">
+																			<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',true,false)}">
+																				<apex:image styleclass="userPicture" value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
+																			</apex:outputpanel>
+																			<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',false,true)}">
+																				<apex:image styleclass="userPicture" value="/servlet/servlet.FileDownload?file={!item.modifiedByPicture}" />
+																			</apex:outputpanel>
+																		</td>
+																		<td valign="top">
+																			<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}';"
+																				value="{!item.Name}"
+																				styleclass="WikiLink"
+																				rerender="auxPanel">
+																			</apex:commandLink><br>
+																			<div class="description">{!item.shortDescription}</div>
+																			<span class="updatedDate">
+																				<apex:commandLink rerender="auxPanel" onclick="location.href ='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
+																				&nbsp;
+																				<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.parentId}';"
+																					value="{!item.parentName}" 
+																					styleclass="WikiSite"
+																					rerender="auxPanel">
+																				</apex:commandLink>&nbsp;
+																				on {!item.LastModifiedDate} 
+																			</span>
+																		</td>
+																	</tr>
+																</table>
+															</div>
+														</apex:repeat>
+													</apex:form>
+												</apex:outputpanel>
+											</td>
+										</tr>
+									</table>
+									
+									
+								</apex:outputpanel>
+							
+							
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="SidebarTitle" />
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<apex:outputpanel id="auxPanel" style="display:none;">
+	</apex:outputpanel>	
+		<script>
+			resetSearchInput();
+		</script>	
+</apex:page>

@@ -1,0 +1,91 @@
+<apex:component ><div id="search" class="CoveoSearchInterface" data-enable-history="true" data-enable-duplicate-filtering="true" data-pipeline="" data-responsive-medium-breakpoint="" data-responsive-small-breakpoint="" data-results-per-page="" data-excerpt-length="" data-maximum-age="">
+  <div class="CoveoAnalytics" data-search-hub="The Station"></div>
+  <div class="coveo-search-section">
+    <div class="CoveoCommunityStateManager"></div>
+  </div>
+  <div class="coveo-main-section">
+    <div class="coveo-facet-column">
+      <div class="CoveoFacet" data-title="Products &amp; Programs" data-field="@SfCloud_Product__c" data-number-of-values="" data-use-and="true"></div>
+      <div class="CoveoFacet" data-title="Content Type" data-field="@sffiletype__c" data-number-of-values="12"></div>
+      <div class="CoveoFacet" data-title="Visibility" data-field="@sfvisibility__c" data-tab="SalesforceAccount" data-number-of-values=""></div>
+      <div class="CoveoFacet" data-title="Owner" data-field="@SfAudience_c__c" data-number-of-values=""></div>
+      <div class="CoveoFacet" data-title="URL" data-field="@sfcontent_url__c" data-tab="SalesforceAccount" data-number-of-values="0"></div>
+      <div class="CoveoFacet" data-title="Description" data-field="@sfDescription__c" data-number-of-values="1"></div>
+    </div>
+    <div class="coveo-results-column">
+      <div class="CoveoShareQuery"></div>
+      <div class="CoveoPreferencesPanel">
+        <div class="CoveoResultsPreferences"></div>
+        <div class="CoveoResultsFiltersPreferences"></div>
+      </div>
+      <div class="CoveoTriggers"></div>
+      <div class="CoveoBreadcrumb"></div>
+      <div class="coveo-results-header">
+        <div class="coveo-summary-section">
+          <span class="CoveoQuerySummary" data-enable-no-results-found-message="true" data-no-results-found-message="Sorry! No results found.  Please try again or submit a Content Request to the appropriate Content Manager." data-enable-cancel-last-action="false">
+            <div class="coveo-show-if-no-results"></div></span>
+          <span class="CoveoQueryDuration"></span>
+        </div>
+        <div class="coveo-result-layout-section">
+          <span class="CoveoResultLayout"></span>
+        </div>
+        <div class="coveo-sort-section">
+          <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+          <span class="CoveoSort" data-sort-criteria="@SfLastModifiedDate__c descending,@SfLastModifiedDate__c ascending" data-caption="Date"></span>
+        </div>
+      </div>
+      <div class="CoveoHiddenQuery"></div>
+      <div class="CoveoDidYouMean"></div>
+      <div class="CoveoErrorReport" data-pop-up="false"></div>
+      <div class="CoveoResultList" data-layout="list" data-wait-animation="fade" data-infinite-scroll-page-size="">
+        <script type="text/html" data-field-objecttype="" class="result-template" id="My Default Template"><div class="coveo-result-frame">
+  <div class="coveo-result-cell" style="vertical-align:top;text-align:center;width:32px;">
+    <span class="CoveoIcon" data-small="true" data-with-label="false"></span>
+    <div class="CoveoQuickview"></div>
+  </div>
+  <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+    <div class="coveo-result-row" style="margin-top:0;">
+      <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;">
+<a class="CoveoResultLink" data-field="@sfcontent_url__c" data-always-open-in-new-window="true"></a>
+<span class="CoveoSalesforceQuickview"></span>
+</div>
+      <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px">
+<span class="CoveoFieldValue" data-field="@sflastmodifieddate__c" data-helper="dateTime" data-html-value="false"></span>
+<span class="CoveoFieldValue" data-field="@sfnext_review_date_c__c" data-helper="dateTime" data-html-value="false"></span>
+<div class="coveo-result-row">
+        </div>
+</div>
+    </div>
+    <div class="coveo-result-row" style="margin-top:10px;">
+    </div>
+    <div class="coveo-result-row" style="margin-top:10px;">
+      <div class="coveo-result-cell">
+<span class="CoveoFieldValue" data-field="@sfdescription_c__c"></span>
+<span class="CoveoFieldValue" data-field="@sfdescription__c"></span>
+<span class="CoveoFieldValue" data-field="@sfdescription"></span>
+<span class="CoveoFieldValue" data-field="@sflong_description_c__c"></span>
+<p>
+  <br/>
+  <span></span>
+</p>
+<span class="CoveoFieldValue" data-field="@sfvisibility__c"></span>
+<span class="CoveoFieldValue" data-field="@sfcontent_type_c__c"></span>
+<span class="CoveoFieldValue" data-field="@sfasset_type_c__c"></span>
+<span class="CoveoFieldValue" data-field="@sffiletype__c"></span>
+<span class="CoveoFieldValue" data-field="@sfdelivery_method_c__c"></span>
+<span class="CoveoFieldValue" data-field="@sfapm_level_2_c__c"></span>
+</div>
+    </div>
+    <div class="coveo-result-row" style="margin-top:10px;">
+    </div>
+  </div>
+</div></script>
+      </div>
+      <div class="CoveoPager"></div>
+      <div class="CoveoLogo"></div>
+      <div class="CoveoResultsPerPage"></div>
+    </div>
+  </div>
+  <div class="CoveoFieldSuggestions" data-field="@title"></div>
+  <div class="CoveoFieldSuggestions" data-field="@sfdescription__c"></div>
+</div></apex:component>

@@ -1,0 +1,28 @@
+<template>
+    <div class="item_container">
+        <template for:each={menuItems} for:item="item">
+            <div key={item.Name} class="item">
+                <div class="content">
+                    <a href={item.navUrl}>
+                        <p class="ITC_font">{item.Name}</p>
+                        <span if:true={item.Status__c} class="feature_icon"> {item.Status__c}</span>
+                    </a>
+                    <div class="subitem">
+                        <template if:true={item.childProducts}>
+                            <template for:each={item.childProducts} for:item="subItem">
+                                <div key={subItem.Id} class="subProduct">
+                                    <a href={subItem.navUrl}>
+                                        <p class="ITC_font">{subItem.Name}</p>
+                                        <span if:true={subItem.Status__c} class="feature_icon sub_feature_icon">
+                                            {subItem.Status__c}</span>
+                                    </a>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                    <img src={item.tileUrl} alt="Background Image"/>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

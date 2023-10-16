@@ -1,0 +1,610 @@
+<apex:page sidebar="false" id="TeamsMembersList" tabStyle="Team__c" controller="TeamMembersListController">    
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}'; 
+	</script>   
+ 
+    <!-- Javascript -->
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<!-- Common css for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamMemberList.css')}" />	
+	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyInviteNewMember.css')}" />
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	
+	<!-- Modal JS -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+
+	<!-- Initialize Modal Overlay for Remove Topic Replies -->
+	<a href="#discusionOverlay" id="initializeModal" style="display:none;"></a>
+	<div id="discusionOverlay"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<!--### Rerender Method ###-->
+	<apex:form >
+		<apex:actionFunction name="reloadMemberList" action="{!refresh}"
+       		rerender="membersList" />
+    </apex:form>
+	
+	<style>
+		.letterFilter li .contains {
+			color:#297B9C !important;
+			font-weight:bold !important;
+			text-decoration:none !important;
+		}
+		
+		.memberImg {
+			padding: 0px 0px 0px 10px;
+		}
+		
+		.filterHR {
+			background-color:#D1D1D1;
+			border:0px solid;
+			height:1px;
+			margin: 7px;
+		}
+		
+		.filterLink {
+			text-decoration:none;
+			font-weight:bold;
+			color: #297B9C;
+		}
+		
+		.AllBtn {
+			background:#297B9C none repeat scroll 0% 50%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:75% !important;
+			margin:0px;
+			padding:1px 4px;
+			text-align:center;
+		}
+		
+		a.blackbutton { /* remove this style from the static */
+			background: #666666 none repeat scroll 0% !important;
+			color:#FFFFFF;
+			cursor:pointer;
+			display:block;
+			float:left;
+			font-family:Arial,Helvetica,sans-serif;
+			font-size:12px;
+			height:17px;
+			margin:0pt 0pt 0pt 5px;
+			padding:3px 8px 0px;
+			text-align:center;
+			text-decoration:none;
+			vertical-align:middle;
+		}
+		
+		.titleTd {
+			width: 140px;
+		}
+		
+		.border_body_top {
+			margin-left: 0px;
+		}
+		
+		.editProfile {
+			clear: none;
+			position: relative;
+			overflow: visible;
+		}
+		
+		.editProfile .profileOptions {
+			clear: none;
+			position: absolute;
+			margin: 0px;
+			top: 19px;
+			border: 1px solid #221E1F;
+			background: #FFFFFF;
+			left: 118px;
+			width: 122px;
+		}
+		 
+		.editProfile .profileOptions ul {
+			list-style-type: none;	
+		}
+		
+		.editProfile .profileOptions ul li{
+			cursor: pointer;
+			padding: 2px 5px;
+		}
+		
+		div.header div.searchBox div div div.search_box_input div.legend.otherMargin {
+			left:-55px;
+		}
+	</style>
+	
+	<script>
+		function refreshChanges() {
+			location.href = "https://na1.salesforce.com/apex/TeamsMembersList?id={!teamId}";
+		}
+		
+		
+		function showSelects(){
+		 	var selects = $$('#modal_container select');
+		 	for(var i = 0; i < selects.size() ; i++){
+		 		selects[i].style.visibility = '';
+		 		selects[i].style.display = '';
+		 	}
+		 }
+		
+		var state = false;
+		function hideSection(twisty,elementId){
+			if (elementId != null) {
+				if (!state){
+					var element = $(elementId);
+					var elemWasOn = false;
+					state = true;
+					
+					if (element.style.display == 'none'){
+						Effect.BlindDown(elementId, {duration: 0.6 , onComplete: function(){state = false;}});
+						twisty.src = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
+						twisty.alt = twisty.title = 'Hide Section';
+					}
+					else {
+						Effect.BlindUp(elementId, {duration: 0.6 , onComplete: function(){state = false;}});
+						twisty.src = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
+						twisty.alt = twisty.title = 'Show Section';
+						elemWasOn = true;
+					}
+				}
+			}
+		}
+		
+		function checkUnCheck (action) {
+			var checked = action.checked;
+			var checkBoxs = document.getElementsByTagName('input');
+			for (i = 0; i < checkBoxs.length; i++) {
+				if (checkBoxs[i].className == 'actionCheck') {
+					if(checked) {
+						checkBoxs[i].checked = true;
+					}
+					else {
+						checkBoxs[i].checked = false;
+					}
+				}
+			}
+		}
+		
+		function massiveMemberRemove () {
+			var membersToRemove = new Array();
+			var checkBoxs = document.getElementsByTagName('input');
+			for (i = 0; i < checkBoxs.length; i++) {
+				if (checkBoxs[i].className == 'actionCheck') {
+					if(checkBoxs[i].checked) {
+						var member = new sforce.SObject("TeamMember__c");
+						member.Id = checkBoxs[i].value;
+						membersToRemove.push(member);
+					}
+				}
+			}
+			sforce.connection.sessionId = API_SESSION_ID;
+			for(j = 0; j < membersToRemove.length; j++) {
+				itemRemove = membersToRemove[j];
+				sforce.connection.deleteIds([itemRemove.Id],{
+					onSuccess:function(result){	
+						
+					},
+					onFailure:function(error){
+						alert(error);
+					}		
+				});
+			}
+			setTimeout("refreshChanges()", 5000);
+		}
+		
+		function showHideOptions () {
+			var optionsDiv = $('profileOptions');
+			if (optionsDiv.style.display == 'none') {
+				optionsDiv.style.display = 'block';
+			}
+			else {
+				optionsDiv.style.display = 'none';
+			}
+		}
+		
+		function bckColor (opt) {
+			if (opt.style.backgroundColor == 'rgb(249, 248, 205)') {
+				opt.style.backgroundColor = '#FFFFFF';
+			}
+			else {
+				opt.style.backgroundColor = 'rgb(249, 248, 205)';
+			}	
+		}
+		
+		function massiveRemoveOverlay () {
+			var countCheck = 0;
+			var checkBoxs = document.getElementsByTagName('input');
+			for (i = 0; i < checkBoxs.length; i++) {
+				if (checkBoxs[i].className == 'actionCheck') {
+					if(checkBoxs[i].checked) {
+						countCheck++;
+					}
+				}
+			}
+				
+			if (countCheck != 0) {
+				createOverlay('','massiveRemoveMemberOverlay','185','');
+			}
+		}
+		
+		function massiveMemberUpdate(profileOption) {
+			var newProfile = profileOption.id;
+			var membersToUpdate = new Array();
+			var checkBoxs = document.getElementsByTagName('input');
+			var countEdit = 0;
+			
+			for (i = 0; i < checkBoxs.length; i++) {
+				if (checkBoxs[i].className == 'actionCheck') {
+					if(checkBoxs[i].checked) {
+						var member = new sforce.SObject("TeamMember__c");
+						member.Id = checkBoxs[i].value;
+						member.TeamProfile__c = newProfile;
+						membersToUpdate.push(member);
+						countEdit++;
+					}
+				}
+			}
+			var optionsDiv = $('profileOptions');
+			optionsDiv.style.display = 'none';
+			
+			if (countEdit != 0) {
+				sforce.connection.sessionId = API_SESSION_ID;
+				for(j = 0; j < membersToUpdate.length; j++) {
+					itemUpdate = membersToUpdate[j];
+					// UPDATE QUERY API
+					sforce.connection.update([itemUpdate],{
+						onSuccess:function(result){	
+							
+						},
+						onFailure:function(error){
+							alert(error);
+						}		
+					});	
+				}
+				setTimeout("refreshChanges()", 5000);
+			}
+		}
+	</script>
+	
+    <!-- Header -->
+    <div class="header">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Team Members List</h1>
+                <h2 class="arial_black">{!teamName}</h2>
+            </div>
+        </div>
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend otherMargin" style="left: -55px;">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key"   onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt=""/>
+            </div>
+        </div>
+    </div><!-- Sidebar -->
+ 
+    <div class="sidebar">
+        <c:TeamDetailsWidget teamId="{!teamId}" />
+        <c:TeamMembersWidget teamId="{!teamId}" type="adminList" />
+    </div>
+    <!-- Main Content Div -->
+    <div class="main_cont">
+        <div>
+            <div class="main_cont">
+                <div>
+          			<div class="holder">
+                        <table width="100%">
+                        	<tr>
+                        		<td class="teamTitleButton titleTd" >                        	
+							 		Members							
+                        		</td>
+								<td>
+									<!-- BUTTONS -->
+									<apex:outputpanel rendered="{!userPermissions.canManage}">	
+										<a onclick="createOverlay('','inviteTeam','400','showSelects()');" href="javascript:;" class="blackbutton">New</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
+										<div class="editProfile">
+											<a href="javascript:;" class="blackbutton" onclick="showHideOptions();">Edit Team Profile | v</a>
+											<div id="profileOptions" class="profileOptions" style="display:none;">
+												<ul>
+													<apex:repeat value="{!teamEditProfiles}" var="item">
+														<li onclick="massiveMemberUpdate(this);" onmouseover="bckColor(this)" onmouseout="bckColor(this)" id="{!item.Id}">{!item.Name}</li>	
+													</apex:repeat>
+												</ul>
+											</div>
+										</div>
+									</apex:outputpanel>
+									<!-- BUTTONS -->
+								</td>	
+							</tr>
+						</table> 
+                        <div class="border_body_top"></div> 
+						<!-- - - - - - - - - - - - - - - - - - - - - -->	
+						<!-- 				LETTER FILTER			 -->
+						<br>
+						<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
+						<a href="javascript:;" onclick="hideSection(document.getElementById('TeamsMembersList:twistImage'),'filterDiv')" class="filterLink">Filter</a>
+							
+						<div class="filter" id="filterDiv" >
+							<div align="center">
+								<apex:form id="filterForm">
+									<ul class="letterFilter">
+										<li>
+											<apex:commandLink action="{!genMembers}" value="ALL" styleclass="AllBtn" rerender="membersList">
+												<apex:param name="ltr" value="ALL" />
+											</apex:commandLink>
+										</li>
+										<apex:repeat id="letterFilterRepeat" value="{!letterFilter}" var="item">
+											<li>
+												<apex:outputpanel rendered="{!item.containMembers}">
+													<apex:commandLink styleclass="contains" action="{!genMembers}" value="{!item.letter}" rerender="membersList">
+														<apex:param name="ltr" value="{!item.letter}" />
+													</apex:commandLink>
+												</apex:outputpanel>
+												<apex:outputpanel rendered="{!NOT(item.containMembers)}">
+													{!item.letter}
+												</apex:outputpanel>
+											</li>
+										</apex:repeat>
+									</ul>
+									<br style="clear:both; font-size:3px;" />
+								</apex:form>
+							</div>
+						</div>
+						<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+							<hr class="filterHR">
+						</apex:outputpanel>
+						<apex:outputpanel id="membersList">
+							<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+		 						<div class="pages" style="width:64%;"> 
+					 				<apex:form >					 
+										<ul>
+											<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+												<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList" rendered="{!prevPageLinkShow}"/>
+												<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+											</li>
+											<li>({!currentPagination}</li>
+											<li>-</li>
+											<li>{!cntPagination})</li>
+											<li class="next {!IF(nextPageShow,'next_disabled','')}">
+												<apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList" rendered="{!nextPageLinkShow}"/>										
+												<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+											</li>
+										</ul>								
+									</apex:form>								
+								</div>
+							</apex:outputpanel>
+	               			<apex:form >
+		               			<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
+			                        <thead>
+			                            <tr>
+			                            	<td>
+				                            	<apex:outputpanel rendered="{!userPermissions.canManage}">
+			                            			<input class="actionCheckAll" onclick="checkUnCheck(this);" type="checkbox" />
+			                            		</apex:outputpanel>
+			                            	</td>
+			                            	<td colspan="2" class="member_title_description" width="20px">
+			                                    <apex:outputpanel rendered="{!isTeamAdmin}">Action</apex:outputpanel>
+			                                </td>
+			                            	<td width="40px">&nbsp;</td>
+			                            	<td width="240px">
+			                                    <apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Name" rerender="membersList">
+													<apex:param name="sb" value="User__r.Name" />
+												</apex:commandLink>&nbsp;
+												<apex:outputpanel rendered="{!IF(sortBy == 'name',true,false)}">
+													<apex:outputpanel rendered="{!sortByDesc}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+													</apex:outputpanel>
+													<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+													</apex:outputpanel>
+												</apex:outputpanel>
+			                                </td>
+											<td width="130px">
+			                                    <apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Company" rerender="membersList">
+													<apex:param name="sb" value="User__r.CompanyName" />
+												</apex:commandLink>&nbsp;
+												<apex:outputpanel rendered="{!IF(sortBy == 'company',true,false)}">
+													<apex:outputpanel rendered="{!sortByDesc}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+													</apex:outputpanel>
+													<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+													</apex:outputpanel>
+												</apex:outputpanel>
+			                                </td>
+			                                <td width="240px">
+			                                    <apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Title" rerender="membersList">
+													<apex:param name="sb" value="User__r.Title" />
+												</apex:commandLink>&nbsp;
+												<apex:outputpanel rendered="{!IF(sortBy == 'title',true,false)}">
+													<apex:outputpanel rendered="{!sortByDesc}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+													</apex:outputpanel>
+													<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+													</apex:outputpanel>
+												</apex:outputpanel>
+			                                </td>
+			                                <td width="110px">
+			                                    <apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Team Profile" rerender="membersList">
+													<apex:param name="sb" value="TeamProfile__r.Name" />
+												</apex:commandLink>&nbsp;
+												<apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
+													<apex:outputpanel rendered="{!sortByDesc}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+													</apex:outputpanel>
+													<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+													</apex:outputpanel>
+												</apex:outputpanel>
+			                                </td>
+										    <td width="140px">
+			                                    <apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Team Role" rerender="membersList">
+													<apex:param name="sb" value="TeamRole__c" />
+												</apex:commandLink>&nbsp;
+												<apex:outputpanel rendered="{!IF(sortBy == 'role',true,false)}">
+													<apex:outputpanel rendered="{!sortByDesc}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+													</apex:outputpanel>
+													<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+														<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+													</apex:outputpanel>
+												</apex:outputpanel>
+			                                </td> 
+			                            </tr>
+			                        </thead>
+			                        <!-- Description  -->
+			                        <tbody>
+			                            <apex:repeat var="item" value="{!members}" rows="{!numberOfItemsToShow}" first="{!firstRow}">
+				                            <tr>
+				                            	<td>
+				                            		<apex:outputpanel rendered="{!userPermissions.canManage}">
+					                            		<input value="{!item.teamMemberId}" class="actionCheck" type="checkbox" />
+				                            		</apex:outputpanel>
+				                            	</td>
+				                            	<td>
+				                            		<apex:outputpanel rendered="{!userPermissions.canManage}">
+				                            			<apex:commandLink styleclass="member_detail_description_underline" value="Edit" action="{!assignEditId}" rerender="overlaysPanel" onclick="createOverlay('','editMemberInfoLoading','270','');" oncomplete="createOverlay('','editMemberInfo','270','showSelects()');">
+															<apex:param name="editId" value="{!item.userId}" />
+														</apex:commandLink>
+				                            			<!-- <a href="javascript:;" class="member_detail_description_underline">Edit</a>&nbsp;| -->
+				                            		</apex:outputpanel>
+				                            	</td>
+				                            	<td>
+				                            		<apex:outputpanel rendered="{!userPermissions.canManage}">
+														<apex:commandLink styleclass="member_detail_description_underline" value="Remove" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="createOverlay('','removeMemberOverlay','185','');">
+															<apex:param name="delId" value="{!item.userId}" />
+														</apex:commandLink>
+				                            			<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
+				                            		</apex:outputpanel>
+				                            	</td>
+				                            	<td class="memberImg">
+				                                    <apex:outputpanel rendered="{!IF(item.memberImg == '',true,false)}">
+														<div class="photoWrapper_32px">
+															<img src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32" />
+														</div>
+													</apex:outputpanel>									 
+													<apex:outputpanel rendered="{!IF(item.memberImg == '',false,true)}">
+														<div class="photoWrapper_32px">
+															<img src="/servlet/servlet.FileDownload?file={!item.memberImg}" width="32"/>
+														</div>
+													</apex:outputpanel>
+												</td>
+				                                <td class="member_detail_description">
+				                                	<a href="javascript:;" onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'" class="member_detail_description_underline">{!item.Name}</a>
+				                                   	<img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+												   	<img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+												</td>
+				                                
+				                                <td class="member_detail_description">
+				                                   	{!item.company}
+				                                </td>
+				                                <td class="member_detail_description">
+				                                    {!item.title}
+				                                </td>
+												<td class="member_detail_description">
+				                                   	{!item.profile}
+				                                </td>
+												<td class="member_detail_description">
+				                                   	{!item.role}
+				                                </td>
+				                            </tr>
+			                          	</apex:repeat>
+			                    	</tbody>
+		                   		</table> 
+		                   	</apex:form>
+		                   	<hr class="filterHR">
+		                   	<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+		 						<div class="pages" style="width:64%;"> 
+					 				<apex:form >					 
+										<ul>
+											<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+												<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList" rendered="{!prevPageLinkShow}"/>
+												<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+											</li>
+											<li>({!currentPagination}</li>
+											<li>-</li>
+											<li>{!cntPagination})</li>
+											<li class="next {!IF(nextPageShow,'next_disabled','')}">
+												<apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList" rendered="{!nextPageLinkShow}"/>										
+												<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+											</li>
+										</ul>								
+									</apex:form>								
+								</div>
+							</apex:outputpanel>	
+							<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+								<hr class="filterHR">
+							</apex:outputpanel>
+							<table width="100%">
+	                        	<tr>
+	                        		<td class="teamTitleButton titleTd" ></td>
+									<td>
+										<!-- BUTTONS -->
+										<apex:outputpanel rendered="{!userPermissions.canManage}">	
+											<a onclick="createOverlay('','inviteTeam','400','showSelects()');" href="javascript:;" class="blackbutton">New</a>
+											<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
+											<div class="editProfile">
+												<a href="javascript:;" class="blackbutton" onclick="showHideOptions();">Edit Team Profile | v</a>
+												<div id="profileOptions" class="profileOptions" style="display:none;">
+													<ul>
+														<apex:repeat value="{!teamEditProfiles}" var="item">
+															<li onclick="massiveMemberUpdate(this);" onmouseover="bckColor(this)" onmouseout="bckColor(this)" id="{!item.Id}">{!item.Name}</li>	
+														</apex:repeat>
+													</ul>
+												</div>
+											</div>
+										</apex:outputpanel>
+										<!-- BUTTONS -->
+									</td>	
+								</tr>
+							</table> 
+							<br>
+						</apex:outputpanel>   
+					</div>     
+                </div>
+            </div>
+        </div>
+    </div>
+    <apex:outputpanel id="overlaysPanel">
+	    <apex:include id="newMembersInclude" pageName="TeamsInviteNewMembers" />	
+		<apex:include pageName="TeamsMembersRemove" />	
+		<apex:include pageName="TeamsMembersMassiveRemove" />
+		<apex:include pageName="TeamsOverlayMemberEditInfo" />	
+	</apex:outputpanel>
+	
+	<apex:outputpanel id="auxPanel" />
+</apex:page>

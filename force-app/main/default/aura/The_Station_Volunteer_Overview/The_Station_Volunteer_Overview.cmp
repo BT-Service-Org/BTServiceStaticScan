@@ -1,0 +1,21 @@
+<aura:component>
+
+    <ltng:require scripts="{!$Resource.chartjs_2_9_4_js+ '/Chart.min.js'}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="records" type="Object"/>
+    <aura:attribute name="title" type="String" default="Volunteer Activities Overview"/>
+    <aura:handler name="change" value="{!v.records}" action="{!c.recordsUpdated}"/>
+
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-card__header-title">{!v.title}</div>
+            <div>Breakdown of Activities (YTD)</div>
+            <div class="canvas-container">
+                <canvas class="canvas" style="margin-left:auto;margin-right:auto;" id="pie-chart" ></canvas>
+            </div>
+        </div>
+        
+    </article>
+</aura:component>

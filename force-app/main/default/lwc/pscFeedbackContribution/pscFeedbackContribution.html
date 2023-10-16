@@ -1,0 +1,55 @@
+<template>
+    <div class="feedback-contribution" tabindex="0" aria-label="Methodology Feedback Box">
+        <div class="feedback-image">
+            <img src={characterCodyImage} alt="" />
+        </div>
+        <div class="feedback" if:true={buttonData.length}>
+            <lightning-formatted-rich-text value={pscFeedbackContributionTitle} class="feedback-head ITC_font" if:true={pscFeedbackContributionTitle}></lightning-formatted-rich-text>
+            <lightning-formatted-rich-text value={pscFeedbackContributionDescription} class="feedback-description salesforce_font" if:true={pscFeedbackContributionDescription}></lightning-formatted-rich-text>
+            <div class="feedback-cta">
+                <template for:each={buttonData} for:item="button">
+                    <div key={button.title} class="slack-button ITC_font" data-id={button.title} onclick={handleButtonClick} onkeyup={handleButtonClick} tabindex="0" aria-label={button.title}>{button.title}</div>
+                </template>
+            </div>
+            <c-psc-modal onclosedialog={closeModal}>
+                <h2 slot="header" id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate header ITC_font">{modalContent.title}</h2>
+                <p slot="tagline" class="tagline">{modalContent.description}</p>
+                <lightning-record-edit-form
+                    record-type-id={clickButtonDetail.recordTypeId}
+                    object-api-name={clickButtonDetail.sobjectName}
+                    onload={handleLoad}
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}
+                >
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading......" size="medium"></lightning-spinner>
+                    </template>
+                    <template for:each={modalContent.modalFieldList} for:item="field">
+                        <template if:true={field.fileUpload}>
+                            <lightning-file-upload key={field.fieldName} name={field.fieldName} label={field.fieldLabel} onuploadfinished={handleUploadFinished}></lightning-file-upload>
+                        </template>
+                        <template if:true={field.inputField}>
+                            <template if:true={field.required}>
+                                <abbr key={field.fieldName} title="required" class="slds-required">*</abbr>
+                            </template>
+                            <label key={field.fieldName} for={field.fieldName} class="slds-m-top_small labelClass">{field.fieldLabel}</label>
+                            <lightning-input-field key={field.fieldName} id={field.fieldName} field-name={field.fieldName} variant="label-hidden" required={field.required} class="marginClass"></lightning-input-field>
+                        </template>
+                        <template if:true={field.customRadioGroup}>
+                            <c-psc-custom-radio-group key={field.fieldName} field={field} record-type-id={clickButtonDetail.recordTypeId} field-api-name={field.fieldName} onselected={handleCustomRadio}></c-psc-custom-radio-group>
+                        </template>
+                    </template>
+                    <div class="slds-m-top_medium">
+                        <lightning-button
+                            class="slds-p-vertical_small slds-float_right"
+                            type="submit"
+                            label="Submit"
+                            variant="brand"
+                        ></lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </c-psc-modal>
+        </div>
+    </div>
+</template>

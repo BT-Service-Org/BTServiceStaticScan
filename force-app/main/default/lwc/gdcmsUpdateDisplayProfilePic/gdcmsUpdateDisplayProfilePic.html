@@ -1,0 +1,22 @@
+<template>
+    <lightning-button variant="brand" class="slds-float_right" label="Update Display Picture" onclick={updateProfilePic}></lightning-button>
+    <c-gdcms-base-modal show-footer="true">
+        <span slot="Title">
+            <p style="color:black; font-weight:600">Please Update Your Display Profile Picture</p>
+        </span>
+        <span slot="Body">
+            <div>
+                <div class="slds-align_absolute-center">
+                    <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="x-small" style="padding-left: 1em; padding-bottom: 0.5em; padding-top: 1em;"></lightning-icon>
+                    <lightning-formatted-text value="Uploading a new Profile Picture will override any previous versions." style="padding-left: 0.5em; color: red; padding-bottom: 0.5em; padding-top: 1em;"></lightning-formatted-text>
+                </div>
+            </div>
+            <c-gdcms-file-upload record-id={recordId} onclose={handleClose}></c-gdcms-file-upload>    
+        </span>
+        <span class="slds-grid slds-wrap" slot="Footer">
+            <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+                <lightning-button label="Cancel" onclick={handleClose}></lightning-button> 
+            </div> 
+        </span>
+    </c-gdcms-base-modal>
+</template>

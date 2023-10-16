@@ -1,0 +1,9 @@
+<template>
+    <div class="slds-grid header-row">
+        <template for:each={columns} for:item="column">
+            <div key={column.name} class={column.classes}>
+                <c-solution-finder-details-header key={column.name} column={column}></c-solution-finder-details-header>
+            </div>
+        </template>
+    </div>
+</template>

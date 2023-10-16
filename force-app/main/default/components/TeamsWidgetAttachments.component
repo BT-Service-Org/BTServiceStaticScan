@@ -1,0 +1,283 @@
+<apex:component controller="TeamsWidgetAttachmentsController" allowDML="true">
+	
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+
+	<!-- Swirly Style -->
+	<style>
+		 div.swirlyAttachment {
+			background: #FFFFFF url({!URLFOR($Resource.TeamsResources, 'images/layout/small_loader.gif')}) no-repeat center center;
+			left: 0pt;
+			opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			z-index: 9999;
+		}
+		
+		.label_style {
+			margin: 8px 5px 0pt 0pt;
+		}
+		
+		div.buttons_attach input.saveBtn {
+			margin-left: 180px;
+			background:#636563 none repeat scroll 0 50%;
+			border:0 solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size: 12px !important;
+			font-weight:bold;
+			height: 27px;
+			margin-top:0;
+			margin: 0pt 0pt 3px 180px;
+			text-align:center;
+			width:56px;				
+		}		
+		
+		div.buttons_attach  .cancelBtn {
+			background:#999999 none repeat scroll 0 50%;
+			border:0 solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:12px !important;
+			font-weight:bold;
+			height:27px;
+			margin-top:0;
+			text-align:center;
+			width:56px;
+		}
+		
+		.attachWidgetContent {
+			position: relative;
+			overflow: hidden;
+		}
+	</style>
+	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsOverlayNewTask.css')}" />	
+	
+	<!-- 
+		### Javascript ### 
+	-->
+	<script>
+		/**
+		* Widget Position
+		*/
+		function widgetPosition() 
+		{
+			var widSmall = $$('.mySmallWidget');
+			var widBig = $$('.myBigWidget');
+			
+			for(var i =0; i<widSmall.length; i++) 
+			{
+				if(widSmall[i].ancestors()[1].hasClassName('holder'))
+				{
+					widSmall[i].remove();
+				}
+			}
+			
+			for(var i =0; i<widBig.length; i++) {
+				if(widBig[i].ancestors()[1].hasClassName('rightCol')){
+					widBig[i].remove();
+				}
+			}
+		}	
+	</script>
+	
+	<!-- Swirly Function -->
+	<script> 
+		
+	function showSwirly(elemClass)
+		{
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+			divLoaders.each(function(elem) {
+				var div = elem.ancestors()[0];
+				elem.style.height = div.getHeight()+'px';
+				Effect.Appear(elem, { duration: 0.1, to: 0.8 });
+			});
+		}
+		
+		function hideSwirly(elemClass){
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+				divLoaders.each(function(elem) {
+				Effect.Fade(elem);
+			});
+		}
+	</script>	
+	
+	<apex:form >
+		<apex:actionFunction name="refreshMethod"
+	       		action="{!refresh}"
+	       		status="attachmentStatus, attachmentStatusWide"
+	       		rerender="attachmentsPanel,attachmentsPanelWide"
+	       		oncomplete="hideSwirly('swirlyAttachment');"
+	        />
+    </apex:form>
+
+	<!-- ### Wide Widget ### -->
+	<div class="myBigWidget">
+		<!-- Widget Title -->		
+		<div class="teamBlockTitle">
+			<h4>{!$ObjectType.Team__c.label} Attachments</h4>
+		</div>
+		<!-- Widget Links Holder -->
+		<div class="linkAction">
+			<apex:outputPanel rendered="{!userPermissions.canManage}">
+				<a href="javascript:;" onclick="createOverlay('','attachOverlay','150');">New Attachment</a>
+			</apex:outputpanel>
+		</div>	
+		<!-- Widget Container --> 		
+		<div class="attachWidgetContent">
+			<div class="swirlyAttachment" style="display:none;"></div>					
+			<apex:form onsubmit="if(!confirm('Do you really want to delete this file?')){return false}else{return true;};">
+                <apex:outputPanel id="attachmentsPanelWide" layout="block">
+					<table style="margin-left:10px" border="0" width="100%">
+						<apex:repeat value="{!attachs}" var="item5">									
+							<tr>
+								<td>
+									<apex:commandLink action="{!DeleteAttach}"
+										rerender="attachmentsPanelWide"
+										rendered="{!userPermissions.canManage}"
+										onclick="showSwirly('swirlyAttachment');"
+										oncomplete="hideSwirly('swirlyAttachment');"												
+										value="Delete">
+										<apex:param name="idAttach" value="{!item5.Id}"/>
+									</apex:commandLink>
+								</td>
+								<td style="padding-left:25px">
+									<img style="vertical-align:bottom;" src="https://na1.salesforce.com{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}"/> &nbsp;
+									<a href="#" onclick="window.open('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item5.Id}')" > {!item5.Name} </a>
+								</td>
+								<td style="padding-left:25px">
+									<apex:outputField value="{!item5.Attachment.BodyLength}"/>
+								</td>
+								<td style="padding-left:25px">
+									<apex:outputField value="{!item5.Attachment.LastModifiedDate}"/>
+								</td>
+								<td style="padding-left:25px"> 
+									<a href="PeopleProfileDisplay?id={!item5.Attachment.LastModifiedBy}"  class="name_margin">{!item5.Attachment.LastModifiedBy.Name}</a>	
+								</td>
+							</tr>
+						</apex:repeat>
+					</table>
+					<apex:outputpanel rendered="{!IF(attachCount == 0, true, false)}">
+						<span class="infoText">There are no attachements for this {!$ObjectType.Team__c.label}.</span>		
+					</apex:outputpanel>
+				</apex:outputPanel>
+			</apex:form>
+		</div>
+	</div>
+
+	
+	<!--  ### Thin Widget ###  -->
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<!-- Widget Title -->		
+		<div class="header_blue">
+	    	<div><div><h4>{!$ObjectType.Team__c.label} Attachments</h4></div></div>
+	   	</div>
+
+		<!-- Widget Container -->				
+   		<div class="box_content ">
+			<div class="swirlyAttachment" style="display:none;"></div>		   			
+   			<!-- Widget Links Holder -->
+   			<apex:outputPanel styleClass="thinWidgetLinkAction" rendered="{!userPermissions.canManage}" layout="block" >
+				<a href="javascript:;" onclick="createOverlay('','attachOverlay','150');">New Attachment</a>
+   			</apex:outputpanel>		
+ 			<apex:form onsubmit="if(!confirm('Do you really want to delete this file?')){return false}else{return true;};">
+	                <apex:outputPanel id="attachmentsPanel" layout="block">
+						<table style="margin-left:10px" border="0" width="100%">
+							<apex:repeat value="{!attachs}" 
+								var="item5"> 									
+									<tr style="{!IF(item5.Id == PictureID,'display: none','')}">
+										<td>
+											<apex:commandLink action="{!DeleteAttach}" 										 										
+												rerender="attachmentsPanel"
+												value="Delete"
+												onclick="showSwirly('swirlyAttachment');"
+												oncomplete="hideSwirly('swirlyAttachment');"
+												rendered="{!userPermissions.canManage}" >
+												<apex:param name="idAttach" value="{!item5.Id}"/>
+											</apex:commandLink>
+										</td>
+										<td style="padding-left:25px">
+											<img style="vertical-align:bottom;" src="https://na1.salesforce.com{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}"/> &nbsp;
+											<a href="#" onclick="window.open('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item5.Id}')" > {!item5.Name} </a>
+										</td>
+									</tr>
+							</apex:repeat>
+						</table>
+						<apex:outputpanel rendered="{!IF(attachCount == 0, true, false)}">
+							<span class="infoText f_left" style="padding:10px; text-align:center;">There are no attachements <br /> for this {!$ObjectType.Team__c.label}.</span>		
+						</apex:outputpanel>
+					</apex:outputPanel>
+			</apex:form>			
+		</div>
+		<!-- Widget Holder Foot -->
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>	
+		
+	<!-- 		 New Attachment Overlay Form 		-->
+	<div class="fixedModalOverlay" id="attachOverlay" style="display:none;">	
+		<!-- Overlay Title -->
+		<div class="modalTitle">
+			<div class="title" id="overlayTeam">Add Attachment</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" />
+				</a>
+			</div>
+		</div>	 
+
+		<script type="text/javascript">
+			function inputNotNull(){
+				if($F('file') == ''){
+					alert('Please select a file');
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+		</script>
+
+		<form action="/p/attach/NoteAttach" enctype="multipart/form-data" onsubmit="if (window.ffInAlert) { return false; }" name="editPage" method="post" id="editPage_1"  target="iframeUpload">
+			<input type="hidden" name="added" id="done_added" value="1" />
+			<input type="hidden" name="pid" id="done_pid" value="{!teamId}" />
+			<div align="right">
+				<table border="0">
+					<tr>
+						<td style="width:4px;"><span style="display:block;width:4px; height:12px; background-color: #C0272D;"></span></td>
+						<td><span class="infoText" style="font-size:10px;"> = &nbsp;&nbsp; Required Information </span></td>
+					</tr>
+				</table> 
+			</div>	
+			<div class="overlay_form" style="padding: 10px;">
+				<label class="label_style">Select the File</label><span class="required"></span><input id="file" name="file" size="26" title="Type the path of the file or click the Browse button to find the file." type="file" /><br/>
+				<label class="label_style"></label><span class="infoText"><i>Type the path of the file or click the Browse button to find the file.</i></span><br>
+				<span id="uploadP__"></span>
+	    	</div>
+			<div class="separateLine"></div> 
+			
+			<div class="buttons_attach">
+				<input class="saveBtn" name="Attach" type="submit" value="Done" onclick="if(inputNotNull()){modal.close(); showSwirly('swirlyAttachment'); refreshMethod();}else{return false;}" />
+				<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+			</div>
+			<iframe name="iframeUpload" style="display:none;"></iframe>
+		</form>
+	</div>
+	
+</apex:component>

@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="show notes modal" >
+	<aura:attribute name="parentId" type="Id" required="true"/>
+	<aura:attribute name="type" type="String" required="true"/>
+</aura:event>

@@ -1,0 +1,29 @@
+<template>
+	<div if:true={display} data-id="snackbar" class="snackbar">
+		<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+			class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<button class="slds-button slds-button_icon slds-modal__close">
+					<lightning-icon variant="inverse" icon-name="utility:close" onclick={handleClose} size="small"
+						alternative-text="close"></lightning-icon>
+					<span class="slds-assistive-text">Cancel and close</span>
+				</button>
+				<div if:true={image} class="header-img-margin-container">
+					<img src={image} class={imgClassName} />
+				</div>
+				<div class="slds-modal__content slds-p-vertical_x-large" id="modal-content-id-1">
+					<div class="body-container">
+						<div class="heading-content slds-text-align_center">
+							<div class="name" onclick={navigateToTeamMember}>{name}</div>
+							<div class="position slds-m-top_small">{position}</div>
+						</div>
+						<div if:true={displaySlot}>
+							<slot name="content"></slot>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+	</div>
+</template>

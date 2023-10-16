@@ -1,0 +1,19 @@
+<apex:page standardController="PA_Onboarding__c" extensions="LPBioController" showheader="false" sidebar="false">
+
+   <apex:pageBlock >
+
+		<apex:pageBlockSection >
+		<apex:pageMessages id="showmsg"></apex:pageMessages> 
+		</apex:pageBlockSection>
+    	<apex:pageBlockSection title="{!fileName} ({!size} KB)" columns="3" rendered="{!NOT(isError)}">
+    	    <apex:pageBlockSectionItem >
+			<apex:outputLink value="{!downloadurl}" id="theLink">Download link</apex:outputLink>
+	    </apex:pageBlockSectionItem> 
+       	
+        <apex:outputPanel id="myPanel" layout="block" rendered="{!NOT(isError)}">
+     		<embed src="/_swf/190003/sfc/flex/DocViewer.swf" flashvars="{!flashvars}" width="700px" height="500px" align="top" id="renditionLarge" quality="high" bgcolor="#f3f3f3" name="renditionLarge" allowscriptaccess="always" allowfullscreen="true" pluginspage="http://www.adobe.com/go/getflashplayer" wmode="opaque" type="application/x-shockwave-flash"/> 
+   		</apex:outputPanel>
+		</apex:pageBlockSection>
+   </apex:pageBlock>
+
+</apex:page>

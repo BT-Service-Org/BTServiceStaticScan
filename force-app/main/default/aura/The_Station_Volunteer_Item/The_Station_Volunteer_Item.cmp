@@ -1,0 +1,27 @@
+<aura:component >
+    <aura:attribute name="record" type="Map" default="{Activity_Type: 'Test',EMP_NAME: 'Test Name'}"/>
+    
+    <div class="slds-col">
+        <article class="slds-card">
+            <div class="slds-box completed-box-style">
+                <div class="slds-box completed-box-style">
+                    <div class="slds-grid slds-grid slds-gutters">
+                        <div class="slds-col slds-card__header-title">{!v.record.Activity_Type}</div>
+                        <div class="slds-col_bump-right"><a href="#" class="slds-button slds-button--neutral slds-button--small slds-card__header-title" style="border-radius: 25px;">Log Time</a></div>
+                    </div>
+                </div>
+                <div class="slds-box completed-box-style">
+                    <div class="slds-grid slds-grid slds-gutters">
+                        <div  class=" slds-col slds-progress-bar " aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" 
+                             role="progressbar" style="width:50%">
+                            <span class="slds-progress-bar__value" ></span>         
+                        </div>
+                        <div class="slds-col_bump-right" >{!v.record.Hours_Volunteered} hrs</div>
+                    </div>
+                </div>
+                <h2 class="desc-Style">Learn about and agree to follow privacy laws and requirements that apply to Salesforce</h2>
+                
+            </div>
+        </article>
+    </div>
+</aura:component>

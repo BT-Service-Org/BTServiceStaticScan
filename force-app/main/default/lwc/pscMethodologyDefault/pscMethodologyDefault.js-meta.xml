@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+     <isExposed>true</isExposed>
+    <masterLabel>PSC Methodology Default</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+        <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="checkBoxLabel" type="String" label="CheckBox Label" required="true" default="I agree video instructions" />
+            <property name="title" type="String" label="Title" required="true" default="Welcome to Salesforce Professional Services Methodology(SPSM)" />
+            <property name="body" type="String" label="Body" default="SPSM Methodology is only available for pilot users. If you wish to explore this feature please refer below video and click Get Access." />
+            <property name="videoUrl" type="String" label="Video Url" />
+        </targetConfig>
+     </targetConfigs> 
+</LightningComponentBundle>

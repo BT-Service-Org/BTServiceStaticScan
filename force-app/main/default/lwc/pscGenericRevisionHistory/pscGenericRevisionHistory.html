@@ -1,0 +1,26 @@
+<template>
+    <div class="revision-card" if:true={historyData}>
+        <p class="title-revision ITC_font">
+            Revision History
+        </p>
+        <div class="card-revision-history">
+            <p class="revision_head ITC_font">Updated and published</p>
+            <template for:each={historyData} for:item="each">
+                <div key={each.Id} class="version_data">
+                    <div class="revision_info">
+                        <p>
+                            <lightning-formatted-date-time value={each.LastModifiedDate} year="numeric" month="short"
+                                day="2-digit"></lightning-formatted-date-time>
+                        </p>
+                    </div>
+    
+                    <div class="revision_info">
+                        <p>Author:</p>
+                        <p>{each.LastModifiedBy.FirstName} {each.LastModifiedBy.LastName}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+        
+    </div>
+</template>

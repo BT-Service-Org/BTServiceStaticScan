@@ -1,0 +1,145 @@
+.mybadges {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge_category {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    border-bottom: var(--lwc-borderWidthThin, 1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder, #D4D4D4));
+}
+
+.badge_activity {
+    font-size: 16px;
+    margin-bottom: 20px;
+    letter-spacing: .04em;
+}
+
+.badges {
+    display: flex;
+    flex-direction: column;
+    width: 23%;
+    flex: 0 0 auto;
+    margin-bottom: 30px;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+    background-color: white;
+    margin-right: 21px;
+    padding: 15px;
+}
+
+.badgetitle {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    height: 60px;
+}
+
+.badgetitle div {
+    margin: auto;
+}
+
+.badge_detail {
+    display: flex;
+    margin: auto;
+}
+.badge_detail p{
+    color: #2b2525ba;
+}
+
+.badge_points {
+    letter-spacing: 0.07em;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2b2525ba;
+}
+
+.highlight {
+    font-size: 14px;
+    color: green;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+
+}
+
+.badge_detail p {
+    font-size: 15px;
+    text-align: center;
+    margin-right: 5px;
+    margin-top: 3px;
+    letter-spacing: 0.07em;
+}
+
+.badgeImg {
+    width: 100px;
+    height: 100px;
+}
+
+.badgelist {
+    display: flex;
+    flex-wrap: wrap;
+}
+.green-utility-icon {
+    --sds-c-icon-color-background: green;
+    margin-top: 15px;
+}
+.grey-utility-icon {
+    --sds-c-icon-color-background: grey;
+    --sds-c-icon-color-foreground-default: #ffffff;
+    margin-top: 17px;
+    padding: 7px;
+    border-radius: 20px;
+
+}
+.badge_icon {
+    color: #032D60;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.badge_icon:hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.slds-popover_tooltip {
+    width: max-content;
+    max-width: var(--slds-c-tooltip-sizing-max-width, var(--sds-c-tooltip-sizing-max-width, var(--lwc-sizeMedium, 20rem)));
+    background-color: #0070D2;
+    border: 0;
+    position: absolute;
+    top: -50px;
+    left: -10px;
+    margin-top: 15px;
+    visibility: hidden;
+}
+
+.badge_icon:hover .slds-popover_tooltip {
+    visibility: visible;
+}
+
+@media screen and (max-width:960px) {
+    .badges {
+        width: 33%;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .badgelist {
+        flex-direction: column;
+    }
+
+    .badges {
+        width: 100%;
+        margin: auto;
+        margin-top: 20px;
+    }
+    .green-utility-icon {
+        margin-top: 8px;
+    }
+    .badgetitle {
+        height: 50px;
+    }
+}

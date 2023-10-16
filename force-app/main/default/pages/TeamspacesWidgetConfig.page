@@ -1,0 +1,952 @@
+<apex:page sidebar="false">
+	
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<script type="text/javascript" src="/js/functions.js"></script>
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript" />		
+	
+	<script>
+
+		var aSelecctedWidget = new Array();
+		var TStypeId = null;
+		var TSDetailLayout = null;
+		var _Rows = 0;
+		var _Columns = 0;
+
+	  /*************************/
+	 /          init()         /
+	/*************************/		
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+
+	  /*************************/
+	 /      getURLParam()      /
+	/*************************/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}				
+
+	  /*************************/
+	 /       getPageSize()     /
+	/*************************/	
+		function getPageSize(){
+			var xScroll, yScroll;
+			if (window.innerHeight && window.scrollMaxY) {	
+				xScroll = document.body.scrollWidth;
+				yScroll = window.innerHeight + window.scrollMaxY;
+			} else if (document.body.scrollHeight > document.body.offsetHeight){
+				xScroll = document.body.scrollWidth;
+				yScroll = document.body.scrollHeight;
+			} else {
+				xScroll = document.body.offsetWidth;
+				yScroll = document.body.offsetHeight;
+			}
+			var windowWidth, windowHeight;
+			if (self.innerHeight) {	
+				windowWidth = self.innerWidth;
+				windowHeight = self.innerHeight;
+			} else if (document.documentElement && document.documentElement.clientHeight) {
+				windowWidth = document.documentElement.clientWidth;
+				windowHeight = document.documentElement.clientHeight;
+			} else if (document.body) {
+				windowWidth = document.body.clientWidth;
+				windowHeight = document.body.clientHeight;
+			}		
+			if(yScroll < windowHeight){
+				pageHeight = windowHeight;
+			} else { 
+				pageHeight = yScroll;
+			}
+			if(xScroll < windowWidth){	
+			pageWidth = windowWidth;
+			} else {
+		
+				pageWidth = xScroll;
+			}
+			arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight) 
+			return arrayPageSize;
+		}
+
+	  /*************************/
+	 /    getDetailLayout()    /
+	/*************************/
+		function getDetailLayout(){
+			var TsId = getURLParam('ts');
+			if(TsId.length == 18 || TsId.length == 16){
+				result = sforce.connection.query("Select TeamspacesTypeId__c, Id From Teamspace__c where Id = '"+ TsId +"'");
+				records = result.getArray("records");
+				if (records.length > 0){
+					try{
+						result = sforce.connection.query("Select Id, Name From TeamspacesType__c where Id = '" + records[0].TeamspacesTypeId__c + "'");
+						records = result.getArray("records");				
+						TStypeId = records[0].Id;
+					}catch(e){
+					}
+					if (TStypeId){
+						result = sforce.connection.query("Select Id, Rows__c, Columns__c From TSDetailLayout__c where TeamspacesType__c = '" + TStypeId + "'");
+						records = result.getArray("records");
+						if (records.length > 0){
+							TSDetailLayout = records[0].Id;
+							_Rows = parseInt(records[0].Rows__c);
+							_Columns = parseInt(records[0].Columns__c);
+							result = sforce.connection.query("Select Widget__c, Row__c, Column__c From WidgetLayout__c where TSDetailLayout__c = '" + TSDetailLayout + "'");
+							records = result.getArray("records");
+							if (records.length > 0){
+								AssemblingConfiguration(records);						
+							}
+						}
+					}else{
+						messageToUser('critical', 'The Teamspace Type does not exist', true);				
+					}
+				}else{
+					messageToUser('critical', 'The Teamspace selected does not exist', true);
+				}
+			}else{
+				messageToUser('critical', 'The Teamspace selected does not exist', true);
+			}
+		}
+		
+	  /*************************/
+	 /AssemblingConfiguration()/
+	/*************************/
+		function AssemblingConfiguration (widgetLayouts){
+			$('wc_rows').value = _Rows;
+			$('wc_cols').value = _Columns;
+			WidgetMatrix__();
+			for (var i = 0; i < records.length; i++){
+				widget = 'widget_' + parseInt(records[i].Row__c) + '_' + parseInt(records[i].Column__c); 
+				setTimeout('setWidget(\'' + widget + '\', \''+ records[i].Widget__c +'\')', 1500);
+			}
+		}
+
+	  /*************************/
+	 /     WidgetMatrix__()    /
+	/*************************/
+		function WidgetMatrix__(){
+			var rows = $('wc_rows');;
+			var cols = $('wc_cols');
+			var matrix = $('matrix');
+			
+			switchOverlay();
+			messageToUser('loading', 'Loading, Please wait...', false);	
+			
+			if (parseInt(cols.value) <= 0 || parseInt(rows.value) <= 0){
+				messageToUser('alert', 'The number of Rows and Columns must be greater than 0', true);
+			}else{			
+				if (parseInt(rows.value) <= 4 && parseInt(cols.value) <= 4){
+						matrix.innerHTML = '';
+						for (var i= 0; i < rows.value; i++){
+							for (var i_= 0; i_ < cols.value; i_++){
+								matrix.innerHTML += '\
+								<div class="WidgetMatrix__widget">\
+							    	<div class="WidgetMatrix__widgetContent" id="widget_' + (i+1) + '_' + (i_+1) + '">\
+							    		Widget\
+							    		<br/>\
+							    		<br/>\
+							    		<a href="Javascript:;" onclick="getWidgetSelecctionList(\'widget_' + (i+1) + '_' + (i_+1) + '\');">\
+							    			<img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'set.gif')}" border="0" />\
+							    		</a>\
+							    	</div>\
+							    </div>';	
+							}	
+							matrix.innerHTML += '<div style="clear:both;"></div>';
+						}
+						_Rows = rows.value;
+						_Columns = cols.value;
+						aSelecctedWidget = new Array();
+						setTimeout('switchOverlay(); Effect.Fade(\'messageToUser\');', 3000);					
+				}else{
+					messageToUser('alert', 'The number of Rows and Columns must be less than or equal to 4', true);			
+				}
+			}
+		} 
+
+	  /*************************/
+	 /      switchOverlay()    /
+	/*************************/		
+		function switchOverlay(){
+			var pageSize = getPageSize();
+			var overlay = $('wc_overlay');
+			overlay.style.height = pageSize[1] + 'px';
+			overlay.style.width = (pageSize[0] - 26) + 'px';
+			if(overlay.style.display == 'none'){
+				Effect.Appear('wc_overlay', {from: 0.0, to: 0.7});
+			}else{
+				Effect.Fade('wc_overlay');
+			}
+		}
+	
+	  /*************************/
+	 /       messageToUser()   /
+	/*************************/	
+		function messageToUser(type, string, okButton){
+			var message = $('messageToUser');
+			var textMsg = $('messageToUserText');
+			var imgMsg = $('messageToUserImg');
+			var buttonMsg = $('messageToUserButton');
+			var pageSize = getPageSize();
+			
+			textMsg.innerHTML = string;			
+			imgMsg.innerHTML = '<img src="/resource/1203342006000/TeamspacesWidgetConfig/messages_' + type + '.gif" />';
+			if(okButton){
+				buttonMsg.style.display = "block";
+			}else{
+				buttonMsg.style.display = "none";
+			}
+			mWin = message.getDimensions();
+			message.style.marginLeft = '-' + ((mWin.width/2)) + 'px';
+			message.style.marginTop = '-' + ((mWin.height/2)) + 'px';
+			Effect.Appear('messageToUser');
+		}
+
+	  /*************************/
+	 /getWidgetSelecctionList()/
+	/*************************/	
+		function getWidgetSelecctionList(widgetId){
+			var widgetList = $('WidgetsSelecctionList');
+			var widgetsCont = $('WidgetsSelecctionContent'); 
+			$('widgetId_').value = widgetId;
+			
+			switchOverlay();
+			if (widgetList.style.display == 'block'){
+				Effect.Fade('WidgetsSelecctionList');
+			}else{
+				messageToUser('loading', 'Loading, Please wait...', false);				
+				widgetsCont.innerHTML = '';
+				
+				init();
+				result = sforce.connection.query("Select Id, Name, Image__c From Widget__c where Type__c = 'Widget'");
+				records = result.getArray("records");					
+				
+				var i_ = 1;
+				var exist = -1;
+				var inst = 0;
+				for (var i = 0; i < records.length; i++){
+					//Divisor Line
+					if((inst / i_) == 4){
+						widgetsCont.innerHTML += '<img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'widgetList_divisor.gif')}" alt="" />';
+						i_++;
+					}	
+					//Check Seleccted Widgets
+					for (var e = 0; e < aSelecctedWidget.length; e++){
+						if (aSelecctedWidget[e][2] == records[i].Id)
+							exist = 1;
+					}
+					//Add Widget
+					if (exist == -1){
+						widgetsCont.innerHTML += '\
+						<div class="widgetContainer">\
+							<a href="javascript:;" onclick="setWidget(\''+widgetId+'\', \'' + records[i].Id + '\'\); getWidgetSelecctionList();" class="widgetSelection" >\
+							<img src="/servlet/servlet.FileDownload?file=' + records[i].Image__c + '" alt="" width="73"/><br/>'+ records[i].Name +'\
+							</a>\
+						</div>';
+						inst++;
+					}
+					exist = -1;
+
+				}
+				mWin = widgetList.getDimensions();
+				widgetList.style.marginLeft = '-' + ((mWin.width/2)) + 'px';
+				widgetList.style.marginTop = '-' + ((mWin.height/2)) + 'px';
+				Effect.Appear('WidgetsSelecctionList', {afterFinish: function(){widgetList.style.display = 'block';}});				
+				setTimeout('Effect.Fade(\'messageToUser\');', 3000);	
+			}
+		}
+		
+		
+	  /*************************/
+	 /         setGadget()     /
+	/*************************/
+		function setGadget(name, src){
+			init();
+			var widget = $('widgetId_').value;
+			result = sforce.connection.query("Select Id From Widget__c where WidgetUrl__c = '" + src.replace(/'/g, '"') + "'");
+			records = result.getArray("records");
+			if (records.length > 0){
+				setWidget(widget, records[0].Id);
+			}else{
+				var gadget = new sforce.SObject("Widget__c");
+				gadget.WidgetUrl__c = src.replace(/'/g, '"');
+				gadget.Name = name;
+				gadget.Type__c = 'Gadget';
+				result = sforce.connection.create([gadget]);
+				if(result[0].getBoolean("success")){
+					setWidget(widget, result[0].id);
+				}
+			}		
+		}		
+
+	  /*************************/
+	 /         setWidget()     /
+	/*************************/
+		function setWidget(widget, id){
+			init();
+			var widgetCont = $(widget);
+			result = sforce.connection.query("Select Name, Image__c From Widget__c where Id='" + id + "'");
+			records = result.getArray("records");			
+			var tempAux = widget.split('_');
+			
+			var idx = aSelecctedWidget.length;
+			var exist = -1;
+			for (var i = 0; i < aSelecctedWidget.length; i++){
+				if(aSelecctedWidget[i][0] == tempAux[1] && aSelecctedWidget[i][1] == tempAux[2]){
+					exist = i;	
+				}
+			}
+			if (exist == -1){
+				aSelecctedWidget[idx] = new Array(tempAux[1], tempAux[2], id);
+			}else{
+				aSelecctedWidget[exist][0] = tempAux[1];
+				aSelecctedWidget[exist][1] = tempAux[2];
+				aSelecctedWidget[exist][2] = id;				
+			}
+			widgetCont.innerHTML = records[0].Name + '<br /><img src="/servlet/servlet.FileDownload?file=' + records[0].Image__c + '" alt="" width="65" height="65" style="margin-bottom:3px;"/>';
+			widgetCont.innerHTML += '<br /><a href="Javascript:;" onclick="getWidgetSelecctionList(\''+ widget +'\');">\
+			 							<img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'edit.gif')}" border="0" />\
+									</a>';
+			return true;
+		}
+		
+	  /*************************/
+	 /        SaveWidget()     /
+	/*************************/		
+		function SaveWidget(){
+			$('saveAlert').innerHTML = 'Saving...';
+			var TsId = getURLParam('ts');
+			
+			if (aSelecctedWidget.length > 0){
+				switchOverlay();
+				messageToUser('loading', 'Loading, Please wait...', false);				
+				
+				var objTSDetailLayout = new sforce.SObject("TSDetailLayout__c");
+				objTSDetailLayout.TeamspacesType__c = TStypeId;
+				objTSDetailLayout.Rows__c = _Rows;
+				objTSDetailLayout.Columns__c = _Columns;
+							
+				if(TSDetailLayout == null){
+					result = sforce.connection.create([objTSDetailLayout]);	
+					if(result[0].getBoolean("success")){
+						TSDetailLayout = result[0].id;
+					}else{
+						messageToUser('critical', 'Failed to save configuration.', true);
+					}
+				}else{
+					objTSDetailLayout.id = TSDetailLayout;
+					result = sforce.connection.update([objTSDetailLayout]);	
+					if(!result[0].getBoolean("success")){
+						messageToUser('critical', 'Failed to save configuration.', true);
+					}					
+				}
+				result = sforce.connection.query("Select Id From WidgetLayout__c where TSDetailLayout__c = '" + TSDetailLayout + "'");
+				records = result.getArray("records");	
+				for (var i = 0; i < records.length; i++){
+					dels = sforce.connection.deleteIds([records[i].Id]);
+				}
+				for (var i = 0; i < aSelecctedWidget.length; i++){
+					var objWidget = new sforce.SObject("WidgetLayout__c");				
+					objWidget.Column__c = aSelecctedWidget[i][1];
+					objWidget.Row__c = aSelecctedWidget[i][0];
+					objWidget.Widget__c = aSelecctedWidget[i][2];				
+					objWidget.TSDetailLayout__c = TSDetailLayout;
+					result = sforce.connection.create([objWidget]);
+					if (!result[0].getBoolean("success")){
+						messageToUser('critical', 'Failed to save configuration.', true);	
+					}
+				}
+				$('saveAlert').innerHTML = 'Your configuration has been saved. <a href="./TeamspacesWidgetAssembling?ts=' + TsId + '">Preview Layout</a>';
+				setTimeout('switchOverlay(); Effect.Fade(\'messageToUser\');', 3000);		
+			}else{
+				switchOverlay();
+				messageToUser('alert', 'You should select one or more widgets to save', true);
+			}
+		}
+	
+	
+	/************************************************
+		Get google gadget list
+	************************************************/
+		var activeCategory = 'all';
+
+		function gadgetListNextPage(){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var currentItemCount = tempSpacers[2].innerHTML;
+			var itemTotalNumber = tempSpacers[3].innerHTML;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + currentItemCount + '&sa=N';
+			url = url + '&cat=' + activeCategory;						
+			$('WidgetsSelecctionContentGadgets').innerHTML = '';
+			getGoogleGadgetList(url);
+		}
+	
+		function gadgetListPrevPage(){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var prevItemCount = tempSpacers[1].innerHTML - 25;
+			var itemTotalNumber = tempSpacers[3].innerHTML;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + prevItemCount + '&sa=N';	
+			url = url + '&cat=' + activeCategory; 
+		
+			$('WidgetsSelecctionContentGadgets').innerHTML = '';
+			getGoogleGadgetList(url);
+		}
+	
+		function filterGadgets() {
+			// Get gadget category
+			var cat = $F('gadgetListFilter');
+			url='http://www.google.com/ig/directory?synd=open&source=gghx&cat=' + cat;
+			activeCategory = cat;			
+			getGoogleGadgetList(url);
+		}
+		
+		function getGoogleGadgetList(url) { 
+	
+		    $('WidgetsSelecctionContentGadgets').innerHTML = ' ';
+			var combo = $('gadgetListFilter');
+
+			
+			if(combo.style.display == 'none' || $('WidgetsSelecctionContentGadgets').style.display == 'none' ){
+				combo.style.display = 'block';
+				$('WidgetsSelecctionContentGadgets').style.display = 'block';
+				$('WidgetsSelecctionContent').style.display = 'none';
+				$('gadgetTab').className = 'tab_gadget_selected';
+				$('widgetTab').className = 'tab_widget';
+			}
+			
+		    if (url != '') {
+		        var l = window.location;
+		        if ( l.protocol == 'https:' ) {
+		            // This code replaces the iframe protocol to match google
+		            l.href = l.href.replace(/https/,'http');
+		            return;
+		        }
+		        sforce.connection.remoteFunction({
+		            url : url, 
+		            onSuccess : function(response) {
+		            		
+		            		// Initialize Arrays to store valid data
+		            		var titleArray = [];
+		            		var imageArray = [];
+		            		var linkArray = [];
+		            		
+		            		// Put the response into a hidden div
+		            		$('response').innerHTML = response;
+		            		
+		            		
+		            		// Erase broken styles            		
+		            		styles = $$('#response style');
+		            		styles[0].innerHTML = ''; 
+		            		
+		            		// Get all images into the container
+		            		gadgetsImages = $$('#response #container img');
+							// Get all divs into the container
+							gadgetsContainers = $$('#response #container div');
+							// Get all inputs into te container
+							gadgetsParams = $$('#response #container input');
+							
+							// Take only the gadgets thumbnails
+							for(var i = 0; i < gadgetsImages.size(); i++){
+								if(gadgetsImages[i].title){
+							    	imageArray[imageArray.length] = gadgetsImages[i];
+							    }
+							}	      
+							
+							for(var i = 0; i < gadgetsParams.size(); i++){
+								var inputOnClick = (gadgetsParams[i]).getAttribute('onclick');
+								var urlpos = inputOnClick.indexOf('&url=');
+		
+								var urlpos = urlpos + 1;
+								var trimmed = inputOnClick.substr(urlpos, inputOnClick.length);
+								var finalUrl = 'http://gmodules.com/ig/ifr?' + trimmed;
+								linkArray[linkArray.length] = finalUrl;
+		
+							}
+							// take only the Title Divs
+							for(var i = 0; i < gadgetsContainers.size(); i++){
+							    var checkTitle = (gadgetsContainers[i].id).indexOf('title');
+							    if(checkTitle != '-1'){
+							            titleArray[titleArray.length] = gadgetsContainers[i].innerHTML;
+							   }					
+							}
+							
+							gadgetCount = 0;
+							
+							// mix it all into a div
+							for(var i = 0; i < imageArray.size(); i++){
+								if(imageArray[i].title){
+									gadgetCount++;
+									var widgetDiv = document.createElement('div');
+									
+									var title = titleArray[i];
+									title = title.substr(13, (titleArray[i].length - 13));
+									title = title.substr(0, (title.length - 15));
+									var src = linkArray[i];
+									src = src.replace (/'/g, "\\'");
+									if(title.length > 23){ 
+										title = title.substr(0,23) + '...';
+									 }
+									widgetDiv.innerHTML = '<div class="widgetContainer"><a class="widgetSelection" href="javascript:;" onclick="setGadget(\'' + title + '\', \'' + src + '\'); getWidgetSelecctionList();"><img alt="" width="94" src="' + imageArray[i].src + '\"/>' + title + '</a></div>';
+									$('WidgetsSelecctionContentGadgets').appendChild(widgetDiv);
+									if( gadgetCount % 4 == 0 ){
+										var divisor = document.createElement('img');
+										divisor.src = "{!URLFOR($Resource.TeamspacesWidgetConfig, 'widgetList_divisor.gif')}";
+										$('WidgetsSelecctionContentGadgets').appendChild(divisor);
+							    	}
+								}
+							}
+							
+							// Paginate the gadgets
+							var tempSpacers = $$('#response table b');
+							var prevItem = tempSpacers[1].innerHTML;
+							var currentItemCount = tempSpacers[2].innerHTML;
+							var itemTotalNumber = tempSpacers[3].innerHTML;
+							var paginationElements = document.createElement('div');
+							paginationElements.style.clear = "both";
+							if(prevItem == 1){
+								paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+							} else {
+								if(currentItemCount == itemTotalNumber){
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a>';
+								} else{
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a> <a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+								}
+							}
+								
+							$('WidgetsSelecctionContentGadgets').appendChild(paginationElements);
+			      	
+		            	},
+		            onFailure : function(error) {}
+		            });     
+		        }
+		}     
+
+		function getGadgetTab(){
+			$('WidgetsSelecctionContentGadgets').style.display = 'none';
+			$('WidgetsSelecctionContent').style.display = 'block';
+			$('gadgetListFilter').style.display = 'none';
+			$('widgetTab').className = 'tab_widget_selected';
+			$('gadgetTab').className = 'tab_gadget';
+		}
+	
+	
+	</script>
+	
+	<style type="text/css">
+
+	 /**********************/
+	/ Widget Matrix Styles /
+   /**********************/
+		
+		/* Div's */
+		.WidgetMatrix__ {
+			width:100%;
+		}
+		
+		.WidgetMatrix__widget{
+			background: url({!URLFOR($Resource.TeamspacesWidgetConfig, 'empty.gif')});
+			height: 112px;
+			width: 169px;
+			float: left;
+			margin: 5px;						
+		}
+		
+		.WidgetMatrix__widgetContent{
+			left: 50px;
+			margin-top: 5px;
+			text-align: center;
+			font-weight: bold;
+		}
+		
+		.WidgetMatrix__tab{
+			background: url({!URLFOR($Resource.TeamspacesWidgetConfig, 'top_green.gif')}) no-repeat;
+			height: 27px;
+			width: 179px;
+			float: left;
+		}
+
+		.WidgetMatrix__bar{
+			height: 33px;
+			clear:both;
+		}
+
+		.WidgetMatrix__bgBar{
+			background: url({!URLFOR($Resource.TeamspacesWidgetConfig, 'bg_beige.gif')}) repeat-x;
+		}			
+					
+		/*/*/
+		
+		/*Tables*/
+		.WidgetMatrix__bar table{
+			font-size: 11px;
+			font-weight: bold;
+		}			
+		
+		.WidgetMatrix__tab table{
+			color: #FFFFFF;
+			font-size: 13px;
+			font-weight: bold;
+			margin-left: 10px;
+			margin-top: 2px;
+		}		
+		
+		.WidgetMatrix__tab table td {
+			color: #FFFFFF;
+		}	
+		
+		.WidgetMatrix__tab td{
+			padding: 3px;
+		}
+
+		.WidgetMatrix__bgBar td{
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		
+		.WidgetMatrix__ table{
+			border-collapse: collapse;
+		}
+		
+		.WidgetMatrix__ table td{
+			vertical-align: middle;
+		}		
+		
+		/*/*/
+
+		
+		/* Forms */
+		.WidgetMatrix__bgBar input{
+			width: 40px;
+			height: 14px;
+			border: none;
+			font-size:12px;
+		}
+		
+		/*/*/			
+
+		/* Misc */
+		.tdBorderLeft{
+			border-left: solid 1px #FFFFFF;
+		}
+		
+		.tdBorderRight{
+			border-right: solid 1px #FFFFFF;
+		}
+		
+		.WidgetMatrix__overlay{
+			position: absolute;
+			background: #666666;
+		}
+		
+		/*/*/
+		
+		
+		/* Messages */
+		#messageToUser{
+			position: absolute;
+			z-index: 15000;
+			left: 50%;
+			top: 50%;
+		}
+
+		#messageToUser .messageText td{
+			font-size: 11px;
+			padding-top: 3px;
+			color: #FFFFFF;
+			vertical-align: middle;			
+		}		
+
+		#messageToUser .bgMessage{
+			background: url({!URLFOR($Resource.TeamspacesWidgetConfig, 'messages_bg.png')});
+		}
+	
+		/*/*/			
+		
+	   	/* Widgets Selecction List */
+		
+		.TeamSpacesWidgetSelection {
+			position: absolute;
+			z-index: 14000;			
+			filter: alpha(opacity=90); 
+			opacity: .9;
+			width:468px;
+			margin:0 auto;
+			overflow:hidden;
+			left: 50%;
+			top: 50%;
+		}
+		
+		.TeamSpacesWidgetSelection  .topBorders {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'border_top.png')}) no-repeat top left;
+				height:9px;
+				clear:both;
+				overflow:hidden;
+				position:relative;
+				width:468px;
+		}
+		
+		.TeamSpacesWidgetSelection  .content_gray  {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'gray_background.png')}) repeat-y top left;
+				width:468px;
+				overflow:hidden;
+		}
+		
+		.TeamSpacesWidgetSelection  .content_gray .btn_New {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'btn_new.gif')}) no-repeat top left;
+				width:70px;
+				height:25px;
+				overflow:hidden;
+				float:right;	
+				color:#8b8a7d;
+				font-family:Arial;
+				font-size:11px;
+				font-weight:bold;
+				position:relative;
+				margin:5px 0px 1px 5px;	
+			}
+		
+		.TeamSpacesWidgetSelection  .content_gray .btn_New span {
+				left:11px;		
+				position:absolute;
+				top:5px;
+			}
+		
+		.TeamSpacesWidgetSelection  .content_gray .btn_Done {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'btn_done.gif')}) no-repeat top left;
+				width:50px;
+				height:25px;
+				overflow:hidden;
+				float:right;
+				position:relative;
+				color:#8b8a7d;
+				font-family:Arial;
+				font-size:11px;
+				font-weight:bold;
+				margin:5px 15px 1px 5px;		
+			}
+		
+		.TeamSpacesWidgetSelection  .content_gray .btn_Done span {
+				left:9px;		
+				position:absolute;
+				top:5px;
+			}
+		
+		.TeamSpacesWidgetSelection  .content_blue  {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'blue_background.png')}) repeat-y top left;
+				width:468px;
+				overflow:hidden;
+		}
+		
+		.TeamSpacesWidgetSelection  .content_blue  .overflow_control {
+				overflow-y:auto;
+				width:450;
+				margin-left:7px;
+				margin-right:9px;
+				position:relative;
+				height:235px;
+			}
+		
+		.TeamSpacesWidgetSelection  .content_blue  .overflow_control .widgetContainer a {
+				text-decoration:none;
+				color:#8b8a7d;
+			}
+		
+		.TeamSpacesWidgetSelection  .content_blue  .overflow_control .widgetContainer a:hover {
+				width:105px;
+				height:105px;
+				float:left;			
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'widgetList_widgetHover.gif')}) no-repeat top left;
+			}
+		
+		.TeamSpacesWidgetSelection  .content_blue  .overflow_control .widgetContainer {
+				width:105px;
+				height:105px;
+				float:left;
+				font-family:Arial;
+				font-size:11px;
+				color:#8b8a7d;
+				text-align:center;
+				margin-left:2px;
+				}
+		
+		.TeamSpacesWidgetSelection  .content_blue  .overflow_control .widgetContainer img {
+			border:0;
+			margin-top:5px;
+			clear:both;
+			margin-bottom:5px;
+			}
+		
+		.TeamSpacesWidgetSelection  .bottomBorders {
+				background:url({!URLFOR($Resource.TeamspacesWidgetConfig, 'border_bottom.png')}) no-repeat top left;
+				height:12px;
+				width:468px;
+		}	   
+	   /*/*/
+	   /* Gadget List styles */
+	   
+	   .gadgetfilter {
+		 	clear:both;
+			text-align:right;
+			height:25px;
+			margin-top:11px;
+			width:454px;
+			margin-left:6px;
+			margin-right:6px;			
+			border-bottom:1px solid white;
+	   }
+	   
+	   .gadgetfilter select {
+	   		float:right;
+	   		margin-right:10px;
+	   		margin-top:-5px;
+	   }
+	   /*
+	   .tabs {
+	   
+	   		width:454px;
+			margin-left:6px;
+			margin-right:6px;
+			border-bottom:1px solid #FFFFFF;
+			height:34px;
+			position:relative;
+	   }
+	   
+	   .tabs .tab {
+	   		height:25px;
+	   		background:#D3DADC;
+	   		overflow:hidden;
+	   		float:left:
+	   		margin-left:10px;
+	   		padding:0 10px;
+	   }
+	   */
+	   
+	   .tabs .tab_widget, .tabs .tab_gadget, .tabs .tab_widget_selected, .tabs .tab_gadget_selected  {
+	   		margin-top:15px;
+	   }
+	   
+	   .tabs {
+	   		overflow:hidden;
+	   		padding-left:5px;
+	   		width:449px;
+	    }
+	</style>
+	<apex:stylesheet value="{!URLFOR($Resource.TeamspacesWidgetConfig, 'testTabsWidgetSel.css')}" />
+
+	<!-- Message to User -->
+	<div id="messageToUser" style="display: none;">
+		<table cellspacing="0" cellpadding="0">
+			<tr>
+				<td><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'messages_bg_left.png')}" /></td>
+				<td class="bgMessage">
+					<table class="messageText">
+						<tr>
+							<td id="messageToUserImg"></td>
+							<td id="messageToUserText"></td>
+						</tr>
+					</table>
+					<div id="messageToUserButton" style="margin-top:25px; text-align:right;"><a href="Javascript:;" onclick="Effect.Fade('messageToUser'); switchOverlay()"><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'messages_btn_ok.gif')}" border="0" /></a></div>
+				</td>
+				<td><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'messages_bg_right.png')}" /></td>
+			</tr>	
+		</table>
+	</div>
+	
+	<!-- Widget Selecction List -->
+	<div class="TeamSpacesWidgetSelection" id="WidgetsSelecctionList" style="display:none;">
+		<div class="topBorders"></div>
+		<div class="content_gray">
+			<div class="tabs">
+				<div class="tab_widget_selected" id="widgetTab">
+					<a href="javascript:;" onclick="getGadgetTab();">Widgets</a>
+				</div>
+				<div class="tab_gadget" id="gadgetTab">
+					<a href="javascript:;" onclick="getGoogleGadgetList('http://www.google.com/ig/directory?synd=open&source=gghx&cat=all');">Add Google Gadgets</a>
+				</div>
+			</div>
+		</div>
+		<div class="content_blue">
+			<input type="hidden" id="widgetId_" />
+			<div id="response" style="display:none;"></div>
+			<div class="gadgetfilter" id="filterAndSearch">
+				<select onchange="filterGadgets();" id="gadgetListFilter" style="display:none;">
+					<option selected="selected" value="">All</option>
+					<option value="news">News</option>
+					<option value="tools">Tools</option>
+					<option value="communication">Communication</option>
+					<option value="funandgames">Fun & Games</option>
+					<option value="finance">Finance</option>
+					<option value="sports">Sports</option>
+					<option value="lifestyle">Lifestyle</option>
+					<option value="technology">Technology</option> 
+					<option value="new">New stuff</option>	
+				</select>
+			</div>
+			<div class="overflow_control" id="WidgetsSelecctionContent">
+			</div>
+			
+			<div class="overflow_control" id="WidgetsSelecctionContentGadgets" style="display:none;">
+			</div>
+		</div><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'divisor.png')}" alt="" /><div class="content_gray">
+			<div class="btn_Done"><a href="Javascript:;" onclick="getWidgetSelecctionList();"><span>Close</span></a></div>
+			<!--<div class="btn_New"><span>New</span></div>-->			
+		</div>		
+		<div class="bottomBorders"></div>
+	</div>	
+	
+	<!-- Widget's Matrix -->
+	<div class="WidgetMatrix__">
+		<div class="WidgetMatrix__overlay" id="wc_overlay" style="display:none;"></div>	
+		<div class="WidgetMatrix__tab">
+			<table>
+				<tr>
+					<td><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'icon.gif')}"/></td>
+					<td>Widget Matrix</td>
+				</tr>
+			</table>
+		</div>
+		<div  class="WidgetMatrix__bar">
+			<table cellspacing="0" cellpadding="0" width="100%">
+				<tr>
+					<td style="width:4px;"><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'left_side_beige.gif')}"/></td>
+					<td class="WidgetMatrix__bgBar">
+						<table>
+							<tr>
+								<td class="tdBorderLeft">Columns</td>
+								<td><input type="text" id="wc_cols" /></td>
+								<td>Rows</td>
+								<td class="tdBorderRight"><input type="text" id="wc_rows" /></td>
+								<td><a href="Javascript:;" onclick="WidgetMatrix__();"><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'show.gif')}" border="0" /></a></td>
+								<td><a href="Javascript:;" onclick="SaveWidget();"><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'save.gif')}" border="0" /></a></td>
+								<td id="saveAlert"></td>
+							</tr>
+						</table>
+					</td>
+					<td><img src="{!URLFOR($Resource.TeamspacesWidgetConfig, 'right_side_beige.gif')}"/></td>						
+				</tr>
+			</table>
+		</div>
+		<div id="matrix"></div>		
+		
+	</div>
+
+	<!-- Initialize SF Connection -->
+	<script>
+		init();
+		getDetailLayout();
+	</script>
+
+</apex:page>

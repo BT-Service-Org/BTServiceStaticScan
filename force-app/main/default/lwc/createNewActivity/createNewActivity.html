@@ -1,0 +1,19 @@
+<template>
+    <lightning-modal-header label="New Activity"></lightning-modal-header>
+    <lightning-record-edit-form object-api-name="Activity__c" onsuccess={handleSuccess}>
+    <lightning-modal-body>
+            <lightning-messages></lightning-messages>
+              <div class="slds-m-around_medium">
+                  <lightning-input-field field-name="Name" required></lightning-input-field>
+                  <lightning-input-field field-name="Related_Method__c"></lightning-input-field>
+                      </div>
+                 
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button variant="brand" type="submit" name="save" label="Save"> </lightning-button>
+    </lightning-modal-footer>
+</lightning-record-edit-form>
+
+ 
+
+</template>

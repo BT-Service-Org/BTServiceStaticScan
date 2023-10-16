@@ -1,0 +1,13 @@
+<template>
+    <div class="slds-p-bottom_x-small">
+        <lightning-input name="label" label="Label" value={label} onchange={handleLabelChange}></lightning-input>
+        <lightning-textarea name="definition" label="Definition" value={definition} onchange={handleDefinitionChange}></lightning-textarea>
+        <lightning-input name="url" label="More Information URL" value={url} onchange={handleUrlChange}></lightning-input>
+        <lightning-combobox name="probability" label="Probability" value={probability} options={probabilityOptions} onchange={handleProbabilityChange}></lightning-combobox>
+    </div>
+    <c-solution-finder-details details={details}></c-solution-finder-details>
+    <div class="footer">
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button label="Save" variant="success" onclick={handleSave}></lightning-button>
+    </div>
+</template>

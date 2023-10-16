@@ -1,0 +1,81 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="The_Station_CollectionController" access="global">
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="collectionList" type="List" default="[]"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="selectedValue" type="String" default="Red"/>
+    <aura:attribute name="showFollowCollection" type="boolean" default="false"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="collectionFilterTitle" type="String" default="My Collections"/>    
+    <aura:attribute name="showCollectionFilterTitle" type="boolean" default="true"/>    
+    <aura:attribute name="collectionFilter" type="String" default="My Collections"/>        
+    <aura:attribute name="showSort" type="boolean" default="true"/>
+    <aura:attribute name="showShareCollection" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionTitle" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionFollowers" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionContentCount" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionDescription" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionLastUpdatedDate" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionCreatedDate" type="boolean" default="true"/>            
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:handler event="c:The_Station_CollectionUserProfileGridUpdateEvent" action="{!c.doSort}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    
+    <div class="collection-grid-container">
+        <div class="slds-grid">            
+                <h3 class="slds-col collection-name">
+                    <aura:if isTrue="{!v.showCollectionFilterTitle}">
+                        {!v.collectionFilterTitle}
+                    </aura:if>
+                </h3>
+            <div class="slds-col actions">
+                <aura:if isTrue="{!v.showSort}">
+                    <lightning:combobox 
+                        class="filter-selector" 
+                        label="Sort" 
+                        aura:id="collectionSort" 
+                        name="collectionSort" 
+                        value="{!v.selectedValue}" 
+                        placeholder="Select filter" 
+                        options="{!v.options}"
+                        onchange="{!c.doSort}" 
+                        variant="label-hidden"/>
+                </aura:if>
+                <aura:if isTrue="{!v.collectionFilterTitle =='My Collections'}">
+                    <div class="filter-selector">
+                        <lightning:button variant="brand" label="New Collection" title="New Collection" onclick="{!c.newCollection}" />            
+                    </div>
+                </aura:if>  
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-wrap collection-items slds-grid--pull-padded">
+            <aura:if isTrue="{!not(empty(v.collectionList))}">
+                <aura:iteration var="collection" items="{!v.collectionList}" indexVar="index">
+                    <div class="slds-col slds-max-small-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+                    <c:The_Station_CollectionUserProfileGridItem 
+                    stationContentGroup="{!collection}"                        
+                    showFollowButton="{!v.showFollowCollection}"
+                    showShareCollection="{!v.showShareCollection}"
+                    showCollectionTitle="{!v.showCollectionTitle}"
+                    showCollectionFollowers="{!v.showCollectionFollowers}"
+                    showCollectionContentCount="{!v.showCollectionContentCount}"
+                    showCollectionDescription="{!v.showCollectionDescription}"
+                    showCollectionLastUpdatedDate="{!v.showCollectionLastUpdatedDate}"
+                    showCollectionCreatedDate="{!v.showCollectionCreatedDate}"
+                    />
+                    </div>
+                </aura:iteration>    
+                <aura:set attribute="else">
+                    <div class="slds-col slds-max-small-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">                        
+                        <div>No collections yet...</div>                                                  
+                    </div>
+                </aura:set>
+            </aura:if>            
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,34 @@
+<apex:component >
+
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="heroImage" type="String" required="true"/>
+  <apex:attribute description=""  name="bioName" type="String" required="true"/>
+  <apex:attribute description=""  name="jobTitle" type="String" required="true"/>
+  <apex:attribute description=""  name="domainVar" type="String" required="true"/>
+
+<header class="site-header container-fluid" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+  <div class="wrap">
+    <style>.site-header { background-image: url( "{!URLFOR($Resource.ServicesHubContent, heroImage)}" ); }</style>
+    <img class="locked-flag" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/icon-locked-flag.svg')}" alt="Internal Use Only"/>
+    <div class="menu-search-buttons">
+      <div id="search-button" class="header-menu-button search-button"></div>
+      <div id="show-navigation-button" class="header-menu-button show-navigation-button"></div>
+    </div>
+    <div class="container">
+      <a href="{!domainVar}/sh_home" class="sf-home">
+        <span class="sf-logo-wrapper">
+          <img class="sf-logo" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/salesforce-logo.svg')}" alt="Salesforce.com" />
+            <span class="sf-logo-accomp-text logo-accomp-text-static">SERVICES</span>        
+        </span>
+      </a>
+      <div class="container bio-information-container">
+        <div class="col-sm-6 col-sm-offset-1">
+          <h1 class="bio-name wrapper-header-project wrapper-header-salesforce-sans" >{!bioName}</h1>
+          <h2 class="bio-job-title wrapper-header-salesforce-sans">{!jobTitle}</h2>
+        </div>
+      </div>
+    </div> <!-- End container -->
+  </div> <!-- End wrap -->
+</header>
+
+</apex:component>

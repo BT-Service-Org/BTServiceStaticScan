@@ -1,0 +1,7 @@
+<design:component label="The Station: Search Content In Page">
+    <design:attribute name="stationCommunityTeam" label="Community / Team"  description="Defines Product or Page Scope" datasource="apex://The_Station_ContentSearchCommunityVals" />
+    <design:attribute name="stationCloudProduct" label="Cloud Product" description="This should only be used if the Community/Team IS 'The Station Hub'" datasource="apex://The_Station_ContentSearchCloudProdVals" />
+    <design:attribute name="stationPageName" label="Station Page Name" description="This should only be used if the Community/Team IS NOT 'The Station Hub'" />
+    <design:attribute name="showSearch" label="Show Search" default="true"/>
+    <design:attribute name="showSort" label="Show Sort" default="true"/>    
+</design:component>

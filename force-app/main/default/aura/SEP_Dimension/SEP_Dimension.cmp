@@ -1,0 +1,151 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="domain" type="Object" access="public"/>
+	<aura:attribute name="assessment" type="Object" access="public"/>
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="dimension" type="Object" access="public"/>
+    <aura:attribute name="capability" type="Object" access="public"/>
+
+    <aura:attribute name="onNext" type="Aura.Action" access="public"/>
+    <aura:attribute name="onPrevious" type="Aura.Action" access="public"/>
+    <aura:attribute name="showQuestion" type="Aura.Action" access="public"/>
+
+    <aura:attribute name="onSave" type="Aura.Action" access="public"/>
+    <aura:attribute name="onSubmit" type="Aura.Action" access="public"/>
+    <aura:attribute name="onCancel" type="Aura.Action" access="public"/>
+    <aura:attribute name="onClose" type="Aura.Action" access="public"/>
+
+    <aura:attribute name="showTooltip" type="Boolean" default="false" access="public"/>
+
+    <!--Events-->
+   	<aura:registerEvent name="showNotes" type="c:SEP_ShowNotes"/>
+
+    <!--Methods-->
+    <aura:method name="handleDimensionChange" action="{!c.handleDimensionChange}"/>
+
+    <!--Event Handlers-->
+   	<aura:handler event="c:SEP_ModeChange" action="{!c.handleModeChange}"/>
+   	<aura:handler event="c:SEP_AnswerChange" action="{!c.handleAnswerChange}"/>
+
+    <!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   	
+   	<!--Content-->
+   	<div aura:id="dimension" class="slds-p-top_xx-small slds-p-bottom_small">
+
+   		<div class="slds-grid slds-grid_align-spread slds-p-vertical_x-small">
+	   		<div class="slds-col">
+	   			<span class="slds-text-title_caps"><b>Dimension: </b></span> 
+	   			<span style="color:blue;font-size:14px;">{!v.dimension.name}</span>
+	   			<aura:if isTrue="{!and(!empty(v.interview),!v.interview.completed)}">
+		            <span class="slds-p-left_small">
+		            	<aura:if isTrue="{!!v.dimension.inapplicable}">
+		            		<lightning:buttonIcon iconName="utility:error" size="small" title="Not Applicable" onclick="{!c.skipDimension}"/>
+		            		<aura:set attribute="else">
+		            			<lightning:buttonIcon class="naBadge" iconName="utility:error" size="small" variant="inverse" title="Not Applicable"/>
+		            		</aura:set>
+		            	</aura:if>
+		            </span>
+		            <aura:set attribute="else"> <span class="slds-p-left_small"/> </aura:set>
+		        </aura:if>
+		        <lightning:buttonIcon iconName="utility:note" size="small" title="Notes" onclick="{!c.showNotes}"/>
+			   	<div class="slds-p-top_xx-small">
+					<span class="slds-text-title_caps"><b>Capability: </b></span> 
+					<span style="color:maroon;font-size:14px;">{!v.capability.name}</span>
+					<aura:if isTrue="{!and(!empty(v.interview),!v.interview.completed)}">
+						<span class="slds-p-left_small">
+							<aura:if isTrue="{!!v.capability.inapplicable}">
+			        	    	<lightning:buttonIcon iconName="utility:error" size="small" title="Not Applicable" onclick="{!c.skipCapability}"/>
+			        	    	<aura:set attribute="else">
+			            			<lightning:buttonIcon class="naBadge" iconName="utility:error" size="small" variant="inverse" title="Not Applicable"/>
+			            		</aura:set>
+			        	    </aura:if>
+			            </span>
+			        </aura:if>
+				</div>
+			</div>
+			<div class="slds-col slds-grid slds-grid_align-end">
+				<div class="slds-grid slds-grid_vertical-align-end" style="height:100%;">
+					<div class="slds-col slds-grid">
+						<aura:if isTrue="{!v.showTooltip}">
+							<section aura:id="tooltip" class="slds-popover slds-nubbin_right slds-popover_walkthrough slds-popover_feature" role="dialog" aria-label="Dialog Title" aria-describedby="dialog-body-id-1" style="width:auto;">
+							    <lightning:buttonIcon iconName="utility:close" variant="bare-inverse" onclick="{!c.hideTooltip}" alternativeText="Close dialog" class="slds-float_right slds-popover__close"/>
+								<div class="slds-popover__body" id="dialog-body-id-1" style="{!if(v.interview.options.enableGoalMode,'width:710px;','width:340px;')}">
+									<p class="slds-text-heading_small" style="font-size:14px;">
+										<aura:if isTrue="{!v.interview.options.enableGoalMode}">
+											Tap on any answer to select as current answer and tap on current answer again to clear off the selection.
+											<aura:set attribute="else">
+												Tap on any answer to select as current answer.
+											</aura:set>
+										</aura:if>
+									</p>
+								</div>
+							</section>
+						</aura:if>
+						<span class="slds-p-left_small" style="margin-top:10px;">
+							<lightning:buttonIcon iconName="utility:info" variant="bare" onclick="{!c.showHideTooltip}" alternativeText="Help"/>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--Capability-->
+	   	<aura:if isTrue="{!!empty(v.capability)}">
+	   		<c:SEP_Capability domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}" dimension="{!v.dimension}"
+	   			capability="{!v.capability}" onNext="{!c.handleNext}" onPrevious="{!c.handlePrevious}"/>
+		</aura:if>
+
+		<!--Buttons-->
+		<div class="slds-grid slds-grid_align-spread slds-p-vertical_medium"> 
+			<div class="slds-col slds-grow-none">
+				<aura:if isTrue="{!!v.interview.completed}">
+					<lightning:button class="slds-button_destructive" label="Cancel Interview" onclick="{!v.onCancel}"/>
+					<lightning:button class="slds-button_brand" label="Save Interview" onclick="{!v.onSave}"/>
+					<aura:if isTrue="{!v.interview.showSubmitButton}">
+						<lightning:button class="slds-button_success" label="Submit Interview" onclick="{!v.onSubmit}"/>
+					</aura:if>
+					<aura:set attribute="else">
+						<lightning:button class="slds-button_outline-brand" label="Close Interview" onclick="{!v.onClose}"/>
+					</aura:set>
+				</aura:if>
+			</div>
+			<!--Progress Bar-->
+			<div class="slds-col" style="width:40%;margin-top:-5px;">
+		    	<div class="slds-align_absolute-center">
+		    		<div class="slds-text-title slds-p-vertical_xx-small">
+		    			<span class="progress"> {!if(v.interview.completed,v.domain.totolQuestions,v.capability.questions[0].number-1)} of {!v.domain.totolQuestions} questions are completed </span>
+		    		</div>
+		    	</div>
+			   	<div class="slds-progress-bar slds-progress-bar_circular slds-progress-bar_small" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar" style="height:.3rem;">
+				  	<span class="slds-progress-bar__value" style="{!'background-color:rgb(0, 112, 210);width:'+if(v.interview.completed,100,(((v.capability.questions[0].number-1)/v.domain.totolQuestions)*100))+'%;'}">
+				    	<span class="slds-assistive-text">Progress</span>
+				  	</span>
+				</div>
+			</div>
+			<div class="slds-col slds-grow-none">
+				<aura:if isTrue="{!v.capability.previous}">
+					<lightning:button class="prv-nxt" label="Previous" onclick="{!c.getPreviousCapability}"/>
+					<aura:set attribute="else">
+						<lightning:button class="prv-nxt" label="Previous" onclick="{!c.getPreviousDimension}" disabled="{!!v.dimension.previous}"/>
+					</aura:set>
+				</aura:if>
+				<aura:if isTrue="{!v.capability.next}">
+					<lightning:button class="prv-nxt" variant="brand" label="Next" onclick="{!c.getNextCapability}"/>
+					<aura:set attribute="else">
+						<lightning:button class="prv-nxt" variant="brand" label="Next" onclick="{!c.getNextDimension}" disabled="{!!v.dimension.next}"/>
+					</aura:set>
+				</aura:if>
+			</div>
+	    </div>
+
+	    <!--Progress-->
+	    <aura:if isTrue="{!v.interview.options.showProgressBar}">
+			<c:SEP_Progress aura:id="progress" domain="{!v.domain}" interview="{!v.interview}" 
+				capability="{!v.capability}" showQuestion="{!v.showQuestion}"/>
+		</aura:if>
+
+	</div>
+
+</aura:component>

@@ -1,0 +1,60 @@
+<aura:component  implements="forceCommunity:availableForAllPageTypes,forceCommunity:searchInterface" access="global">
+    <aura:attribute name="greetingText" type="String" default="" description="" access="global" />
+    <aura:attribute name="title" type="String" default="" description="" access="global" />
+    <aura:attribute name="subTitleOne" type="String" default="" description="Banner subtitle 1"
+        access="global" />
+    <aura:attribute name="subTitleTwo" type="String" default="" description="Banner subtitle 2"
+        access="global" />
+    <aura:attribute name="enableQuerySuggestAddon" type="Boolean" default="true" access="global" />
+    <aura:attribute name="name" type="String" default="communityCoveo" access="global" />
+    <aura:attribute name="placeholder" type="String" default="Search Knowledge" access="global" />
+    <aura:attribute name="searchHub" type="String" default="" access="global" />
+    <aura:attribute name="searchPageName" type="String" default="global-search/%40uri" access="global" />
+    <aura:attribute name="heroBannerType" type="String" default="Wide" access="global" />
+    <aura:attribute name="backgroundImageUrl" type="String" default="/banner/bannerImage.png" />
+	<aura:attribute name="currentUser" type="User"/>
+    <aura:attribute name="pageType" type="String" default="PSC Page" access="global" />
+
+	<force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}"  fields="FirstName" targetFields="{!v.currentUser}"/>
+    <div class="{!'underheader' + (equals(v.heroBannerType, 'Wide')? (equals(v.pageType, 'Community Page') ?' underheader--bigger': ' underheader--big') : ' underheader--lit')}">
+        <aura:if isTrue="{!equals(v.heroBannerType, 'Wide')}">
+            <img src="{!$Resource.pscImages + v.backgroundImageUrl}" alt="Hero Banner"/>
+        </aura:if>
+        <div class="{!'container' + (equals(v.heroBannerType, 'Wide')?' container--lit':' container--big')}">
+            <aura:if isTrue="{!equals(v.heroBannerType, 'Wide')}">
+                <aura:if isTrue="{!equals(v.pageType, 'PSC Page')}">
+                    <h1 class="underheader__text ITC_font">
+                        Hi {!v.currentUser.FirstName},
+                    </h1>
+                </aura:if>
+               
+                    <h1 class="underheader__title_top ITC_font">
+                        {!v.subTitleTwo}
+                    </h1>   
+        
+            <aura:if isTrue="{!equals(v.pageType, 'PSC Page') || equals(v.pageType, 'Community Page') || equals(v.pageType, 'Methodology')}">
+                <h1 class="underheader__title ITC_font">
+                    {!v.title} 
+                </h1>   
+            </aura:if>
+                  
+            </aura:if>
+            <aura:if isTrue="{!equals(v.pageType, 'PSC Page')}">
+                <form class="search underheader__search">
+                    <CoveoV2:CommunitySearchBox  enableQuerySuggestAddon="{!v.enableQuerySuggestAddon}"
+                                    name="{!v.name}"
+                                    placeholder="{!v.placeholder}"
+                                    searchHub="{!v.searchHub}"
+                                    searchPageName="{!v.searchPageName}" />
+                </form>
+            </aura:if>
+
+            <aura:if isTrue="{!equals(v.pageType, 'Community Page') || equals(v.pageType, 'Methodology')}">
+                <c:pscCustomSearchBox placeholder="{!v.placeholder}" searchFilter="{!v.searchPageName}" searchPageURI="/ServicesCentral/s/global-search/%40uri" ></c:pscCustomSearchBox>
+            </aura:if>
+
+            
+           
+        </div>
+    </div>
+</aura:component>

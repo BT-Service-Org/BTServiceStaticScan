@@ -1,0 +1,164 @@
+<template>
+    <div class="backArrow" onclick={handleBackClick}>
+        <span class="back_arrow">&#8592;</span>
+        <p class="ITC_font">Back</p>
+    </div>
+    <div class="article_page">
+        <template if:true={assets}>
+            <div class="slds-m-left_large slds-m-bottom_large slds-m-top_large ">
+                <div slot="title" class="slds-m-right-small">
+                    <div class="article_header ITC_font">
+                        <div class="author">
+                            <span if:true={assets.Owner.Name}>
+                                <lightning-icon icon-name="utility:user" size="x-small" class="my-icon">
+                                </lightning-icon>
+                                Author: {assets.Owner.Name}
+                            </span>
+                        </div>
+                        <div class="icons slds-var-m-right_x-large">
+                            <c-psc-favorite record-id={recordId} title={assets.Title__c} fav-id={favId}
+                                fav-data={favData} fav={fav}></c-psc-favorite>
+                            <c-psc-copy-url></c-psc-copy-url>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-m-top_small slds-m-right_medium slds-m-bottom_large slds-align_absolute-center">
+                    <div if:true={assets.Design_Link__c}>
+                        <lightning-button label="Design" onclick={handleNavigateToUrl} variant="brand" data-id="Design"
+                            value={assets.Design_Link__c}></lightning-button>
+                        &nbsp;
+                    </div>
+                    <div if:true={assets.Demo_Link__c}>
+                        <lightning-button label="Demo" onclick={handleNavigateToUrl} variant="brand" data-id="Demo"
+                            value={assets.Demo_Link__c}></lightning-button>
+                        &nbsp;
+                    </div>
+                    <div if:true={assets.Repository_Link__c}>
+                        <lightning-button label="Use this Asset" onclick={handleNavigateToUrl} variant="brand"
+                            data-id="Repository_link__c" value={assets.Repository_Link__c}></lightning-button>
+                    </div>
+                </div>
+                <div class="slds-m-top_medium">
+                    <p class="title ITC_font">
+                        {assets.Title__c}
+                    </p>
+                    <div class="slds-m-top_small article_info">
+                        <div class="article_published">
+                            <div class="publish_date ITC_font">
+                                <lightning-icon icon-name="utility:clock" size="x-small" name="Published date">
+                                </lightning-icon>
+                                <lightning-formatted-date-time value={assets.CreatedDate} year="numeric" day="2-digit"
+                                    month="long"></lightning-formatted-date-time>
+                            </div>
+                            <div class="curationLevel" if:true={assets.Asset_Indications__c}>
+                                <div class="curation_img" if:true={curationIcon}>
+                                    <img src={curationIcon} alt={assets.Curation_Level__c}>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        <template if:true={addArticle}>
+                            <template if:true={addArticle.Fields} for:each={addArticle.Fields} for:item="field">
+                                <div if:true={field.value} key={field.label} class="slds-m-top_small badges">
+                                    <lightning-badge label={field.value}
+                                        class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;
+                                </div>
+                            </template>
+                        </template>
+                    </p>
+                    <div class="article_detail">
+                        <div class="article_body">
+                            <div if:true={assets.Description__c}>
+                                <p class="summary ITC_font slds-m-top_medium">
+                                    Asset Details
+                                </p>
+                                <p class="slds-m-top_small slds-m-right_medium slds-m-bottom_large">
+                                    <lightning-formatted-rich-text value={assets.Description__c}>
+                                    </lightning-formatted-rich-text>
+                                </p>
+                            </div>
+                            <div if:true={assets.Project_Name__c}>
+                                <p class="summary ITC_font slds-m-top_medium">
+                                    Project Details
+                                </p>
+                                <div if:true={assets.Project_Org62_URL__c}>
+                                    <p class="slds-m-top_small slds-m-right_medium slds-m-bottom_large">
+                                        Project Name:&nbsp;
+                                        <lightning-formatted-url value={assets.Project_Org62_URL__c}
+                                            label={assets.Project_Name__c} target="_blank"></lightning-formatted-url>
+                                    </p>
+                                </div>
+                                <div if:false={assets.Project_Org62_URL__c}>
+                                    <p class="slds-m-top_small slds-m-right_medium slds-m-bottom_large">
+                                        Project Name:&nbsp;
+                                        {assets.Project_Name__c}
+                                    </p>
+                                </div>
+                                <p class="slds-m-top_xx-small slds-m-right_medium slds-m-bottom_large">
+                                    <lightning-formatted-rich-text value={assets.Project_Description__c}>
+                                    </lightning-formatted-rich-text>
+                                </p>
+                            </div>
+                            <div class="slds-m-top_medium">
+                                <c-psc-display-related-files parent-id={recordId}></c-psc-display-related-files>
+                            </div>
+                        </div>
+                        <div class="article_tags">
+                            <div class="article_categories">
+                                <span if:true={assetProducts.length}>
+                                    <c-psc-pills label="Products" tabs={assetProducts} onrefreshpilldata={refreshAssetData} knowledge-id={recordId} parent-type="Reusable"></c-psc-pills>
+                                </span>
+                                <span if:true={assetIndustries.length}>
+                                    <c-psc-pills label="Industries" tabs={assetIndustries} onrefreshpilldata={refreshAssetData} knowledge-id={recordId} parent-type="Reusable"></c-psc-pills>
+                                </span>
+                                <span if:true={targetAudience.length}>
+                                    <c-psc-pills label="Target Audience" tabs={targetAudience}
+                                        onrefreshpilldata={refreshAssetData} knowledge-id={recordId}
+                                        parent-type="Reusable"></c-psc-pills>
+                                </span>
+                                <span if:true={assetTags.length}>
+                                    <c-psc-pills label="Tags" tabs={assetTags}
+                                        onrefreshpilldata={refreshAssetData} knowledge-id={recordId}
+                                        parent-type="Reusable"></c-psc-pills>
+                                </span>
+                                <span if:true={assets.Benefits__c}>
+                                    <c-psc-pills label="Benefits" tabs={assetBenefits} hide-delete=true></c-psc-pills>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-var-m-top_small slds-var-m-right_medium slds-var-m-bottom_large slds-align_absolute-center">
+                        <div if:true={assets.Design_Link__c}>
+                            <lightning-button label="Design" onclick={handleNavigateToUrl} variant="brand"
+                                data-id="Design" value={assets.Design_Link__c}></lightning-button>
+                            &nbsp;
+                        </div>
+                        <div if:true={assets.Demo_Link__c}>
+                            <lightning-button label="Demo" onclick={handleNavigateToUrl} variant="brand" data-id="Demo"
+                                value={assets.Demo_Link__c}></lightning-button>
+                            &nbsp;
+                        </div>
+                        <div if:true={assets.Repository_Link__c}>
+                            <lightning-button label="Use this Asset" onclick={handleNavigateToUrl} variant="brand"
+                                data-id="Repository_link__c" value={assets.Repository_Link__c}></lightning-button>
+                        </div>
+                    </div>
+                    <div>
+                        <c-psc-reusable-voting record-id={recordId} parent-type="Reusable_Asset__c">
+                        </c-psc-reusable-voting>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:false={assets}>
+            <lightning-spinner></lightning-spinner>
+        </template>
+    </div>
+    <div class="backArrow" onclick={handleBackClick}>
+        <span class="back_arrow">&#8592;</span>
+        <p class="ITC_font">Back</p>
+    </div>
+
+</template>

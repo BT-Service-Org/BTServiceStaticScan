@@ -1,0 +1,144 @@
+<apex:page sidebar="false" showHeader="false" controller="PeopleSidebarProfileController" id="PeopleSidebarProfile">
+		
+	<style>
+		div.main_form_holder div.main_form div.form_action div.cancel, div.advanced_search div.form_action div.cancel {
+			padding-top:9px !important;
+		}
+		div.main_form_holder div.main_form div.form_action div.cancel, div.advanced_search div.form_action div.cancel {
+			float:left;
+			padding-top:12px;
+			width:70px;
+		}
+		div.grayButton { 
+			background:#999999 none repeat scroll 0%;
+			color:white;
+			float:left;
+			margin-left:4px;
+			padding:5px 12px 6px;
+			text-align:center;
+		}
+		
+		div.grayButton a {
+				display:block;
+				color:white;
+				font-size:11px;
+		}	
+		
+		a.small_link { 
+			color:black;
+			text-decoration:underline !important;
+			font-size:10px;
+		}
+		
+		div.div_content_buttons{
+			margin-top: 3px;
+		}	
+	</style>  
+	<script>
+		 // Cancel Status Edition
+		/////////////////////////////////
+		function cancelEditStatusJs(){
+			var statusContainer = $('currentStatus');
+			var statusEdition = $('statusEdition');
+			var statusMessage = $('status_message');
+			var statusModified = $('status_modified');
+			var statusOverlay = $('statusOverlay');
+			$('PeopleOverview:StatusInclude:PeopleSidebarProfile:StatusForm:StatusMessage').value = 'is ';		
+			statusEdition.style.display = 'none';
+			statusContainer.style.display = 'block';
+		}	
+		
+		// Edit Status
+		/////////////////////////////////
+		function editStatusJs(){
+			$('PeopleOverview:StatusInclude:PeopleSidebarProfile:StatusForm:StatusMessage').value = 'is ';
+			var statusContainer = $('currentStatus');
+			var statusEdition = $('statusEdition');
+			var statusOverlay = $('statusOverlay');	
+			statusContainer.style.display = 'none';
+			statusEdition.style.display = 'block';
+		}
+
+	</script>
+		<!-- Rounded Box blue -->
+		<div class="box_round_blue">
+			<div class="top_borders"><div><div></div></div></div>
+			<!-- Rounded Box Content -->
+			<div class="box_content">
+				<div class="contentHolder">
+					<!-- Personal Information section -->
+					<div class="personal_data">
+						<!-- Avatar and Name -->
+						<div class="avatar_name">
+							<a href="/apex/PeopleProfileDisplay?id={!MySidebarProfile.User__c}">
+								<apex:outputPanel rendered="{!IF((myPicture != '') ,'true','false')}"><img src="/servlet/servlet.FileDownload?file={!myPicture}" alt="{!MySidebarProfile.User__r.Name}" title="{!MySidebarProfile.User__r.Name}" width="60" class="f_left"/></apex:outputPanel>
+								<apex:outputPanel rendered="{!IF((myPicture != '') ,'false','true')}"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/images/user.gif')}" alt="{!MySidebarProfile.User__r.Name}" title="{!MySidebarProfile.User__r.Name}" width="60" class="f_left"/></apex:outputPanel>  
+								<h2 class="f_left" style="width:100px;">{!MySidebarProfile.User__r.FirstName} <br /> {!MySidebarProfile.User__r.LastName}</h2>
+							</a>
+							<a href="/apex/PeopleProfileDisplay?id={!MySidebarProfile.User__c}" class="small_link f_left">
+								View My Profile
+							</a>
+						</div>
+						<!-- Title -->
+						<p class="title">{!MySidebarProfile.User__r.Title}</p>						
+						<!-- Instant Messaging -->
+						<div class="instant_messaging"></div>						
+					</div>										
+					<!-- Status section -->
+					<div class="brt"><div><h3>My Status</h3></div></div>
+					<div class="status" id="status">
+						<apex:outputPanel layout="block" id="statusPanel">
+							<div id="currentStatus">
+								<p class="status" id="statusParagraph" style="{!IF(ShowStatus,'','display:none;')}"><strong>{!MySidebarProfile.User__r.FirstName}</strong>&nbsp;<span id="status_message">{!Status.Message}</span></p>
+								<p class="last_update" id="statusModifiedParagraph" style="{!IF(ShowStatus,'','display:none;')}"><span id="status_modified">{!Status.Modified}.</span><a href="javascript:;" onclick="editStatusJs();">edit</a></p>
+								
+								<a class="setStatus" href="javascript:;" onclick="editStatusJs();" style="{!IF(ShowStatus,'display:none;','')}" id="newStatusLink">Share with your co-workers what you're doing.</a>							 								
+							</div>
+							<div id="statusEdition" style="display:none;">
+								<apex:form id="StatusForm">
+									<p class="status"><strong>{!MySidebarProfile.User__r.FirstName}</strong></p>
+		                            <apex:inputText id="StatusMessage" value="{!Status.Message}" />
+									<div class="div_content_buttons">
+										<div class="buttonSave">
+											<apex:actionStatus id="StatusAS">
+												<apex:facet name="start"><apex:outputText value="Saving Status..." /></apex:facet>
+								                <apex:facet name="stop">	                                        
+		                                       		<apex:commandLink styleClass="saveLabel" action="{!EditStatus}" rerender="statusPanel" value="Save" status="StatusAS" /> 
+		                                   		</apex:facet>
+		                                   	</apex:actionStatus>
+										</div>
+										<div class="cancel grayButton">
+											<a href="javascript:;" onclick="cancelEditStatusJs();">Cancel</a>						
+										</div>
+									</div>
+								</apex:form>
+							</div>
+						</apex:outputPanel>
+					</div> 
+					<!-- People Updates -->
+					<apex:outputpanel layout="block" rendered="{!showSubscribedPeople}">						
+						<div class="brt"><div><h3>People Updates</h3></div></div>					
+						<div class="contentHolder peopleUpdates">
+							<apex:outputpanel layout="block" rendered="{!IF((countImSubscribedTo == 0),false,true)}">				
+								<table>
+									<tr>
+										<td valign="top" width="25" align="center"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/users_rss.gif')}" alt="{!MySidebarProfile.User__r.FirstName}'s Suscribers" /></td>
+										<td valign="top"><a href="/apex/PeopleList?type=MyPeople&id={!MySidebarProfile.User__r.Id}">{!MySidebarProfile.User__r.FirstName} subscribed to {!countImSubscribedTo} People Updates</a></td>
+									</tr>
+								</table>
+							</apex:outputpanel>
+							<apex:outputpanel layout="block" rendered="{!IF((countSubscribedToMe == 0),false,true)}">
+								<table>
+									<tr>
+										<td valign="top" width="25" align="center"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/user_rss.gif')}" alt="People subcribed to: {!MySidebarProfile.User__r.FirstName}" /></td>
+										<td valign="top"><a href="/apex/PeopleList?type=SubscribesToMe&id={!MySidebarProfile.User__r.Id}">{!countSubscribedToMe} subscribers to {!MySidebarProfile.User__r.FirstName}'s updates</a></td>
+									</tr>
+								</table>
+							</apex:outputpanel>		
+						</div>
+					</apex:outputpanel>
+				</div>
+			</div>
+			<div class="bottom_borders"><div><div></div></div></div>
+		</div>
+</apex:page>

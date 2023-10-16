@@ -1,0 +1,81 @@
+<aura:component implements="forceCommunity:themeLayout">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- Areas attributes -->
+    <aura:attribute name="themeHero" type="Aura.Component[]" />
+    <aura:attribute name="navBar" type="Aura.Component[]" />
+    <aura:attribute name="search" type="Aura.Component[]" />
+    <aura:attribute name="profileMenu" type="Aura.Component[]" />
+    <aura:attribute name="body" type="Aura.Component[]" />
+    <aura:attribute name="footer" type="Aura.Component[]" />
+    
+    <!-- Design attributes -->
+    <aura:attribute name="showHeader" type="Boolean" default="True" />
+    <aura:attribute name="showHero" type="Boolean" default="False" />
+    <aura:attribute name="mainMenu" type="String" />
+    <aura:attribute name="childMenus" type="String" />
+    <aura:attribute name="menuAlignment" type="String" default="Left" />
+    
+    <aura:attribute name="communityHomeUrl" type="String" default="" access="private"/>
+      
+    <div class="themeLayout">
+        <div class="themeHeader">
+            <aura:if isTrue="{! v.showHeader }">
+                <div class="themeBgImage"></div>
+                <div class="themeBottomBorder"></div>
+                
+                <div class="themeHeaderInner">
+                    <div class="themeLogo" onclick="{! c.goToHomePage }">
+                        <div class="themeLogoContainer">
+                        </div>
+                    </div>
+                    
+                    <div class="themeNav">
+                        <c:The_Station_AdvancedNavigationMenu mainMenu="{! v.mainMenu }"
+                                                              childMenus="{! v.childMenus }"
+                                                              alignment="{! v.menuAlignment }" />
+                    </div>
+                    
+                    <div class="themeUtils">
+                        <div class="themeUtilsContainer">
+                            <div class="themeUtil themeSearch">
+                                <div class="align-right forceCommunityThemeSearchSection">
+                                    <div class="search-trigger">
+                                        <lightning:buttonIcon iconName="utility:search" variant="bare"
+                                                              onclick="{! c.handleShowSearchClick }" alternativeText="Search"
+                                                              title="Search" />
+                                    </div>
+                                    <div class="search-region comm-hide">
+                                        {!v.search}
+                                        <lightning:buttonIcon iconName="utility:close" class="slds-col_padded"
+                                                              variant="bare" onclick="{! c.handleCloseSearchClick }" alternativeText="Close"
+                                                              title="Close" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="themeUtil themeProfileMenu">
+                                {!v.profileMenu}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </aura:if>
+            <div class="hero">
+                <aura:if isTrue="{! v.showHero }">
+                    {!v.themeHero}
+                </aura:if>
+            </div>
+        </div>
+        
+        <div class="body">
+            {!v.body}
+        </div>
+        
+        <div class="footer">
+            {!v.footer}
+        </div>
+    </div>
+    
+</aura:component>

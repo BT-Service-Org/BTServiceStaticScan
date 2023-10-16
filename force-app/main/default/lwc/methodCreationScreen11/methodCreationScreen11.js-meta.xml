@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+
+   <target>lightning__RecordPage</target>
+
+   <target>lightning__AppPage</target>
+
+   <target>lightning__HomePage</target>
+
+   <target>lightning__FlowScreen</target>
+
+</targets>
+<targetConfigs>
+  <targetConfig targets="lightning__FlowScreen">
+    <property name="SpecialistCloud" type="@salesforce/schema/Method_by_Specialist_Cloud__c[]" label="SpecialistCloud"/>
+    <property name="methodRecordId" type ="String" label="methodRecordId"/>
+  </targetConfig>
+</targetConfigs>  
+</LightningComponentBundle>

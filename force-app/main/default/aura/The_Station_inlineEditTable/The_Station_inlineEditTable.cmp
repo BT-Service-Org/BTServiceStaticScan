@@ -1,0 +1,59 @@
+<aura:component controller="The_Station_inlineEditCtrl" implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:appHostable">   
+    <!--Init handler which is call initRecords js function on component Load-->  
+    <aura:handler name="init" value="{!this}" action="{!c.initRecords}"/>
+    <aura:attribute name="originUrl" type="String" />
+    <aura:attribute name="url" type="String" />
+    <aura:attribute name="urll" type="String" />
+    <aura:attribute name="listCount" type="Integer" default = "0" />   
+    <aura:attribute name="AssociationList" type="StationGroupingAssociation__c[]" description="store  record list"/>
+    <aura:attribute name="showSaveCancelBtn" type="boolean" default="false" description="flag for rendered save and cancel buttons in aura:if "/>
+    <div class="slds-box" style="background-color:white">
+        <lightning:layout>
+            <lightning:layoutItem>
+                        <strong style="font-size:16px"><lightning:icon iconName="custom:custom63" size="small" />&nbsp;&nbsp;Station Page</strong>
+                &nbsp;&nbsp;
+                <div style="padding-left:34px; font-size:11px;">{!v.listCount} items </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem alignmentBump="left">
+                <lightning:buttonIcon  iconName ="utility:refresh" iconClass="dark" onclick="{!c.refresh}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem >
+                <lightning:button label="New" onclick="{!c.createAssociation}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <div class="slds-m-around_large" >
+            <!--Data Table-->     
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right slds-table_fixed-layout slds-table_resizable-cols" role="grid" >
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:60px"><div class="slds-truncate" title="Id"></div></th> 
+                        <th scope="col" style="width:80px"><div class="slds-truncate" title="Order">Order</div></th>
+                        <th scope="col" class="slds-is-resizable"><div class="slds-truncate" title="StationGroupingAssociation">StationGroupingAssociation Name</div></th>
+                        <th scope="col" class="slds-is-resizable"><div class="slds-truncate" title="Content Name">Content Name</div></th>
+                        <th scope="col" class="slds-is-resizable"><div class="slds-truncate" title="Content Type">Content Type</div></th>
+                        <th scope="col" style="width:60px"><div class="slds-truncate" title="Action"></div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.AssociationList}" var="asso" indexVar="sNo">
+                        <!-- Child Lightning Component --> 
+                        <c:The_Station_inlineEditRow singleRec="{!asso}"
+                                                     showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                                     sNo="{!sNo + 1}"
+                                                     url = "{!v.url}"
+                                                     urll = "{!v.urll}"
+                                                     />
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <aura:if isTrue="{!v.showSaveCancelBtn}">
+                <!--button for save and cancel Record after Inline Edit-->
+                <lightning:buttonGroup class="slds-m-around_medium">
+                    <lightning:button label="Cancel" onclick="{!c.cancel}"/>
+                    <lightning:button label="Save" onclick="{!c.Save}" variant="success"/>
+                </lightning:buttonGroup>
+            </aura:if> 
+        </div>
+        <div style="text-align: center;"><a href="{!v.originUrl+'/lightning/r/'+v.recordId+'/related/StationGroupingAssociations1__r/view'}">View All</a></div>
+    </div>
+</aura:component>

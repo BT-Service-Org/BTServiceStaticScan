@@ -1,0 +1,157 @@
+<apex:component allowDML="true" id="WikiNewPageWidget" controller="WikiNewPageWidgetController">
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/NewWikiPageOverlay.css')}" />
+	<!-- Common css for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	
+	<style>
+		.AddChildForm .saveEditBtn {
+			background:#556A2F none repeat scroll 0% 50% !important;
+			border:0px solid !important;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:95% !important;
+			font-weight:bold;
+			height:22px !important;
+			margin-top:0px !important;
+			text-align:center;
+			width:102px !important;
+		}
+		
+		.saving {
+			margin: 30px; 
+			font-size: 15px; 
+			font-weight: bold; 
+			color: #566A22;
+		}
+	</style>
+	
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script> 
+ 
+    <!-- Javascript -->
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- Modal JS -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+
+	<!-- Initialize Modal Overlay for Remove Topic Replies -->
+	<a href="#discusionOverlay" id="initializeModal2" style="display:none;"></a>
+	<div id="discusionOverlay"></div>
+	<script>
+			createOverlay('initializeModal2');
+	</script>
+
+
+	<div class="forms__Overlay" id="AddChildForm" style="display:none;">	
+		<script>
+			var idTeam = '{!idTeam}';
+			
+			function validateName (elementId,name) {
+				var records;
+				Name = document.getElementById(name).value;
+				sforce.connection.sessionId = API_SESSION_ID;
+				result = sforce.connection.query("Select Name from WikiPage__c where Name = '" + Name + "' and team__c = '" + idTeam + "'");
+				records = result.getArray("records");
+				if (records.length != 0 || Name.replace(/[ ]*/gi ,'') == '') {
+					document.getElementById(elementId).style.display = 'block';
+					$$(".saveBtn")[0].style.color = '#DDDEB8';
+					return false;
+				}
+				else {
+					document.getElementById(elementId).style.display = 'none';
+					$$(".saveBtn")[0].style.color = '#FFFFFF';
+					return true;
+				}
+			}
+			
+			function reinicializeScrollBar () {
+				if($("Scroller-1")){
+	  				scroller  = new jsScroller(document.getElementById("Scroller-1"), 400, 200);
+	  				scrollbar = new jsScrollbar (document.getElementById("Scrollbar-Container"), scroller, false);
+  				}
+				if($("Scroller-2")){
+ 					scroller2  = new jsScroller2(document.getElementById("Scroller-2"), 500, 240);
+ 					scrollbar2 = new jsScrollbar2 (document.getElementById("Scrollbar-Container2"), scroller2, false);
+				}
+			}
+			
+			function savingShow(formDiv) {
+				$('saving').style.display='';	
+				$(formDiv).style.display='none';
+			}
+		</script>
+		
+		
+		
+		<apex:form >
+	        <apex:actionFunction name="refreshWikis" oncomplete="reinicializeScrollBar();" action="{!refreshWikis}" rerender="theFeeds, theFeeds2, wikiScrollSmall1" />
+	        <apex:actionFunction name="refreshWikiPage" action="{!refreshWikis}" rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
+	    </apex:form>
+		
+		<div class="AddChildForm">
+			<div class="formsHeader">
+				<table>
+					<tr>
+						<td>Add Child Page</td>
+						<td align="right"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" onclick="modal.close();" /></td>
+					</tr>
+				</table>
+			</div>
+			<div class="AddChildFormDiv">
+				<div id="saving" class="saving" style="display:none;">
+					Saving...
+				</div>
+				<apex:form id="formNew" onsubmit="return validateName('errorName','{!$Component.nameNewWP}');">
+					<span class="newChild" style="display:none;">Your new page will be a child-page of <a href="Javascript:;"></a></span>
+					<br>
+					<span class="requiredInfoRight">= Required Information</span>
+					<table>
+						<tr>
+							<td align="right" valign="top" style="width:85px;"><span class="inputLabel">Page Name</span></td>
+							<td valign="top" class="requiredTD"><span class="requiredInput"></span></td>
+							<td valign="top">
+								<apex:inputText value="{!newWikiPage.Name}" id="nameNewWP" onblur="validateName('errorName','{!$Component.nameNewWP}');" style="width:98%" maxlength="79"/>
+								<br>
+								<div id="errorName" class="errorMsj">The name is empty or already exist!</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" valign="top"><span class="inputLabel">Description</span></td>
+							<td></td>
+							<td class="descriptionInput">
+								<apex:inputTextarea id="descNewWP" value="{!newWikiPage.ShortDescription__c}" />
+								<span class="infoText">250 character limit</span>
+							</td>
+						</tr>
+					</table>
+					<br>
+					<div class="separateLine"></div>
+					<div align="center">
+						<!-- Wiki Page -->
+						<apex:outputpanel rendered="{!IF(idWikiPage == null, false, true)}">
+							<apex:commandButton id="saveBtnNewPageWiki" action="{!saveWiki}" styleclass="saveBtn" onclick="savingShow('{!$Component.formNew}');" oncomplete="modal.close();" value="Save"  rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
+						</apex:outputpanel> 
+						
+						<!-- Wiki Team Overview -->
+						<apex:outputpanel rendered="{!IF(idTeamOverview == null, false, true)}">
+							<apex:commandButton id="saveBtnNewPageOverview" action="{!saveWiki}" styleclass="saveBtn" onclick="savingShow('{!$Component.formNew}');" oncomplete="refreshTeamOverview();modal.close();" value="Save" rerender="wikiTreePanel, updatedPanel" />
+						</apex:outputpanel>
+						
+						<!-- Wiki Directory -->
+						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
+							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" styleclass="saveBtn" onclick="savingShow('{!$Component.formNew}');" oncomplete="modal.close();reinicializeScrollBar();" value="Save" rerender="wikiRight, theFeeds, theFeeds2, wikiScrollSmall1" />
+						</apex:outputpanel>
+						
+						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" styleclass="saveEditBtn" value="Save and Edit" />
+						<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+					</div>
+				</apex:form> 
+			</div>
+		</div>
+	</div>
+</apex:component>

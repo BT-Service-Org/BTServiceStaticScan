@@ -1,0 +1,176 @@
+<template>
+    <div class="backArrow" onclick={handleBackClick}>
+        <span class="back_arrow">&#8592;</span>
+        <p class="ITC_font">Back</p>
+    </div>
+
+    <div class="article_page">
+        <template if:true={article}>
+            <div class="slds-m-left_large slds-m-bottom_large slds-m-top_large ">
+
+                <div slot="title" class="slds-m-right-small">
+
+                    <div class="article_header ITC_font">
+                        <div class="author">
+                            <span if:true={article.Owner.FirstName}>
+                                <lightning-icon icon-name="utility:user" size="x-small" class="my-icon">
+
+                                </lightning-icon>
+                                {authorTitle}: {article.Owner.FirstName} {article.Owner.LastName}<span
+                                    if:true={article.Additional_Author__r}>, {article.Additional_Author__r.FirstName}
+                                    {article.Additional_Author__r.LastName}</span>
+                            </span>
+                            <span if:true={article.Reviewer__r}>
+                                <lightning-icon icon-name="utility:user" size="x-small" class="my-icon">
+                                </lightning-icon>
+                                Reviewed By: {article.Reviewer__r.FirstName} {article.Reviewer__r.LastName}
+                            </span>
+                        </div>
+
+
+                        <div class="icons slds-var-m-right_x-large">
+                            <c-psc-favorite record-id={recordId} title={article.Title} fav-id={favId} fav-data={favData}
+                                fav={fav}></c-psc-favorite>
+                            <c-psc-copy-url></c-psc-copy-url>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="slds-m-top_medium">
+                    <p class="title ITC_font">
+                        {article.Title}
+                    </p>
+
+                    <div class="slds-m-top_small article_info">
+                        <div class="article_published">
+                            <div class="publish_date ITC_font" if:true={article.LastPublishedDate}>
+                                <lightning-icon icon-name="utility:clock" size="x-small" name="Published date">
+                                </lightning-icon>
+                                <lightning-formatted-date-time value={article.LastPublishedDate} year="numeric"
+                                    day="2-digit" month="long"></lightning-formatted-date-time>
+                                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip"
+                                    id="help13">
+                                    <div class="slds-popover__body">Last Publication Date</div>
+                                </div>
+                            </div>
+                            <div class="publish_date ITC_font" if:true={article.Nxt_Maintenance_Date__c}>
+                                <lightning-icon icon-name="utility:maintenance_plan" size="x-small"
+                                    name="Published date">
+                                </lightning-icon>
+                                <lightning-formatted-date-time value={article.Nxt_Maintenance_Date__c} year="numeric"
+                                    day="2-digit" month="long"></lightning-formatted-date-time>
+
+                                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip"
+                                    id="help14">
+                                    <div class="slds-popover__body">Next Maintenance Date</div>
+                                </div>
+                            </div>
+                            <div class="curationLevel" if:true={article.Article_Indications__c}>
+                                <div class="curation_img" if:true={curationIcon}>
+                                    <img src={curationIcon} alt={article.Curation_Level__c}>
+                                </div>
+
+                            </div>
+                            <div class="salesforceWay_img" if:true={article.Visual_The_Salesforce_Way__c}>
+                                <img src={theSalesforceWay} alt=" The Salesforce Way">
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        <template if:true={addArticle}>
+                            <template if:true={addArticle.Fields} for:each={addArticle.Fields} for:item="field">
+                                <div if:true={field.value} key={field.label} class="slds-m-top_small badges">
+                                    <lightning-badge label={field.value}
+                                        class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;
+                                </div>
+                            </template>
+                        </template>
+                    </p>
+                    <div class="article_detail">
+                        <div class="article_body">
+
+                            <div if:true={article.Summary}>
+                                <p class="summary ITC_font">
+                                    Summary
+                                </p>
+                                <p>
+                                    {article.Summary}
+                                </p>
+                            </div>
+
+                            <div if:true={article.Body__c}>
+                                <p class="summary ITC_font slds-m-top_medium">
+                                    Article Details
+                                </p>
+
+                                <p class="slds-m-top_small slds-m-right_medium slds-m-bottom_large">
+                                    <lightning-formatted-rich-text value={article.Body__c}>
+                                    </lightning-formatted-rich-text>
+                                </p>
+                            </div>
+
+                            <div>
+                                <template if:true={article.Article_Links__r}>
+                                    <c-psc-knowledge-article-links items={article.Article_Links__r}
+                                        title={resourceLinkTitle}>
+                                    </c-psc-knowledge-article-links>
+                                </template>
+                            </div>
+                            <div>
+                                <template if:true={articleMethods.length}>
+                                    <c-psc-knowledge-article-links items={articleMethods} title="Methods">
+                                    </c-psc-knowledge-article-links>
+                                </template>
+                            </div>
+                            <div class="slds-m-top_medium">
+                                <c-psc-display-related-files parent-id={recordId}></c-psc-display-related-files>
+                            </div>
+                        </div>
+                        <div class="article_tags">
+                            <div class="article_categories">
+                                <span if:true={articleProducts.length}>
+                                    <c-psc-pills label="Products" tabs={articleProducts}
+                                        onrefreshpilldata={refreshArticleData} knowledge-id={recordId}
+                                        parent-type="Knowledge"></c-psc-pills>
+                                </span>
+                                <span if:true={articleIndustries.length}>
+                                    <c-psc-pills label="Industries" tabs={articleIndustries}
+                                        onrefreshpilldata={refreshArticleData} knowledge-id={recordId}
+                                        parent-type="Knowledge"></c-psc-pills>
+                                </span>
+                                <span if:true={articleRoles.length}>
+                                    <c-psc-pills label="Target Audience" tabs={articleRoles}
+                                        onrefreshpilldata={refreshArticleData} knowledge-id={recordId}
+                                        parent-type="Knowledge"></c-psc-pills>
+                                </span>
+                                <span if:true={articleTags.length}>
+                                    <c-psc-pills label="Tags" tabs={articleTags}
+                                        onrefreshpilldata={refreshArticleData} knowledge-id={recordId}
+                                        parent-type="Knowledge"></c-psc-pills>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <c-psc-article-voting record-id={recordId} knowledge-article-id={article.KnowledgeArticleId}
+                            parent-type="Knowledge__kav">
+                        </c-psc-article-voting>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+        <template if:false={article}>
+            <lightning-spinner></lightning-spinner>
+        </template>
+
+    </div>
+    <div class="backArrow" onclick={handleBackClick}>
+        <span class="back_arrow">&#8592;</span>
+        <p class="ITC_font">Back</p>
+    </div>
+
+</template>

@@ -1,0 +1,10 @@
+<template>
+    <div class="container">
+        <div class="searchBox">
+            <input type="text" data-id="pscCustomSearch" autocomplete="off" title="Insert a query. Press enter to send" placeholder={placeholder} onkeyup={handleKeyUp}>
+            <div class="search-bar" onclick={handleSearch}>
+                <lightning-icon icon-name="utility:search" alternative-text="Search" title="Insert a query. Press enter to send" size="x-small" class="search-icon"></lightning-icon>
+            </div>
+        </div>
+    </div>
+</template>

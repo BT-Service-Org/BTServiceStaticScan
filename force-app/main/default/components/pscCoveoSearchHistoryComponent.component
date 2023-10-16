@@ -1,0 +1,7 @@
+<apex:component >
+  <div id="search" class="CoveoSearchInterface" data-enable-history="true" data-enable-duplicate-filtering="true" data-pipeline=""
+    data-responsive-medium-breakpoint="" data-responsive-small-breakpoint="" data-results-per-page="" data-excerpt-length="200"
+    data-maximum-age="">
+    <div class="CoveoSearchHistory" data-caption="My Recent Searches" data-number-of-queries="9" data-no-values-available="Your recent searches will appear here once you start searching." data-is-standalone="true" data-redirection-url="global-search/%40uri"></div>  
+  </div>
+</apex:component>

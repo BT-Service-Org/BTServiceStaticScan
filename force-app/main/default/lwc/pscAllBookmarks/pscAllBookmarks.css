@@ -1,0 +1,72 @@
+.Container {
+        background-color: whitesmoke;
+        padding: 20px;
+        border-radius: 8px;
+}
+.Container h3 {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.004em;
+    color: #032D60;
+    padding: 16px;
+}
+
+.Page-item {
+    border: thin solid #7e8c9a;
+    margin-left: 10px;
+    padding: 3px 10px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    color: white;
+    text-decoration: none;
+    cursor: default;
+    background-color: #0070D2;
+    border-radius: 4px;
+    font-family: 'Salesforce Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+}
+.Page-active {
+    border: 2px solid #3b3c3d;
+}
+
+.Page-item:hover {
+    cursor: pointer;
+}
+.Page-item a {
+    color:white;
+    text-decoration: none;
+}
+.list-item {
+    display: inline-block;
+}
+.page-button {
+    background-color: #f3f3f3;
+    color: #000000;
+    padding: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.page-button:hover {
+    border: 1px solid black;
+}
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:center;
+    width: 100%;
+}
+ul div {
+    display: inline-block;
+}
+
+@media screen and (max-width:540px) {
+    .Container h3 {
+        font-size: 16px;
+    }
+    
+}

@@ -1,0 +1,77 @@
+<template>
+    <div class="slds-is-relative container" style="width:100%">
+        <template for:each={slidesData} for:item="slide">
+
+            <div key={slide.index} class={slide.slideClass} onmouseover={handleMouseOver} onmouseout={handleMouseOut}> <!---->
+
+                <div class="slide-card">
+                    <div class="slds-grid slds-wrap" style="
+                    display: contents;">
+                        <!-- First Section -->
+                        <div class="slds-col slds-size_3-of-12">
+                          <!--<div class="slds-grid slds-grid_vertical-align-center" style="width:100%; height:300px; text-align: center;">
+                            <div class="slds-col">
+                                <img class="logo" style="height:70px;width:70px" src={slide.PictureUrl}></img>
+                            </div>
+                          </div>-->
+                            <div style="width:100%; height:300px; text-align: center;">
+                                <img class="slds-m-top_medium contact-picture-square" src={slide.gdc_ms_Customer_Logo__c}></img>
+                                <div style="position: relative;top: 8%; padding: 10px;">
+                                    <p style="names-class">{slide.gdc_ms_Name_of_Customer__c}</p>
+                                </div>
+                                 
+                            </div>                  
+                        </div>
+                  
+                        <!-- Second Section -->
+                        <div class="slds-col slds-size_4-of-12">
+
+                            <div style="width:100%; height:300px; text-align: center; padding-top: 30px;">
+                                <h1 style="color: #032D60;font-weight: 600;size:20px;" class="slds-text-align--center">
+                                    GDC Partner
+                                </h1>
+                                
+                                <img class="slide-picture-circle slds-m-top_medium" src={slide.gdc_ms_SF_Partner_Photo__c}></img>
+                                <div class="slds-m-top_x-small">
+                                    <p style="names-class">{slide.gdc_ms_SF_Partner_Name__c}</p>
+                                    <p style="color:black;font-size:10px">{slide.gdc_ms_SF_Partner_Designation__c}</p>
+                                </div>
+                                <div class="slds-m-top_x-small" style="text-align: justify;">
+                                    <p class = "quotes-class">{slide.gdc_ms_Quotes_from_SF__c}”</p>
+                                </div>
+                            </div>
+                        </div>
+                  
+                        <!-- Third Section -->
+                        <div class="slds-col slds-size_4-of-12">
+
+                            <div style="width:100%; height:300px; text-align: center; padding-top: 30px;">
+                                <h1 style="color: #032D60;font-weight: 600;size:20px;" class="slds-text-align--center">
+                                    Customer Testimonial
+                                </h1>
+                                
+                                <img class="slide-picture-circle slds-m-top_medium" src={slide.gdc_ms_Photos_of_visitor__c}></img>
+                                <div class="slds-m-top_x-small">
+                                    <p style="names-class">{slide.gdc_ms_Name_of_visitor__c}</p>
+                                    <p style="color:black;font-size:10px">{slide.gdc_ms_Designation_of_Visitor__c}</p>
+                                </div>
+                                <div class="slds-m-top_x-small" style="text-align: justify;">
+                                    <p class = "quotes-class">“{slide.gdc_ms_Quotes_from_Client__c}”</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <div class="slds-col slds-size_1-of-12">
+            <!-- <a if:false={hideNavigationButtons} class="prev" onclick={slideBackward}>&#10094;</a> -->
+            <a if:false={hideNavigationButtons} class="next" onclick={slideForward}>&#10095;</a>
+        </div>
+    </div>
+    <div if:false={hideNavigationDots} class="slds-text-align_center slds-p-around_medium">
+        <template for:each={slidesData} for:item="slide">
+            <span key={slide.index} class={slide.dotClass} data-id={slide.index} onclick={showSlide}></span>
+        </template>
+    </div>
+</template>

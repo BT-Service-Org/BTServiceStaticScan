@@ -1,0 +1,15 @@
+.THIS.slds-sourceurl-display{
+    font-size: 15px;
+    font-weight: bold;
+    background: none;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+.THIS .buttonTheme-light1 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}

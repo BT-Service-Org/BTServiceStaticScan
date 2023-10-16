@@ -1,0 +1,38 @@
+<apex:component controller="sh_ProjectListController">
+
+<!-- Attribute Definitions -->
+  <apex:attribute description="" name="userId" type="String" required="false" assignTo="{!userId}"/>
+  <apex:attribute description="" name="practiceId" type="String" required="false" assignTo="{!practiceId}" />
+
+  <div id="projects-wrapper" class="projects-wrapper" style="margin-top:0px;">
+    <div class="posts-grid-wrapper">
+      <div class="row">                
+        <div class="col-sm-2 single-label-cell">
+          <div class="cell-container">
+            <div class="cell-inner">
+              <!--<img width="295" height="295" src="http://www.serviceshub.com/wp-content/uploads/2014/10/generic-projects.png" class="img-responsive wp-post-image" alt="generic-projects" />-->                     
+              <img width="295" height="295" src=" {!URLFOR($Resource.ServicesHubContent, 'Content/images/generic-projects.png')}" class="img-responsive wp-post-image" alt="generic-projects" />                        
+
+           </div>
+          </div>
+        </div>
+        <apex:repeat value="{!projectData}" var="project">
+        <a href="{!domainVariable}/sh_project?name={!project.projectName}" class="col-sm-2 single-post-cell">
+          <span class="cell-container">
+            <img width="295" height="295" src="{!URLFOR($Action.Attachment.Download, project.thumbnailId)}" class="img-responsive wp-post-image" alt="{!project.Name}" />                
+              <span class="single-project-cell-container black-hover-state">
+                <span class="sf-title">{!project.Name}</span><br/>
+                <span class="sf-date">
+                  <span class="sf-date">{!project.Year}</span>
+                </span>
+              </span>
+          </span>
+        </a> 
+        </apex:repeat>
+     </div>
+   </div><!-- end posts-grid-wrapper -->
+    <div class="pagination-wrapper">
+      <div class="pagination-links"></div>
+    </div>
+ </div> <!-- End projects-wrapper -->
+</apex:component>

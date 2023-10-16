@@ -1,0 +1,35 @@
+<template>
+    
+    <div if:true={display} data-id="snackbar" class="snackbar">
+        <div class="snackbar-outer-container">
+
+          <div>
+            <lightning-button-icon class="close-icon" icon-name="utility:close" variant="bare"
+              alternative-text="Close" title="Close" size="large" onclick={handleClose}></lightning-button-icon>
+            <lightning-button-icon style="float:left" icon-name="utility:share" variant="bare"
+              alternative-text="View Profile" title="View Profile" size="large" onclick={navigateToTeamMember}></lightning-button-icon>
+          
+            </div>
+
+          <div  class="snackbar-inner-container">
+              
+            <div if:true={image} class="header-img-margin-container" >
+              <img src={image} class={imgClassName} />
+              <div  class="header-margin"></div>
+            </div>
+            <div class="body-container" >
+              
+                <div class="name">{name}</div>
+                <div class="position">{position}</div>
+                <div if:true={displaySlot}><slot name="content"></slot>
+                </div>
+              </div>
+           
+
+            <div class="scrollbar" ></div>
+          </div>
+        </div>
+
+         
+      </div>
+    </template>

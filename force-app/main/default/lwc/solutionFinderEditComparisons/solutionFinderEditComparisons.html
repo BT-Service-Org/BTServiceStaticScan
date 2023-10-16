@@ -1,0 +1,31 @@
+<template>
+    <div if:true={displayMatrix}>
+        <table>
+            <thead>
+                <td>&nbsp;</td>
+                <td for:each={recommendations} for:item="recommendation" key={recommendation.solutionId} class="slds-text-align_center">
+                    {recommendation.solutionLabel}
+                </td>
+            </thead>
+            <tbody>
+                <tr for:each={properties} for:item="property" key={property.Id}>
+                    <td>
+                        <c-solution-finder-edit-comparison-property property={property} onedit={handleEditProperty}></c-solution-finder-edit-comparison-property>
+                    </td>
+                    <td for:each={recommendations} for:item="recommendation" key={recommendation.solutionId}>
+                        <c-solution-finder-edit-comparison-value property-name={property.name}  property-data-type={property.dataType}
+                            solution-name={recommendation.solutionName} map-of-values={mapOfValues} onvaluechanged={handleValueChanged}></c-solution-finder-edit-comparison-value>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="slds-m-top_medium slds-p-top_medium slds-text-align_left">
+            <lightning-button label="New Property" onclick={handleNewProperty}></lightning-button>
+        </div>
+        <div class="slds-m-top_medium slds-p-top_medium slds-border_top slds-text-align_center">
+            <lightning-button label="Save" onclick={handleSave} variant="brand"></lightning-button>
+        </div>
+    </div>
+    <c-solution-finder-comparison-property-form if:true={displayPropertyForm} selected-property={selectedProperty}
+        oncancel={handleFormCancel} onsave={handleFormSave}></c-solution-finder-comparison-property-form>
+</template>

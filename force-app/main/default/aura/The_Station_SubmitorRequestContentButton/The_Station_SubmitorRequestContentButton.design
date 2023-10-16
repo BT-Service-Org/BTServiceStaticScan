@@ -1,0 +1,4 @@
+<design:component label="TheStation - Submit Content Case">
+    <design:attribute name="buttonLabel" label="Button Label" default="Submit or Request Content" required="true"/>
+    <design:attribute name="UserorQueueId" label="User or Queue Id" required="true"/>
+</design:component>

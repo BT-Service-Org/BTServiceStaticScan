@@ -1,0 +1,22 @@
+<template>
+    <template if:true={favData}>
+
+        <div class="favourite" onclick={handleFavoriteButtonClick}
+            onkeydown={handleFavoriteButtonClick} tabindex="0">
+            <div class="heart_fill" if:true={favId}>
+                <div class="slds-popover slds-popover_tooltip fill slds-nubbin_bottom-left" role="tooltip" id="help">
+                    <div class="slds-popover__body">Remove From Bookmarks</div>
+                </div>
+                <img src={heart_fill} alt="favourite">
+            </div>
+
+            <div class="heart_blank" if:false={favId}>
+                <div class="slds-popover slds-popover_tooltip blank slds-nubbin_bottom-left" role="tooltip" id="help1">
+                    <div class="slds-popover__body">Add To Bookmarks</div>
+                </div>
+                <img src={heart_blank} alt="favourite">
+
+            </div>
+        </div>
+    </template>
+</template>

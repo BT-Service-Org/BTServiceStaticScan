@@ -1,0 +1,20 @@
+/* .THIS .slds-is-relative{
+    z-index: -1;
+}
+
+.THIS coveo-magicbox-suggestions {
+    border-radius: 8px;
+    
+}
+.THIS .coveo-magicbox-suggestions {
+    border-radius: 8px;
+}
+.THIS .magic-box-suggestion:first-child {
+    border-top: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.THIS .magic-box-hasSuggestion {
+    background-color:white;
+    border-radius: 8px;
+} */

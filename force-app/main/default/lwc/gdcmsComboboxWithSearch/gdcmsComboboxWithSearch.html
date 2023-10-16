@@ -1,0 +1,74 @@
+<template>
+    <!--Label -->
+    <template if:true={label}>
+        <label class="slds-form-element__label">
+            <abbr if:true={required} class="slds-required" title="required">* </abbr>{label}</label>
+    </template>
+    <div class="slds-combobox_container">
+        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+            <!-- Search Input -->
+            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                <lightning-input disabled={disabled} class="inputBox" placeholder="Select an Option" onblur={handleBlur} onclick={handleClick} onkeyup={handleKeyup} value={searchString} auto-complete="off" variant="label-hidden" id="combobox-id-1" required={required}></lightning-input>
+                <lightning-icon class="slds-input__icon" icon-name="utility:down" size="x-small" alternative-text="search"></lightning-icon>
+            </div>
+            <!-- Dropdown List -->
+            <template if:true={showDropdown}>
+                <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                        <template if:false={message} >
+                            <template for:each={optionData} for:item="option">
+                                <template if:true={option.isVisible}>
+                                    <li key={option.value} data-id={option.value} onmousedown={handleSelect} class="slds-listbox__item">
+                                        <template if:true={option.selected}>
+                                            <div aria-checked="true" id={option.value} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-is-selected" role="option">
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <lightning-icon icon-name="utility:check" size="x-small" alternative-text="check" class="slds-current-color"></lightning-icon>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <span class="slds-truncate slds-listbox__option-text_entity" title={option.label}>{option.label}</span>
+                                                    <template if:true={option.secondarylabel}>
+                                                        <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{option.secondarylabel}</span>
+                                                    </template>
+                                                </span>
+                                            </div>   
+                                        </template>
+                                        <template if:false={option.selected}>
+                                            <div aria-checked="true" id={option.value} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <template if:true={option.iconname}>
+                                                         <lightning-icon icon-name={option.iconname} size="small" alternative-text={option.label}></lightning-icon>
+                                                    </template>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <span class="slds-truncate slds-listbox__option-text_entity" title={option.label}>{option.label}</span>
+                                                    <template if:true={option.secondarylabel}>
+                                                        <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{option.secondarylabel}</span>
+                                                    </template>
+                                                </span>
+                                            </div>   
+                                        </template>
+                                    </li>
+                                </template>
+                            </template>
+                        </template>
+                        <template if:true={message} >
+                            <li class="slds-listbox__item">
+                                <span class="slds-media slds-listbox__option_entity verticalAlign slds-truncate">{message}</span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+    <!-- Multi Select -->
+    <template for:each={optionData} for:item="option">
+        <template if:true={option.selected}>
+            <lightning-pill key={option.value} class="slds-m-around_xx-small" name={option.value} label={option.label} onremove={handleRemove}>
+                <template if:true={option.iconname}>
+                    <lightning-icon icon-name={option.iconname} size="small" alternative-text={option.label}></lightning-icon>
+               </template>
+            </lightning-pill>
+        </template>
+    </template>
+</template>

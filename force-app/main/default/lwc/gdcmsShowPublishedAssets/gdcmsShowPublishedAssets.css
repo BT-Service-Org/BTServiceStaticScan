@@ -1,0 +1,141 @@
+:host {
+    --slds-c-card-sizing-border: 0px;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+}
+
+.demo-only {
+    background-color: rgb(242, 242, 242);
+}
+
+.myTable {
+    margin: 10px;
+}
+
+.inputField {
+    margin: 10px;
+}
+
+.noResult {
+    border: 1px solid #950101;
+    text-align: center;
+    color: #950101;
+    box-shadow: 0px 0px 5px 0px;
+}
+
+.searchFields1 {
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.searchFields {
+    display: inline-block;
+    height: 10px;
+    cursor: pointer;
+    padding: 0 3px;
+}
+
+.icon {
+    --slds-c-icon-color-background: #64CF23;
+}
+
+.assets-list {
+    max-height: 750px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+.progress-ring {
+    transform: scale(0.75) translate(1em, 1em);
+}
+
+.logo {
+    max-height: 45px;
+    max-width: 45px;
+    margin: 8px;
+}
+
+.button-bkg {
+    background-color: #FFF;
+}
+
+.button-bkg .btn-tooltip {
+    display: none;
+}
+
+.button-bkg:hover .btn-tooltip {
+    z-index: 100;
+    display: block;
+}
+
+.card {
+    border-radius: 10px;
+    height: 9.5rem;
+    box-shadow: 2px 2px 8px #888888;
+    transition: box-shadow .2s !important
+}
+
+.assetTile {
+    transition: width 3s;
+}
+
+.truncate {
+    width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.heading {
+    color: #032D60;
+    font-family: 'ITCAvantGarde';
+}
+.cardText {
+    color: #0B0B0B;
+}
+
+.cardHeading {
+    font-size:24px;
+    cursor: pointer;
+}
+.cardHeading:hover{
+    color : #0176D3;
+}
+
+.pageHeading {
+    font-size:40px;
+}
+
+.card:hover {
+    box-shadow: 0 0 8px 0px;
+}
+
+.menuItem {
+    color: #FFF;
+}
+.menuItem:hover {
+    background-color: #FFF;
+    color: #032D60;
+}
+
+.buttonMenu {
+    background-color: #032D60;
+}
+
+.slds-listbox {
+    background-color: #032D60;
+}
+
+.mock-card{
+    border-radius: 16px;
+    box-shadow: 0px 0px 2px 0px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    transition: box-shadow 0.3s ease-in-out;
+    /*min-height: 162px;*/
+    height: 100%;
+}
+
+.mock-card:hover{
+    border-radius: 16px;
+    box-shadow: 0px 12px 24px -4px rgba(24, 24, 24, 0.08),0px 16px 32px -4px rgba(24, 24, 24, 0.16);
+}

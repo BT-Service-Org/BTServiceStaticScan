@@ -1,0 +1,31 @@
+<apex:page standardController="PA_Onboarding__c" extensions="OnDemandRefreshController">
+
+<apex:pageMessages />
+<apex:form >
+<apex:pageBlock > 
+    <apex:pageBlockButtons >
+        <apex:commandButton value="Refresh Certs" action="{!refreshCerts}"/>
+        <apex:commandButton value="Refresh Badges" action="{!refreshBadges}"/>
+        <apex:commandButton value="Refresh Projects" action="{!refreshProjects}"/>
+        <apex:commandButton value="Update Org62" action="{!updateOrg62}"/>
+        <apex:commandButton value="Recalculate Milestones" action="{!recalculateMissedMilestones}" rendered="{!OR($Profile.Name='System Adminstrator',$Profile.Name='System Admin - SSO')}"/>
+        <apex:commandButton value="Refresh CSAT" action="{!refreshCSAT}" rendered="{!OR($Profile.Name='System Adminstrator',$Profile.Name='System Admin - SSO')}"/>
+        <apex:commandButton value="Refresh Multiple CSAT" action="{!refreshCSATMultiple}" rendered="{!OR($Profile.Name='System Adminstrator',$Profile.Name='System Admin - SSO')}"/>
+     
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection >
+          <apex:pageBlockTable rendered="{!completed}" columns="4" value="{!finalResults}" var="o">
+            <apex:column width="20%" headerValue="Record Id" value="{!o.recordId}"/>
+            <apex:column width="20%" headerValue="Created?" value="{!o.created}"/>
+            
+            <apex:column width="20%" headerValue="Successful?" value="{!o.success}"/>
+            <apex:column headervalue="Errors">
+                <apex:inputTextArea value="{!o.errors}" readonly="true" cols="80"/>
+                </apex:column>
+          </apex:pageBlockTable>
+          
+   </apex:pageBlockSection> 
+    <apex:outputText rendered="{!recalculationDone}" value="Recalculation Done"></apex:outputText>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,77 @@
+<aura:component >
+    <div class="slds-modal_container">
+        <header class="slds-modal_header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                <lightning:icon iconName="utility:close" alternativeText="Close"/>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Tell Us How This Could Be More Helpful</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="combobox-id-10">Why was this not helpful</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-combobox_container">
+                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                <input type="text" class="slds-input slds-combobox__input slds-has-focus slds-combobox__input-value" id="combobox-id-10" aria-controls="listbox-id-222" autoComplete="off" role="textbox" placeholder="Select an Option" readonly="" value=""
+                                        />
+                                <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                    <lightning:icon iconName="utility:chevrondown" size="large" alternativeText="Indicates approval"/>
+                                </span>
+                            </div>
+                            <div id="listbox-id-222" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid" role="listbox">
+                                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="option">
+                                            <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                            <span class="slds-media__body">
+                                                <span class="slds-truncate" title="Poorly Written"> Poorly Written</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div id="option2" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="option">
+                                            <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                            <span class="slds-media__body">
+                                                <span class="slds-truncate" title="Outdated"> Outdated</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div id="option3" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="option">
+                                            <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                            <span class="slds-media__body">
+                                                <span class="slds-truncate" title="Other"> Other</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-align_absolute-center slds-p-top_medium">
+                                            <div role="status" class="slds-spinner slds-spinner_x-small slds-spinner_inline">
+                                                <span class="slds-assistive-text">Loading</span>
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="textarea-id-01">Tell us how to better help you</label>
+                <div class="slds-form-element__control">
+                    <textarea id="textarea-id-01" class="slds-textarea" placeholder=""></textarea>
+                </div>
+            </div>
+        </div>
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.hideFeedbackModal}">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick="{!c.hideFeedbackModal}">Save</button>
+        </footer>
+    </div>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

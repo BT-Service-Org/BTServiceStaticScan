@@ -1,0 +1,41 @@
+<apex:component controller="sh_SearchController">
+  <apex:outputPanel styleClass="pagination-wrapper" layout="block" rendered="{!nav.showNavigation}">
+    <div class="pagination-links">
+      <apex:outputPanel layout="none" rendered="{!nav.showPrev}">
+        <a class="prev page-numbers" href="{!domainVariable}/sh_search?{!nav.allSearchParms}&page={!nav.prevPage}">
+          Previous
+        </a>
+      </apex:outputPanel>
+      <apex:outputPanel layout="none" rendered="{!nav.currentPage != 1}">
+        <a class='page-numbers' href="{!domainVariable}/sh_search?{!nav.allSearchParms}&page=1">
+          1
+        </a>
+      </apex:outputPanel>
+      <apex:outputPanel styleClass="page-numbers current" layout="inline" rendered="{!nav.currentPage == 1}">
+          1
+      </apex:outputPanel>
+      <apex:outputPanel styleClass="page-numbers dots" layout="inline" rendered="{!nav.showFirstEllipsis}">
+        ...
+      </apex:outputPanel>
+      <apex:outputPanel styleClass="page-numbers current" layout="inline" rendered="{!nav.currentPage != 1 && nav.currentPage != nav.lastPage}">
+          {!nav.currentPage}
+      </apex:outputPanel>
+      <apex:outputPanel styleClass="page-numbers dots" layout="inline" rendered="{!nav.showSecondEllipsis}">
+        ...
+      </apex:outputPanel>
+      <apex:outputPanel layout="none" rendered="{!nav.currentPage != nav.lastPage}">
+        <a class='page-numbers' href="{!domainVariable}/sh_search?{!nav.allSearchParms}&page={!nav.lastPage}">
+          {!nav.lastPage}
+        </a>
+      </apex:outputPanel>
+      <apex:outputPanel styleClass="page-numbers current" layout="inline" rendered="{!nav.currentPage == nav.lastPage}">
+          {!nav.lastPage}
+      </apex:outputPanel>
+      <apex:outputPanel layout="none" rendered="{!nav.showNext}">
+        <a class="next page-numbers" href="{!domainVariable}/sh_search?{!nav.allSearchParms}&page={!nav.nextPage}">
+          Next
+        </a>
+      </apex:outputPanel>
+    </div>
+  </apex:outputPanel>
+</apex:component>

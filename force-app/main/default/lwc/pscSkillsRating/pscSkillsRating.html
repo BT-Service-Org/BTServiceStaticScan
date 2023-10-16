@@ -1,0 +1,76 @@
+<template>
+    <lightning-spinner alternative-text="Loading" size="small" if:true={showSpinner}></lightning-spinner>
+
+    <div class="user-skill-page" if:true={showRecords}>
+        <div class="user-profile-info">
+
+            <h3 class="category userName ITC_font" if:true={userName}> {userName}</h3>
+            <div class="user-skill-insight">
+                <div class="profile-summary">
+                    <h3 class="category ITC_font" if:true={userRole}>Role</h3>
+                    <p class="salesforce_font category_desc" if:true={userRole}>{userRole} <span
+                            if:true={currentGrade}>- Grade {currentGrade}</span></p>
+                    <h3 class="category ITC_font" if:true={nextCareerGroup}>Career Path</h3>
+                    <a class="salesforce_font category_desc role"> {nextCareerGroup} - {nextCareerGoal}</a>
+                    <h3 class="category ITC_font" if:true={profileDesc}>Summary</h3>
+                    <lightning-formatted-rich-text value={profileDesc} class="salesforce_font category_desc"
+                        if:true={profileDesc}></lightning-formatted-rich-text>
+                    <h3 class="category ITC_font" if:true={keyExperience}>Key Experience</h3>
+                    <lightning-formatted-rich-text value={keyExperience} class="salesforce_font category_desc"
+                        if:true={keyExperience}></lightning-formatted-rich-text>
+                    <h3 class="category ITC_font" if:true={roleMovement.length}>Career Movements</h3>
+                    <div class="career_paths" if:true={roleMovement.length}>
+                        <div class="career_roles">
+                            <div class="role_header">
+                                <h2 class="category ITC_font">Roles</h2>
+                            <h2 class="category ITC_font">Career Path</h2>
+                            </div>
+                            
+                            <template for:each={roleMovement} for:item="role" if:true={roleMovement}>
+                                <div key={role.Id} class="career_options">
+                                    <a class="role salesforce_font path" href={role.careerProfileUrl}
+                                        target="_blank" if:true={role.Next_Career_Profile__r.Name}>{role.Next_Career_Profile__r.Name}</a>
+                                        <p class="role salesforce_font path" if:true={role.Next_Career_Profile__r.Name}>{role.Next_Career_Profile__r.Career_Path__c}</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                   <p style="margin-top:10px"> <a class="role salesforce_font" href={skillInsightsLink} target="_blank"> View other career
+                    options</a></p>
+
+                </div>
+                <div class="skill-insight">
+                    <h3 class="category ITC_font" if:true={currentReadinessLevel}> Readiness Score: {currentReadinessPercentage} {currentReadinessLevel}
+                    </h3>
+                    <div class="skill-summary" if:true={skillData.lmdwList}>
+                        <p class="skill-matched ITC_font"> You have matched {currentMatchSkills} out of
+                            {expectedMatchSkills} skills</p>
+                        <template for:each={skillData.lmdwList} for:item="group">
+                            <div key={group.skillGroup}>
+
+                                <c-psc-skill-slider skill-list={group.ldwList}
+                                    group-name={group.skillGroup}></c-psc-skill-slider>
+                            </div>
+                        </template>
+                        <div class="manager_validation">
+                            <span if:true={managerValidatedPct}>&nbsp;&check;</span>
+                            <p class="salesforce_font" if:true={managerValidatedPct}>Manager Validated {managerValidatedPct}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div if:false={showRecords} class="no-results">
+        <span class="ITC_font">There are no leveling guides that matches your current role. Please use the <a  href={skillInsightsLink} target="_blank">Skills Insight App</a> to explore possible career opportunities.</span>
+    </div>
+
+
+</template>

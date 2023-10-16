@@ -1,0 +1,10 @@
+.buzz-word {
+    padding: 10px;
+    color: #909090;
+    border-bottom: 1px #c0c0c0 solid;
+    cursor: pointer;
+}
+
+.buzz-word:hover {
+    background: #fffff0;
+}

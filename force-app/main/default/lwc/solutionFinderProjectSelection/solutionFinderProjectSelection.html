@@ -1,0 +1,56 @@
+<template>
+    <div class="slds-p-bottom_small slds-border_bottom slds-m-bottom_small">
+        <div if:true={project} class="slds-grid">
+            <div class="slds-row slds-size_1-of-4">
+                <div if:true={displayCancelButton}>
+                    <lightning-button-icon  icon-name="utility:back" onclick={handleCancelClick}></lightning-button-icon>
+                </div>
+                <div if:true={displayExpandButton}>
+                    <lightning-button-icon icon-name="utility:expand_alt" onclick={handleViewProjectClick}></lightning-button-icon><br />
+                    <a onclick={handleViewProjectClick}>View Project</a>
+                </div>
+            </div>
+            <div class="slds-row slds-size_3-of-4 slds-text-align_right">
+                <div class="slds-text-heading_medium slds-text-color_success">
+                    {projectName}
+                </div>
+                <div>
+                    <a onclick={handleProjectChangeClick}>Change Project</a>
+                </div>
+            </div>
+        </div>
+        <div if:false={project} class="slds-text-align_right">
+            <div class="slds-text-heading_medium slds-text-color_inverse-weak">
+                No Project Selected
+            </div>
+            <div>
+                <a onclick={handleProjectChangeClick}>Select a Project</a>
+            </div>
+        </div>
+    </div>
+
+    <section if:true={displaySelectProject} role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <lightning-button-icon icon-name="utility:close" class="slds-modal__close" variant="bare-inverse"
+                    size="large" onclick={handleCancelSelection}></lightning-button-icon>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Choose a Project</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <c-solution-finder-projects onselect={handleProjectSelected}></c-solution-finder-projects>
+            </div>
+            <footer class="slds-modal__footer">
+                <div class="slds-grid">
+                    <div class="slds-row slds-size_5-of-6 slds-p-right_small">
+                        <lightning-input type="Text" placeholder="New Project Name" variant="label-hidden" onkeyup={handleNewProjectKeyUp}></lightning-input>
+                    </div>
+                    <div class="slds-row slds-size_1-of-6 slds-text-align_center">
+                        <lightning-button label="Create" onclick={handleCreateProject}></lightning-button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    <div if:true={displaySelectProject} class="slds-backdrop slds-backdrop_open"></div>
+
+</template>

@@ -1,0 +1,109 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="StationNotifStripController"
+  access="global"
+> 
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Title" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="30px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="30" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+
+    <aura:attribute name="mainTitle" type="String" default="mainTitle" />
+    <aura:attribute name="subTitle" type="String" default="subTitle" /> 
+    <aura:attribute name="subTitleFontSize" type="Integer" default="18" />
+    <aura:attribute name="intSubTitleFontSize" type="String" default="18px" />
+
+    <!-- Actions -->
+    <aura:attribute name="callAction1Title" type="String" default="" />
+    <aura:attribute name="callAction1URL" type="String" default="" />
+    <aura:attribute name="callAction1Image" type="String" default="" />
+
+    <aura:attribute name="callAction2Title" type="String" default="" />
+    <aura:attribute name="callAction2URL" type="String" default="" />
+    <aura:attribute name="callAction2Image" type="String" default="" />
+    <aura:attribute name="showAction2" type="boolean" default="false" />
+
+    <aura:attribute name="hideTitle" type="boolean" default="false"/>
+    <aura:attribute name="hideSubtitle" type="boolean" default="false"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <div aura:id="parent">
+    <div class="main-container" style="{!v.intTitleAlignment}">
+      <div class="slds-grid slds-grid_align-center slds-wrap slds-p-top_xx-small slds-p-bottom_small slds-text-align_center main-cont" data-aura-rendered-by="136:2;a">
+        <div class="slds-col slds-size_4-of-4">
+          <aura:if isTrue="{! !v.hideTitle}">
+            <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+              {!v.mainTitle}
+            </div>
+          </aura:if>
+          <aura:if isTrue="{! !v.hideSubtitle}">
+            <p class="sub-title" style="{!v.intSubTitleFontSize + v.intTitleAlignment}">
+              {!v.subTitle}
+            </p>
+          </aura:if>
+        </div>
+        <div class="slds-grid slds-gutters slds-grid_align-center slds-wrap slds-text-align_left slds-gutters_small slds-p-around_xx-small">
+          <div class="slds-col"> 
+            <div class="slds-media">
+              <div class="slds-media__figure slds-p-top_none">
+                <aura:unescapedHtml value="{!v.callAction1Image}"/>
+              </div>
+              <div class="slds-media__body slds-align-content-center">
+                <h3 class="slds-tile__title">
+                  <a rel="noopener" href="{!v.callAction1URL}" class="action-title" style="{!v.hrefColorStyle}">{!v.callAction1Title}</a>
+                </h3>
+              </div>
+              <div class="slds-no-flex">
+                <button class="slds-button slds-p-around_xx-small slds-p-right_none">
+                  <a rel="noopener" href="{!v.callAction1URL}">
+                    <lightning:icon class="{!(v.backgroundColor == 'Dark 1') ||  (v.backgroundColor == 'Dark 2')? 'arrowIcon' : ''}"  iconName="utility:chevronright"
+                                                        alternativeText="Go to content" size="x-small" style="fill:black"/>
+                    <!-- <img src="https://sfservices-bedrockuat.cs8.my.salesforce.com/resource/1593686007000/notificationArrowImg?"
+                      style="width: 20px; height: 20px; margin-top: 5px;"/> -->
+                  </a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aura:if isTrue="{!v.showAction2}">
+            <div class="slds-col">
+            <div class="slds-media slds-p-left_xx-large" style="padding-top : 5px;">
+                <div class="slds-media__figure slds-p-top_none">
+                    <aura:unescapedHtml value="{!v.callAction2Image}"/>
+                </div>
+                <div class="slds-media__body slds-align-content-center">
+                <h3 class="slds-tile__title">
+                    <a rel="noopener" href="{!v.callAction2URL}" class="action-title" style="{!v.hrefColorStyle}">{!v.callAction2Title}</a>
+                </h3>
+                </div>
+                <div class="slds-no-flex">
+                  <button class="slds-button slds-p-around_xx-small slds-p-right_none">
+                    <a rel="noopener" href="{!v.callAction2URL}">
+                      <lightning:icon class="{!(v.backgroundColor == 'Dark 1') ||  (v.backgroundColor == 'Dark 2')? 'arrowIcon' : ''}" iconName="utility:chevronright"
+                                                        alternativeText="Go to content" size="x-small" />
+                      <!-- <img src="https://sfservices-bedrockuat.cs8.my.salesforce.com/resource/1593686007000/notificationArrowImg?"
+                          style="width: 20px; height: 20px;margin-top: 5px;"/> -->
+                    </a>
+                </button>
+                </div>
+            </div>
+            </div> 
+        </aura:if>
+      </div>
+    </div>
+  </div>
+</aura:component>

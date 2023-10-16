@@ -1,0 +1,14 @@
+<template>
+    <template if:true={showBenchBtn}>
+        <lightning-card if:false={isButtonDisabled}
+                        title="ADC Bench">
+            <lightning-button
+                onclick={handleClick}
+                aria-haspopup="dialog"
+                slot="actions"
+                label="ADC Bench Survey"
+                disabled={isButtonDisabled}>
+            </lightning-button>
+        </lightning-card>
+    </template>
+</template>

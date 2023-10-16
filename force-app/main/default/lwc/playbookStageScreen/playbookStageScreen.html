@@ -1,0 +1,228 @@
+<template>
+    <div class="slds-is-relative">
+        <!-- NOTE for some reason platformShowToast is not working, so created a new toast here -->
+        <template if:true={showToast}>
+            <div class="slds-notify_container">
+                <div class={toastClass} role="status">
+                    <span class="slds-assistive-text">{variant}</span>
+                    <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                        </svg>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">{toastMessage}</h2>
+                    </div>
+                    <div class="slds-notify__close">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="close" title="Close" variant="border-inverse" size="small" onclick={closeToast}></lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <h2 class="slds-text-heading_medium slds-hyphenate slds-text-align_center">2.0 STAGE DETAILS</h2>
+        <div if:true={isLoading}>
+            <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+        </div>
+        <div class="slds-grid slds-p-around_medium">
+            <div class="slds-col slds-size_1-of-1 slds-p-around_small slds-text-align_right">
+                <button class="slds-button slds-button_brand" onclick={addStage}>Add Stage</button>
+            </div>
+        </div>
+        <div class="slds-grid slds-p-around_medium">
+            <div class="slds-size_1-of-1">
+                <lightning-accordion>
+                    <template for:each={stageArray} for:item="eachStage" for:index="index">
+                        <div key={eachStage.indexNumber}>
+                            <lightning-accordion-section name="A" label={eachStage.label}>
+                                <div class="slds-p-vertical_medium">
+                                    <div class="slds-box_border">
+                                        <div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_4-of-12">
+                                                    <lightning-input
+                                                        type="checkbox"
+                                                        variant="standard"
+                                                        checked={eachStage.MandatoryStage}
+                                                        data-index={eachStage.index}
+                                                        data-element="MandatoryStage"
+                                                        onchange={handleChange}
+                                                        label="Mandatory Stage"
+                                                    ></lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size_7-of-12"></div>
+                                                <div class="slds-col slds-size_1-of-12">
+                                                    <button
+                                                        class="slds-button slds-button_destructive"
+                                                        style="width: 100%"
+                                                        data-index={eachStage.index}
+                                                        data-element="DeleteButton"
+                                                        onclick={handleDeleteStage}
+                                                    >
+                                                        x
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <lightning-input
+                                                        type="number"
+                                                        variant="standard"
+                                                        data-element="StageNumber"
+                                                        label="Stage Number"
+                                                        value={eachStage.StageNumber}
+                                                        data-index={eachStage.index}
+                                                        onchange={handleChange}
+                                                        placeholder=""
+                                                    ></lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <lightning-input
+                                                        type="text"
+                                                        variant="standard"
+                                                        data-element="StageTitle"
+                                                        label="Stage Title"
+                                                        value={eachStage.StageTitle}
+                                                        data-index={eachStage.index}
+                                                        onchange={handleChange}
+                                                        placeholder=""
+                                                    ></lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-form-element__label slds-no-flex">Description</div>
+                                                    <lightning-input-rich-text
+                                                        placeholder=""
+                                                        value={eachStage.Description}
+                                                        label="Description"
+                                                        data-element="Description"
+                                                        data-index={eachStage.index}
+                                                        onchange={handleChange}
+                                                    >
+                                                    </lightning-input-rich-text>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-form-element__label slds-no-flex">Objectives</div>
+                                                    <lightning-input-rich-text
+                                                        placeholder=""
+                                                        value={eachStage.Objectives}
+                                                        label="Objectives"
+                                                        data-element="Objectives"
+                                                        data-index={eachStage.index}
+                                                        onchange={handleChange}
+                                                    >
+                                                    </lightning-input-rich-text>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-form-element__label slds-no-flex">Activities</div>
+                                                    <lightning-input-rich-text
+                                                        placeholder=""
+                                                        value={eachStage.Activities}
+                                                        label="Activities"
+                                                        data-element="Activities"
+                                                        data-index={eachStage.index}
+                                                        onchange={handleChange}
+                                                    >
+                                                    </lightning-input-rich-text>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-form-element__label slds-no-flex">Key Questions</div>
+                                                    <lightning-input-rich-text
+                                                        placeholder=""
+                                                        label="Key Questions"
+                                                        data-element="KeyQuestions"
+                                                        data-index={eachStage.index}
+                                                        value={eachStage.KeyQuestions}
+                                                        onchange={handleChange}
+                                                    >
+                                                    </lightning-input-rich-text>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-p-around_x-small slds-small-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                                    <lightning-input
+                                                        variant="standard"
+                                                        value={eachStage.Duration}
+                                                        data-element="Duration"
+                                                        data-index={eachStage.index}
+                                                        label="Duration"
+                                                        onchange={handleChange}
+                                                    ></lightning-input>
+                                                </div>
+                                                
+                                                <div class="slds-col slds-p-around_x-small slds-small-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-text-align_right">
+                                                    <div>&nbsp;</div>
+                                                    <button class="slds-button slds-button_brand" onclick={handleOpenAddOutcomes} data-index={eachStage.index}>Add Outcome</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                            <div class="slds-border_bottom"></div>
+                        </div>
+                    </template>
+                </lightning-accordion>
+            </div>
+        </div>
+
+        <!-- SECTION Modal for Outcome -->
+        <template if:true={toggleAddOutcomes}>
+            <section role="dialog" class="slds-modal slds-modal_large slds-fade-in-open">
+                <div class="slds-modal__container" style="padding: 5px 5px; width: 100%">
+                    <header class="slds-modal__header">
+                        <span class="slds-modal__close">
+                            <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="close" onclick={handleCloseAddOutcomes}></lightning-icon>
+                        </span>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">3.0 OUTCOMES</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" style="flex-grow: 2">
+                        <c-playbook-outcome-screen
+                            data-outcome
+                            onjumptostage={jumpToStage}
+                            onoutcomesupdate={handleOutcomeSelection}
+                            parentoutcome-list={currentOutcomeList}
+                            parentoutcome-id-vs-method={currentOutcomeMap}
+                            outcome-index={currentOutcome}
+                        ></c-playbook-outcome-screen>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" title="Cancel" class="slds-m-right_small" onclick={handleCloseAddOutcomes}></lightning-button>
+                        <lightning-button variant="brand" label="Save" title="Save" onclick={handleDoneAddOutcomes}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <!-- !SECTION -->
+
+        <template if:true={toggleViewSummary}>
+            <c-playbook-view-summary stage-obj={stageArray} onclosebuttonclicked={handleCloseViewSummary}></c-playbook-view-summary>
+        </template>
+
+        <!-- SECTION Footer -->
+        <div class="slds-grid slds-grid_align-end slds-p-around_small" style="background-color: rgb(243, 243, 243)">
+            <div class="slds-col slds-p-horizontal_small">
+                <button class="slds-button slds-button_neutral" onclick={handlePrevious}>Previous</button>
+            </div>
+            <div class="slds-col slds-p-horizontal_small">
+                <button class="slds-button slds-button_neutral" onclick={handleOpenViewSummary}>View Summary</button>
+            </div>
+            <div class="slds-col slds-p-horizontal_small">
+                <button class="slds-button slds-button_brand" onclick={handleSave}>Finish</button>
+            </div>
+        </div>
+        <!-- !SECTION -->
+    </div>
+</template>

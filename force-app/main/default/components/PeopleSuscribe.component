@@ -1,0 +1,31 @@
+<apex:component controller="PeopleSuscribeController" allowDML="true">
+	<!-- Attribute Definitions -->
+	<apex:attribute name="subscribeId" description="The Person Id of the person that you want to be suscribed." type="String" required="false" assignTo="{!personId}" />	
+	<!-- Styles -->
+	<style>
+		td.suscribe {
+			background:url('{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/users_rss.gif')}') no-repeat top center;
+			width:18px;			
+		}
+		
+		td.unsuscribe {
+			background:url('{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/delete.png')}') no-repeat top center;
+			width:14px;			
+		}
+		
+	</style>	
+	<div style="display:none;">{!SubscriptionStatus}</div>
+	<apex:outputpanel layout="block" rendered="{!IF((currentId == personId),'false','true')}">
+		<div id="suscribeStatus-{!personId}">
+			<table>
+				<tr>
+					<td class="{!IF(SubscribedBoolean,'un','')}suscribe" >&nbsp;</td>
+					<td><a href="javascript:;"  onclick="suscribe('{!personId}', '{!currentId}')" ><apex:outputText value="{!SubscriptionStatus}" escape="false" /></a></td>
+				</tr>
+			</table>
+			<div id="suscribeBoolean-{!personId}" style="display:none;">{!SubscribedBoolean}</div>
+			<div id="suscribedName-{!personId}" style="display:none;">{!SubscribedName}</div>
+			<div id="suscribedRow-{!personId}" style="display:none;">{!SubsRow}</div>			
+		</div>
+	</apex:outputpanel>	 
+</apex:component>

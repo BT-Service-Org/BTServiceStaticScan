@@ -1,0 +1,24 @@
+.comment-parent{
+    padding: 1rem;
+    margin-bottom: -2rem;
+}
+.comments-list{
+    max-height: 700px; 
+    overflow:auto; 
+    scroll-behavior:smooth;
+    padding-right: 0.5rem;
+}
+.comment-card{
+    border-radius: 7px;
+    margin-bottom: 7px;
+    background-color: #0000000d;
+    --sds-c-card-color-background: #0000000d;
+    transition: background-color 2s;
+}
+.success-bg{
+    background-color: #cce9bc;
+}
+.back-position{
+    display: flex;
+    justify-content: start;
+}

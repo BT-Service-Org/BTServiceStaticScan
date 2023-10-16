@@ -1,0 +1,58 @@
+<template>
+
+    <!-- ACTIVITIES GROUP SECTION START -->
+    <div class="card-body slds-card_boundary slds-form_horizontal ">
+        <!-- HEADER START -->
+        <div class="slds-card__header slds-grid slds-border_bottom">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="custom:custom32" alternative-text="Activity Groups" title="Activity Groups" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-text-heading_small slds-truncate">{sectionHeader}</span></h2>
+                </div>
+                
+                <div class="slds-no-flex">
+                    <slot name="actions">
+                        <lightning-button label="New" slot="actions" onclick={navigateToNewActivityGroup} variant="brand" ></lightning-button>
+                    </slot>
+                </div>
+            </header>
+        </div>
+        <!-- HEADER END -->
+
+        <!-- BODY START -->
+        <div class="slds-card__body">
+            <slot>
+                <div class="c-container">
+                    <c-custom-datatable-comp  key-field="Id" data={dataTableInput}  columns={columns}
+                        hide-checkbox-column="true" onrowaction={handleRowAction}
+                        sorted-by={sortBy} sorted-direction={sortDirection} onsort={handleSortActivityGroupData}>
+                    </c-custom-datatable-comp>
+                </div>
+            </slot>
+        </div>
+        <!-- BODY END -->
+
+        <!-- FOOTER START-->
+        <div class="slds-card__footer">
+            <slot name="footer">
+                <p slot="footer">
+                    <template if:false={viewAll}>
+                        <lightning-button label="View All" onclick={handleViewAll} variant="base" ></lightning-button>
+                    </template>
+                    <template if:true={viewAll}>
+                        <lightning-button label="View Less" onclick={handleViewLess} variant="base" ></lightning-button>
+                    </template>
+                </p>
+            </slot>
+        </div>
+        <!-- FOOTER END-->
+    </div>
+    <!-- ACTIVITIES GROUP SECTION END -->
+
+    <template if:true={showLoader}>
+        <div class="backgroundInverse"> <lightning-spinner alternative-text="Loading" variant="inverse"></lightning-spinner> </div>
+    </template>
+    
+</template>

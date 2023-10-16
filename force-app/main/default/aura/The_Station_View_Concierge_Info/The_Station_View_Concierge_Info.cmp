@@ -1,0 +1,16 @@
+<aura:component controller="SupportCasesController" implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:The_Station_Profile_Overview_Tab">
+ <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+   
+   <aura:set attribute="title" value="Open Tickets" />
+   <aura:set attribute="titleLogo" value="{!$Resource.Concierge_Icon}"/>
+   <aura:set attribute="showMoreURL" value="https://concierge.it.salesforce.com/tickets"/>
+   <aura:attribute name="supportforce_Cases" type="Supportforce_Case__x[]"/> 
+
+       <!--Liste of Concierge Item-->
+    
+            <aura:iteration items="{!v.supportforce_Cases}" var="supportforce_Case">
+                <c:The_Station_Concierge_Item supportforce_Case="{!supportforce_Case}"
+                                               />
+            </aura:iteration>
+ 
+</aura:component>

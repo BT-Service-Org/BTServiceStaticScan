@@ -1,0 +1,21 @@
+<apex:page >
+	<div id="removeTeamType" style="display:none;">
+		<div class="modalTitle">
+			<div class="title">Remove Team Type</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>
+		<div class="modalContent">
+			<!-- Dialog Body  -->
+			<div class="modalMessage padding_30px bottom_border_gray">
+				Are you sure you want to delete this team type <br />
+			</div>
+			<!--Actions  -->
+			<div class="actions">
+			 	<span id="removeTypeEvent"></span>
+			 	<a href="javascript:;" onclick="modal.close();" class="button gray">Cancel</a>
+			</div>
+		</div>
+	</div>
+</apex:page>

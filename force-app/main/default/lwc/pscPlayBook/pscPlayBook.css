@@ -1,0 +1,45 @@
+.playbook__header {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.004em;
+    text-transform: capitalize;
+    color: #032D60;
+}
+
+.playbook-page {
+    width: 94%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.playbook__text {
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+    margin-top: 10px;
+    width: 80%;
+}
+
+@media screen and (max-width:920px) {
+    .playbook__header {
+        font-size: 16px;
+        line-height: 14px;
+    }
+
+    .playbook__text {
+        font-size: 12px;
+        line-height: 22px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .playbook__header {
+        font-size: 12px;
+        line-height: 2px;
+    }
+
+    .playbook__text {
+        font-size: 8px;
+        line-height: 20px;
+    }
+}

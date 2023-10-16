@@ -1,0 +1,118 @@
+<template>
+    <lightning-card title="Do you need to share this record ?">
+        <div style="margin: 10px;"> 
+        <div class="slds-form-element">
+            <div class="slds-form-element__control">
+              <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                  <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none" >
+                    <!--input type="text" class="slds-input slds-combobox__input" id="combobox-id-13" aria-autocomplete="list" aria-controls="listbox-id-15" aria-expanded="true" aria-haspopup="listbox" role="combobox" placeholder="Search..."
+                    onchange={handleSearch} value={searchKey}/-->
+                    <lightning-layout>
+                        <lightning-layout-item size="11">
+                            <lightning-input class="slds-p-right_x-small" value={searchKey} onchange={handleSearch} label="Search users to share this record"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1"> 
+                            <lightning-card>
+                                <div if:true={userLoadState.isLoading} class="slds-spinner_container" style="height: 75px;">
+                                    <lightning-spinner  size="small" variant="brand" alternative-text="loading" class="slds-align_absolute-center"></lightning-spinner>
+                                </div>
+                                    <div if:true={showDropdown} >
+                                    
+                                        <button style="float:right; position:sticky" class="slds-button slds-button_icon slds-modal__close slds-button--icon-inverse"
+                                            title="Close" onclick={handleCancel}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="small" >
+                                            </lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                    
+                                </div>
+                            </lightning-card>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    
+                    
+                    <!--span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                      <lightning-icon icon-name="utility:search" alternative-text="search" size="x-small"></lightning-icon>
+                    </span-->
+                  </div>
+                  <template if:true={showDropdown}>
+                    
+                        <div class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox" >
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template for:each={userLoadState.data} for:item="user">
+                                <li role="presentation" class="slds-listbox__item" key={user.Id}>
+                                        <div data-name={user.Name} data-id={user.Id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option" onclick={handleSelection}>
+                                          <span class="slds-media__figure slds-listbox__option-icon">
+                                            <span class="slds-icon_container slds-icon-standard-account">
+                                                <lightning-icon icon-name="standard:user" alternative-text="user" size="x-small"></lightning-icon>
+                                            </span>
+                                          </span>
+                                          <span class="slds-media__body">
+                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">{user.Name}</span>
+                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{user.Title} • {user.Id}</span>
+                                          </span>
+                                        </div>
+                                      </li>
+                                    </template>
+                            </ul>
+                          </div>
+                      
+                  </template>
+                  
+                  
+                </div>
+              </div>
+              <template if:true={showUsers}>
+                <template for:each={selectedUsers} for:item="user">
+                <div class="slds-listbox_selection-group" key={user.id}>
+                    
+                    <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal" >
+                        
+                            <li class="slds-listbox-item" role="presentation">
+                                <span class="slds-pill" role="option" tabindex="0" aria-selected="true">
+                                  <span class="slds-icon_container slds-icon-standard-account slds-pill__icon_container" title="User">
+                                    <!-- <svg class="slds-icon" aria-hidden="true">
+                                      <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">Account</span> -->
+                                    <lightning-icon icon-name="standard:user" alternative-text="user" size="x-small"></lightning-icon>
+                                  </span>
+                                  <span class="slds-pill__label" title="Salesforce Inc.">{user.name}</span>
+                                  <span class="slds-icon_container slds-pill__remove" title="Remove">
+                                    <lightning-icon icon-name="utility:close" alternative-text="close" size="x-small" data-id={user.id} onclick={handleRemove}></lightning-icon>
+                                  </span>
+                                </span>
+                              </li>
+                        
+                        
+                    </ul>
+                
+                  </div>
+                </template>
+              </template>
+              
+            </div>
+          </div>
+          <div class="slds-clearfix">
+            <lightning-layout>
+              <lightning-layout-item class="slds-float_left" size="8">
+                  <lightning-combobox name="accessType" label="Access Type" value={accessType_Value}
+                    placeholder="Select Access Type" options={options} onchange={handleAccessType}></lightning-combobox>
+              </lightning-layout-item>
+              <lightning-layout-item  size="1">
+              </lightning-layout-item>
+              <lightning-layout-item size="3">
+                <div class="slds-p-around_large">
+                  <lightning-button label="Share" variant="brand" onclick={handleShare}></lightning-button>
+                </div>
+
+              </lightning-layout-item>
+            </lightning-layout>
+          </div>
+        </div>
+    </lightning-card>
+
+</template>

@@ -1,0 +1,53 @@
+<template>
+    <div class="slds-modal__content slds-p-around_medium" style="flex-grow: 2">
+        <div class="slds-grid slds-wrap">
+            <h3>5.0 METHOD OUTCOMES</h3>
+            <div class="slds-size_12-of-12">
+                <div class="slds-grid slds-m-around_medium">
+                    <div class="slds-size_2-of-12 slds-p-around_x-small">Select Method</div>
+                    <div class="slds-size_5-of-12 slds-p-around_x-small">
+                        <c-playbook-lookup-component
+                            label="Select Method"
+                            placeholder="Select Method"
+                            s-object-api-name="Method__c"
+                            default-record-id={currentMethodId}
+                            index-number={currentMethodOutcomeIndex}
+                            onlookupupdate={handleMethodOutcomeUpdate}
+                            selection-locked=true
+                        ></c-playbook-lookup-component>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-size_12-of-12">
+                <div class="slds-grid slds-m-around_medium">
+                    <div class="slds-size_2-of-12 slds-p-around_x-small"></div>
+                    <legend class="slds-form-element__legend slds-form-element__label">
+                        <abbr class="slds-required" title="required">*</abbr> Select Outcome
+                    </legend>
+                    <template for:each={listMethodOutcomes} for:item="eachMethodOutcome">
+                        <span class="slds-radio" key={eachMethodOutcome.id}>
+                            <template if:true={eachMethodOutcome.checked}>
+                                <input type="radio" id={eachMethodOutcome.Id} value={eachMethodOutcome.Id} name="options" checked="" />
+                                    <label class="slds-radio__label" for={eachMethodOutcome.Id}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{eachMethodOutcome.Outcome__r.Name}</span>
+                                    </label>
+                            </template>
+                            <template if:false={eachMethodOutcome.checked}>
+                                <input type="radio" id={eachMethodOutcome.Id} value={eachMethodOutcome.Id} name="options" onclick={handleOnBoxChecked}/>
+                                    <label class="slds-radio__label" for={eachMethodOutcome.Id}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{eachMethodOutcome.Outcome__r.Name}</span>
+                                    </label>
+                            </template>
+                        </span>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="slds-modal__footer">
+        <lightning-button label="Cancel" title="Cancel" class="slds-m-right_small" onclick={handleCloseAddMethodOutcome}></lightning-button>
+        <lightning-button variant="brand" label="Save" title="Save" onclick={handleDoneAddMethodOutcomes}></lightning-button>
+    </footer>
+</template>

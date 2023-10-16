@@ -1,0 +1,18 @@
+<aura:component implements='forceCommunity:availableForAllPageTypes' controller="PSCCoveoSearchCtrl">
+     <aura:attribute name="endpointHandler" type="Aura.Component[]" access="global">
+          <c:pscCoveoSearchTokenGenerator></c:pscCoveoSearchTokenGenerator>
+      </aura:attribute>
+      <aura:attribute name="prod" type="String" access="global"></aura:attribute>
+	<CoveoV2:CommunitySearch name="{!v.name}" 
+                      searchHub="{!v.searchHub}"
+                      aura:id="pscCoveoSearchComponent"  
+                      endpointHandler="{!v.endpointHandler}"
+                      customScripts="{!join(',',$Resource.pscCoveoSearchHistoryStandaloneJS,$Resource.pscCoveoFacetScript)}"  
+                      />
+                      <c:pscRequestContentModal aura:id="requestcontentmodal"></c:pscRequestContentModal>               
+    
+     <aura:attribute name="name" type="String" default="" access="global" />
+     <aura:attribute name="debug" type="Boolean" default="false" access="global" />
+     <aura:attribute name="searchHub" type="String" default="" access="global" />
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+</aura:component>

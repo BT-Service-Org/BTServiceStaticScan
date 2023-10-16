@@ -1,0 +1,85 @@
+<aura:component extends="c:SEP_Base"  implements="force:appHostable,flexipage:availableForRecordHome,lightning:isUrlAddressable" >
+
+    <!--Attributes-->
+	
+	<!-- {!v.pageReference} is included w/ implements="lightning:isUrlAddressible" -->
+
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="screen" type="String" access="public"/>
+    <!-- <aura:attribute name="interviewId" type="String" access="public"/>
+    <aura:attribute name="personaId" type="String" access="public"/> -->
+
+    <aura:attribute name="assessmentId" type="String" access="public"/> <!-- SEP Stream Assesment -->
+
+    <aura:attribute name="customer" type="Object" access="public"/> <!-- Account name -->
+   <!-- <aura:attribute name="contact" type="Object" access="public"/> -->
+    <aura:attribute name="domain" type="Object" access="public"/> <!-- SEP Domain2Assessment -->
+    <aura:attribute name="assessment" type="Object" access="public"/>
+    <!-- <aura:attribute name="interview" type="Object" access="public"/> -->
+
+    <aura:attribute name="assessments" type="Object[]" access="public"/>
+    <aura:attribute name="notes" type="Object[]" access="public"/>
+
+    <aura:attribute name="summary" type="String" access="public"/>
+    <aura:attribute name="message" type="Object" access="public"/>
+    <aura:attribute name="autoSave" type="Object" access="public"/>
+
+   	<!--Event Handlers-->
+   	<aura:handler event="c:SEP_OptionChange" action="{!c.handleOptionChange}"/>
+
+   	<!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-container slds-container_center slds-card slds-p-around_small">
+
+		<!--Message-->
+		<aura:if isTrue="{!v.message.show}">
+   			<div class="{!'alert-top alert slds-text-heading_small '+if(v.message.success,'alert-success','alert-danger')}">
+			  	<lightning:buttonIcon iconName="utility:close" variant="bare-inverse"  class="slds-float_right slds-popover__close"
+			  		alternativeText="Close dialog" onclick="{!c.closeMessage}"/>
+			  	<strong>{!v.message.success ? 'Success! ' : 'Danger! '}</strong> {!v.message.body}
+			</div>
+   		</aura:if>
+
+   		<!--Title & Auto Save-->
+		<div class="slds-grid slds-grid_align-end" style="margin-bottom:-15px;">
+			<aura:if isTrue="{!v.interview.options.enableAutoSave}">
+				<div class="slds-col slds-text-color_weak slds-p-right_large">
+					<aura:if isTrue="{!!empty(v.autoSave.message)}">
+						<strong style="color:green;"> Success! </strong> {!v.autoSave.message}
+						<aura:set attribute="else">
+							<aura:if isTrue="{!v.autoSave.time}">
+							 	Auto saving in {!v.autoSave.time} seconds...
+							 	<aura:set attribute="else">
+							 		Saving...
+							 	</aura:set>
+							 </aura:if>
+						</aura:set>
+					</aura:if>
+				</div>
+			</aura:if>
+			<div class="slds-col" style="margin-top:-5px;">
+				<span class="slds-text-heading_medium"><b>Scoping and Estimation</b></span> 
+			</div>
+		</div>
+
+		<!--Header-->
+		<c:SEP_Header customer="{!v.customer}"  
+			domain="{!v.domain}" assessment="{!v.assessment}" />
+
+		<!--Interview View-->
+		<aura:if isTrue="{!equals(v.screen,'SEP_Interview')}">
+			<c:SEPNotes notes="{!v.notes}" types="{!v.interview.noteTypes}" editable="{!!v.interview.completed}"/>
+			<c:SEP_Interview domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}" 
+				onSave="{!c.handleSaveInterview}" onSubmit="{!c.handleSubmitInterview}" onCancel="{!c.handleCancelInterview}"/>
+		</aura:if>
+
+		<!--Spinner-->
+		<aura:if isTrue="{!empty(v.screen)}">
+			<lightning:spinner alternativeText="Loading" size="medium" />
+		</aura:if>
+
+	</div>
+
+</aura:component>

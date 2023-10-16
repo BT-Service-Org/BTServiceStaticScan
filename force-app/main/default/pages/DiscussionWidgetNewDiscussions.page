@@ -1,0 +1,113 @@
+<apex:page sidebar="false" controller="DiscussionWidgetNewDiscussionsController"> 
+
+   
+
+<style>  
+	
+	div.box_round_blue.no_subtitle h3 {
+		padding: 13px;
+	}	
+	
+	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team {
+		margin:4px 0pt;
+	}
+	
+	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team div.desc {
+		height:auto;
+
+	}
+	
+	.minifeed_discussion {
+		padding: 0pt;
+		margin: 0pt;
+		list-style: none;
+	}
+	.minifeed_discussion li{
+		background: url('{!URLFOR($Resource.commonResources, 'images/icons/minifeeds/minifeed_discussion.gif')}') no-repeat scroll 1px 4px;
+		padding: 3px 0px 3px 25px;
+		margin-bottom: 5px;
+		position: relative;
+		overflow: hidden;
+		width: 155px;
+	}
+	
+	.minifeed_discussion a {
+		font-weight: bold;
+	}
+	
+</style>
+	
+	
+<div class="box_round_blue no_subtitle">
+
+					<div class="header">
+						<div>
+							<div>
+							
+							<h3>New Discussions</h3>
+							</div>
+						</div>							
+					</div>
+					<div class="box_content">
+						<div class="contentHolder">
+							<div>
+									<div class="desc">
+									<ul class="minifeed_discussion">
+									<apex:repeat value="{!newDiscussionTopics}" var="dt" >
+										
+											<apex:outputpanel rendered="{!IF(dt.subject == null,true,false)}">
+													<li>	
+													<a href="/apex/DiscussionDetail?id={!dt.id}">
+														No Title. 
+													</a>
+												</li>	
+											</apex:outputpanel>
+											  
+											<apex:outputpanel rendered="{!IF(dt.subject == null,false,true)}">
+												<li>	
+													<a href="/apex/DiscussionDetail?id={!dt.id}">
+														{!dt.subject} 
+													</a>
+												</li>	
+											</apex:outputpanel>
+											
+																		
+											
+									</apex:repeat>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="bottom_borders"><div><div></div></div></div>
+				</div>	
+				
+				
+				
+				<!-- 
+			<div class="widgetBox"> 
+				<div class="header">
+					<div>
+						<div>
+							<h3>New Discussions</h3>
+						</div>
+					</div>
+				</div>
+				<div class="box_content">
+					<ul class="quickLinks">
+						<apex:repeat value="{!newDiscussionTopics}" var="dt" >						
+							<li><a href="/apex/DiscussionDetail?id={!dt.Id}">{!dt.Subject__c}</a></li>
+						</apex:repeat>
+					</ul>
+				</div>
+				<div class="bottom_borders">
+					<div>
+						<div>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+		
+
+</apex:page>

@@ -1,0 +1,49 @@
+<aura:component>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <aura:attribute name="title" type="String" default="Recent Volunteer Activities"/>
+    <aura:attribute name="records" type="Object"/>
+    <aura:handler name="change" value="{!v.records}" action="{!c.recordsUpdated}"/>
+    <aura:attribute name="privateRecords" type="Object"/>
+
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-card__header-title">
+                {!v.title}
+            </div>
+            <div class="activities__container">
+                <table class="slds-table slds-table_fixed-layout">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Type">Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Type">Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Type">Hours</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.privateRecords}" var="record">
+                            <tr class="slds-hint-parent">
+                                <th data-label="Type Text" scope="row">
+                                    <div class="slds-truncate" title="{!record.Activity_Type}">{!record.Activity_Type}</div>
+                                </th>
+                                <th data-label="Date Text" scope="row">
+                                    <p class="slds-truncate" title="{!record.start_date}"><lightning:formattedDateTime value="{!record.start_date}" timeZone="UTC"/></p>
+                                    <!--{!record.start_date}-->
+                                </th>
+                                <th data-label="Hours Text" scope="row">
+                                     <div class="slds-truncate" title="{!record.Hours_Volunteered}">{!record.Hours_Volunteered}</div>
+                                </th>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</aura:component>

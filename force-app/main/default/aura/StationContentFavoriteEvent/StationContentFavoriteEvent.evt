@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="Station Content Favorite Event">
+    <aura:attribute name="stationContentRecordId" type="String"/>
+    <aura:attribute name="currentState" type="Boolean"/>
+    <aura:attribute name="runningUser" type="String"/>
+</aura:event>

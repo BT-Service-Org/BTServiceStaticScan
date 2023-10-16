@@ -1,0 +1,24 @@
+<template>
+    <div class="engagement-card ITC_font" if:true={formData}>
+        <p id="start" class="card_title" tabindex="0" aria-label={formTitle}>{formTitle}</p>
+        <div class="engagement-title ITC_font">
+            <template for:each={engagementData} for:item="data" for:index="index">
+                <div key={data.title} class="engagement-item">
+                    <p class="engagement_title" tabindex="0" aria-label={data.title}>{data.title}</p>
+                    <div class="item-list">
+                        <ul class="slds-list_dotted">
+                            <template for:each={data.methodologyChildList} for:item="item">
+                                <li key={item.recId} class="list-item salesforce_font">
+                                    <a href={item.redirectLink}>{item.name}</a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                    <div class="links">
+                        <a href={data.allListLink}>{data.allListTitle}</a>
+                    </div>
+                </div>                
+            </template>
+        </div>
+    </div>
+</template>

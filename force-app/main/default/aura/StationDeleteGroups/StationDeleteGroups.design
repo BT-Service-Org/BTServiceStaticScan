@@ -1,0 +1,4 @@
+<design:component>
+<design:attribute name="scId" label="ContentPiece Id" />
+<design:attribute name="selectedGroups" label="Selected Groups" />
+</design:component>

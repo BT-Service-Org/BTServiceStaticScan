@@ -1,0 +1,48 @@
+<template>
+
+    <lightning-spinner if:true={isLoading} alternative-text="Loading..." size="large"></lightning-spinner>
+
+    <div if:false={displayEditForm}>
+        <div class="slds-p-top_medium slds-p-bottom_medium">
+            <div>
+                <span class="slds-text-heading_large slds-text-color_success">
+                    {previousSelection}
+                </span>
+            </div>
+            <div class="slds-text-heading_medium bold">
+                {currentQuestion}
+            </div>
+            <div class="slds-text-color_inverse-weak">
+                {currentHelpText}
+            </div>
+        </div>
+        <lightning-tabset>
+            <lightning-tab label="Selected Solutions">
+                <c-solution-finder-solutions solutions={selectedSolutions} option-name={optionName}
+                    no-records-message="No solutions have been selected." button="remove" onedit={handleEdit} onloading={handleLoading}></c-solution-finder-solutions>
+            </lightning-tab>
+            <lightning-tab label="Comparisons">
+                <c-solution-finder-edit-comparisons settings={settings} option-name={optionName}></c-solution-finder-edit-comparisons>
+            </lightning-tab>
+            <lightning-tab label="Recommended Solutions">
+                <c-solution-finder-solutions solutions={recommendedSolutions} option-name={optionName}
+                    no-records-message="No recommendations exist." button="recommend" onedit={handleEdit} onloading={handleLoading}></c-solution-finder-solutions>
+            </lightning-tab>
+            <lightning-tab label="Other Solutions">
+                <c-solution-finder-solutions solutions={otherSolutions} option-name={optionName}
+                    no-records-message="No other solutions exist." button="recommend" onedit={handleEdit} onloading={handleLoading}></c-solution-finder-solutions>
+            </lightning-tab>
+            <lightning-tab label="Create Solution">
+                <c-solution-finder-solution-form settings={settings} option-name={optionName} onloading={handleLoading}></c-solution-finder-solution-form>
+            </lightning-tab>
+        </lightning-tabset>
+    </div>
+
+    <div if:true={displayEditForm}>
+        <c-solution-finder-solution-form settings={settings} option-name={optionName} name={editSolution.name} label={editSolution.label}
+            description={editSolution.description} export-note={editSolution.exportNote} considerations={editSolution.considerations}
+            limitations={editSolution.limitations} stories={editSolution.stories} properties={editSolution.properties}
+            oncancel={handleCancel} onloading={handleLoading}></c-solution-finder-solution-form>
+    </div>
+
+</template>

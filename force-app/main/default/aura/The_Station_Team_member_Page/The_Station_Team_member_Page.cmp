@@ -1,0 +1,85 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+    controller="Station_Team_Member_Page_Controller" access="global">
+
+    <aura:attribute name="title" type="String" default="Team" />
+    <aura:attribute name="stationMemberRecord" type="List" default="[]" />
+    <aura:attribute name="stationLeaderRecord" type="List" default="[]" />
+    <aura:attribute name="leaderColumnstyle" type="String" />
+    <aura:attribute name="memberColumnstyle" type="String" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="42px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="backgroundColor" type="String" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="showGroupTitle" type="Boolean" default="true" />
+    <aura:attribute name="isFullScreenWidth" type="Boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="numLeader" type="Integer" default="1" />
+    <aura:attribute name="numLeaderColumns" type="Integer" default="1" />
+    <aura:attribute name="numMemberColumns" type="Integer" default="3" />
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:attribute name="containerHorizPadding" type="String" default="10px" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div aura:id="parent" style="{! '--containerHorizPadding:' + v.containerHorizPadding}">
+        <div class="main-container">
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="column-outer-container slds-container--large slds-container--center">
+                <div class="c-container">
+                    <!--<lightning:layout horizontalAlign="center">-->
+                    <div class="slds-grid slds-wrap slds-grid_align-center">
+                        <aura:iteration items="{!v.stationLeaderRecord}" var="itemLeader">
+                            <div class="{!v.leaderColumnstyle}" style="margin-top:12px; margin-bottom:0px">
+                                <span>
+                                    <div style="text-align:center">
+                                        <img src="{!itemLeader.sImageURL}"
+                                            style="width:120px;height:120px;border-radius: 50%;object-fit:cover;" /><br />
+                                        <p style="margin-top:10px;" class="member-title"><a style="{!v.hrefColorStyle}"
+                                                href="{!'https://org62.lightning.force.com/lightning/r/User/'+itemLeader.sLink+'/view'}"
+                                                target="_blank">{!itemLeader.sTitle}</a></p>
+                                        <p style="margin-top:4px;" class="member-sub-title">
+                                            <lightning:formattedText value="{!itemLeader.sSubTitle}" />
+                                        </p><br />
+                                    </div>
+                                </span>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                    <!--</lightning:layout>-->
+                </div>
+                <div class="c-container">
+                    <!--<lightning:layout horizontalAlign="center">-->
+                    <div class="slds-grid slds-wrap slds-grid_align-center">
+                        <aura:iteration items="{!v.stationMemberRecord}" var="itemMember">
+                            <div class="{!v.memberColumnstyle}" style="margin-top:16px; margin-bottom:10px">
+                                <span>
+                                    <div style="text-align:center">
+                                        <img src="{!itemMember.sImageURL}"
+                                            style="width:120px;height:120px;border-radius: 50%;object-fit:cover;" /><br />
+                                        <p style="margin-top:10px;" class="member-title"><a style="{!v.hrefColorStyle}"
+                                                href="{!'https://org62.lightning.force.com/lightning/r/User/'+itemMember.sLink+'/view'}"
+                                                target="_blank">{!itemMember.sTitle}</a></p>
+                                        <p style="margin-top:4px;" class="member-sub-title">
+                                            <lightning:formattedText value="{!itemMember.sSubTitle}" />
+                                        </p><br />
+                                    </div>
+                                </span>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                    <!--</lightning:layout>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

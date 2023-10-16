@@ -1,0 +1,102 @@
+<apex:page id="AdminAddWidgetImplementation" sidebar="false" showHeader="false">
+	
+	<div id="addWidget" style="display:none;">
+		<div class="modalTitle">
+			<div class="title">Add widget</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>
+
+		<div class="modalContent">
+			<div class="tabContainer">
+				<div class="tabBorder">
+				</div>
+				<ul class="tabs">
+					<li id="salesforceTab" class="selected salesforce"><div class="topBorder"><div><div></div></div></div><a id="salesforceLink" class="selected" onclick="changeTab(this);" href="javascript:;" onmouseover="changeLinkColor(this);" onmouseout="changeLinkColor(this);">Salesforce.com Widgets</a></li>
+					<li id="googleTab" class="google"><div class="topBorder"><div><div/></div></div><a id="googleLink" class="unselected" onclick="changeTab(this);filterGadgets();" href="javascript:;" onmouseover="changeLinkColor(this);" onmouseout="changeLinkColor(this);">Google Gadgets</a></li>
+				</ul>
+			</div>
+
+			<div id="salesforceContent" class="salesforceContent">
+				<div id="itemCount" class="itemsCount"></div>
+				
+				<div class="separateLine"></div>
+				
+				<div id="salesforceWidgets" class="widgetsContent"></div>
+			</div>
+
+			<div id="googleContent" class="googleContent" style="display:none;">
+				<div class="headerSelects">
+					<form action="">
+						<span>
+							Categories &nbsp;&nbsp;
+							<select id="gadgetListFilter" onchange="filterGadgets();">
+								<option value="all">All Categories</option>
+								<option value="news">News</option>
+								<option value="tools">Tools</option>
+								<option value="communication">Communication</option>
+								<option value="funandgames">Fun & Games</option>
+								<option value="finance">Finance</option>
+								<option value="sports">Sports</option>
+								<option value="lifestyle">Lifestyle</option>
+								<option value="technology">Technology</option>
+							</select>
+						</span>
+						<span>
+							Search &nbsp;&nbsp;
+							<input type="text" id="searchCriteria" name="searchCriteria"/>
+							<input onclick="doSearch();" type="button" value="Go" class="goBtn"/>
+						</span>
+					</form>
+				</div>
+				
+				<div id="overlayLoader" style="display:none;">
+					<div class="loader">
+			 			<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}" alt="Loading..." title="Loading..." />
+			 		</div>
+				</div>
+				
+				<div class="separateLine"></div>
+				
+				<div id="resultContainer" class="resultContainer">
+					<div class="itemsCount" id="gadgetItemCount">0 items</div>
+					
+					<div class="separateLine"></div>
+					
+					<div id="googleWidgets" class="widgetsContent">
+	
+					</div>
+				</div>
+
+				<div id="noResultContainer" class="resultContainer" style="display:none;">
+					<div class="itemsCount">No matches found for "<span id="searchCriteriaWords1"></span>"</div>
+					
+					<div class="separateLine"></div>
+		
+					<div class="widgetsContent">
+						We're sorry, we were unable to find any content containing the words "<span id="searchCriteriaWords2"></span>" <br>
+						<br>
+						Suggestions: <br>
+							<ul>
+								<li>Make sure all words are spelled correctly.</li>
+								<li>Try different keywords.</li>
+								<li>Try more general keywords.</li>
+							</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<script>
+		function showSelect () {		
+			var inputSelect = $('catogiresSelect');
+			if (inputSelect != null) {
+				inputSelect.style.visibility = 'visible';
+			}
+		}
+	</script>
+	
+</apex:page>

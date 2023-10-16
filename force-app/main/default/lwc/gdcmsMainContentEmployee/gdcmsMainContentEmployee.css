@@ -1,0 +1,51 @@
+.container {
+  background-color: #001639;
+  min-height: 360px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.my-icon1 {
+  --sds-c-icon-color-foreground-default: #032D61;
+}
+.heading {
+  width: 100%;
+  padding: 0 3px;
+  text-align: center;
+  padding-top: 30px;
+  color: #032D61;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  
+}
+.description {
+  width: 80%;
+  margin: 0 auto;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 20px;
+  color: white;
+  letter-spacing: 2px;
+  opacity: 0;
+  max-height:0;
+  transition: all 0.3s ease;
+
+}
+.tileBox{
+  cursor: pointer;
+}
+.tileBox:hover .description{
+  transition: all 0.3s ease;
+  opacity: 1;
+  max-height:80px;
+}
+.tileBox:hover .heading{
+  color: white;
+}
+.tileBox:hover .my-icon1{
+  --sds-c-icon-color-foreground-default: white;
+}

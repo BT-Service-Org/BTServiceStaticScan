@@ -1,0 +1,75 @@
+.card{
+    /* box-shadow: 0px 0px 6px 0px; */
+    max-height: 20rem;
+    scroll-behavior: smooth;
+    overflow: auto;
+    margin: 2rem 1.5rem;
+    padding: 1rem;
+    box-shadow: 0px 0px 2px 0px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 5px;
+    transition: box-shadow .2s !important
+}
+
+.card:hover {
+    box-shadow: 0px 12px 24px -4px rgba(24, 24, 24, 0.08),0px 16px 32px -4px rgba(24, 24, 24, 0.16);
+  }
+.parked-rejected-text{
+    color: #531A2B;
+    font-weight: 700;
+}
+
+.delivered-text{
+    color: #396547;
+    font-weight: 700;
+}
+.in-progress-text{
+    color: #D98C00;
+    font-weight: 700;
+}
+
+.parked-rejected::before, .parked-rejected::after, .parked-rejected{
+    background-color: #531A2B !important;
+}
+
+.step-hover:hover, .step-hover:hover::after, .step-hover:hover::before{
+    background-color: #396547 !important;
+}
+.step-hover, .step-hover::after, .step-hover::before{
+    color: #FFFF;
+    background-color: #70BF75 !important;
+}
+.readonly-path .hover-none{
+    /* pointer-events: none; */
+}
+
+.description-height{
+    max-height: 7rem;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.heading {
+    font-family: 'ITCAvantGarde';
+    font-style: normal;
+    color: #032D60;
+}
+
+.fadedText {
+    color: #0B0B0B;
+}
+
+.cardHeading {
+    cursor: pointer;
+}
+
+.cardHeading:hover {
+    color: #0176D3;
+}
+
+.justifiedContent {
+    text-align: justify;
+    text-justify: inter-word;
+}
+.step-Index{
+    z-index: 1 !important;
+}

@@ -1,0 +1,13 @@
+.c-container {
+    border: 1px solid #d8dde6;
+    margin: 10px 0 20px;
+}
+:host {
+    --slds-c-tabs-list-color-border: black;
+    --slds-c-tabs-item-color-border-active: rgb(235, 206, 88);
+    --slds-c-tabs-item-color-border-hover: green;
+    --slds-c-tabs-item-text-color: black;
+    --slds-c-tabs-item-text-color-active: green;
+    --slds-c-tabs-item-line-height : 4rem;
+    --slds-c-textarea-sizing-min-height: 120px;
+}

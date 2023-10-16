@@ -1,0 +1,48 @@
+<aura:component controller="The_Station_CollectionController" access="global" >
+    <aura:attribute name="showAddToCollection" type="boolean" default="true"/>
+    <aura:attribute name="contentRecordId" type="String" />
+    <aura:attribute name="buttonTheme" type="String" default="buttonMenuTheme-light1"/>
+    <aura:attribute name="dataSeparator" type="String" default="|;;|" />    
+    <aura:attribute name="iconName" type="String" default="utility:add"/>
+    <aura:attribute name="buttonAltText" type="String" default="Add To Collection"/> 
+    <aura:attribute name="buttonType" type="String" default="button"/> 
+    <aura:attribute name="loading" type="boolean" default="true"/>
+    <aura:attribute name="loadingText" type="String" default="loading..."/> 
+    <aura:attribute name="actions" type="Object[]" /> 
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.showAddToCollection}">
+        <lightning:buttonMenu 
+            alternativeText="{!v.buttonAltText}" 
+            onselect="{!c.handleMenuSelect}" 
+            iconName="{!v.iconName}" 
+            isLoading="{!v.loading}"
+            menuAlignment="auto"
+            loadingStateAlternativeText="{!v.loadingText}">
+            <lightning:menuSubheader label="Add to..." />
+            <aura:iteration var="action" items="{!v.actions}">
+                <lightning:menuItem 
+                    aura:id="actionMenuItems" 
+                    label="{!action.label}" 
+                    value="{!action.value}" 
+                    checked="{!action.checked}"/>
+            </aura:iteration>            
+            <lightning:menuDivider />
+            <lightning:menuItem 
+                aura:id="showAllCollections" 
+                value="showAllCollections" 
+                label="View All" 
+                prefixIconName="utility:preview"/>
+            <lightning:menuDivider />
+            <lightning:menuItem 
+                aura:id="createCollection" 
+                value="createCollection" 
+                label="Create a new collection" 
+                prefixIconName="utility:add"/>
+        </lightning:buttonMenu>
+    </aura:if>
+
+</aura:component>

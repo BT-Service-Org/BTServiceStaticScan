@@ -1,0 +1,5 @@
+.THIS .slds-button_icon-more {
+    height: var(--buttonHeight);
+    background-color: transparent;
+    border-width: 2px;
+}

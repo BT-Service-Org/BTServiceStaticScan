@@ -1,0 +1,167 @@
+<template>
+    <div class="slds-grid slds-no-flex" style="background-color:white">
+
+        <div class="slds-col slds-size_12-of-12">
+
+            <div class="slds-scrollable" style="height:30rem">
+
+                <div class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate slds-text-heading--medium">
+                        <div
+                            class="slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center slds-align_absolute-center">
+                            <p class="slds-p-top_xx-small">{formName}</p>
+                            <lightning-helptext icon-name="utility:info" class="slds-p-left_small"
+                                content={LABELS.info}></lightning-helptext>
+                        </div>
+                    </h2>
+                </div>
+                <div class="slds-p-bottom_medium">
+                </div>
+                <!-- <div>
+                    <h2 class="infoClr slds-align_absolute-center">{LABELS.info}</h2>
+                </div> -->
+                <lightning-layout class="slds-p-around_small" multiple-rows="true">
+                    <template if:true={questions}>
+                        <template for:each={questions} for:item="question" for:index="index">
+
+                            <!--For Picklist Type Question-->
+                            <template if:true={question.picklist}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-combobox key={question.Id} id={question.Id} label={question.questionName}
+                                        placeholder="Select" options={question.options} name="picklist"
+                                        data-index={question.queNo} required={question.required} class="validate"
+                                        value={question.value} onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--For Multi-Picklist Type Question-->
+                            <template if:true={question.multipicklist}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-checkbox-group key={question.Id} name="multiselect"
+                                        data-index={question.queNo} label={question.questionName}
+                                        options={question.options} value={question.value} required={question.required}
+                                        class="validate" onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-checkbox-group>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--For Text-Area Type Question-->
+                            <template if:true={question.textarea}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea name="textarea" id={question.Id} key={question.Id}
+                                        label={question.questionName} data-index={question.queNo}
+                                        required={question.required} class="validate" value={question.value}
+                                        onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--For Checkbox Type Question-->
+                            <template if:true={question.checkbox}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+
+                                    <!-- <h2 class="header" key={question.Id}>
+                                        {question.questionName}
+                                    </h2> -->
+                                    <label class="slds-form-element__label"> {question.questionName}</label>
+                                    <lightning-input key={question.Id} type="checkbox" name="checkbox"
+                                        data-index={question.queNo} label="" checked={question.checked} class="validate"
+                                        required={question.required} onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-input>
+
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--For Number Type Question-->
+                            <template if:true={question.Number}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-input key={question.Id} type="Number" name="Number"
+                                        data-index={question.queNo} label={question.questionName}
+                                        required={question.required} class="validate" value={question.value}
+                                        onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--For Date Type Question-->
+                            <template if:true={question.Date}>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-input key={question.Id} type="date" name="Date"
+                                        data-index={question.queNo} label={question.questionName}
+                                        required={question.required} class="validate" value={question.value}
+                                        onchange={handleChange} disabled={boolShowPreview}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-horizontal_small slds-p-bottom_small" size="6"
+                                    key={question.Id}>
+                                    <lightning-textarea label="Comments" data-index={question.queNo}
+                                        value={question.comments} onchange={handleComment} disabled={boolShowPreview}>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </template>
+
+                            <br key={question.Id}>
+                        </template><br>
+                    </template>
+                </lightning-layout>
+            </div>
+
+            <footer class="slds-modal__footer slds-align_absolute-center"
+                style="background-color:rgba(236, 235, 234, 0.9)">
+                <div>
+                    <lightning-button variant="brand" label="Previous" disabled={disablePreviousButtons}
+                        class="slds-m-top_medium" onclick={handleNavigation}></lightning-button>
+                </div>
+                &nbsp;
+                <div>
+                    <lightning-button variant="brand" label="Next" disabled={disableNextButtons}
+                        class="slds-m-top_medium" onclick={handleNavigation}></lightning-button>
+                </div>
+                &nbsp;
+                <template if:true={showSubmitButton}>
+                    <lightning-button variant="brand" label="Submit" onclick={handleSubmit}>
+                    </lightning-button>
+                </template>
+            </footer>
+
+        </div>
+    </div>
+</template>

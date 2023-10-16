@@ -1,0 +1,28 @@
+<design:component  label="TheStation: Notification Strip"> <!-- REPLACE WITH DESIGNATED COMPONENT NAME -->
+    
+    <design:attribute name="contentGroupId" label="Station Content Id" default="" required="true" placeholder="Station Content ID"/>
+    <!-- <design:attribute name="showGroupTitle" label="Show Content Group Title" default="true"/>
+    <design:attribute name="mainTitle" label="Title" required="true" default="Main Title Test"/>
+    <design:attribute name="subTitle" label="Sub-Title" required="true" default="Sub-Title Test"/> -->
+    <design:attribute name="hideTitle" label="Hide Title" default="false"/>
+    <design:attribute name="hideSubtitle" label="Hide Subtitle" default="false"/>
+    <design:attribute name="titleFontSize" label="Title Size" default="30" min="16" max="60" required="true" description="In pixels"/>
+    <design:attribute name="subTitleFontSize" label="Sub-Title Size" default="18" min="12" max="50" required="true" description="In pixels"/>
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2" default="Dark 2" description="Change component theme"/>
+    <design:attribute name="titleAlignment" label="Alignment" datasource="Left,Center,Right" default="Center"/>
+    
+    <!-- <design:attribute name="callAction1Title" label="Call to Action #1 Title" required="true"/>
+    <design:attribute name="callAction1URL" label="Call to Action #1 URL" required="true"/>
+    <design:attribute name="callAction1Image" label="Call to Action #1 Image" required="true"/>
+
+    <design:attribute name="showAction2" label="Show Second Action" default="false"/> -->
+
+    <!-- <design:attribute name="callAction2Title" label="Call to Action #2 Title" />
+    <design:attribute name="callAction2URL" label="Call to Action #2 URL" />
+    <design:attribute name="callAction2Image" label="Call to Action #2 Image" /> -->
+
+    <!-- EXAMPLES
+    <design:attribute name="contentAlignment" label="First Content Alignment" datasource="Left,Right" default="Left" description="Sets image alignment of first item, others alternate"/>
+    <design:attribute name="numColumns" label="Number of Columns" datasource="1, 2, 3" default="2"/>
+	-->
+</design:component>

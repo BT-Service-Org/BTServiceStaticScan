@@ -1,0 +1,13 @@
+<aura:component >
+	<aura:attribute name="cspRecordId" type="String"/>
+    <aura:attribute name="cspRecordOwnerID" type="String"/>
+    <aura:attribute name="cspRecordTitle" type="String"/>
+    <aura:attribute name="cspRecordPrimaryID" type="String"/>
+    <aura:attribute name="orgInstanceUrl" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <lightning:flow aura:id="submitFeedbackFlow" onstatuschange="{!c.handleStatusChange}"/>
+</aura:component>

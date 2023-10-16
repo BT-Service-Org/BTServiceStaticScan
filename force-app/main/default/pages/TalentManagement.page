@@ -1,0 +1,352 @@
+<apex:page Controller="IC_Talent_Management" lightningStylesheets="TRUE" title="Skills Insights App">
+    <apex:form >
+    	<apex:actionFunction name="doInit" action="{!CheckRecordExist}" rerender="allPanel"/>
+        <apex:outputPanel Id="allPanel">
+            <apex:outputPanel rendered="{!NOT(initialised)}">
+                <p align="center" style='{font-family:"Arial", Helvetica, sans-serif; font-size:20px;}'>
+                    <apex:image value="/img/loading.gif"/>&nbsp;Please wait</p>
+                <script>
+                window.onload=function() {
+                    doInit();
+                };
+                </script>
+            </apex:outputPanel>
+        
+            <apex:outputPanel rendered="{!initialised}">
+                <apex:pageBlock >
+                    <apex:pageBlockSection columns="2">
+                        <apex:outputField label="Name" value="{!Individual.User__r.Name}"/>
+                        <apex:outputField label="Manager" value="{!Individual.User__r.Manager.Name}"/>
+                        <apex:outputField label="Job Code" value="{!Individual.User__r.JobCode__c}"/>
+                        <apex:outputField value="{!Individual.Onboarding__r.Last_Profile_Skills_Update__c}"/>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+
+                <apex:pageBlock >
+                    <apex:tabPanel switchType="client" selectedTab="Career">
+                        <apex:tab label="Leveling Guide" name="Career">
+                            <apex:pageBlockSection columns="2" collapsible="False">
+                                <apex:outputField label="Career Profile" value="{!Individual.Career_Profile__c}" title="Only your People Leader can update this value"/>
+                                <apex:outputField label="Career Path" value="{!Individual.Career_Profile__r.Career_Path__c}"/>
+                                <apex:outputField label="Job Grade" value="{!Individual.Career_Profile__r.Job_Grade__c}"/>
+                                <apex:outputField label="Career Path Group" value="{!Individual.Career_Profile__r.Career_Path_Group__c}"/>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                <apex:outputField label="Skills in the Leveling Guide" value="{!Individual.Career_Expected__c}"/>
+                                <apex:outputField label="Skills that are rated" value="{!Individual.Career_Rated__c}"/>
+                                <apex:outputField label="Matched skills" value="{!Individual.Career_Match__c}"/>
+                                <apex:outputField label="Validated skills %" value="{!Individual.Career_Validated_pct__c}"/>
+                                <apex:outputField label="Skill Readiness Score" value="{!Individual.Career_Match_pct__c }"/>
+                                <apex:outputField label="Skill Readiness" value="{!Individual.Career_Readiness__c}"/>
+                            </apex:pageBlockSection>
+             
+                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                <apex:outputField value="{!Individual.Expected_Certifications__c}"/>
+                                <apex:outputField value="{!Individual.Certification_Status__c}"/>
+                                <apex:outputField value="{!Individual.Achieved_Certifications__c}"/>
+                                <apex:outputField value="{!Individual.Tenure__c}"/>
+                                <apex:outputField value="{!Individual.Career_Profile__r.Special_note__c}" rendered="{!ShowNote}" />
+                            </apex:pageBlockSection>
+             
+                            <apex:pageBlockSection title="Transferable Skills" columns="1" collapsible="False" rendered="{!Data.ShowProfileTransferableSkills}">
+                                <apex:pageBlockTable value="{!Data.ProfileTransferableSkills}" var="itm">
+                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        
+                            <apex:pageBlockSection title="Group Specific Skills" columns="1" collapsible="False" rendered="{!Data.ShowProfileGroupSkills}">
+                                <apex:pageBlockTable value="{!Data.ProfileGroupSkills}" var="itm">
+                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection title="Path Specific Skills" columns="1" collapsible="False" rendered="{!Data.ShowProfilePathSkills}">
+                                <apex:pageBlockTable value="{!Data.ProfilePathSkills}" var="itm">
+                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:tab>
+    
+                        <apex:tab label="Opportunity Exploration" name="Opportunity">
+                            <apex:outputPanel Id="Oppty">
+                                <apex:pageBlockSection columns="2" collapsible="False">
+                                    <apex:inputField label="Career Profile (opportunity)" value="{!Individual.Opportunity_Profile__c}">
+                                        <apex:actionSupport event="onchange" reRender="Oppty" action="{!UpdateOpportunity}" status="myStatus"/>
+                                    </apex:inputField>
+                                    <apex:outputField label="Career Path" value="{!Individual.Opportunity_Profile__r.Career_Path__c}"/>
+                                    <apex:outputField label="Job Grade" value="{!Individual.Opportunity_Profile__r.Job_Grade__c}"/>
+                                    <apex:outputField label="Career Path Group" value="{!Individual.Opportunity_Profile__r.Career_Path_Group__c}"/>
+                                </apex:pageBlockSection>
+                                
+                                <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                    <apex:outputField label="Skills in the Leveling Guide" value="{!Individual.Opportunity_Expected__c}"/>
+                                    <apex:outputField label="Validated skills %" value="{!Individual.Opportunity_Validated_pct__c}"/>
+                                    <apex:outputField label="Matched skills" value="{!Individual.Opportunity_Match__c}"/>
+                                    <apex:outputText />
+                                    <apex:outputField label="Opportunity Readiness Score" value="{!Individual.Opportunity_Match_pct__c }"/>
+                                    <apex:outputField label="Opportunity Readiness" value="{!Individual.Opportunity_Readiness__c}"/>
+                                </apex:pageBlockSection>
+
+                                <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                    <apex:outputField value="{!Individual.Expected_Certifications_Opportunity__c}"/>
+                                    <apex:outputField value="{!Individual.Certification_Status_Opportunity__c}"/>
+                                    <apex:outputField value="{!Individual.Achieved_Certifications__c}"/>
+                                    <apex:outputField value="{!Individual.Tenure__c}"/>
+                                    <apex:outputField value="{!Individual.Opportunity_Profile__r.Special_note__c}" rendered="{!ShowNoteOpty}" />
+                                </apex:pageBlockSection>
+                                
+                                <apex:pageBlockSection title="Transferable Skills" columns="1" collapsible="False" rendered="{!Data.ShowOpportunityTransferableSkills}">
+                                    <apex:pageBlockTable value="{!Data.OpportunityTransferableSkills}" var="itm">
+                                        <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                        <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                        <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                        <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                        <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                        <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                        <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                    </apex:pageBlockTable>
+                                </apex:pageBlockSection>
+                                
+                                <apex:pageBlockSection title="Group Specific Skills" columns="1" collapsible="False" rendered="{!Data.ShowOpportunityGroupSkills}">
+                                    <apex:pageBlockTable value="{!Data.OpportunityGroupSkills}" var="itm">
+                                        <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                        <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                        <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                        <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                        <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                        <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                        <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                    </apex:pageBlockTable>
+                                </apex:pageBlockSection>
+                                
+                                <apex:pageBlockSection title="Path Specific Skills" columns="1" collapsible="False" rendered="{!Data.ShowOpportunityPathSkills}">
+                                    <apex:pageBlockTable value="{!Data.OpportunityPathSkills}" var="itm">
+                                        <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                        <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                        <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                        <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                        <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                        <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                        <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                    </apex:pageBlockTable>
+                                </apex:pageBlockSection>
+                            </apex:outputPanel>
+                        </apex:tab>
+
+                        <apex:tab label="My Certifications" name="Certs">
+                            <apex:pageBlockSection columns="2" collapsible="False">
+                                <apex:selectList multiselect="false" label="Achieved Certifications" size="10" readonly="true">
+                                	<apex:selectOptions value="{!Data.AchievedCertifications}"/>
+                                </apex:selectList>
+                                <apex:selectList multiselect="false" label="Available Certifications" size="10" readonly="true">
+                                	<apex:selectOptions value="{!Data.AvailableCertifications}"/>
+                                </apex:selectList>
+                            </apex:pageBlockSection>    
+                        </apex:tab>
+
+                        <apex:tab label="My Team" name="Team" rendered="{!ShowMyTeam}" Id="Team">
+                            <apex:pageBlockSection columns="1" collapsible="False">
+                                <apex:pageBlockTable value="{!MyDirects}" var="itm" Id="MyTeam">
+									<apex:actionSupport event="onRowClick" action="{!SelectDirect}" rerender="DirectLG,MyTeam">
+                                        <apex:param name="cId" value="{!itm.Id}" />
+                                    </apex:actionSupport>
+                                    <apex:column value="{!itm.User__c}" headerValue="User" width="15%"/>
+                                    <apex:column value="{!itm.User__r.JobCode__c}" headerValue="Job Code" width="5%"/>
+                                    <apex:column value="{!itm.Career_Profile__c}" headerValue="Career Profile" width="25%"/>
+                                    <apex:column value="{!itm.Career_Profile__r.Career_Path__c}" headerValue="Career Path" width="20%"/>                                   
+                                    <apex:column value="{!itm.Career_Profile__r.Job_Grade__c}" headerValue="Job Grade" width="6%"/>
+                                    <apex:column value="{!itm.Career_Match_pct__c}" headerValue="Match %" width="7%" />
+                                    <apex:column value="{!itm.Career_Readiness__c}" headerValue="Readiness" width="15%" />
+                                    <apex:column value="{!itm.Career_Validated_pct__c}" headerValue="Validated Skills %" width="7%" />
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                            
+                            <apex:outputPanel Id="DirectLG">
+	                            <apex:outputPanel rendered="{!ShowDirect}">
+                                    <apex:tabPanel switchType="client" selectedTab="Career">
+
+                                        <apex:tab label="Leveling Guide for {!Direct.User__r.Name}" name="Career">
+                                            <apex:pageBlockSection columns="2" collapsible="False">
+                                                <apex:outputField label="Name" value="{!Direct.User__r.Name}"/>
+                                                <apex:outputField label="Job Code" value="{!Direct.User__r.JobCode__c}"/>
+                                            </apex:pageBlockSection>
+
+                                            <apex:pageBlockSection columns="2" collapsible="False">
+												<apex:inputField label="Career Profile" value="{!Direct.Career_Profile__c}">
+													<apex:actionSupport event="onchange" reRender="DirectLG, MyTeam" action="{!UpdateDirect}"/>
+                    							</apex:inputField>
+                                                <apex:outputField label="Career Path" value="{!Direct.Career_Profile__r.Career_Path__c}"/>
+                                                <apex:outputField label="Job Grade" value="{!Direct.Career_Profile__r.Job_Grade__c}"/>
+                                                <apex:outputField label="Career Path Group" value="{!Direct.Career_Profile__r.Career_Path_Group__c}"/>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                                
+                                                <apex:outputField label="Skills in the Leveling Guide" value="{!Direct.Career_Expected__c}"/>
+                                                <apex:outputField label="Skills that are rated" value="{!Direct.Career_Rated__c}"/>
+                                                <apex:outputField label="Matched skills" value="{!Direct.Career_Match__c}"/>
+                                                <apex:outputField label="Validated skills %" value="{!Direct.Career_Validated_pct__c}"/>
+                                                <apex:outputField label="Skill Readiness Score" value="{!Direct.Career_Match_pct__c }"/>
+                                                <apex:outputField label="Skill Readiness" value="{!Direct.Career_Readiness__c}"/>
+                                            </apex:pageBlockSection>
+
+                                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                                <apex:outputField value="{!Direct.Expected_Certifications__c}"/>
+                                                <apex:outputField value="{!Direct.Certification_Status__c}"/>
+                                                <apex:outputField value="{!Direct.Achieved_Certifications__c}"/>
+                                                <apex:outputField value="{!Direct.Tenure__c}"/>
+                                                <apex:outputField value="{!Direct.Career_Profile__r.Special_note__c}" rendered="{!ShowDirectNote}" />
+                                            </apex:pageBlockSection>
+
+                                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                                <apex:outputField value="{!Direct.Expected_Certifications__c}"/>
+                                                <apex:outputField value="{!Direct.Certification_Status__c}"/>
+                                                <apex:outputField value="{!Direct.Achieved_Certifications__c}"/>
+                                                <apex:outputField value="{!Direct.Tenure__c}"/>
+                                            </apex:pageBlockSection>
+                                            
+ 
+                                            <apex:pageBlockSection title="Transferable Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowProfileTransferableSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.ProfileTransferableSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                        
+                                            <apex:pageBlockSection title="Group Specific Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowProfileGroupSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.ProfileGroupSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection title="Path Specific Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowProfilePathSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.ProfilePathSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                        </apex:tab>
+
+                                        <apex:tab label="Opportunity Exploration from {!Direct.User__r.Name}" name="Opportunity">
+                                            <apex:pageBlockSection columns="2" collapsible="False">
+                                                <apex:outputField label="Name" value="{!Direct.User__r.Name}"/>
+                                                <apex:outputField label="Job Code" value="{!Direct.User__r.JobCode__c}"/>
+                                            </apex:pageBlockSection>
+
+                                            <apex:pageBlockSection columns="2" collapsible="False">
+                                                <apex:outputField label="Career Profile (opportunity)" value="{!Direct.Opportunity_Profile__c}"/>
+                                                <apex:outputField label="Career Path" value="{!Direct.Opportunity_Profile__r.Career_Path__c}"/>
+                                                <apex:outputField label="Job Grade" value="{!Direct.Opportunity_Profile__r.Job_Grade__c}"/>
+                                                <apex:outputField label="Career Path Group" value="{!Direct.Opportunity_Profile__r.Career_Path_Group__c}"/>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                                <apex:outputField label="Skills in the Leveling Guide" value="{!Direct.Opportunity_Expected__c}"/>
+                                                <apex:outputField label="Validated skills %" value="{!Direct.Opportunity_Validated_pct__c}"/>
+                                                <apex:outputField label="Matched skills" value="{!Direct.Opportunity_Match__c}"/>
+                                                <apex:outputText />
+                                                <apex:outputField label="Opportunity Readiness Score" value="{!Direct.Opportunity_Match_pct__c }"/>
+                                                <apex:outputField label="Opportunity Readiness" value="{!Direct.Opportunity_Readiness__c}"/>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection columns="2" collapsible="False" showHeader="FALSE">
+                                                <apex:outputField value="{!Direct.Expected_Certifications_Opportunity__c}"/>
+                                                <apex:outputField value="{!Direct.Certification_Status_Opportunity__c}"/>
+                                                <apex:outputField value="{!Direct.Achieved_Certifications__c}"/>
+                                                <apex:outputField value="{!Direct.Tenure__c}"/>
+                                                <apex:outputField value="{!Direct.Opportunity_Profile__r.Special_note__c}" rendered="{!ShowDirectNoteOpty}" />
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection title="Transferable Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowOpportunityTransferableSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.OpportunityTransferableSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%">
+                                                    </apex:column>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection title="Group Specific Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowOpportunityGroupSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.OpportunityGroupSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                            
+                                            <apex:pageBlockSection title="Path Specific Skills" columns="1" collapsible="False" rendered="{!DirectLG.ShowOpportunityPathSkills}">
+                                                <apex:pageBlockTable value="{!DirectLG.OpportunityPathSkills}" var="itm">
+                                                    <apex:column value="{!itm.SkillType__c}" headerValue="Type" width="15%"/>
+                                                    <apex:column value="{!itm.SkillCategory__c}" headerValue="Category" width="15%"/>
+                                                    <apex:column value="{!itm.Skill__c}" headerValue="Skill" width="30%"/>
+                                                    <apex:column value="{!itm.Expectation__c}" headerValue="Expectation" width="10%"/>
+                                                    <apex:column value="{!itm.Rating__c}" headerValue="Rating" width="10%"/>
+                                                    <apex:column value="{!itm.Match__c}" headerValue="Match" width="10%"/>
+                                                    <apex:column value="{!itm.Validated__c}" headerValue="Validated" width="10%"/>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                        </apex:tab>
+                                        
+                                        <apex:tab label="Certifications" name="Certifications">
+                                            <apex:pageBlockSection columns="2" collapsible="False">
+                                                <apex:selectList multiselect="false" label="Achieved Certifications" size="10" readonly="true">
+                                                    <apex:selectOptions value="{!DirectLG.AchievedCertifications}"/>
+                                                </apex:selectList>
+                                                <apex:selectList multiselect="false" label="Available Certifications" size="10" readonly="true">
+                                                    <apex:selectOptions value="{!DirectLG.AvailableCertifications}"/>
+                                                </apex:selectList>
+                                            </apex:pageBlockSection>    
+                                        </apex:tab>
+                                    </apex:tabPanel>
+	                            </apex:outputPanel>    
+                            </apex:outputPanel>    
+                        </apex:tab>
+                    </apex:tabPanel>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

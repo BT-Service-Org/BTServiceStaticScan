@@ -1,0 +1,8 @@
+.THIS .slds-button_icon,
+.THIS .slds-button_icon .button-description {
+  color: var(--buttonColor);
+}
+
+.THIS .slds-button_icon svg {
+  fill: var(--buttonColor);
+}

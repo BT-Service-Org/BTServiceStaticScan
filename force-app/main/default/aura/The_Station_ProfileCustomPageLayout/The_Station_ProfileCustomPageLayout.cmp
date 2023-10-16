@@ -1,0 +1,28 @@
+<aura:component implements="forceCommunity:layout" description="Custom Content Layout" access="global">
+    <aura:attribute name="search" type="Aura.Component[]"/>
+    <aura:attribute name="sidebarFooter" type="Aura.Component[]"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="newHeader" type="Aura.Component[]" required="false"/>  
+    <aura:attribute name="column1" type="Aura.Component[]" required="false"/>    	
+    <aura:attribute name="column2" type="Aura.Component[]" required="false"/>    	
+  	
+    	<div class="navigation">
+            {!v.navBar}
+        </div>
+        <div class="newHeader">
+            {!v.newHeader}
+        </div>
+    	<div class="slds-grid slds-gutters slds-m-around_none">
+            <div class="detailsComponentContainer">
+                <div class="mainContentArea">
+                    {!v.column1}
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-m-around_none">
+            <div class="mainContentArea">
+                {!v.column2}
+            </div>
+        </div>   
+</aura:component>

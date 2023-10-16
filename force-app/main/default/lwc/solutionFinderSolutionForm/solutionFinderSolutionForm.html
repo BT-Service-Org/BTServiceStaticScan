@@ -1,0 +1,27 @@
+<template>
+    <div>
+        <lightning-tabset>
+            <lightning-tab label="Details">
+                <lightning-input name="label" label="Label" value={label} onchange={handleLabelChange}></lightning-input>
+                <lightning-textarea label="Description" value={description} onkeyup={handleDescriptionChange}></lightning-textarea>
+                <lightning-input label="Export Note" value={exportNote} onkeyup={handleExportNoteChange}></lightning-input>
+            </lightning-tab>
+            <lightning-tab label="Considerations">
+                <c-solution-finder-details data-id="considerations" title="Consideration" details={considerations}></c-solution-finder-details>
+            </lightning-tab>
+            <lightning-tab label="Limitations">
+                <c-solution-finder-details data-id="limitations" title="Limitation" details={limitations}></c-solution-finder-details>
+            </lightning-tab>
+            <lightning-tab label="Stories">
+                <c-solution-finder-details data-id="stories" title="Stories" details={stories}></c-solution-finder-details>
+            </lightning-tab>
+            <lightning-tab label="Configurations">
+                <c-solution-finder-properties data-id="properties" properties={properties}></c-solution-finder-properties>
+            </lightning-tab>
+        </lightning-tabset>
+        <div class="footer">
+            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button label="Save" variant="success" onclick={handleSave}></lightning-button>
+        </div>
+    </div>
+</template>

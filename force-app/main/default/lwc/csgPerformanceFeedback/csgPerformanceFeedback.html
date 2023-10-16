@@ -1,0 +1,114 @@
+<template>
+    <div class="slds-var-p-around_medium slds-theme_default">
+    <template if:true={isFeedbackProvider}>
+        <template if:true={lockRecord}>
+            <div class="slds-notify slds-notify_alert" role="alert">
+                <span class="slds-assistive-text">completed</span>
+                <h2>
+                    Feedback has been submitted
+                </h2>
+                <lightning-button
+                    class="slds-var-p-left_small"
+                    variant="inverse"
+                    type="button"
+                    name="Open Record"
+                    label="Open Record"
+                    onclick={redirectToRecord}>
+                </lightning-button>
+              </div>
+        </template>
+        <lightning-record-edit-form object-api-name="CSG_Project_Feedback__c" record-type-id={recordTypeId} onsubmit={handleSubmit}>
+        <lightning-card title="Engagement Feedback">
+            <div class="slds-var-p-around_small">
+                    <lightning-messages></lightning-messages>
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <lightning-accordion-section name="R" label="Resource">
+                            <div class="slds-grid slds-gutters slds-wrap slds-var-m-top_small">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name={csgUserField} disabled="true" value={csgUser}></lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-accordion-section>
+                    <lightning-accordion-section name="GF" label="General Feedback">
+                        <div class="slds-grid slds-gutters slds-wrap slds-var-m-top_small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={relationshipField} readonly={lockRecord} disabled={lockRecord} value={relationship}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={commentField} readonly={lockRecord} disabled={lockRecord} value={comment}></lightning-input-field> 
+                                <p class="slds-form-element__label">Note any areas of concern/improvement in the comments field</p>
+                            </div>
+                        </div>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name="GC" label="Great Characteristics">
+                        <div class="slds-grid slds-gutters slds-wrap slds-var-m-top_small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={salesforceSmartField} readonly={lockRecord} disabled={lockRecord} value={salesforceSmart} required={smartRequired}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={salesforceSmartRatingField} required="true" disabled={lockRecord} readonly={lockRecord} value={salesforceSmartRating} onchange={handleSmartRatingChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={getITDoneField} readonly={lockRecord} disabled={lockRecord} value={itDone} required={gidRequired}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={getITDoneRatingField} required="true" disabled={lockRecord} readonly={lockRecord} value={itDoneRating} onchange={handleGIDRatingChange}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={winAsTeamField} readonly={lockRecord} disabled={lockRecord} value={winAsTeam} required={winRequired}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={winAsTeamRatingField} required="true"  disabled={lockRecord} readonly={lockRecord} value={winAsTeamRating} onchange={handleWinRatingChange}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={motivateChampionField} readonly={lockRecord} disabled={lockRecord}  value={motivateChampion} required={motivateRequired}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={motivateChampionratingField} required="true" disabled={lockRecord} readonly={lockRecord} value={motivateChampionRating} onchange={handleMotivateRatingChange}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={courageuousField} readonly={lockRecord} disabled={lockRecord} value={courageuous} required={courageuousRequired}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={courageuousRatingField} required="true" disabled={lockRecord} readonly={lockRecord} value={courageuousRating} onchange={handleCourageousRatingChange}></lightning-input-field> 
+                            </div>
+                        </div>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name="JDI" label="Judgement, Drive, and Influence">
+                        <div class="slds-grid slds-gutters slds-wrap slds-var-m-top_small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={judgementField} disabled={lockRecord} readonly={lockRecord} value={judgement}></lightning-input-field> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={driveField} disabled={lockRecord} readonly={lockRecord} value={drive}></lightning-input-field>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={influenceField} disabled={lockRecord} readonly={lockRecord} value={influence}></lightning-input-field> 
+                            </div>
+                        </div> 
+                    </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
+            <div slot="footer">        
+                <template if:false={lockRecord}>
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        name="save"
+                        label="Save">
+                    </lightning-button>
+                </template>  
+            </div>
+        </lightning-card>
+    </lightning-record-edit-form>
+    </template>
+    <template if:false={isFeedbackProvider}>
+        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                You are not the assigned Feedback Provider
+            </h2>
+          </div>
+    </template>
+</div>
+</template>

@@ -1,0 +1,85 @@
+<aura:component implements="force:hasRecordId" controller="The_Station_CollectionController" access="global">
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="stationContentGroup" type="Station_Pages__c"/>
+    <aura:attribute name="collectionDetailURL" type="String"/>    
+    <aura:attribute name="collectionContentCount" type="String"/>    
+<!--
+    <aura:attribute name="bannerBackgroundColor" type="String" default="rgb(128, 128, 128, 0.3);"/>
+-->    
+    <!-- ONLY FOR SHARED WITH ME -->
+    <aura:attribute name="showFollowButton" type="Boolean" default="false"/>
+    <aura:attribute name="showShareCollection" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionTitle" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionFollowers" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionContentCount" type="boolean" default="true"/>        
+    <aura:attribute name="showCollectionDescription" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionLastUpdatedDate" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionCreatedDate" type="boolean" default="true"/>            
+    
+    <aura:attribute name="followersNumber" type="String" default="1"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+            
+    <aura:html tag="style">
+		.item-header {
+            background: {! v.stationContentGroup.Collection_Header_Background_Color__c };
+        }
+    </aura:html>
+    
+    <article class="collection-item">
+        <div class="item-header" style="{!'background: '+ v.stationContentGroup.Collection_Header_Background_Color__c }">
+            <div class="actions">
+                <aura:if isTrue="{! v.showFollowButton }">
+                    <lightning:button variant="brand" 
+                        label="Follow Collection" 
+                        class="slds-m-right_x-small button-border-white" 
+                        onclick="{!c.handleFollow}">
+                    </lightning:button>                    
+                </aura:if>
+<!-- SHARING BUTTON NEEDED HERE -->                
+                <aura:if isTrue="{!v.showShareCollection}">
+                    <c:The_Station_CollectionShareButton 
+                        showShareCollection="{!v.showShareCollection}" 
+                        collectionId="{!v.stationContentGroup.Id}" 
+                        collectionTitle="{!v.stationContentGroup.Name}" />
+                </aura:if>
+<!-- Zak's Button -->
+<!--
+                <lightning:buttonIcon iconName="utility:internal_share" variant="border-filled" alternativeText="Share" title="Share" />
+-->
+
+            </div>
+            <h3 class="title">
+                <a href="{!v.collectionDetailURL}" class="font-white">
+                    {!v.stationContentGroup.Name}
+                </a>
+            </h3>
+            <div class="footer-container">
+                <div class="subtitle">{! v.followersNumber } Followers</div>
+                <div class="subtitle">{! v.stationContentGroup.Associated_Content_Count__c } Total Content</div>
+            </div>
+            
+        </div>
+        <div class="item-body">
+            <aura:if isTrue="{!v.showCollectionDescription}">
+                <div class="content">
+                    {!v.stationContentGroup.Group_Subtitle__c}
+                </div>
+            </aura:if>
+            <div class="footer-container">
+                <aura:if isTrue="{!v.showCollectionLastUpdatedDate}">
+                    <div class="audit-date">
+                        Last Updated: <lightning:formattedDateTime value="{!v.stationContentGroup.LastModifiedDate}" year="numeric" month="numeric" day="numeric" />    
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.showCollectionCreatedDate}">
+                    <div class="audit-date">
+                        Created: <lightning:formattedDateTime value="{!v.stationContentGroup.CreatedDate}" year="numeric" month="numeric" day="numeric" />    
+                    </div>
+                </aura:if> 
+            </div>   
+        </div>
+    </article>
+</aura:component>

@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-p-around_x-small slds-border_top">
+        <template if:true={backButton}>
+            <lightning-button label="<Back" variant="brand" title="Go back" onclick={handleBack}
+                class="slds-p-right_small slds-float_left">
+            </lightning-button>
+        </template>
+        <template if:true={nextButton}>
+            <lightning-button label="Next>" variant="brand" title="Go next" onclick={handleNext}
+                class="slds-float_right">
+            </lightning-button>
+        </template>
+    </div>
+    <br />
+    <br />
+</template>

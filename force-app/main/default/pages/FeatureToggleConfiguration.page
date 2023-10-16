@@ -1,0 +1,131 @@
+<apex:page controller="FeatureToggleConfigurationController" showHeader="false" sidebar="true" applyHtmlTag="false">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Feature Toggle Configuration page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <apex:slds />
+    </head>
+
+    <body>
+    <apex:form rendered="{!isCacheEnabled}">
+        <apex:actionFunction name="cleanupCache" action="{!cleanupTheCache}" reRender="messageBlock"/>
+        <apex:pageMessages id="messageBlock"/>
+    </apex:form>
+
+        <div class="slds-scope">
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-opportunity" title="Feature Toggles">
+                                                    <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                                                    </svg>
+                                                    <span class="slds-assistive-text">Feature Toggles</span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__col-actions">
+                                    <div class="slds-page-header__controls">
+                                        <div class="slds-page-header__control">
+                                            <ul class="slds-button-group-list">
+                                                <li>
+                                                    <apex:outputPanel rendered="{!isCacheEnabled}">
+                                                        <button class="slds-button slds-button_destructive" onclick="cleanupCache()">Cleanup the cache</button>
+                                                    </apex:outputPanel>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="originalDrilldowns" class="slds-table slds-table_bordered slds-table_cell-buffer" role="treegrid">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">Actions</th>
+                        <apex:repeat value="{!featureToggleFields}" var="field">
+                            <th aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable" scope="col">
+                                <div class="slds-truncate" title="{!field}">{!field}</div>
+                            </th>
+                        </apex:repeat>
+                    </tr>
+                </thead>
+                <apex:repeat value="{!featureToggles}" var="feature">
+                    <tr class="slds-hint-parent">
+                        <td>
+                            <div class="slds-truncate">
+                                <apex:outputLink value="/{!feature.Id}?retURL=/apex/FeatureToggleConfiguration">View</apex:outputLink>
+                                /
+                                <apex:outputLink value="/{!feature.Id}/e?retURL=/apex/FeatureToggleConfiguration">Edit</apex:outputLink>
+                            </div>
+                        </td>
+                        <apex:repeat value="{!featureToggleFields}" var="field">
+                            <td>
+                                <apex:outputField value="{!feature[field]}" />
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                    <apex:outputPanel rendered="{!feature.Child_Feature_Toggles__r.size > 0}">
+                        <td colspan="25">
+                            <div class="slds-section">
+                                <h3 class="slds-section__title">
+                                        <button aria-controls="expando-unique-id" aria-expanded="false" class="slds-button slds-section__title-action">
+                                            <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+											    <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#expand_alt')}"></use>
+                                            </svg>
+                                            <span class="slds-truncate" title="Section Title">Child Feature Toggles</span>
+                                        </button>
+                                    </h3>
+                                <div aria-hidden="true" class="slds-section__content" id="expando-unique-id">
+                                    <div class="slds-grid slds-gutters slds-wrap">
+                                        <apex:repeat value="{!feature.Child_Feature_Toggles__r}" var="childFeature">
+                                            <div class="slds-col slds-size_1-of-6">
+                                                <div class="slds-size_1-of-1">
+                                                    <apex:outputLink value="/{!childFeature.Id}?retURL=/apex/FeatureToggleConfiguration">View</apex:outputLink>
+                                                    /
+                                                    <apex:outputLink value="/{!childFeature.Id}/e?retURL=/apex/FeatureToggleConfiguration">Edit</apex:outputLink>
+                                                </div>
+                                                <apex:repeat value="{!childFeatureToggleFields}" var="chieldField">
+                                                    <div class="slds-size_1-of-1">
+                                                        <apex:outputLabel value="{!chieldField}: " for="{!chieldField}" />
+                                                        <apex:outputField id="sfFields" value="{!childFeature[chieldField]}" />
+                                                    </div>
+                                                </apex:repeat>
+                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </apex:outputPanel>
+                </apex:repeat>
+            </table>
+        </div>
+    </body>
+    <script>
+        /*SLDS Sections*/
+        j$ = $;
+        j$('.slds-section__content').hide();
+        j$('.slds-section__title').find('button').find('svg').css('transition', '0.3s');
+        j$('.slds-section__title').click(function() {
+            j$(this).parent().toggleClass('slds-is-open');
+            if (j$(this).parent().hasClass('slds-is-open')) {
+                j$(this).parent().find('.slds-section__content').show();
+            } else {
+                j$(this).parent().find('.slds-section__content').hide();
+            }
+        });
+        /*SLDS Sections*/
+    </script>
+
+    </html>
+</apex:page>

@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Rewards & Recognition Quarter Date's">
+        <lightning-button variant="brand" label="Save" slot="actions" onclick={handleSave}></lightning-button>
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item padding="around-small" size="12">
+                <p style="font-weight: bolder;text-align: center;">Current Quarter : {curretQuarter}</p>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="6">
+                <lightning-input type="date" name="startDate" label="Start date" value={startDateInput}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="6">
+                <lightning-input type="date" name="endDate" label="End date" value={endDateInput}></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

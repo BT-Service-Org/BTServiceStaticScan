@@ -1,0 +1,9 @@
+<design:component >
+	<design:attribute name="showSearch" label="Show Search Box" />
+    <design:attribute name="searchHub" label="Enter SearchHub Name" />
+    <design:attribute name="searchPageName" label="Enter SearchPage Name" />
+    <design:attribute name="name" label="Name Of Search Box" />
+    <design:attribute name="enableQuerySuggestAddon" label="Enable Search As Type" />    
+    <design:attribute name="placeholder" label="Placeholder Text" />
+
+</design:component>

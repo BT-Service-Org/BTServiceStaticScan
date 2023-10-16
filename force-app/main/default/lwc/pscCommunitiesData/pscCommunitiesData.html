@@ -1,0 +1,19 @@
+<template>
+    <div class="communities" if:true={communities}>
+        <template for:each={communities} for:item="community">
+            <div class="community_card" key={community.Id}  if:true={community.Page_Title__c}>
+                <div class="card_img">
+                    <img src={tileImg} alt="Community-image"/>
+                </div>
+                <div class="card_content">
+                   <a href={community.Services_Central_Link__c}>
+                    <h3 if:true={community.Page_Title__c} class="ITC_font">{community.Page_Title__c}</h3>
+                   </a>
+                    <lightning-formatted-rich-text
+                    value={community.Page_Description__c} if:true={community.Page_Description__c} class="community_desc salesforce_font"
+                ></lightning-formatted-rich-text>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

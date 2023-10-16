@@ -1,0 +1,28 @@
+<template>
+    <div class="feature-container" if:true={displayFeatureContent} >
+       <div class="features"> 
+          <template for:each={displayFeatureContent} for:item="feature">
+             <div key={feature.Id} class="feature" if:true={feature.bgUrl} style={feature.bgUrl}>
+                <a class="feature_content" href={feature.Featured_Content_URL__c} target="_blank">
+                      <p if:true={feature.Page_Section_Title__c} class="feature_title ITC_font">
+                         {feature.Page_Section_Title__c}
+                      </p>
+                   <lightning-formatted-rich-text value={feature.Section_Body__c} if:true={feature.Section_Body__c}
+                      class="feature_desc salesforce_font"></lightning-formatted-rich-text>
+                   <div class="feature_parent" if:true={feature.Page__r}>
+                      <div class="community_logo" style={getLogo}>
+                         <!-- <img src={tileImage} style="width:50px height:50px"/> -->
+                      </div>
+                      <p class="community_head ITC_font">Community Name - </p>
+                      <p class="community_name salesforce_font">{feature.Page__r.Page_Title__c}</p>
+                   </div>
+                </a>
+             </div>
+          </template>
+       </div>
+       <div class="navigation_buttons">
+          <p><span class="prev disable" data-id="prev" onclick={prevBannerHandler}>❮</span></p>
+          <p><span class="next" data-id="next" onclick={nextBannerHandler}>❯</span></p>
+       </div>
+    </div>
+ </template>

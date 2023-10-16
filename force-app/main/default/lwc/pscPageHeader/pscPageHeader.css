@@ -1,0 +1,149 @@
+.productheader {
+    box-sizing: border-box;
+}
+
+.productheader--big {
+    position: relative;
+    width: 100%;
+}
+
+.productheader--big img {
+    width: 100%;
+    min-height: 120px;
+}
+
+.product {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.product--lit {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    transform: translate(-50%, 0);
+    max-width: 780px;
+}
+
+.productheader__text {
+    font-size: 44px;
+    color: #032D60;
+}
+
+.productheader__title {
+    font-size: 19px;
+    line-height: 29px;
+    letter-spacing: 0.0012em;
+    color: #032D60;
+}
+
+.header__button {
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 39px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.header__button:hover {
+    color: #0176D3;
+    background-color: white;
+    border: 1px solid #0176D3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.header__button:focus {
+    text-decoration: none;
+}
+
+.request_content {
+    color: #0176D3;
+    background: white;
+    border: 1px solid #0176D3;
+    width: 170px;
+}
+
+.request_content:hover {
+    background: #0176D3 !important;
+    color: white !important;
+}
+
+@media screen and (max-width:1336px) {
+
+    .productheader__text {
+        font-size: 28px;
+    }
+
+    .productheader__title {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+}
+
+@media screen and (max-width:1024px) {
+
+    .productheader__text {
+        font-size: 25px;
+    }
+
+    .productheader__title {
+        font-size: 17px;
+        line-height: 23px;
+    }
+
+    .product--lit {
+        top: 15%;
+    }
+
+    .productheader--big img {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .productheader__text {
+        font-size: 24px;
+    }
+
+    .productheader__title {
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .productheader--big img {
+        height: 200px;
+    }
+
+    .header__button {
+        font-size: 12px;
+        width: 94px;
+        height: 33px;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width:540px) {
+
+    .productheader__text {
+        font-size: 15px;
+    }
+
+    .productheader__title {
+        font-size: 10px;
+        line-height: 15px;
+    }
+
+    .productheader--big {
+        position: relative;
+        width: 100%;
+    }
+
+    .productheader--big img {
+        height: 100px;
+    }
+}

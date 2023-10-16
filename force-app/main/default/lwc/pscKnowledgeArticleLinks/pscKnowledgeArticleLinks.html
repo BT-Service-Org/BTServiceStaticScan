@@ -1,0 +1,13 @@
+<template>
+    <div class="card ITC_font">
+            <div class="summary">
+                <p>{title}</p>
+            </div>
+            <template for:each={items} for:item="item">
+                <ul key={item.Id}>
+                    <li class="article_links ITC_font"><a href={item.Link_Url__c} tabindex="0" target="_blank">{item.Link_Text__c}</a>
+                    </li>
+                </ul>
+            </template>
+    </div>
+</template>

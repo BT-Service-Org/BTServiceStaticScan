@@ -1,0 +1,28 @@
+<template>
+    <!--<c-solution-finder-tree record-name={optionName}></c-solution-finder-tree>-->
+    <lightning-card>
+        <div class='slds-p-around_x-small'>
+            <span class="slds-text-heading_large slds-text-color_success">
+                {context.label}
+            </span>
+            <div class="slds-text-heading_medium bold">
+                {context.description}
+            </div>
+            <div class="slds-grid slds-gutters slds-m-top_x-small">
+                <div class="slds-col slds-size_1-of-4">
+                    <c-solution-finder-export-solutions solutions={context.recommendations}></c-solution-finder-export-solutions>
+                </div>
+                <div class="slds-col slds-size_2-of-4">
+                    <div class="slds-p-around_x-small">
+                        <template for:each={items} for:item="item">
+                            <c-solution-finder-export-item key={item.name} item={item}></c-solution-finder-export-item>
+                        </template>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-4">
+                    <c-solution-finder-export-buzz-words buzz-words={context.buzzWords}></c-solution-finder-export-buzz-words>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

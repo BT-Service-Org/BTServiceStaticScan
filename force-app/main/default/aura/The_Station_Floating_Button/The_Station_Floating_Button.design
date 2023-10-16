@@ -1,0 +1,6 @@
+<design:component label="TheStation: Floating Button">
+    <design:attribute name="buttonLabel" label="Button Label" max="30" required="true"/>
+    <design:attribute name="showButtonHoverLabel" label="Show Button Hover Label" default="true"/>
+    <design:attribute name="buttonHoverLabel" label="Button Hover Label" max="100" required="true"/>
+    <design:attribute name="buttonURL" label="Button URL" required="true"/>
+</design:component>

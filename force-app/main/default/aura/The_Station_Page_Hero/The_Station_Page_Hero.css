@@ -1,0 +1,84 @@
+.THIS .SAContainer {
+    background-color: #f1f7fd;
+    height: 280px;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding-bottom: 80px
+}
+
+.THIS .title-design {
+    font-family:StationWOFFFontsRegular;
+    font-size:28px;
+    padding-top: 15px
+}
+.THIS .main-title {
+    margin-left: 50px;
+    margin-right: 50px;
+    background: none;
+	line-height: 2.0;
+    padding-top: 20px;
+}
+.THIS .img-style {
+    width:125px; 
+    height:125px
+}
+.THIS .item-container {
+    background: none;
+    margin-bottom: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.THIS .item-image {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    margin-bottom:1rem;
+    border-radius: 6px;
+    position: relative;
+    /* aspect clamp if needed */
+    display: flex;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+}
+
+.THIS .item-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.THIS .item-copy {
+    background: none;
+}
+
+.THIS .item-title {
+    line-height: 36px;
+    font-weight: bold;
+    background: none;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.THIS .item-subtitle {
+    line-height: 30px;
+    letter-spacing: 0.61px;
+    font-size: 22px;
+    font-family: "Salesforce Sans";
+    background: none;
+    margin-bottom: 8px;
+    text-align: right;
+
+}
+
+.THIS .item-description {
+    font-family:StationWOFFFontsRegular;
+    padding-top: 10px;
+    font-size: 15px;
+    text-align: center;
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Pre_Hires_to_Internal</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Pre_Hires_to_Internal</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+        <booleanFilter>1 AND (2 OR (3 AND 4))</booleanFilter>
+        <criteriaItems>
+            <field>Accepted_Offer__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Position__c</field>
+            <operation>notEqual</operation>
+            <value>Success Partner,Engagement Mgr</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Position__c</field>
+            <operation>equals</operation>
+            <value>Engagement Mgr</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Created2__c</field>
+            <operation>greaterThan</operation>
+            <value>5/1/2016</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>SP_EM_Observation</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>SP EM Observation</label>
+        <sharedTo>
+            <group>SP_EM_Observers</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Position__c</field>
+            <operation>equals</operation>
+            <value>Success Partner,Engagement Mgr</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

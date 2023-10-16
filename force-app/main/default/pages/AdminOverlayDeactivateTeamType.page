@@ -1,0 +1,54 @@
+<apex:page sidebar="false" showHeader="false">
+
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/AdminDeactivateteamType.css')}" />	
+		
+	<!-- Edit Member Info -->
+		<div id="AdminDeactivateteamType" style="display:none;">
+			<!-- Title of Dialog -->
+			<div class="modalTitle">
+				<div class="title">Deactivate Team Type</div>
+				<div class="closeEvent">
+					<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+				</div>
+			</div>
+			<!-- Content  -->
+			<div class="modalContent">
+					<!-- Dialog Body  -->
+				<div class="modalMessage padding_Tables bottom_border_gray">				
+					<table>
+						<tr>
+							<td ><br/><span class="inputInfoMedium">Are you sure you want to deactivate this Team Type?</span><br /></td>
+						</tr>
+					</table>
+					<div id="teamTypeTeams" style="overflow: auto; height: 70px; width: 350px;"></div>
+					<table>	
+						<tr>
+							<td>
+							<br />
+							</td>
+						</tr>	
+						<tr>
+							<td ><span class="inputInfo">Once a Team Type is deactivated, new teams cannot be created using</span><br /></td>
+													</tr>
+						<tr>
+							<td ><span class="inputInfo">this team type. However, existing teams will continue to function without</span><br /></td>
+						</tr>
+						<tr>
+							<td ><span class="inputInfo">data loss.</span></td>
+						</tr>
+								<tr>
+							<td>
+							<br />
+							</td>
+						</tr>		
+					 </table>	
+				</div>
+				<!--Actions  -->
+				<div class="DivBtn" >			
+                       <span id="desactivateEventButton"></span>
+					   <input class="cancelBtn" type="button" value="Cancel"  onclick="modal.close();" />
+                 </div>
+			</div>
+		</div>
+</apex:page>

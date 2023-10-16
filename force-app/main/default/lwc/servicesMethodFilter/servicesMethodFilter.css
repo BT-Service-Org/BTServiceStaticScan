@@ -1,0 +1,17 @@
+.slds-modal__content{
+    overflow: initial;
+}
+.fordesktop{
+    display:inline;
+}
+.formobile{
+    display:none;
+}
+@media only screen and (max-width: 600px) {
+    .fordesktop{
+        display:none;
+    }
+    .formobile{
+        display:block;
+    }
+}

@@ -1,0 +1,15 @@
+<template>
+    <div class="slds-grid option">
+        <div class="slds-row slds-size_1-of-12 slds-text-align_left">
+            <button onclick={handleDelete}>
+                <lightning-icon icon-name="utility:close" variant="inverse" size="xx-small"></lightning-icon>
+            </button>
+        </div>
+        <div class="slds-row slds-size_4-of-12 question">
+            {option.title}
+        </div>
+        <div class="slds-row slds-size_7-of-12 slds-text-align_right answer">
+            {option.description}
+        </div>
+    </div>
+</template>

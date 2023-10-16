@@ -1,0 +1,13 @@
+<apex:component >
+                 <div class="modal show" id="myModal"  style="display: none; vertical-align: middle width: 20%">
+                    <!-- <div class="modal-header">
+                        <a class="close" data-dismiss="modal"></a>
+                            <h3><b>Skill:&nbsp;&nbsp;&nbsp;&nbsp;Updating</b></h3>
+                    </div> -->
+                    <div class="modal-body">
+                            <b>Saving....Please wait&nbsp;</b>                     
+                   </div>
+                    <!-- <div class="modal-footer">
+                    </div> -->
+                </div>
+</apex:component>

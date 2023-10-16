@@ -1,0 +1,89 @@
+<aura:component controller="StationUserPhotoController">
+    
+    <!--MODAL ATTRIBUTES-->
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="Loading" type="boolean" default="false"/>
+    <aura:attribute name="viewMode" type="boolean" default="false"/>
+    <aura:attribute name="updateMode" type="boolean" default="false"/>
+    <aura:attribute name="deleteMode" type="boolean" default="false"/>
+    
+    <!--EVENT REGISTRATION-->
+    <aura:registerevent name="refreshMainPhoto" type="c:The_Station_EventRefreshUserPhoto"></aura:registerevent> 
+    
+    <!--MAIN PHOTO ATTRIBUTE-->
+    <aura:attribute name="userObject" type="user" />
+    
+    <!--FILE UPLOAD ATTRIBUTES-->
+    <aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.gif']" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="modalTitle" type="String" />
+    <aura:attribute name="isPhotoUpdated" type="boolean" default="false"/>
+    <aura:attribute name="tempFiles" type="object" />
+    <!--END OF ATTRIBUTES DECLARATIONS-->
+    
+    <div class="slds-m-around_xx-large">
+        <aura:if isTrue="{!v.isModalOpen}">
+            <!-- start:MODAL-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- HEADER -->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.modalTitle}</h2>
+                    </header>
+                    <!-- end:HEADER -->
+                    <!-- BODY -->
+                    <div class="modal-body scrollable slds-modal__content slds-p-around--medium" id="modal-content-id-1" style="text-align:center">
+                        <aura:if isTrue="{!v.viewMode}">
+                            <!-- VIEW -->
+                            <div class="UserPhotoInModal">
+                                <c:The_Station_UserPhoto oUser="{!v.userObject}" />
+                            </div>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.updateMode}">
+                                    <!-- UPDATE -->
+                                    <p>You can upload a JPG, GIF or PNG file. Maximum file size is 16 MB.</p>
+                                    <lightning:fileUpload label=""
+                                                          name="fileUploader"
+                                                          multiple="false"
+                                                          accept="{!v.filetype}"
+                                                          recordId="{!v.recordId}"
+                                                          onuploadfinished="{!c.handleUploadFinished}" />
+                                    <p>Current Photo:</p>
+                                    <div class="UserPhotoInModal">
+                                        <c:The_Station_UserPhoto aura:id="userPhotoInTheModal" oUser="{!v.userObject}" isLoading="{!v.Loading}"/>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!v.deleteMode}">
+                                            <!-- DELETE -->
+                                            <p>Are you sure you want to delete the current photo?</p>
+                                        </aura:if> 
+                                    </aura:set>
+                                </aura:if> 
+                            </aura:set>
+                        </aura:if> 
+                    </div>
+                    <!-- end:BODY -->
+                    <!--FOOTER-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.submitDetails}"/>
+                    </footer>
+                    <!--end:FOOTER-->
+                </div>
+            </section>
+            <!-- end:MODAL-->
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

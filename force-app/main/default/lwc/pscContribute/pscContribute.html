@@ -1,0 +1,265 @@
+<template>
+   <div class="banner-image">
+      <img src={contributeImageURL}>
+   </div>
+   <div class="contribute_page" if:true={orignalPicklistData}>
+      <div class="page_title">
+         <h3 data-id="target">Contribute</h3>
+         <div class="page-help">
+            <h3 style="font-size: 15px">Need help creating your content ?</h3>
+            <p class="salesforce_font">Read this <a href={userGuideUrl} target="_blank">User Guide</a> for more
+               information
+            </p>
+         </div>
+      </div>
+      <!-- Page content -->
+      <div class="page_content">
+         <template if:false={showSuccessPage}>
+            <h3 if:true={show1Page} class="sub-heading slds-m-top_medium">Choose a category</h3>
+            <span if:false={isReusableAsset}><h3 if:false={show1Page} class="sub-heading slds-m-top_medium slds-m-bottom_small">Information</h3></span>
+            <div class="page_categories">
+               <template if:true={show1Page}>
+                  <template for:each={orignalPicklistData} for:item="each" if:true={orignalPicklistData}>
+                     <div key={each.key} class="category">
+                        <lightning-radio-group name="radioGroup" data-key={each.key} label={each.label}
+                           options={each.options} value={assetTypeValue} type="radio"
+                           onchange={handleAssetTypeSelect}></lightning-radio-group>
+                     </div>
+                  </template>
+               </template>
+            </div>
+            <div class="page_information" if:false={show1Page}>
+               <!-- Knowledge Page  -->
+               <div if:false={isReusableAsset}>
+                  <lightning-record-edit-form object-api-name="Knowledge__kav" record-type-id={recordTypeId}
+                     onload={handleLoad} onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit}
+                     style="width:100%">
+                     <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading......" size="medium" variant="brand">
+                        </lightning-spinner>
+                     </template>
+                     <div class="sub-section">
+                        <div class="title-with-info">
+                           <p>
+                              <span class="custom-redFont">* </span>
+                              <span class="slds-text-title">Title</span>
+                              <span class="custom-helptext">
+                                 <lightning-helptext alternative-text="Title"
+                                    content="Please limit your input to a maximum of 255 characters.">
+                                 </lightning-helptext>
+                              </span>
+                           </p>
+                           <lightning-input-field variant="label-hidden" field-name="Title" style="width: 67%;">
+                           </lightning-input-field>
+                        </div>
+                        <lightning-input-field field-name="Summary" required> </lightning-input-field>
+                        <lightning-input-field field-name="Body__c" variant="label-stacked">
+                        </lightning-input-field>
+                     </div>
+                     <c-psc-modal show-footer="true">
+                        <div if:true={link_modal}>
+                           <h2 slot="header" id="modal-heading-01"
+                              class="slds-text-heading_medium slds-hyphenate header ITC_font">Add Article
+                              Links
+                           </h2>
+                           <div class="slds-p-around_medium">
+                              <lightning-combobox class="link-location" name="AssetLocation" label="Asset Location"
+                                 value={assetLoc} placeholder="Select Asset Location" options={assetLocationOptions}
+                                 onchange={handleAssetLocationChange} required>
+                              </lightning-combobox>
+                           </div>
+                           <div class="slds-p-around_medium">
+                              <lightning-input class="link-text" value={assetText} type="text" label="Link Text"
+                                 onchange={handleLinkTextChange} required>
+                              </lightning-input>
+                           </div>
+                           <div class="slds-p-around_medium ">
+                              <lightning-input class="link-url" value={assetUrl} type="url" label="Link Url"
+                                 onchange={handleLinkUrlChange} required>
+                              </lightning-input>
+                           </div>
+                           <div slot="footer" if:true={showButtons}>
+                              <lightning-button class="slds-var-p-vertical_small slds-float_right" label="Submit"
+                                 variant="brand" onclick={handleAddLinksSubmit}>
+                              </lightning-button>
+                              <lightning-button class="slds-var-p-vertical_small slds-float_right slds-m-right_x-small"
+                                 label="Cancel" variant="brand" onclick={closeModal}></lightning-button>
+                           </div>
+                        </div>
+                        <div if:true={tags_modal}>
+                           <h2 slot="header" id="modal-heading-02"
+                              class="slds-text-heading_medium slds-hyphenate header ITC_font">Add Tags
+                           </h2>
+                           <lightning-record-edit-form record-type-id={articleTagRecTypeId}
+                              object-api-name="Article_Tags__c" onload={handleTagLoad} onsubmit={handleAddTagsSubmit}
+                              onerror={handleTagError}>
+                              <div if:true={errorFound} class="salesforce_font errormsg">
+                                 <span if:true={errorMsg}>{errorMsg}</span>
+                              </div>
+                              <lightning-input-field field-name="Tag__c" class="tag"> </lightning-input-field>
+                              <lightning-input type="text" label="Enter New Tag Name" placeholder="Type here..."
+                                 variant="label-inline" value={tagText} onchange={handleTagChange}></lightning-input>
+                              <div class="slds-m-top_medium">
+                                 <lightning-button class="slds-p-vertical_small slds-float_right" type="submit"
+                                    label="Submit" variant="brand"></lightning-button>
+                              </div>
+                           </lightning-record-edit-form>
+                        </div>
+                     </c-psc-modal>
+                     <h3 class="sub-heading slds-m-top_large slds-m-bottom_small">Additional Information</h3>
+                     <div class="sub-section">
+                        <lightning-input-field field-name="Additional_Author__c" class="additional_author_input">
+                        </lightning-input-field>
+                        <div class="additional_info">
+                           <template if:true={productData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={productData.recordList} label={productData.key}
+                                    search-field-name="Name" onselected={handleProductChange}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/browse-all?name=Products" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       products</a>
+                                 </p>
+                              </div>
+                           </template>
+                           <template if:true={industryData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={industryData.recordList}
+                                    label={industryData.key} search-field-name="Name"
+                                    onselected={handleIndustriesChange}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/industries" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       industries</a>
+                                 </p>
+                              </div>
+                           </template>
+                           <template if:true={roleData}>
+                              <div class="additional_data">
+                                 <c-psc-multi-select-lookup record-list={roleData.recordList} label={roleData.key}
+                                    search-field-name="Name" show-help-text =true help-text={targetAudienceHelpText} onselected={handleRoleChange}>
+                                 </c-psc-multi-select-lookup>
+                                 <p><a href="/ServicesCentral/s/target-audience" target="_blank"
+                                       class="salesforce_font detail-link">Click here to browse list of all
+                                       target
+                                       audience</a>
+                                 </p>
+                              </div>
+                           </template>
+                        </div>
+                        <template if:true={isDealSizeArticle}>
+                           <div class="slds-grid slds-gutters">
+                              <div class="slds-col slds-size_4-of-12">
+                                 <lightning-input-field field-name="Resource_Type__c" value={resourceTypeValue}
+                                    variant="label-stacked" disabled></lightning-input-field>
+                              </div>
+                              <div class="slds-col slds-size_4-of-12">
+                                 <lightning-input-field field-name="Asset_Type__c" value={assetTypeValue}
+                                    variant="label-stacked" disabled></lightning-input-field>
+                              </div>
+                              <div class="slds-col slds-size_4-of-12">
+                                 <lightning-input-field field-name="Deal_Size__c"
+                                    variant="label-stacked"></lightning-input-field>
+                              </div>
+                           </div>
+                        </template>
+                     </div>
+                     <h3 class="sub-heading slds-m-top_large slds-m-bottom_small">Tags, Links & Attachments</h3>
+                     <div class="sub-section">
+                        <div class="modal_buttons">
+                           <lightning-button variant="brand" label="Add Tags" title="Add Tags"
+                              onclick={openAddTagsModal} icon-name="utility:attach"
+                              style="display:block;margin-top:12px">
+                           </lightning-button>
+                           <lightning-button variant="brand" label="Add Link" title="Add Link"
+                              onclick={openAddLinksModal} icon-name="utility:attach"
+                              style="display:block;margin-top:12px">
+                           </lightning-button>
+                           <lightning-file-upload name="KnowlegdeFile" onuploadfinished={handleUploadFinished}>
+                           </lightning-file-upload>
+                        </div>
+                        <div
+                           class="slds-form-element__control slds-input-has-icon slds-input-has-icon slds-input-has-icon_left-right records"
+                           role="none">
+                           <p class="salesforce_font attachment_label" if:true={articleTagsToInsert.length}>
+                              Tags
+                           </p>
+                           <template for:each={articleTagsToInsert} for:item="tag" if:true={articleTagsToInsert}>
+                              <span key={tag.Tag__c}>
+                                 <lightning-pill label={tag.Name} name={tag.Name} onclick={removeRecord}
+                                    class="bubble"></lightning-pill>
+                              </span>
+                           </template>
+                        </div>
+                        <template if:true={articleLinksToInsert.length}>
+                           <p class="salesforce_font attachment_label">Attached Links </p>
+                           <ul style="list-style: inside; margin-top:10px">
+                              <template for:each={articleLinksToInsert} for:item="eachLink">
+                                 <li key={eachLink.Link_Text__c}>
+                                    <a href={eachLink.Link_Url__c} class="ITC_font">{eachLink.Link_Text__c}</a>
+                                 </li>
+                              </template>
+                           </ul>
+                        </template>
+                     </div>
+                     <div class="slds-grid help_text">
+                        <lightning-input data-id="submitForReview" type="checkbox" name="Submit For Review"
+                           class="slds-col slds-grow-none slds-text-title_bold" onchange={handleSubmitReview}>
+                        </lightning-input>
+                        <p class="salesforce_font review_label">{pscContributeSubmitForReviewLabel}</p>
+                        <lightning-helptext class="slds-col help_text_icon" content={submitForReviewHelpText}>
+                        </lightning-helptext>
+                     </div>
+                     <div class="action_button" if:false={show1Page}>
+                        <lightning-button label="Previous" variant="Neutral" onclick={handle1stPageNext}>
+                        </lightning-button>
+                        <lightning-button type="submit" label={submitButtonLabel} variant="brand"
+                           style="display: inline-block;">
+                        </lightning-button>
+                     </div>
+                  </lightning-record-edit-form>
+               </div>
+               <!-- Reusable Asset Page  -->
+               <div if:true={isReusableAsset}>
+                  <!-- Page 1 -->
+                  <c-psc-reusable-contribute-flow onpagechange={updatePageStatus} onnavtop={navigateToTop}
+                     onsuccesspage={SuccessPage} show-spinner={showSpinner} industry-data={industryData}
+                     product-data={productData} role-data={roleData} reusable-asset-page-one={reusableAssetPageOne}
+                     asset-type-value={assetTypeValue} resource-type-value={resourceTypeValue} target-audience-help-text ={targetAudienceHelpText}>
+                  </c-psc-reusable-contribute-flow>
+               </div>
+               <template if:true={renderFlow}>
+                  <lightning-flow flow-api-name={flowApiName} flow-input-variables={flowInputVariables}
+                     onstatuschange={handleFlowStatusChange}>
+                  </lightning-flow>
+               </template>
+            </div>
+            <div class="next_button" if:true={show1Page}>
+               <lightning-button label="Next" variant="brand" onclick={handle1stPageNext}
+                  disabled={isNextButtonDisabled} if:true={show1Page}></lightning-button>
+            </div>
+         </template>
+         <!-- Success Page -->
+         <template if:true={showSuccessPage}>
+            <h3 if:false={isReusableAsset}>{pscContributeSuccessPageHeaderLabel}</h3>
+            <h3 if:true={isReusableAsset}>{pscContributeSuccessRAPageHeaderLabel}</h3>
+            <div class="success_text">
+               <lightning-formatted-rich-text value={successPageBody} if:false={isReusableAsset}>
+               </lightning-formatted-rich-text>
+               <lightning-formatted-rich-text value={reusableSuccessPageBody} if:true={isReusableAsset}>
+               </lightning-formatted-rich-text>
+            </div>
+            <div class="nav_btn">
+               <lightning-button label={articleButtonLabel} variant="brand" onclick={navigateToKnowledgeListView}
+                  if:false={isReusableAsset}>
+               </lightning-button>
+               <lightning-button label={articleRAButtonLabel} variant="brand" onclick={navigateToKnowledgeListView}
+                  if:true={isReusableAsset}>
+               </lightning-button>
+            </div>
+         </template>
+      </div>
+   </div>
+   <lightning-spinner alternative-text="Loading..." size="medium" variant="brand" if:false={orignalPicklistData}>
+   </lightning-spinner>
+</template>

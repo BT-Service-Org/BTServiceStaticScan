@@ -1,0 +1,12 @@
+<template>
+    <div>
+        <lightning-input if:true={isText} type="text" value={value} onkeyup={handleValueChange} variant="label-hidden"></lightning-input>
+        <lightning-input if:true={isNumber} type="number" value={value} onkeyup={handleValueChange} variant="label-hidden"></lightning-input>
+        <lightning-combobox if:true={isBoolean}
+            name="BooleanValue"
+            value={textValue}
+            options={booleanOptions}
+            onchange={handleBooleanValueChange}
+            variant="label-hidden"></lightning-combobox>
+    </div>
+</template>

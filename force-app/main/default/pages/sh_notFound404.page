@@ -1,0 +1,36 @@
+<apex:page docType="html-5.0" sidebar="false" showHeader="false" standardStylesheets="false" controller="sh_PracticeController">
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" dir="ltr" lang="en-US"><!--<![endif]-->
+<head profile="http://gmpg.org/xfn/11">
+   <meta charset="UTF-8" />
+   <title>Salesforce Services Hub</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+   <apex:stylesheet value="{!URLFOR($Resource.ServicesHubCSS, 'css/sfServices.style.min.css')}" />
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'jquery1.11.1.js')}"/>
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'javascript.min_1.22.js')}"/>
+
+   <!-- Google Analytics Tracker -->
+   <c:sh_GATracker />
+
+   <link rel="Shortcut Icon" href="{!URLFOR($Resource.ServicesHubContent, 'Content/images/favicon.ico')}" type="image/x-icon" />
+   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+   <style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+</head>
+<body class="home page page-id-5 page-template-default header-full-width full-width-content" itemscope="itemscope" itemtype="https://schema.org/WebPage">
+  <a class="skip-to-main-content btn btn-large btn-danger" href="#main-content-container">skip to main content</a>
+	  <br/><br/>
+      <div class="text-center bg-warning">
+      YOU HAVE REACHED AN UNAVAILABLE PAGE<br/>
+      PLEASE CLICK ON THE LOGO BELOW TO CONTINUE
+      </div>
+
+    <!-- FOOTER.HTML -->
+    <c:sh_footer domainVar="{!domainVariable}"/>
+
+</body>
+</html>
+
+</apex:page>

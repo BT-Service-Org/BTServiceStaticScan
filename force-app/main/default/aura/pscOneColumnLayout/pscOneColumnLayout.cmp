@@ -1,0 +1,11 @@
+<aura:component implements="forceCommunity:layout" access="global">
+    <aura:attribute name="contentHeader" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="content" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="contentFooter" type="Aura.Component[]" required="false"></aura:attribute>
+
+    {!v.contentHeader}
+	<div class="container container--big">
+        {!v.content}
+    </div>
+    {!v.contentFooter}
+</aura:component>

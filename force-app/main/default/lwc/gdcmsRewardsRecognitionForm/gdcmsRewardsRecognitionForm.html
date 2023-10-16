@@ -1,0 +1,94 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="slds-box slds-theme_default slds-scrollable_y">
+        <div class="slds-text-align_center slds-text-heading_medium slds-p-around_large">
+            Achiever's Award Nomination
+        </div>
+        <div class="slds-p-around_small">
+            <template if:true={isEdit}>
+                <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c" record-id={recordId}
+                    onsuccess={handleSuccess}>
+                    <lightning-messages> </lightning-messages>
+
+                    <h1 style="font-weight: bolder;font-family: 'Courier New', Courier, monospace;text-align: center;">
+                    </h1>
+                    <!--Sections for Record Creation-->
+                    <label><abbr class="slds-required" title="required">* </abbr>Nominee</label>
+
+                    <c-gdcms-custom-look-up obj-name="gdc_ms_TeamMember__c" search-placeholder="Search Nominee"
+                        icon-name="standard:user" filter={soqlFilter} onlookupselected={handleNomineeSelection}
+                        preselect-value={nominee}>
+                    </c-gdcms-custom-look-up>
+
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <h1 class="slds-text-heading_small">Examples of Nomination Criteria for Achiever's Award
+                        </h1>
+                        <br>
+                        <p>Please note this is a Monthly Award. Please choose AT LEAST TWO of the below examples
+                            and give a detailed description for each example. You may describe more than three
+                            but at least three must be filled in for the nominee to be considered.
+                        </p>
+                        <br>
+                    </div>
+
+                    <lightning-input-field name="CustomerGeoFeedback" field-name="gdc_ms_CustomerGeoFeedback__c" variant="label-inline"
+                        value={achiverAward.gdc_ms_CustomerGeoFeedback__c} class="nominationUpdateData" required>
+                    </lightning-input-field>
+                    <lightning-input-field name="PersonalAchievements" field-name="gdc_ms_PersonalAchievements__c" variant="label-inline"
+                        value={achiverAward.gdc_ms_PersonalAchievements__c} class="nominationUpdateData">
+                    </lightning-input-field>
+                    <lightning-input-field name="DemonstrateWinAsTeamCharacteristic" field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                        value={achiverAward.gdc_ms_WinAsTeamCharacteristic__c} required class="nominationUpdateData"
+                        variant="label-inline">
+                    </lightning-input-field>
+                    <lightning-button  class="slds-align_absolute-center slds-m-around_large" label="Save"
+                        variant="brand" onclick={handleSave}>
+                    </lightning-button>
+                </lightning-record-edit-form>
+            </template>
+            <template if:false={isEdit}>
+                <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c" record-id={recordId}
+                    onsuccess={handleSuccess}>
+                    <lightning-messages> </lightning-messages>
+
+                    <h1 style="font-weight: bolder;font-family: 'Courier New', Courier, monospace;text-align: center;">
+                    </h1>
+                    <!--Sections for Record Creation-->
+                    <label><abbr class="slds-required" title="required">* </abbr>Nominee</label>
+
+                    <c-gdcms-custom-look-up obj-name="gdc_ms_TeamMember__c" search-placeholder="Search Nominee"
+                        icon-name="standard:user" filter={soqlFilter} onlookupselected={handleNomineeSelection}>
+                    </c-gdcms-custom-look-up>
+
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <h1 class="slds-text-heading_small">Examples of Nomination Criteria for Achiever's Award
+                        </h1>
+                        <br>
+                        <p>Please note this is a Monthly Award. Please choose AT LEAST TWO of the below examples
+                            and give a detailed description for each example. You may describe more than three
+                            but at least three must be filled in for the nominee to be considered.
+                        </p>
+                        <br>
+                    </div>
+
+                    <lightning-textarea name="CustomerGeoFeedback" label="Customer/ Geo feedback" variant="label-inline"
+                        placeholder={placeholderText.CustomerGeoFeedback}
+                        value={achiverAward.gdc_ms_CustomerGeoFeedback__c} class="nominationData" required>
+                    </lightning-textarea>
+                    <lightning-textarea name="PersonalAchievements" label="Personal Achievement's"
+                        variant="label-inline" placeholder={placeholderText.PersonalAchievements}
+                        value={achiverAward.gdc_ms_PersonalAchievements__c} class="nominationData">
+                    </lightning-textarea>
+                    <lightning-textarea name="DemonstrateWinAsTeamCharacteristic"
+                        label="Demonstrate Win as a team characteristic" variant="label-inline"
+                        placeholder={placeholderText.DemonstrateWinAsTeamCharacteristic_Ind}
+                        value={achiverAward.gdc_ms_WinAsTeamCharacteristic__c} required class="nominationData">
+                    </lightning-textarea>
+                    <lightning-button class="slds-align_absolute-center slds-m-around_large" label="Save"
+                        variant="brand" onclick={handleSave}>
+                    </lightning-button>
+                </lightning-record-edit-form>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,46 @@
+<template>
+
+        <div style="background-color:#c2e7ff">
+                <div class="slds-col slds-size_4-of-4 slds-p-top_large">
+                        <span class="slds-text-align_center">
+                                <h1
+                                        style="font-family: StationWOFFFontsLight; font-size:24px; color:#16325c; font-family: 'Salesforce Sans';">
+                                        {title}</h1> <br>
+                        </span>
+                </div>
+                <div
+                        class="slds-grid slds-gutters slds-grid_align-center slds-wrap slds-text-align_left slds-gutters_medium slds-p-around_small">
+                        <div class="slds-col slds-p-bottom_large">
+                                <ul style="background-color: white; border: none;"
+                                        class="slds-list--vertical slds-has-dividers--bottom-space slds-has-selection slds-box">
+
+
+                                        <div class="slds-media">
+                                                <div class="slds-media__figure slds-p-top_xx-small">
+                                                        <img src={intakeImage}>
+                                                </div>
+                                                <div class="slds-media__body slds-align-content-center">
+                                                        <p style="color:#16325c">Complete the</p>
+                                                        <h3 class="slds-tile__title">
+                                                                <a target="_blank" onclick={handleClick}
+                                                                        style="font-size: 1.125rem;">
+                                                                        <span style="color:#16325c">Work Intake
+                                                                                Form</span>
+                                                                </a>
+                                                        </h3>
+                                                </div>
+                                                <div class="slds-no-flex" style="width:30px">
+                                                        <lightning-icon icon-name="utility:chevronright"
+                                                                alternative-text="" size="x-large"
+                                                                class="slds-p-around_small slds-p-right_none"
+                                                                onclick={handleClick}>
+                                                        </lightning-icon>
+                                                </div>
+                                        </div>
+
+                                </ul>
+                        </div>
+
+                </div>
+        </div>
+</template>

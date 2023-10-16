@@ -1,0 +1,16 @@
+<design:component label="TheStation: Team Members">
+    <design:attribute name="recordId" label="Content Group Id" default="" required="true" placeholder="Station Page ID"
+        description="Team Id" />
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2"
+        default="Light 1" description="" />
+    <design:attribute name="showGroupTitle" label="Show Content Group Title" default="true" />
+    <design:attribute name="isFullScreenWidth" label="Full width?" default="true" />
+    <design:attribute name="titleFontSize" label="Title Font Size" default="42" min="16" max="60" required="true"
+        description="In pixels" />
+    <design:attribute name="titleAlignment" label="Title Alignment" datasource="Left,Center,Right" default="Center" />
+    <design:attribute name="numLeader" label="Number of Leaders" description="Number of Team Leaders" />
+    <design:attribute name="numLeaderColumns" label="Number of Columns for Leader Row" min="1" max="6"
+        description="Number of Columns for Leader Row" />
+    <design:attribute name="numMemberColumns" label="Number of Columns for Member Row" min="1" max="6"
+        description="Number of Columns for Member Row" />
+</design:component>

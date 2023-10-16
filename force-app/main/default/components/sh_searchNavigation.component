@@ -1,0 +1,405 @@
+<apex:component controller="sh_SearchController">
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="domainVar" type="String" required="true"/>
+  
+  <a class="skip-to-main-content btn btn-large btn-danger" href="#main-content-container">skip to main content</a>
+    <div id="primary-navigation-wrapper" class="primary-navigation-wrapper overlay-menu">
+        <nav class="nav-primary" role="navigation" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+            <div class="wrap">
+                <ul id="menu-primary-nav-menu" class="menu genesis-nav-menu menu-primary">
+                    <li id="menu-item-57" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-57">
+                        <a href="https://org62.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F9300000008Pyi">CONTACT US</a>
+                    </li>
+                    <li id="menu-item-50" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-50">
+                        <a href="{!domainVar}/sh_home">Services Home</a>
+                    </li>
+                     <li id="menu-item-52" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-52">
+                        <a href="{!domainVar}/sh_practice?name=customer-experience-design">Experience Design</a>
+                    </li>
+                    <li id="menu-item-51" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-51">
+                        <a href="{!domainVar}/sh_practice?name=sales-practice">Sales Practice</a>
+                    </li>
+                    <li id="menu-item-53" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-53">
+                        <a href="{!domainVar}/sh_practice?name=service-cloud">Service Practice</a>
+                    </li>
+                    <li id="menu-item-1550" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1550">
+                        <a href="{!domainVar}/sh_practice?name=analytics-cloud-practice">Emerging Technology Practice</a>
+                    </li>
+                    <li id="menu-item-55" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55">
+                        <a href="{!domainVar}/sh_practice?name=community-cloud">Community Cloud / HR Practice</a>
+                    </li>
+                    <li id="menu-item-55" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55">
+                        <a href="{!domainVar}/sh_practice?name=marketing-cloud">Marketing Practice</a>
+                    </li>                                                                                                    
+                </ul>
+            </div>
+        </nav>
+        <div id="close-navigation-button" class="close-navigation-button close-button">
+        </div>
+        <div class="transparent-primary-wrapper">
+        </div>
+    </div>
+    <div id="search-menu-wrapper" class="search-menu-wrapper overlay-menu">
+        <div class="search-menu-container">
+                <input id="sfSearch" type="search" class="search-query" name="s" placeholder="search" >
+               <!-- <apex:inputText value="{!tags}" label="Tags" id="tagsTxt" >-->
+                <c:autoCompleteComp autocomplete_textbox="sfSearch" objectname="sh_Bio__c" />
+                </input>
+               <!-- </apex:inputText> -->
+                <input type="submit" id="searchBtn" class="btn" value="Go" />
+                <div class="filter-container" id="filterContainer">
+                    <label class="heading">Or Filter By</label>
+                    <div>
+                      <input type="checkbox" id="cbReferenceable" name="cbReferenceable" value="Referenceable" />
+                      <label class="default-label" data-default-label="Referencable" for="cbReferencable">Referenceable / Includes Reference</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="cbExternalOk" name="cbExternalOk" value="External OK" />
+                      <label class="default-label" data-default-label="External OK" for="cbExternalOk">OK to Share Externally</label>
+                    </div>
+                    <div class="project-type-filter">
+                        <label class="default-label" data-default-label="Project Type" for="sf_project_type_filter">Project Type</label>
+        <!-- <br /> -->
+                        <div class="sf-select-button">
+                        <select class="turnintodropdown" id="sf_project_type_filter" name="sf_project_type_filter">
+                            <option value="" >– select –</option>
+                            <option value="8x8" >8x8</option>
+                            <option value="addcom" >Addcom</option>
+                            <option value="adobe" >Adobe</option>
+                            <option value="agent console" >Agent Console</option>
+                            <option value="all" >All</option>
+                            <option value="amer-east" >AMER East</option>
+                            <option value="amer-west" >AMER West</option>
+                            <option value="analytics" >Analytics</option>
+                            <option value="analytics-pilot" >Analytics Pilot</option>
+                            <option value="apac" >APAC</option>
+                            <option value=“app-cloud” >App Cloud</option>
+                            <option value=“apple-watch” >Apple Watch</option>
+                            <option value="appexchange" >AppExchange</option>
+                            <option value="app-store" >App store</option>
+                            <option value="aus" >AUS</option>
+                            <option value="avaya" >Avaya</option>
+                            <option value="aws" >AWS</option>
+                            <option value="b2c" >B2C</option>
+                            <option value="butcher-sutter" >Butcher & Suter</option>
+                            <option value="call-center" >Call Center</option>
+                            <option value="cardgate" >Cardgate</option>
+                            <option value="castiron" >CastIron</option>
+                            <option value="cbu" >CBU</option>
+                            <option value="change-management" >Change Management</option>
+                            <option value="chatter" >Chatter</option>
+                            <option value="chatter-answers" >Chatter Answers</option>
+                            <option value=“click-software” >Click Software</option>
+                            <option value="clicktools" >Click Tools</option>
+                            <option value="communities" >Communities</option> 
+                            <option value="compass" >Compass</option>
+                            <option value="composite" >Composite</option>
+                            <option value="csat-10" >CSAT 10</option>
+                            <option value="cti" >CTI</option>
+                            <option value="custom-apps" >Custom Apps</option>
+                            <option value="custom-forecast" >Custom Forecast</option>
+                            <option value="custom-objects" >Custom Objects</option>
+                            <option value="customer-portal" >Customer Portal</option>
+                            <option value="cybersource" >CyberSource</option>
+                            <option value="data-com" >Data.com</option>
+                            <option value="demandware" >Demandware</option>
+                            <option value="design-guidelines" >Design Guidelines</option>
+                            <option value="docusign" >Docusign</option>
+                            <option value="dsa" >DSA</option>
+                            <option value="ebu" >EBU</option>
+                            <option value="echo" >Echo</option>
+                            <option value="email-to-case" >Email to Case</option>
+                            <option value="emea" >EMEA</option>
+                            <option value=“employee-community” >Employee Community</option>
+                            <option value="envision" >Envision</option>
+                            <option value="epic" >Epic</option>
+                            <option value="experian" >Experian</option>
+                            <option value="external-ok" >External OK</option>
+                            <option value="field-sales" >Field Sales</option>
+                            <option value=“field-service-lightning” >Field Service Lightning</option>
+                            <option value="force-com" >Force.com</option>
+                            <option value="ham-weather" >Ham Weather</option>
+                            <option value="healthedge" >HealthEdge</option>
+                            <option value="hr" >HR</option>
+                            <option value="hyland" >Hyland</option>
+                            <option value="ibeacons" >iBeacons</option>
+                            <option value="ibm" >IBM</option>
+                            <option value="ignite-collaboration" >Ignite collaboration</option>
+                            <option value="informatica" >Informatica</option>
+                            <option value="interactive-intelligence" >Interactive Intelligence</option>
+                            <option value=“iot” >IoT</option>
+                            <option value="communities" >Communities</option>
+                            <option value=“japan” >Japan</option>
+                            <option value=“json” >JSON</option>
+                            <option value="knowledge" >Knowledge Base</option>
+                            <option value=“latam” >LATAM</option>
+                            <option value=“lawson” >Lightning Connect</option>
+                            <option value=“livelink” >LiveLink</option>
+                            <option value="live-agent" >Live Agent</option>
+                            <option value="lotus" >Lotus</option>
+                            <option value=“loyalty-management” >Loyalty Management</option>
+                            <option value="magento" >Magento</option>
+                            <option value="marketing-cloud" >Marketing Cloud</option>
+                            <option value="mobile" >mobile</option>
+                            <option value="mobile-app" >Mobile App</option>
+                            <option value=“mobile-dashboards” >Mobile Dashboards</option>
+                            <option value=“ms-office” >MS Office</option>
+                            <option value=“mulesoft” >Mulesoft</option>
+                            <option value=“multi-currency” >Multi Currency</option>
+                            <option value=“omni-channel” >Omni-Channel</option>
+                            <option value=“operational-effectiveness” >Operational Effectiveness</option>
+                            <option value="oracle" >Oracle</option>
+                            <option value="platform" >Platform</option>
+                            <option value=“partner-collaboration” >Partner Collaboration</option>
+                            <option value=“partner-community” >Partner Community</option>
+                            <option value=“partner-si” >Partner SI</option>
+                            <option value=“pipeline-analysis” >Pipeline Analysis</option>
+                            <option value=“platform” >Platform</option>
+                            <option value="poc-apps" >POC Apps</option>
+                            <option value="portal" >Portal</option>
+                            <option value="premier-success" >Premier Success</option>
+                            <option value="premier-support" >Premier Support</option>
+                            <option value=“product-analysis” >Product Analysis</option>
+                            <option value=“push-notifications” >Push Notifications</option>
+                            <option value=“qas” >QAS</option>
+                            <option value=“reports-dashboards” >Reports-Dashboards</option>
+                            <option value="sales-cloud" >Sales Cloud</option>
+                            <option value="sales-cloud-analytics" >Sales Cloud Analytics</option>
+                            <option value="salesforce1" >Salesforce1</option>
+                            <option value=“sales-management” >Sales Management</option>
+                            <option value="sap" >SAP</option>
+                            <option value="service-cloud" >Service Cloud</option>
+                            <option value="service-cloud-console" >Service Cloud Console</option>
+                            <option value=“sharepoint” >SharePoint</option>
+                            <option value="siebel-replacement" >Siebel Replacement</option>
+                            <option value=“simplicti” >SimpliCTI</option>
+                            <option value="site-com" >Site.com</option>
+                            <option value=“social” >Social</option>
+                            <option value=“social-media” >Social Media</option>
+                            <option value=“sso” >SSO</option>
+                            <option value=“store-builder” >Store Builder</option>
+                            <option value=“telematics” >Telematics</option>
+                            <option value=“telephony” >Telephony</option>
+                            <option value="video" >Video</option>
+                            <option value="visioning" >Visioning</option>
+                            <option value="visualforce" >VisualForce</option>
+                            <option value=“web-to-case” >Web-to-Case</option>
+                            <option value=“web-trends” >Web Trends</option>
+                            <option value=“workforce-management” >Workforce Management</option>             
+                            <option value=“workday” >Workday</option>
+                            <option value=“zuora” >Zuora</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="client-filter">
+                        <label class="default-label" data-default-label="Client" for="sf_project_client_filter">Client</label>
+        <!-- <br /> -->
+                         <div class="sf-select-button">
+                         <select class="turnintodropdown" id="sf_project_client_filter" name="sf_project_client_filter">
+                            <option value="" >– select –</option>
+                            <option value="7-eleven" >7-Eleven</option>
+                            <option value="ab-sciex" >AB Sciex</option>
+                            <option value="abbott" >abbott</option>
+                            <option value="abbott-laboratories" >Abbott Laboratories</option>
+                            <option value="adp" >ADP</option>
+                            <option value="akamai" >Akamai</option>
+                            <option value="alcatel-lucent" >Alcatel-Lucent</option>
+                            <option value="alcon" >Alcon</option>
+                            <option value="allstate" >Allstate</option>
+                            <option value="ameriprise-financial" >Ameriprise Financial</option>
+                            <option value="amgen" >Amgen</option>
+                            <option value="avon" >Avon</option>
+                            <option value="baker-hughes" >Baker Hughes</option>
+                            <option value="biogen" >Biogen</option>
+                            <option value="biomet" >Biomet</option>
+                            <option value="blackberry" >BlackBerry</option>
+                            <option value="blue-shield-of-california" >Blue Shield of California</option>
+                            <option value="bombardier-inc" >Bombardier Inc</option>
+                            <option value="british-gas" >British Gas</option>
+                            <option value="brown-forman" >Brown-Forman</option>
+                            <option value="caterpillar" >Caterpillar</option>
+                            <option value="charles-schwab-corporation" >Charles Schwab Corporation</option>
+                            <option value="chc-helicopter" >CHC Helicopter</option>
+                            <option value="chrysler-group-llc" >Chrysler Group LLC</option>
+                            <option value="clear-channel" >Clear Channel</option>
+                            <option value="coca-cola" >Coca-Cola</option>
+                            <option value="coles" >Coles</option>
+                            <option value="csg" >CSG</option>
+                            <option value="daymon-worldwide" >Daymon Worldwide</option>
+                            <option value="delta" >Delta</option>
+                            <option value="diageo" >Diageo</option>
+                            <option value="dun-bradstreet" >Dun &amp; Bradstreet</option>
+                            <option value="ebay-enterprise" >eBay Enterprise</option>
+                            <option value="ecolab" >Ecolab</option>
+                            <option value="evolve-vacation-rental" >Evolve Vacation Rental</option>
+                            <option value="exclusive-resorts" >Exclusive Resorts</option>
+                            <option value="facebook" >Facebook</option>
+                            <option value="first-republic-bank" >First Republic Bank</option>
+                            <option value="fitbit" >Fitbit</option>
+                            <option value="francisco-partners" >Francisco Partners</option>
+                            <option value="ge" >GE</option>
+                            <option value="ge-aviation" >GE Aviation</option>
+                            <option value="ge-capital" >GE Capital</option>
+                            <option value="ge-oil-gas" >GE Oil &amp; Gas</option>
+                            <option value="genentech" >Genentech</option>
+                            <option value="herff-jones" >Herff Jones</option>
+                            <option value="hibu" >Hibu</option>
+                            <option value="home-depot" >Home Depot</option>
+                            <option value="houghton-mifflin-harcourt" >Houghton Mifflin Harcourt</option>
+                            <option value="jda-software" >JDA Software</option>
+                            <option value="john-lewis" >John Lewis</option>
+                            <option value="jp-morgan-chase-co" >JP Morgan Chase &amp; Co</option>
+                            <option value="kellogg" >Kellogg</option>
+                            <option value="kona-brewing-company" >Kona Brewing Company</option>
+                            <option value="life-time-fitness" >Life Time Fitness</option>
+                            <option value="maersk-line" >Maersk Line</option>
+                            <option value="masco" >Masco</option>
+                            <option value="mcgraw-hill" >McGraw Hill</option>
+                            <option value="mckesson" >McKesson</option>
+                            <option value="mdvip" >MDVIP</option>
+                            <option value="merrill-lynch" >Merrill Lynch</option>
+                            <option value="molson-coors-brewing-company" >Molson Coors Brewing Company</option>
+                            <option value="monsanto" >Monsanto</option>
+                            <option value="nex-outlets" >NEX Outlets</option>
+                            <option value="nissan" >Nissan</option>
+                            <option value="otb-destination" >OTB Destination</option>
+                            <option value="pg" >P&amp;G</option>
+                            <option value="pearson" >Pearson</option>
+                            <option value="postnl" >PostNL</option>
+                            <option value="roche-group" >Roche Group</option>
+                            <option value="rogers-wireless" >Rogers Wireless</option>
+                            <option value="siemens" >Siemens</option>
+                            <option value="south-east-water-ltd" >South East Water Ltd</option>
+                            <option value="southern-wine-spirits" >Southern Wine Spirits</option>
+                            <option value="sutter-health" >Sutter Health</option>
+                            <option value="symantec" >Symantec</option>
+                            <option value="syngenta" >Syngenta</option>
+                            <option value="the-coca-cola-company" >The Coca-Cola Company</option>
+                            <option value="the-hartford-group" >The Hartford Group</option>
+                            <option value="toyota" >Toyota</option>
+                            <option value="uniliever" >Uniliever</option>
+                            <option value="united-airlines" >United Airlines</option>
+                            <option value="ups" >UPS</option>
+                            <option value="verizon" >Verizon</option>
+                            <option value="wells-fargo" >Wells Fargo</option>
+                            <option value="wolters-kluwer" >Wolters Kluwer</option>
+                            <option value="zimmer-holdings" >Zimmer Holdings</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="industry-filter">
+                        <label class="default-label" data-default-label="Industry" for="sf_project_industry_filter">Industry</label>
+        <!-- <br /> -->
+                        <div class="sf-select-button">
+                        <select class="turnintodropdown" id="sf_project_industry_filter" name="sf_project_industry_filter">
+                            <option value="" >– select –</option>
+                            <option value="aerospace" >Aerospace</option>
+                            <option value="agriculture" >Agriculture</option>
+                            <option value="airlines" >Airlines</option>
+                            <option value="alcoholic-beverages" >Alcoholic Beverages</option>
+                            <option value="automotive" >Automotive</option>
+                            <option value="b2b" >B2B</option>
+                            <option value="beauty-cosmetics" >Beauty/Cosmetics</option>
+                            <option value="beverages" >Beverages</option>
+                            <option value="biotech" >Biotech</option>
+                            <option value="chemical-solutions" >Chemical Solutions</option>
+                            <option value="commercial-lending" >Commercial Lending</option>
+                            <option value="communications" >Communications</option>
+                            <option value="concierge-medicine" >Concierge Medicine</option>
+                            <option value="construction" >Construction</option>
+                            <option value="consulting" >Consulting</option>
+                            <option value="consumer-interactions" >Consumer Interactions</option>
+                            <option value="cpg" >CPG</option>
+                            <option value="defence" >Defence</option>
+                            <option value="education" >Education</option>
+                            <option value="energy" >Energy</option>
+                            <option value="farm-construction-machinery" >Farm &amp; Construction Machinery</option>
+                            <option value="financial-services" >Financial Services</option>
+                            <option value="fitness" >Fitness</option>
+                            <option value="food-and-beverage" >Food and Beverage</option>
+                            <option value="government-services" >Government Services</option>
+                            <option value="healthcare" >Healthcare</option>
+                            <option value="high-tech" >High Tech</option>
+                            <option value="home-improvement" >Home Improvement</option>
+                            <option value="hospitality" >Hospitality</option>
+                            <option value="human-resource" >Human Resource</option>
+                            <option value="industry" >Industry</option>
+                            <option value="innovation" >Innovation</option>
+                            <option value="insurance" >Insurance</option>
+                            <option value="leasing" >Leasing</option>
+                            <option value="life-science-research-and-manufacturing" >Life Science Research and Manufacturing</option>
+                            <option value="life-sciences" >life sciences</option>
+                            <option value="liquor-distribution" >Liquor Distribution</option>
+                            <option value="mail" >Mail</option>
+                            <option value="manufacturing" >Manufacturing</option>
+                            <option value="materials-management" >Materials Management</option>
+                            <option value="media-entertainment" >Media &amp; Entertainment</option>
+                            <option value="oil-gas" >Oil &amp; Gas</option>
+                            <option value="ophthalmology" >Ophthalmology</option>
+                            <option value="outsourcing" >Outsourcing</option>
+                            <option value="pharmaceutical" >Pharmaceutical</option>
+                            <option value="print-digital" >Print &amp; Digital</option>
+                            <option value="private-branding" >Private Branding</option>
+                            <option value="private-equity" >Private Equity</option>
+                            <option value="professional-services" >Professional Services</option>
+                            <option value="public-sector" >Public Sector</option>
+                            <option value="publishing" >Publishing</option>
+                            <option value="real-estate" >Real Estate</option>
+                            <option value="retail" >Retail</option>
+                            <option value="shipping" >Shipping</option>
+                            <option value="social-media" >Social Media</option>
+                            <option value="telecom" >Telecom</option>
+                            <option value="transportation" >Transportation</option>
+                            <option value="travel" >Travel</option>
+                            <option value="utilities" >Utilities</option>
+                            <option value="vacation-rental" >Vacation Rental</option>
+                            <option value="warehousing" >Warehousing</option>
+                            <option value="wireless-telecom" >Wireless Telecom</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    <div id="close-search-wrapper-button" class="close-search-wrapper-button close-button"></div>
+    </div>
+    <script>
+      jQuery(document).ready(function() {
+          console.log( "ready!" );
+          jQuery("#searchBtn").on("click", performSearch);
+      });
+      
+      function performSearch() {
+        var searchString = jQuery('#sfSearch').val().trim();
+        var projectType = jQuery('#sf_project_type_filter option:selected').text();
+        var industry = jQuery('#sf_project_industry_filter option:selected').text();
+        var client = jQuery('#sf_project_client_filter option:selected').text();
+
+        if (searchString.length > 0 && searchString.length < 3) {
+           alert('Minimum 3 characters required for search');
+           return;
+        }
+        
+        projectType = (projectType == '– select –') ? '' : projectType;
+        industry = (industry == '– select –') ? '' : industry;
+        client = (client == '– select –') ? '' : client;
+        
+        if ( jQuery('#cbReferenceable').is(':checked') ) {
+          if (projectType != '') {
+            projectType += ';';
+          }
+          projectType += jQuery('#cbReferenceable').val();
+        }
+        
+        if ( jQuery('#cbExternalOk').is(':checked') ) {
+          if (projectType != '') {
+            projectType += ';';
+          }
+          projectType += jQuery('#cbExternalOk').val();
+        }
+        
+        console.log('>>>>> ' + searchString + ', ' + projectType + ', ' + industry + ', ' + client);
+        var url = '{!domainVar}/sh_search?searchString=' + searchString + '&projectType=' + projectType + '&industry=' + industry + '&client=' + client;
+        jQuery(location).attr('href',url);
+      }
+    </script>
+    </apex:component>

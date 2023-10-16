@@ -1,0 +1,9 @@
+<template>
+    <template if:true={objectInfo.data}>
+        <lightning-modal-header label="New Outcome"></lightning-modal-header>
+        <lightning-modal-body>
+            <lightning-record-form object-api-name="Outcome__c" fields={fields} oncancel={handleCancel} onsuccess={handleSuccess} record-type-id={recordTypeId}>
+            </lightning-record-form>
+        </lightning-modal-body>
+    </template>
+</template>

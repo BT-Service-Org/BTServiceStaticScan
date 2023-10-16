@@ -1,0 +1,4 @@
+<design:component>
+	<!--<design:attribute name="headerCopy" label="Copy" description="Copy to be used in the header" />-->
+    <design:attribute name="redirectURL" label="Redirect URL" description="URL to redirect the user to" />
+</design:component>

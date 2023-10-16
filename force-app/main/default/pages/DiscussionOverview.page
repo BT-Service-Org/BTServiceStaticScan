@@ -1,0 +1,342 @@
+<apex:page sidebar="false" tabStyle="DiscussionForum__c" controller="DiscussionOverviewController">
+	<!-- Scriptaculous / Prototype -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<!-- Common Js -->
+	<script type="text/javascript" src="{!URLFOR($Resource.discussionResourceFiles, 'inc/js/common.js')}"></script>
+	<!-- Common Layout -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/commonLayout.css')}" /> 
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/discussionOverview.css')}" />
+	<style>
+		div.tabContainer { 
+			margin-left:17px;
+		}
+		
+	 	div.holderWrapper { 
+	 		overflow:hidden;clear:both;position:relative;
+	 	}
+	 	
+	 	div#paginationOverlay {
+	 		background:#FFFFFF;
+	 		height:2000px;
+	 		overflow:hidden;	 		
+	 		position:absolute;
+	 		top:0;
+	 		left:0;
+	 		z-index:9999;
+	 		width:100%;
+	 		opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+	 		}
+	 	
+	 	div#paginationOverlay div.loader {
+	 		width:60px;
+	 		margin:0 auto;
+	 		height:60px;
+	 		margin-top:60px;
+	 	}
+	 	
+	 	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team div.desc {
+			width:170px !important;
+		}
+
+	 	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team div.desc a {
+			font-weight: bold;
+		}
+		
+		div.box_round_blue.no_subtitle .info a {
+			font-weight: bold;
+		}	 
+		
+		.tabLinks{
+			text-decoration:none;
+		} 
+		
+		.search_btn {
+			background-color:#5E99AB !important;
+		}	
+		
+		
+		div.header div.searchBox {
+			width:495px;
+		}
+		
+		.hover{
+			color:#FFFFFF;
+   			background-color:#97B6BE !important;
+		}
+		
+		.noTableFooter {
+			clear:both;
+			margin-left:205px;
+			z-index:100000;
+			opacity: none;
+			-moz-opacity: none;
+			filter: alpha(opacity=500);
+		}
+		.bPageFooter {
+			border-top:1px solid #E8E8E8;
+			line-height:1.8em;
+			padding:10px 0px 20px;
+			text-align:center;
+			z-index:100000;
+			margin-left: 237px;
+		}
+		
+		ul.tabs li {
+			z-index:1;			
+		}			
+		
+		ul.tabs li.selected {
+			z-index:6000;			
+		}
+		
+		/* Row border Fixes */ 
+		
+		
+		tr.discussionRow td {
+			border-bottom:1px solid #F5F5F5;
+		}
+		
+		div.holder table.topicsOverview td.imgHolder { 
+			padding:0px 10px;
+		}
+		
+		div.holder table.topicsOverview {
+			margin-left:10px !important;
+		}
+		
+		
+		div.holder table.topicsOverview thead tr td {
+			border-bottom: #E0E0E0 solid 1px ;
+			border-top: #E0E0E0 solid 1px ;
+			padding-top:10px ;
+			padding-bottom:10px ;
+		}
+		
+	</style>	
+	<script>
+	
+	function onMouseOverSearch(btn){
+		var btnClass = btn.className;
+		btn.className = btnClass + ' hover';
+	} 
+	
+	function onMouseOutSearch(btn){
+		var btnClassConcatenated = btn.className;
+		var btnClass = btnClassConcatenated.substring(0,btnClassConcatenated.length - 6);
+		btn.className = btnClass;
+	} 
+		
+	function showHideOverlay(){
+		var a = $('paginationOverlay');
+		if(a.style.display == 'none'){
+			Effect.Appear(a,{duration:0.3,to:0.6});
+		} else {
+			Effect.Fade(a,{duration:0.3,to:0.0});
+		}
+	}
+	
+	function goSearch () {
+		var inputSearch = $('searchInput');
+		var inputSearchValue = inputSearch.value;
+		location.href = 'https://na1.salesforce.com/apex/DiscussionSearchResults?key=' + inputSearchValue;
+	}
+	
+	function ie6FixOverlay(){
+		if(Prototype.Browser.IE){
+			var holderDims = $('holderWrapper').getDimensions();
+			$('paginationOverlay').style.height = holderDims.height + 'px';
+		}			
+	}
+	
+	</script>
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Discussions</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container -->
+		<div class="searchBox">
+			<div>
+				<div>
+					<!-- Search Form -->
+					<form action="">
+						<div class="search_box_input f_left">
+							<div class="legend">Find Discussions</div>
+							<input id="searchInput" type="text" value="Enter keyword or Name" name="" onclick="searchBoxFocus(this);"  onfocus="if(this.value == ' ') { setValue(''); };"  onblur="if(this.value == ' ') { setValue('Enter keyword or name');}" /> 						
+							<script>
+								$('searchInput').value = 'Enter keyword or Name';
+							</script>
+						</div>
+						<input type="button" onclick="goSearch();" value="Search" class="search_btn f_left" onmouseover="onMouseOverSearch(this);" onmouseout="onMouseOutSearch(this);"/> 								
+					</form>		
+				</div>
+			</div>
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+		<!-- BreadCrumbs -->
+		<!-- <div class="breadcrumbs" >
+			<div class="map">
+			Discussions Overview 
+			</div>
+		</div>
+		-->	
+	</div>
+	<div class="leftBar">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<!-- Sub Teams Widget -->
+			<apex:include pageName="DiscussionWidgetMostRead" />		
+			<!-- New Discussions Widget -->
+			<apex:include pageName="DiscussionWidgetNewDiscussions" />			
+			<!-- Most Active People Widget -->
+		  	<apex:include pageName="DiscussionWidgetActivePeople" />		
+		</div><!-- /Left Column container -->
+		<!-- 
+		############
+		# Center Column 
+		################
+		-->	
+		<div class="main_content" id="main_content">  
+			<div >
+				<div class="holder">
+					<!-- Tab container -->
+					<div class="tabContainer">
+						<div class="tabBorder">
+						</div>
+						<ul class="tabs">
+							<li class="{!IF((tabControl == 'myForums'),'selected','')}">
+								<apex:outputLink styleClass="tabLinks" value="?my=true" id="My_teams">My Teams</apex:outputLink>
+							</li>
+							<li class="{!IF((tabControl == 'allForums'),'selected','')}">
+								<apex:outputLink styleClass="tabLinks" value="?all=true" id="all_teams">All Teams</apex:outputLink>
+							</li>					 
+						</ul>
+					</div>
+			
+					<!-- Discussion -->
+					
+					<div class="clear" ></div>
+				
+						<apex:outputPanel id="noForums" style="margin: 25px 3px 3px 20px;" rendered="{!IF(noForums,true,false)}" layout="block">
+							<apex:outputtext rendered="{!IF((tabControl == 'allForums'),true,false)}" >No forums available.</apex:outputtext>
+							<apex:outputtext rendered="{!IF((tabControl == 'myForums'),true,false)}" >You need to join a team to see a forum.</apex:outputtext>
+						</apex:outputPanel>
+						<!-- 
+							Team List
+						 -->
+						 <!-- Pagination -->
+		
+						 <div class="holderWrapper" id="holderWrapper" style="overflow:hidden !important;position:relative;">
+						 	
+						 	<div id="paginationOverlay" style="display:none;" >
+						 	
+						 		<div class="loader">
+						 			<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}" alt="Loading..." title="Loading..." />
+						 		</div>
+							</div>					
+							 <apex:outputPanel id="forums" rendered="{!IF(noForums,false,true)}" layout="block">						 	
+							 	<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+				 					
+				 					<div class="discussion_content" >
+										<h2 class="discussion_detail_title clear">Discussions</h2>					
+									</div>
+			 						<div class="pages" style="width:46%"> 
+						 				<apex:form >					 
+											<ul>
+												<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+													<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="forums" rendered="{!prevPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();" oncomplete="ie6FixOverlay();showHideOverlay();"/>
+													<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+												</li>
+												<li>({!currentPagination}</li>
+												<li>-</li>
+												<li>{!cntPagination})</li>
+												<li class="next {!IF(nextPageShow,'next_disabled','')}">
+													<apex:commandLink action="{!nextPage}" value="Next Page" rerender="forums" rendered="{!nextPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"  oncomplete="ie6FixOverlay();showHideOverlay();"/>										
+													<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+												</li>
+											</ul>								
+										</apex:form>								
+									</div>
+								</apex:outputpanel>								
+								<!-- End Pagination controls -->
+								<table class="topicsOverview" cellpadding="0" cellspacing="0"  width="100%">
+										<!-- Title -->
+										<thead>
+											<tr>
+												<td colspan="2" class="discussion_title_description" width="40%" style="padding-left:20px">Team Name</td>
+												<td class="discussion_title_description" width="15%">Topics</td>
+												<td class="discussion_title_description" width="15%">Replies</td>
+												<td class="discussion_title_descriptionNoUnderline" width="30%">Last Replies</td>
+												<!-- 
+												<td colspan="2" class="discussion_title_description" width="550px" style="padding-left:20px">Team Name</td>
+												<td class="discussion_title_description" width="70px">Topics</td>
+												<td class="discussion_title_description" width="70px">Replies</td>
+												<td class="discussion_title_descriptionNoUnderline" width="140px">Last Replies</td>		
+											   -->							
+											</tr>
+										</thead>
+										<tbody>											
+											<!-- My Teams Repeat -->
+											<apex:repeat value="{!forums}" rows="{!numberOfItemsToShow}" first="{!firstRow}" var="forum" >
+												<tr class="discussionRow">
+													<td class="imgHolder" width="60">
+														<apex:outputpanel rendered="{!IF(forum.Image == '',true,false)}">		
+															<img width="55px" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif')}" />
+														</apex:outputpanel>
+														<apex:outputpanel rendered="{!IF(forum.Image == '',false,true)}">
+															<img width="55px" src="/servlet/servlet.FileDownload?file={!forum.Image}"/>
+														</apex:outputpanel>	
+													</td>
+													<td align="left">
+														<span  class="discussion_title_description" ><a href="/apex/discussionTopics?id={!forum.TeamId}">{!forum.TeamName}</a></span><br />
+														<span  class="discussion_detail_description">{!forum.TeamDescription}</span></td>
+													<td ><div class="number">{!forum.NumberOfThreads}</div></td>
+													<td ><div class="number">{!forum.NumberOfMessages}</div></td>	
+													<td class="discussion_description_DateNoUnderline">{!forum.LastPostMessage}</td>								
+												</tr>
+												
+											</apex:repeat>																			
+										</tbody>
+									</table>
+									<!-- Pagination -->
+									<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+								 		<div class="pages"> 
+											 <apex:form >					 
+												<ul>
+													<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+														<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="forums" rendered="{!prevPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();" oncomplete="ie6FixOverlay();showHideOverlay();"/>
+														<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+													</li>
+													<li>({!currentPagination}</li>
+													<li>-</li>
+													<li>{!cntPagination})</li>
+													<li class="next {!IF(nextPageShow,'next_disabled','')}">
+														<apex:commandLink action="{!nextPage}" value="Next Page" rerender="forums" rendered="{!nextPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"  oncomplete="ie6FixOverlay();showHideOverlay();"/>										
+														<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+													</li>
+												</ul>								
+											</apex:form>								
+										</div>  
+									</apex:outputpanel>	
+									<!-- End Pagination controls -->
+								</apex:outputPanel>	
+							</div><!-- overlay Black -->
+						</div><!-- Holder End -->	 
+					</div>
+				</div>							
+			</div>	
+
+</apex:page>

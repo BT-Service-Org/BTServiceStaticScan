@@ -1,0 +1,124 @@
+<aura:component  controller="StationSPController" access="global" >
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Title"/>
+    <aura:attribute name="groupList" type="List" default="[]"/>
+    <aura:attribute name="hrefColorStyle" type="String"/>
+    <aura:attribute name="intTitleFontSize" type="String" default="42px"/>
+    <aura:attribute name="intTitleAlignment" type="String" default="Center"/>
+    <aura:attribute name="description" type="String" default="Description"/>
+    <aura:attribute name="pageTitle" type="String" default="Page Title"/>
+    <aura:attribute name="pageOwnerFName" type="String" default=""/>
+    <aura:attribute name="pageOwnerFJobTitle" type="String" default=""/>
+    <aura:attribute name="pageOwnerFPageTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner2Name" type="String" default=""/>
+    <aura:attribute name="pageOwner2JobTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner2PageTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner3Name" type="String" default=""/>
+    <aura:attribute name="pageOwner3JobTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner3PageTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner4Name" type="String" default=""/>
+    <aura:attribute name="pageOwner4JobTitle" type="String" default=""/>
+    <aura:attribute name="pageOwner4PageTitle" type="String" default=""/>
+    <aura:attribute name="orgUser1" type="String" default=""/>
+    <aura:attribute name="orgUser2" type="String" default=""/>
+    <aura:attribute name="orgUser3" type="String" default=""/>
+    <aura:attribute name="orgUser4" type="String" default=""/>Ò
+    <aura:attribute name="isEmptyOwner1" type="boolean" default="true"/>
+    <aura:attribute name="isEmptyOwner2" type="boolean" default="true"/>
+    <aura:attribute name="isEmptyOwner3" type="boolean" default="true"/>
+    <aura:attribute name="isEmptyOwner4" type="boolean" default="true"/>
+
+    
+
+    
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default=""/>
+
+    
+    <!-- DESIGN ATTRIBUTES-->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+
+    
+
+    <div > 
+        <div class="SAContainer">
+                <h1 class="item-title title-design">
+                        {!v.pageTitle}
+                </h1>
+            <span> 
+                <img alt="B2B Commerce" class="slds-align_absolute-center img-style" src="https://sfservices--bedrockuat.cs8.my.salesforce.com/resource/1593686007000/centerImage?">
+                </img>
+                <p class="item-description">{!v.description}
+                </p> 
+            </span> 
+        </div>
+    </div>        
+
+    <div class="slds-grid slds-wrap slds-grid_align-center slds-p-top_medium"> 
+
+        <aura:if isTrue="{!not(v.isEmptyOwner1)}"> 
+            <div class="slds-grid"> 
+                <div class="slds-col slds-p-horizontal_large slds-size_4-of-4 slds-border_bottom"> 
+                    <span> 
+                        <p>{!v.pageOwnerFPageTitle}</p> 
+                        <h3>
+                            <a target="_blank" href="https://org62.lightning.force.com/lightning/r/User/'+v.orgUser1+'/view">{!v.pageOwnerFName}
+                            </a>
+                        </h3> 
+                        <i>{!v.pageOwnerFJobTitle}</i>
+                    </span>
+                </div> 
+            </div> 
+        </aura:if>
+       
+        <aura:if isTrue="{!not(v.isEmptyOwner2)}">
+            <div class="slds-grid"> 
+                <div class="slds-col slds-p-horizontal_large slds-size_4-of-4 slds-border_bottom"> 
+                    <span style="text-align:left;"> <p>{!v.pageOwner2PageTitle}</p> 
+                        <h3>
+                            <a target="_blank" href="https://org62.lightning.force.com/lightning/r/User/'+v.orgUse2r+'/view">{!v.pageOwner2Name}
+                            </a>
+                        </h3> 
+                        <i>{!v.pageOwner2JobTitle}</i> 
+                    </span> 
+                </div> 
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!not(v.isEmptyOwner3)}">
+            <div class="slds-grid"> 
+                <div class="slds-col slds-p-horizontal_large slds-size_4-of-4 slds-border_bottom"> 
+                    <span style="text-align:left;"> <p>{!v.pageOwner3PageTitle}</p> 
+                        <h3>
+                            <a target="_blank" href="https://org62.lightning.force.com/lightning/r/User/'+v.orgUser3+'/view">{!v.pageOwner3Name}
+                            </a>
+                        </h3> 
+                        <i>{!v.pageOwner3JobTitle}</i> 
+                    </span> 
+                </div> 
+            </div>
+        </aura:if>
+
+
+        <aura:if isTrue="{!not(v.isEmptyOwner4)}">
+            <div class="slds-grid"> 
+                <div class="slds-col slds-p-horizontal_large slds-size_4-of-4 slds-border_bottom"> 
+                    <span style="text-align:left;"> <p>{!v.pageOwner4PageTitle}</p> 
+                        <h3>
+                            <a target="_blank" href="https://org62.lightning.force.com/lightning/r/User/'+v.orgUser4+'/view">{!v.pageOwner4Name}
+                            </a>
+                        </h3> 
+                        <i>{!v.pageOwner4JobTitle}</i> 
+                    </span> 
+                </div> 
+            </div>
+        </aura:if>
+    
+    </div>
+
+</aura:component>

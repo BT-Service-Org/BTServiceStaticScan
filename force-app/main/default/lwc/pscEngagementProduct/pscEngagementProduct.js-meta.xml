@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property label="Engagement Card Title" name="engagementCardTitle" type="String" default="Specialized Resources" />
+            <property label="Product Record Type" name="productRecordType" type="String" default="Service Offering" />
+            <property label="Footer True Title" name="footerTrueTitle" type="String" />
+            <property label="Footer False Title" name="footerFalseTitle" type="String" />
+            <property label="Footer Warning Title" name="footerWarningTitle" type="String" />
+            <property label="Large Screen Count" name="largeScreenValue" type="Integer" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

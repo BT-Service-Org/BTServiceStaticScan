@@ -1,0 +1,13 @@
+<design:component>
+    <design:attribute name="Headline" label="Headline" />
+    <design:attribute name="headlineFontFamily" label="Headline Font Family" default="Arial" required="true"/>
+    <design:attribute name="headlineFontSize" label="Headline Font Size" default="28px" required="true"/>
+    <design:attribute name="SubHeadline" label="Sub-Headline" />
+    <design:attribute name="subHeadlineFontFamily" label="Sub Headline Font Family" default="Arial" required="true"/>
+    <design:attribute name="subHeadlineFontSize" label="Sub Headline Font Size" default="18px" required="true"/>
+    <design:attribute name="centerHeadlines" label="Center Headlines" default="false"/>
+	<design:attribute name="ContentIdList" label="ContentDocument Id List" />
+   	<design:attribute name="AllowMultipleSectionsOpen" label="Allow Multiple Sections Open" default="true"/>
+    <design:attribute name="DisplayAsAccordion" label="Display As Accordion" default="true"/>
+    
+</design:component>

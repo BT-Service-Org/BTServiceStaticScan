@@ -1,0 +1,30 @@
+<apex:component >
+<!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectObj" type="sh_Project__c" required="true"/>
+  
+<style>
+    a{
+        text-decoration:none;
+    }
+    .table-bordered, table, table tr td, .table-bordered>thead>tr>th, table>thead>tr>th, .table-bordered>thead>tr>td, table>thead>tr>td, .table-bordered>tbody>tr>th, table>tbody>tr>th, .table-bordered>tbody>tr>td, table>tbody>tr>td, .table-bordered>tfoot>tr>th, table>tfoot>tr>th, .table-bordered>tfoot>tr>td, table>tfoot>tr>td{
+        border:0;
+    }
+</style>  
+
+<main class="content col-sm-8" id="main-content-container" role="main" itemprop="mainContentOfPage">
+        <article class="post-1726 sf_project type-sf_project status-publish has-post-thumbnail entry" itemscope="itemscope" itemtype="http://schema.org/CreativeWork">
+            <header class="entry-header">
+            </header>
+            <div class="entry-content" itemprop="text">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                        <apex:outputfield value="{!projectObj.Content__c}"></apex:outputfield>
+                        <apex:outputPanel layout="none" rendered="{!(projectObj.Customer_Story_Link__c!=null)}">
+                        <a href="{!projectObj.Customer_Story_Link__c}" target="_blank">CUSTOMER STORY</a>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+             </div>
+        </article>
+    </main>
+</apex:component>

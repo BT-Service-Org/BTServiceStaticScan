@@ -1,0 +1,117 @@
+.THIS .slds-card__body{
+    width:100%;
+}
+.THIS .slds-progress-bar{
+    background: #EBEBEB;
+    height: 13px;
+    width: 150px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-width: 30px;
+    float:left;
+    margin-left: 60px;    
+}
+.THIS .slds-progress-bar__value{
+    background: #3AC44C  ;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.THIS .slds-card__body{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.THIS .slds-box{
+    border-radius: 60px;
+    background:#F4F1F2;
+    width:82px;
+    height:25px;
+    margin-top: -21px;
+    margin-left: 420px;
+    border:none;
+    
+}
+.THIS .slds-text-align_center{
+    color:#797979   ; 
+    font-size: 0.9em;
+    
+}
+.THIS .completed-box-style{
+    background:#3AC44C;
+}
+.THIS .completed-text-style{
+    color:#FFFFFF; 
+    font-weight:500;
+}
+.THIS .overdue-box-style{
+    background:#c91616;
+}
+.THIS .rate-style{
+    padding-left: 170px;
+    margin-top: -2px;
+    margin-left: 45px;
+    color:#707A8A ;
+    font-size: 12px;
+    font-weight: 500;  
+}
+.THIS .compassIcon{
+    width: 65px; height: 50px; 
+    margin-top: -8px;
+    margin-left: -10px;   
+    
+}
+.THIS .slds-card__header-title{
+    color: #1180C0; /*blue: Title Color*/
+    margin-left: 60px;
+    margin-top: -30px;
+}
+.THIS .desc-Style{
+    color: #929292 ; 
+    margin-left: 60px;
+    margin-top: 6px;   
+}
+
+@media (max-width:1200px) and (min-width:1120px){
+    .THIS .rate-style{
+        padding-left: 160px;
+    }
+    .THIS .slds-progress-bar {
+        width: 140px !important;
+    }
+    .THIS .slds-box{
+   		width: 70px !important; 
+    }
+}
+
+
+@media (max-width: 1120px) and (min-width:1100px){
+    .THIS .rate-style{
+        font-size: 11px !important;
+        padding-left: 155px !important;
+    }
+    .THIS .slds-progress-bar {
+        width: 130px !important;
+    }
+    .THIS .slds-box{
+   		width: 68px !important; 
+    }
+}
+
+
+@media screen and (max-width: 1100px){
+    .THIS .rate-style{
+        font-size: 10px !important;
+        padding-left: 142px !important;
+    }
+    .THIS .slds-progress-bar {
+        width: 125px !important;
+    }
+    .THIS .slds-box{
+   		width: 60px !important; 
+    }
+    .THIS .slds-text-align_center{
+   		font-size: 0.8em;
+	}
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="quickstart"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>html ruleset</description>
+
+    <rule ref="category/html/bestpractices.xml/AvoidInlineStyles">
+        <priority>3</priority>
+    </rule>
+    <rule ref="category/html/bestpractices.xml/UnnecessaryTypeAttribute">
+        <priority>3</priority>
+    </rule>
+    <rule ref="category/html/bestpractices.xml/UseAltAttributeForImages">
+        <priority>3</priority>
+    </rule>
+
+</ruleset>

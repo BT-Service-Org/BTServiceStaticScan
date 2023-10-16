@@ -1,0 +1,224 @@
+<template>
+	<div class="container" >
+		<div class="slds-grid slds-wrap">
+
+			<div class="slds-col slds-size_1-of-1 container-section-header">
+				<h1 class="slds-align_absolute-center our-vision">Our Vision</h1>
+				<p class="slds-align_absolute-center headerContent">While we grow rapidly, we want
+					to make it easy for each and every one of you to easily access all
+					necessary information and tools for you to be Successful at Salesforce</p>
+			</div>
+
+			<!--<div class="slds-col slds-size_1-of-4 slds-border_bottom container-section">
+				<div class="slds-m-around_medium" style="width:90%; height:90%; margin:auto;">
+					<img src={flyingDroneImageUrl}>
+				</div>
+				<div class="slds-m-small slds-align_absolute-center hyper-link">
+					<lightning-formatted-url value="https://salesforce.quip.com/RayCA7ggyd3r"
+						label="New Hire Essentials " target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				</div>
+			</div>-->
+
+			<!--<div class="slds-col slds-size_1-of-4 slds-border_bottom container-section">
+				<c-gdcms-flip-card  flip-card-height="200px">
+					<h2 slot="Front">New Hire Essentials</h2>
+					<p slot="Back">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. </p>
+				  </c-gdcms-flip-card>
+				  <br>
+				  <lightning-formatted-url value="https://salesforce.quip.com/RayCA7ggyd3r"
+						label="New Hire Essentials" target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				<div class="slds-m-small slds-align_absolute-center hyper-link">
+					<lightning-formatted-url value="https://salesforce.quip.com/RayCA7ggyd3r"
+						label="New Hire Essentials" target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				</div>
+			</div>-->
+			<div class="slds-col slds-size_2-of-4 slds-p-around_x-small">
+				<lightning-card  title="New Hire Essentials" class="slds_card">
+					<!-- <lightning-button 
+						label="Open" 
+						slot="actions" 
+						variant="brand" 
+						onclick={openDocInNewTab} 
+						data-href="https://salesforce.quip.com/RayCA7ggyd3r">
+					</lightning-button> -->
+					<div slot="actions">
+						<lightning-button-icon class="button-icon"
+							icon-name="utility:preview"
+							size="large"
+							data-href="https://salesforce.quip.com/RayCA7ggyd3r"
+							onclick={openDocInNewTab}
+						></lightning-button-icon>
+					</div>
+					<p class="slds-p-horizontal_small">We are delighted to have you join us. This Quip Essentials Guide outlines the resources to help you prepare yourself to have a successful start here at Salesforce.</p>
+				</lightning-card>
+			</div>
+			<div class="slds-col slds-size_2-of-4 slds-p-around_x-small">
+				<lightning-card  title="Team Bio" class="slds_card">
+					<!-- <lightning-button 
+						label="Open" 
+						slot="actions" 
+						variant="brand" 
+						data-href="https://drive.google.com/drive/u/0/folders/1obndlEIUqhSOrCVv72IIPP-vpLe0Qt4G" 
+						onclick={openDocInNewTab}>
+					</lightning-button> -->
+					<div slot="actions">
+						<lightning-button-icon class="button-icon"
+							icon-name="utility:preview"
+							size="large"
+							data-href="/gdc-team" 
+							onclick={openDocInNewTab}
+						></lightning-button-icon>
+					</div>
+					<p class="slds-p-horizontal_small">We’re a group of changemakers with a passion for impact. Bringing expertise from a variety of fields, our leaders and their teams are here to help you advance your mission. Get to know us.</p>
+				</lightning-card>
+			</div>
+			<div class="slds-col slds-size_2-of-4  slds-p-around_x-small" style="margin-bottom:1rem;">
+				<lightning-card  title="Skills 360" class="slds_card">
+					<div slot="actions">
+						<lightning-button-icon class="button-icon"
+							icon-name="utility:preview"
+							size="large"
+							data-href="https://www.google.com/url?q=https%3A%2F%2Fsfservices.lightning.force.com%2Flightning%2Fn%2FCSG_Skills_App&sa=D&sntz=1&usg=AFQjCNG9rJ6XhOEIhKD3UQEjymMysCE2nA"
+							onclick={openDocInNewTab}
+						></lightning-button-icon>
+					</div>
+					<!-- <lightning-button 
+						label="Open" 
+						slot="actions" 
+						variant="brand" 
+						data-href="https://www.google.com/url?q=https%3A%2F%2Fsfservices.lightning.force.com%2Flightning%2Fn%2FCSG_Skills_App&sa=D&sntz=1&usg=AFQjCNG9rJ6XhOEIhKD3UQEjymMysCE2nA" 
+						onclick={openDocInNewTab}>
+					</lightning-button> -->
+					<p class="slds-p-horizontal_small">Access the CSG Skills 360 App here. If you are experiencing an issue with the Skills 360 App, Skills 360 Dashboard, or your Org62 profile page, please submit a ticket in concierge!</p>
+				</lightning-card>
+			</div>
+			<div class="slds-col slds-size_2-of-4 slds-p-around_x-small" style="margin-bottom:1rem;">
+				<lightning-card  title="Role Based Certifications" class="slds_card">
+					<div slot="actions">
+						<lightning-button-icon class="button-icon"
+							icon-name="utility:preview"
+							size="large"
+							data-href="https://docs.google.com/spreadsheets/d/11NoRBPAejqTkngq73YSvpfIx-YLHZY3hc-49bNMa9m0/edit#gid=0"
+							onclick={openDocInNewTab}
+						></lightning-button-icon>
+					</div>
+					<!-- <lightning-button label="Open" slot="actions" variant="brand" data-href="https://docs.google.com/spreadsheets/d/11NoRBPAejqTkngq73YSvpfIx-YLHZY3hc-49bNMa9m0/edit#gid=0" onclick={openDocInNewTab}></lightning-button> -->
+					<p class="slds-p-horizontal_small">Salesforce certifications highlight an overall mastery of a specific role and are a great way to identify candidates for defined jobs and projects. All the best for your preparation!!</p>
+				</lightning-card>
+			</div>
+
+			<!--<div class="slds-col slds-size_1-of-4 slds-border_bottom container-section">
+				<div class="slds-m-around_medium" style="width:90%; height:90%; margin:auto;">
+					<img src={codeyTypingImageUrl}>
+				</div>
+				<div class="slds-m-small slds-align_absolute-center hyper-link">
+					<lightning-formatted-url
+						value="https://drive.google.com/drive/u/0/folders/1obndlEIUqhSOrCVv72IIPP-vpLe0Qt4G"
+						label="Team Bio" target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				</div>
+			</div>
+
+			<div class="slds-col slds-size_1-of-4 slds-border_bottom container-section">
+				<div class="slds-m-around_medium" style="width:90%; height:90%; margin:auto;">
+					<img src={suirrelImageUrl}>
+				</div>
+				<div class="slds-m-small slds-align_absolute-center hyper-link">
+					<lightning-formatted-url
+						value="https://www.google.com/url?q=https%3A%2F%2Fsfservices.lightning.force.com%2Flightning%2Fn%2FCSG_Skills_App&sa=D&sntz=1&usg=AFQjCNG9rJ6XhOEIhKD3UQEjymMysCE2nA"
+						label="Skills 360" target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				</div>
+			</div>
+
+			<div class="slds-col slds-size_1-of-4 slds-border_bottom container-section">
+				<div class="slds-m-around_medium" style="width:90%; height:90%; margin:auto;">
+					<img src={flyingDroneImageUrl}>
+				</div>
+				<div class="slds-m-small slds-align_absolute-center hyper-link">
+					<lightning-formatted-url
+						value="https://docs.google.com/spreadsheets/d/11NoRBPAejqTkngq73YSvpfIx-YLHZY3hc-49bNMa9m0/edit#gid=0"
+						label="Role Based Certification" target="_blank" tyle="color: #205ca0;">
+					</lightning-formatted-url>
+				</div>
+			</div>-->
+
+			<div class="slds-col slds-size_1-of-1 slds-border_bottom container-section">
+				<h1 class="actionsHeader">Actions</h1>
+				<ul class="action-list">
+					<li>Connect with your Trail Buddy and Manager.</li>
+					<li>Update Skills 360</li>
+					<li>Update medical insurance and add your dependents</li>
+					<li>Update timecards before every Friday EOD</li>
+				</ul>
+			</div>
+
+			<div class="slds-col slds-size_2-of-3">
+				<div class="slds-m-around_medium" style="width:90%; height:90%; margin:auto;">
+					<img src={peoplrImageUrl}>
+				</div>
+			</div>
+			<div class="slds-col slds-size_1-of-3" style="margin:auto;">
+				<h1 class="listeningHeader">We are listening </h1>
+				<ul class="action-list">
+					<li>Join <a href="https://salesforce-internal.slack.com/archives/C02DSNL0NSK"
+						target="_blank"> <span style="color:#0D7377">‘#ask-gdc-enablement’ </span>
+					</a>channel
+				</li>
+					<li>Post your questions and answers in the channel </li>
+					<li>Contribute to ‘Did You Know’ series</li>
+					<li>Let us know how we are doing!! We are always open to feedback. </li>
+				</ul>
+			</div>
+
+			<div class="slds-col slds-size_1-of-1 slds-border_bottom container-section"></div>
+
+			<div class="slds-col slds-size_1-of-1 container-section" >
+				<h1 class="actionsHeader">Frequently Asked Questions</h1>
+				<!--<ul class="action-list">
+					<li>Who is a TrailGuide/Buddy?</li>
+					<li>Who is the Mentor?</li>
+					<li>CWho is the Manager?</li>
+					<li>What is Concierge?</li>
+				</ul>-->
+				<lightning-accordion class="accordion-faqs" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px;--sds-c-accordion-heading-font-size:16pt;"
+					allow-multiple-sections-open>
+
+					<lightning-accordion-section name="A" label="Who is a TrailGuide/Buddy?">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">Your Trail Guide is your buddy who provides guidance, support, information, and coaching initially during your first few weeks at Salesforce. He/She is your mate.</p>
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="B" label="Who is the Mentor?">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">Your Mentor is usually a senior member of the team who supports your growth and development by sharing experiences, expertise and learnings. They help you with setting up your Individual Development Plan (IDP) and provide you with guidance on initiatives, projects etc.</p>
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="C" label="Who is the Manager?">
+						<p class="slds-p-horizontal_small">Your Manager guides you and enables you on your V2MOM, IDP, projects and your career growth.</p>
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="C" label="What is Concierge?">
+						<p class="slds-p-horizontal_small">Salesforce tool for all official answers and solutions to general employee questions, You can easily manage and file tickets and get answers to most of your questions.</p>
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="D" label="What is Trailhead Ranger Program?">
+						<p class="slds-p-horizontal_small">The <a href="https://concierge.it.salesforce.com/articles/en_US/Supportforce_Article/Trailhead-Ranger-Program" target="_blank">Trailhead Ranger Program</a> recognizes our top INTERNAL employee trailblazers, who have earned an outstanding number of Trailhead badges and points. This elite group will receive special perks and exclusive invites. As well, they will serve as Trailhead evangelists for their teams, in an effort to promote Trailhead and provide guidance to fellow employees.</p>
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="E" label="How to merge trailhead accounts?" class="slds-border_bottom">
+						<p class="slds-p-horizontal_small">If you need your points and badges merged, please <a href="https://trailhead.salesforce.com/en/help?article=Trailhead-Self-Service-Account-Merge" target="_blank">follow the instructions in the link</a>.
+						</p>
+					</lightning-accordion-section>
+
+				</lightning-accordion>
+			</div>
+
+		</div>
+
+	</div>
+
+
+</template>

@@ -1,0 +1,153 @@
+.THIS .detailsComponentContainer{
+    background-color: rgb(248,248,248);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;  
+    width:100vw;
+}
+
+
+
+/* Override the style of every state of the hyperlinks in the standard tab */
+.THIS a[class="tabHeader"],
+.THIS a[class="tabHeader"]:hover,
+.THIS a[class="tabHeader"]:focus,
+.THIS a[class="tabHeader"]:active, 
+.THIS a[class="tabHeader"]:visited, 
+.THIS a[class="tabHeader"]:focus-within{
+    color:white;
+    border-bottom : 0px;
+    padding: 8px!important;
+    box-shadow:none!important;
+    text-shadow:none!important;
+    text-decoration: none!important;
+}
+/*The link in the Active Tab*/
+.THIS ul[class="tabs__nav"] > li[class~="active"] > a {
+    color: #8EBDEA;
+    border-radius:25px;
+    background-color:white;
+    font-weight : bolder!important;
+}
+/*The text in the standard tabs's titles*/
+.THIS a[class="tabHeader"] > span[class="title"] {
+    bottom:1px;
+    font-size: small;
+    position :relative;   
+    font-family:StationWOFFFontsLight;
+}
+
+
+/*Relative adjustments depending on the screen size*/
+/*Mobile*/
+@media only screen and (max-width: 767px){
+    .THIS .mainContentArea {
+        width : 100%;
+    }
+    .THIS li[class="uiMenuItem"] > a {
+        color:#8DA1CC!important;
+    }
+    /*MORE - mobile */
+    .THIS div[class="uiMenu"] >div[class="uiPopupTrigger"]> div a {
+        color:white!important;
+        font-size: small!important;
+    }
+    .THIS *[class^="slds-col--padded contentRegion comm-layout-column"] {
+        padding:0;
+    }
+    
+    .THIS div[role="tablist"]{
+        padding: 10PX;
+        background-color:#8DA1CC!important;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;    
+        max-width:100%;
+    }
+    
+    .THIS ul[class="tabs__nav"]{
+        border-bottom : 0px!important;
+    }
+    
+    .THIS ul[class="tabs__nav"] span[class="title"] {
+        white-space: unset!important;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
+    
+}
+/*Tablet*/
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .THIS .mainContentArea {
+        width : 100%;
+    }
+
+    /*MORE - Tablet */
+    .THIS li[class="tabs__item uiTabOverflowMenuItem"] > * a
+    {
+        position:relative;
+        bottom:1px;
+        font-size: small!important;
+        color:white!important;
+    }
+    .THIS div[class^="popupTargetContainer"] > div li a {
+        color:#8DA1CC!important;
+    }
+    
+    .THIS *[class^="slds-col--padded contentRegion comm-layout-column"] {
+        padding:0;
+    }
+    /* First tab element in the Tabs Component */
+    .THIS a[class="tabHeader"][data-tab-name="1"] {
+        margin-left: 2vw;
+    }
+    
+    .THIS [class="tabs__nav"] {
+        padding: 10PX;
+        background-color:#8DA1CC!important;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+}
+/*Desktop*/
+@media only screen and (min-width: 1024px) {
+    .THIS .mainContentArea {
+        width : 100%;
+        margin : auto;
+    }
+    /* First tab element in the Tabs Component */
+    .THIS a[class="tabHeader"][data-tab-name="1"] {
+        margin-left: 11vw;
+    }
+    
+    .THIS [class="tabs__nav"] {
+        padding: 10PX;
+        background-color:#8DA1CC!important;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+    .THIS .mainContentArea{
+        width:80vw!important;
+    }
+    .THIS a[class="tabHeader"] > span[class="title"] {
+    	max-width:unset!important;
+    }
+}

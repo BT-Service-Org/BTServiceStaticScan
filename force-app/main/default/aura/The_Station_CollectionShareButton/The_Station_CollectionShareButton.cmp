@@ -1,0 +1,34 @@
+<aura:component>
+    <aura:attribute name="showShareCollection" type="boolean" default="true"/>
+    <aura:attribute name="collectionId" type="String" /> 
+    <aura:attribute name="collectionTitle" type="String" /> 
+    <aura:attribute name="buttonTheme" type="String" default="buttonMenuTheme-light1"/>
+    <aura:attribute name="dataSeparator" type="String" default="|;;|" />    
+    <aura:attribute name="iconName" type="String" default="utility:internal_share"/>
+    <aura:attribute name="buttonAltText" type="String" default="Share"/> 
+    <aura:attribute name="buttonType" type="String" default="button"/> 
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+
+    <aura:if isTrue="{!v.showShareCollection}">
+    <!--
+        <lightning:buttonMenu aura:id="share-button" name="{!v.collectionTitle}" class="{!v.buttonTheme}" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }">
+            <lightning:menuItem value="{!'Copy' + v.dataSeparator + 'https://bedrockuat-dreamportal.cs8.force.com/thestation/s/station-pages/'+v.collectionId}" 
+            label="Copy Collection Link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    -->        
+        <lightning:buttonIcon 
+                    aura:id="enabled-button" 
+                    class="" 
+                    iconName="{!v.iconName}" 
+                    variant="border-filled" 
+                    name="{!v.collectionTitle}" 
+                    value="{!v.collectionId}" 
+                    onclick="{!c.shareCollection}" 
+                    alternativeText="{!v.buttonAltText}" 
+                    title="{!v.buttonAltText}" 
+                    type="{!v.buttonType}"/>
+    </aura:if>
+</aura:component>

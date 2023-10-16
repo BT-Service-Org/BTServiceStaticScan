@@ -1,0 +1,4 @@
+<design:component label="TheStation: User Case List">
+    <design:attribute name="recType" label="Record Type" datasource="The Station Content Request, The Station Feedback, The Station SP Record Feedback, The Station SI Case, SI Case and Content Request"/>
+    <design:attribute name="contentType" label="content Type" datasource ="None,Request,Submit"/>
+</design:component>

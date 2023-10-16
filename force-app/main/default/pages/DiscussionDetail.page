@@ -1,0 +1,656 @@
+<apex:page sidebar="false" tabStyle="DiscussionForum__c" controller="DiscussionReplyController" action="{!updateReadCount}" id="DiscussionDetail">
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+		var replyMessageId = '';
+		topicFirstMessage = '';
+		var topicId = null;
+	</script>	
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<script src="{!URLFOR($Resource.discussionResources, 'inc/js/common.js')}" />
+	
+	<!-- Common Js -->
+	<script type="text/javascript" src="{!URLFOR($Resource.discussionResourceFiles, 'inc/js/common.js')}"></script>
+	
+	<!-- FCKEditor Include  -->
+	<script type="text/javascript" src="{!URLFOR($Resource.discussionResourceFiles, 'inc/js/fckeditor/fckeditor.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.discussionResourceFiles, 'inc/js/createFCKEditor.js')}"></script>
+
+	<!-- Modal JS -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+
+	<!-- Initialize Modal Overlay for Remove Topic Replies -->
+	<a href="#discusionOverlay" id="initializeModal" style="display:none;"></a>
+	<div id="discusionOverlay"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+
+	<!-- Common Layout -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/commonLayout.css')}" /> 
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/discussionOverview.css')}" />	
+		<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	<style>
+	
+	/* Style Overrides */
+	
+	
+	.divImgArrow{
+		position:absolute;
+		top:30px;
+		right:0px;
+	}
+	div.two_colsContainer div.content div.holder div.discussionThread div.threadText img.arrowTitle {
+		z-index:100;
+	}
+
+	
+	.message {
+		background-color:#EFEFEF !important;
+		border-style:none !important;
+		border-width:1px;
+		color:#000000;
+		margin:4px 20px;
+		padding:6px 8px 6px 6px;
+	}
+
+	.UPF__overlay__{
+		position: absolute;	
+		z-index: 10000;
+		width: 100%;
+		height: 100%;
+		background: #666666;					
+	}
+
+	.replyTopic_overlay {
+		position: fixed;
+ 		margin-top:-50px;
+		z-index: 10001;
+		overflow: hidden;
+		background: white;
+		padding: 6px;
+		width: 510px; 
+		left: 50%;
+		height:397px;
+	}
+		
+	.replyTopicIE6_overlay {
+	 	postion: absolute;
+	  	z-index: 10001;
+		overflow: hidden;
+		background: white;
+		padding: 3px;
+		width: 510px; 
+		left: 50%;
+		height:510px;
+		top: expression((20 + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px' );
+	}
+	
+	div.formsHeader{
+		background: #5E808A;
+		margin-bottom: 10px;
+		padding:10px;
+		width:479px !important;
+	}
+	
+	div.formsHeader table td{
+		color: #fff;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	
+	input.saveBtn {
+		background:#3B7686;
+		border:none;
+		color:#FFFFFF;
+		margin-top:0px;
+		padding:10px;
+		margin-right:10px;
+		font-weight:bold;
+		height:auto;
+		text-align:center;
+		width:auto;
+		font-size:80% !important;
+	}
+	input.cancelBtn {
+		background:#999999;
+		border:none;
+		color:#FFFFFF;
+		padding:10px;
+		height:auto;
+		width:auto;
+		font-size:80% !important;
+	}
+	
+	div.header div.page_section div {
+		width:260px;
+	}
+	
+	div.header div.searchBox div div div.search_box_input div.legend {
+		background:transparent none repeat scroll 0%;
+		color:#FFFFFF;
+		font-size:11px;
+		left:-6px;
+		position:absolute;
+		top:-8px;
+		width:100px;
+	}
+	
+	div.quotesReply {
+		background-color:#E1E2E1;
+		color:#455661;
+		font-size:11px;
+		padding:3px;
+		margin:5px 5px 5px 15px;
+	}
+	
+	.quotesAuhor{
+		font-size:12px;
+		font-weight: bold;
+		color: #999;
+		margin-left: 15px;
+	} 
+	
+	div#paginationOverlay {
+ 		background:#FFFFFF;
+ 		height:100%;	 		
+ 		position:absolute;
+ 		top:0;
+ 		left:0;
+ 		z-index:9999;
+ 		width:100%;
+ 		opacity: 0.6;
+		-moz-opacity: 0.6;
+		filter: alpha(opacity=60);
+ 	}
+ 	
+ 	div#paginationOverlay div.loader {
+ 		width:60px;
+ 		margin:0 auto;
+ 		height:60px;
+ 		margin-top:230px;
+ 	}
+ 	
+ 	form {
+ 		margin:0px !important;
+ 	}
+ 		
+	
+	div.header div.searchBox {
+		width:495px;
+	}
+/*
+	h1, h2, h3, h4, form, ul, ul li, li, p, ol li, ol{
+		padding: 3px 10px 2px 10px;
+		margin: 3px 10px 2px 10px;
+	}
+*/	
+	
+	* html h1, * html h2, * html h3, * html h4, * html form, * html p {
+		padding: 0px;
+		xmargin: 3px 10px 2px 10px;
+	} 
+	
+	.buttonList li {
+		float:left;
+		list-style:none;
+		position:relative;	
+		margin:0px;
+		padding:0px 3px 0px 0px !important;		
+	}
+	
+	* html div.discussionTopic {
+		margin-left:0px !important;
+		padding-left:0px !important;
+	}
+	/*
+	* html div.discussionTopicText  div {
+		margin:0px !important;
+		padding:0px !important;
+	}
+	*/
+	* html div.discussionTopicText .title {
+		width:99% !important;
+	}
+	
+	* html div.discussionTopicText .content {
+		width:99% !important;
+	}
+	
+	* html div.discussionTopicText .content p {
+		margin-left:0px;
+		padding-left:0px;
+	}
+	
+	* html div.two_colsContainer div.content div.holder div.discussionTopic div.discussionTopicTextContent {
+		margin-right:10px;
+	}
+	
+	* html #rightArrowAbsolute {
+		right:-1px !important;	
+		top: 20px !important;
+	}
+	
+	* html div.discussionTopicText {
+		overflow:visible !important;
+		margin-left:8px !important;
+	}
+	
+	* html div.discussionTopicText .author {
+		width:145px !important;
+	}
+	.two_colsContainer .content{
+		width:97% !important;
+	}
+	.FCKloader {
+		color:#333333;
+		left:50%;
+		overflow:hidden;
+		position:absolute;
+		top:150px;
+	}
+	
+	</style>
+	
+	<script>
+	
+	function relocateOverlay(){	
+		Control.Modal.center(Control.Modal.container);
+	}
+		
+	// Loader 
+	function showHideOverlay(){
+		var a = $('paginationOverlay');
+		if(a.style.display == 'none'){
+			Effect.Appear(a,{duration:0.3,to:0.6});
+		} else {
+			Effect.Fade(a,{duration:0.3,to:0.0});
+		}
+		
+	}
+	
+	//This method is to execute after the fckEditor is created
+	 function FCKeditor_OnComplete( editorInstance ) {
+	
+		if(editorInstance.Name == 'replyTopicArea'){
+			
+			Effect.Fade('FCKloaderReply');
+			var divContentFck = $('fckContentDivReply');
+			divContentFck.style.visibility = 'visible';
+		}
+		else{
+			if(editorInstance.Name == 'replyMessageArea'){
+				
+				assignFCKHTML(topicFirstMessage);
+				Effect.Fade('FCKloaderMessage');
+				var divContentFck = $('fckContentDivMessage');
+				divContentFck.style.visibility = 'visible';
+			}
+			else{
+				if(editorInstance.Name == 'message'){
+					
+					Effect.Fade('FCKloader');
+					assignFCKHTML(topicFirstMessage);
+					var divContentFck = $('fckContentDiv');
+					divContentFck.style.visibility = 'visible';
+					topicFirstMessage = '';
+				}
+			}
+		}	
+	}
+	
+	function getIframe() {
+		var b = document.getElementsByTagName('iframe');
+		for(var it = 0; it < b.length; it++){
+			var aux = b[it].src.split('fckeditor');
+			if(aux.length > 1){
+				var iframes = b[it].contentWindow.document.getElementsByTagName('iframe');						
+			}
+		}
+		return iframes;
+	}	
+	
+	function assignFCKHTML(newContent) {
+		var frame = getIframe();
+		frame[0].contentWindow.document.body.innerHTML = newContent;
+	}
+	
+	
+	function deleteTopicOverlay(tID){
+		var deleteInput = $('deleteButton');
+		deleteInput.innerHTML = '<input class=\"eventDelete\" value=\"Continue and delete topic\" onclick=\"statusDelete(this);deleteTopicFromController();\"/>';
+		createOverlay('','deleteTopicOverlay','200');
+	}
+	
+	
+	function afterDeleteTopic(){
+		modal.close();
+		var holder = $$('.holder');		
+		holder[0].innerHTML = 'Topic Deleted!! <br/> <a href="/apex/DiscussionOverview"> Go Back to Overview </a>';
+	}
+	
+		
+	function goSearch () {
+		var inputSearch = $('searchInput');
+		var inputSearchValue = inputSearch.value;
+		location.href = 'https://na1.salesforce.com/apex/DiscussionSearchResults?key=' + inputSearchValue;
+	}
+	
+	function ie6FixOverlay(){
+	  if(Prototype.Browser.IE){
+	  var holderDims = $('content').getDimensions();	   
+	   $('paginationOverlay').style.height = holderDims.height + 'px';
+	  }   
+	 }
+	</script>
+	
+	<apex:form >
+		<apex:actionFunction name="deleteTopicFromController" action="{!deleteTopic}" rerender="dummy" oncomplete="afterDeleteTopic();"/>
+	</apex:form>
+	<apex:outputPanel id="dummy"></apex:outputPanel>
+	
+	
+	<!-- Header -->
+	<!-- <div class="header"> -->
+	<div class="header headerNoHeight"> 
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Discussion Topic</h1>
+				<h2 class="arial_black">{!topicUser.ShowShortTopicName}</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container -->
+		<div class="searchBox">
+			<div>
+				<div>
+					<!-- Search Form -->
+					<form action="" style="margin:0pt;padding:0pt;">
+						<div class="search_box_input f_left">
+							<div class="legend" style="left:14px;">Find Discussions</div>
+							<input id="searchInput" type="text" value="Enter keyword or Name" name="" onclick="searchBoxFocus(this);" 
+							 />								
+						</div>
+						<input type="button" onclick="goSearch();" value="Search" class="search_btn f_left" onmouseover="onMouseOverSearch(this);" onmouseout="onMouseOutSearch(this);" /> 								
+					</form>											
+				</div>
+			</div>
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.discussionResources, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+		<!-- BreadCrumbs -->
+		<div class="breadcrumbs" >
+			<div class="map">
+				<apex:outputlink value="DiscussionOverview">Discussion Overview </apex:outputlink> &nbsp;><a href="discussionTopics?id={!topicUser.team.Id}"> {!topicUser.team.Name} Topics</a> > <strong>{!topicUser.ShowShortTopicName}</strong>
+			</div>
+			<div class="buttons" >
+			<ul class="buttonList">
+				<li>
+					<apex:outputpanel layout="block" rendered="{!IF((userPermissions.canManage || userPermissions.canComment || isTopicAuthor ),true ,false)}">
+						<a class="blackbutton" href="Javascript:;" onclick="createOverlay('', 'replyTopic_overlay', '379', 'setFocusReply()');relocateOverlay();" >
+							<span>Reply</span>
+						</a>  
+					</apex:outputpanel>
+				</li>
+				<li style="float:left;" >
+					<apex:outputpanel layout="block" rendered="{!IF((isTopicAuthor || userPermissions.canManage),true ,false)}">
+						<a class="blackbutton" href="Javascript:;" onclick="createOverlay('','NewTopicForm','362','getTopicToEdit(\'{!topicUser.topic.DiscussionTopic__r.Id}\', \'{!topicUser.topic.Id}\', \'details\')','');relocateOverlay();" >
+							<span>Edit topic</span>
+						</a>
+					</apex:outputpanel>
+				</li>
+				<li style="float:left;">
+					<apex:outputpanel layout="block" rendered="{!IF((isTopicAuthor || userPermissions.canManage),true ,false)}">
+						<a class="blackbutton" href="Javascript:;" onclick="deleteTopicOverlay('{!topicUser.topic.DiscussionTopic__c}');relocateOverlay();" >
+							<span>Delete</span>
+						</a>
+					</apex:outputpanel>
+				</li>				
+			</ul>				
+				</div>
+			
+			<!-- Not to this release
+			
+				<a class="blackbutton">
+					<span>Suscribe to this topic</span>
+				</a>
+			-->					
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+	<!-- Sidebar -->
+	<div class="sidebar">				
+	  <!-- Sub Teams Widget -->
+	  <apex:include pageName="DiscussionWidgetSubTeams" />		
+	  <!-- New Discussions Widget -->
+	  <apex:include pageName="DiscussionWidgetNewDiscussions" />
+	  <!-- Most Active People Widget -->
+	  <apex:include pageName="DiscussionWidgetActivePeople" />	
+	</div><!-- /Left Column container -->
+	
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div id="content" class="content" style="margin:0px;">
+			<!-- The center div at content -->
+			<div class="holder" style="margin:0px;">
+				<!-- Discussion Container -->
+				<apex:form >
+						<apex:actionFunction name="refreshReplys" action="{!constructorMethods}" rerender="replysHolder" />					
+					</apex:form>
+					<apex:outputPanel id="replysHolder" rendered="{!IF(noForums,false,true)}" layout="block">	
+					<div class="views">
+					
+					<!--********* Next sprint ********
+					 
+						Views: <strong>Chronological</strong> | <a href="">Tree</a>
+					-->
+					</div>
+					<!-- Pagination and view Mode Title -->				
+					<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+						<div class="pages"> 
+							 <apex:form >					 
+								<ul>
+									<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+										<!-- <apex:commandLink action="{!prevPage}" value="Previous Page" rerender="replysHolder" rendered="{!prevPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();" oncomplete="showHideOverlay();"/> -->
+										<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="replysHolder" rendered="{!prevPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"/>
+										<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+									</li>
+									<li>({!currentPagination}</li>
+									<li>-</li>
+									<li>{!cntPagination})</li>
+									<li class="next {!IF(nextPageShow,'next_disabled','')}">
+										<!-- <apex:commandLink action="{!nextPage}" value="Next Page" rerender="replysHolder" rendered="{!nextPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"  oncomplete="showHideOverlay();"/> -->
+										<apex:commandLink action="{!nextPage}" value="Next Page" rerender="replysHolder" rendered="{!nextPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();" />										
+										<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+									</li>
+								</ul>								
+							</apex:form>								
+						</div>
+					</apex:outputpanel>
+				
+				<div class="discussionTopic">
+					<!-- Discussion TOPIC  -->					
+					<div class="discussionTopicText"  >
+						<div style="position:relative;overflow:hidden;clear:both;">
+							<div class="discussionTopicTextContent" >
+								<div class="title"> 
+									<h2 style="margin-left:0px;padding-left:0px;" id="DiscussionTopicTitle"><apex:outputText escape="false" value="{!topicUser.TopicNameReplaced}"/></h2>
+									<span class="date">{!topicUser.strdate}</span>
+								</div>
+								<div class="content" id="DiscussionMessageContainer">								 
+									<apex:outputText value="{!topicUser.MessTopic}" escape="false" id="DiscussionTopicMessage">
+									</apex:outputText>	 															
+								</div>
+								<div id="modifyIdsApex" style="display:none;">{!topicId}|{!firstMessage.Id}</div>							
+							</div>	
+						</div>
+						<div class="divImgArrow" id="rightArrowAbsolute">
+							<img src="{!URLFOR($Resource.discussionResources, 'images/layout/discussiontitlearrow.gif')}" alt=""   />
+						</div>					
+					</div>
+					
+					<div class="author" >
+						<a href="/apex/PeopleProfileDisplay?id={!topicUser.User.Id}">
+							<div class="picture">
+								<apex:outputpanel rendered="{!IF(topicUser.picture == 'nopicture',true,false)}">
+									<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32">
+								</apex:outputpanel>
+								<apex:outputpanel rendered="{!IF(topicUser.picture == 'nopicture',false,true)}">
+									<img src="/servlet/servlet.FileDownload?file={!topicUser.picture}" alt="" width="40" />
+								</apex:outputpanel>
+							</div>
+							<div class="data" style="width:300px">
+								<h4 style="margin:0; padding:0px;font-size:13px">{!topicUser.user.Name}</h4>
+								<span class="title">{!topicUser.user.Title}</span>
+							</div>
+						</a>	
+					</div>						
+				</div><!-- Discussion TOPIC END -->	
+				
+				<!-- Loader -->
+				<div id="paginationOverlay" style="display:none;" >
+			 		<div class="loader">
+			 			<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}" alt="Loading..." title="Loading..." />
+			 		</div>
+				</div>
+				<!-- Loader -->
+				
+			
+					<!-- End Pagination controls -->
+					
+					<apex:outputPanel layout="block" id="theReplys">
+						 <apex:form >
+							 <apex:repeat value="{!topicUser.replys}" rows="{!numberOfItemsToShow}" first="{!firstRow}" var="reply">		
+								<div class="discussionThread">
+								<div class="author">
+									<a style="cursor:pointer;" href="/apex/PeopleProfileDisplay?id={!reply.User.Id}">
+										<div class="picture">
+										
+											<apex:outputpanel rendered="{!IF(reply.picture == 'nopicture',true,false)}">
+												<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="23">
+											</apex:outputpanel>
+											
+											<apex:outputpanel rendered="{!IF(reply.picture == 'nopicture',false,true)}">
+												<img src="/servlet/servlet.FileDownload?file={!reply.picture}" alt="" width="23" />
+											</apex:outputpanel>
+							
+										</div>
+										<div class="data">
+											<h4  id="userName-{!reply.message.id}">{!reply.UserShortName}</h4>
+											<span class="title">{!reply.user.Title}</span>
+										</div>
+									</a>
+								</div>
+								<div class="threadText">
+									<img src="{!URLFOR($Resource.discussionResources, 'images/layout/discussionthreadarrow.gif')}" alt="" class="arrowTitle" />
+									<div class="content">
+										<div class="title">
+											<div class="titleData">
+												<span class="about" >RE: {!topicUser.topic.DiscussionTopic__r.Subject__c} </span><br />
+												<span class="date" ><span id="date-{!reply.message.id}">{!reply.strdate}</span> in response to <a href="/apex/peopleprofiledisplay?id={!topicUser.user.Id}" >{!topicUser.user.Name}</a></span>
+												<!-- <span class="date" id="date-{!reply.message.id}">{!reply.strdate} in response to <a href="/apex/peopleprofiledisplay?id={!topicUser.user.Id}">{!topicUser.user.Name}</a></span>-->
+											</div>
+											<div class="reply">
+												<apex:outputPanel rendered="{!IF((reply.isMessageAuthor || userPermissions.canComment || isTopicAuthor),true , false)}">
+													<a href="javascript:;" onclick="createOverlay('', 'replyMessage_overlay', '397', 'setFocusReplyMessage()');replyBuild('{!reply.message.id}');relocateOverlay();">Reply</a>  
+												</apex:outputPanel>
+												<apex:outputPanel rendered="{!IF((reply.isMessageAuthor || userPermissions.canManage),true,false)}">
+													| <a href="javascript:;" onclick="editReplyMessage('{!reply.message.id}',{!reply.existqt});relocateOverlay();">Edit</a>  												
+												</apex:outputPanel>
+												<apex:outputPanel rendered="{!IF((reply.isMessageAuthor || userPermissions.canManage),true,false)}">
+													| <apex:commandLink action="{!deleteReplyId}"  
+															rerender="auxDeleteReplyPanel"
+															value="Delete"
+															oncomplete="createOverlay('', 'deleteReply_overlay', '171');relocateOverlay();">															<apex:param name="idR" value="{!reply.message.Id}"/>
+													</apex:commandLink>
+												</apex:outputPanel>
+											</div>
+											<div class="clear"></div>
+										</div>
+										<div class="message" id="content-{!reply.message.id}">											
+											<apex:outputPanel id="quoteContainer" 
+												rendered="{!reply.existqt}" 
+												layout="block"
+												style="background:#CBCBCB; width:100%; overflow:hidden; position:relative; clear:both;" >
+											 	<div style="background:#EFEFEF;width:100%;clear:both;position:relative;color:#666666;font-size:11px;margin-bottom:2px;" id="quoteDate-{!reply.message.id}">
+											 		<span id="quoteAuthor-{!reply.message.id}"> <apex:outputText value="{!reply.qtAuthor}" /> </span>,&nbsp; at&nbsp; <apex:outputText value="{!reply.qtdate}" />&nbsp;said...
+											 	</div>
+											 	<div style="padding:4px;overflow:hidden;clear:both;position:relative;" id="quoteMessage-{!reply.message.id}">
+													<apex:outputText value="{!reply.quote}" escape="false" />
+												</div>
+											</apex:outputPanel>
+											<div id="contentMessage-{!reply.message.id}">
+												<apex:outputText value="{!reply.message.Message__c}" escape="false"  />
+											</div>				
+										</div>
+									</div>
+								</div>
+							</div>
+							</apex:repeat> 
+						</apex:form>
+					</apex:outputPanel>
+					<!-- Pagination and view Mode Title -->				
+					<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+						<div class="pages"> 
+							 <apex:form >					 
+								<ul>
+									<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+										<apex:commandLink action="{!prevPage}" value="Previous Page" rerender="replysHolder" rendered="{!prevPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"/>
+										<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+									</li>
+									<li>({!currentPagination}</li>
+									<li>-</li>
+									<li>{!cntPagination})</li>
+									<li class="next {!IF(nextPageShow,'next_disabled','')}">
+										<apex:commandLink action="{!nextPage}" value="Next Page" rerender="replysHolder" rendered="{!nextPageLinkShow}" onclick="ie6FixOverlay();showHideOverlay();"/>										
+										<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+									</li>
+								</ul>								
+							</apex:form>								
+						</div>
+					</apex:outputpanel>
+					<!-- End Pagination controls --> 
+				</apex:outputPanel>
+			</div>
+		</div>		
+	</div>
+	
+	<!-- Reply Overlay -->
+	<apex:include pageName="DiscussionOverlayReply" />
+	<!-- delete Reply Overlay -->
+	<apex:include pageName="DiscussionOverlayDeleteReply" />
+	
+	
+	<!-- New Topic Overlay -->
+	<apex:include pageName="DiscussionOverlayNewTopic" >
+		<apex:param value="{!topicUser.team.Id}" name="id"/>
+	</apex:include> 
+	
+	<!-- Delete Topic Overlay -->
+	<apex:include pageName="DiscussionOverlayDeleteTopic" />
+	
+	<!-- Fix for IE -->
+	<script>
+		var version;
+		if (navigator.appName == "Microsoft Internet Explorer") {
+			version = navigator.appVersion;
+			if (version.indexOf("MSIE 6") != -1) {
+				document.getElementById('replyTopic_overlay').className = 'replyTopicIE6_overlay';
+				document.getElementById('replyTopic_overlay').style.position = 'absolute';
+			}
+		}
+	</script>	
+	
+	<apex:form id="auxForm" style="border:none;">
+	 	<apex:commandButton value="auxLink" id="auxLink" styleclass="auxLinkClass" style="visibility:hidden;" action="{!saveReply}" rerender="replysHolder" />
+	</apex:form>
+	
+</apex:page>

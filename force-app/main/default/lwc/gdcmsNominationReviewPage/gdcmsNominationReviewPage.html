@@ -1,0 +1,53 @@
+<template>
+    <lightning-layout multiple-rows="true">
+        <lightning-layout-item padding="around-small" size="12">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item padding="around-small" size="3">
+                    <lightning-vertical-navigation selected-item={selectedItem} onselect={handleSelect}
+                        class="navigation">
+                        <lightning-vertical-navigation-section>
+                            <lightning-vertical-navigation-item label="Trailblazer Nomination"
+                                name="trailblazer_nomination"></lightning-vertical-navigation-item>
+                            <lightning-vertical-navigation-item label="Customer Success Team Nomination"
+                                name="customer_success_team_nomination"></lightning-vertical-navigation-item>
+                            <lightning-vertical-navigation-item label="Achiever Nomiantion"
+                                name="achiever_nomination"></lightning-vertical-navigation-item>
+                        </lightning-vertical-navigation-section>
+                    </lightning-vertical-navigation>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="9">
+                    <template if:true={trailblazerNomination}>
+                        <lightning-tabset variant="scoped">
+                            <lightning-tab label="Nominees">
+                                <c-gdcms-nominations-review-tile award-type = "Trailblazer Award" current-tab-name="false"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                            <lightning-tab label="Winners">
+                                <c-gdcms-nominations-review-tile award-type = "Trailblazer Award" current-tab-name="true"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </template>
+                    <template if:true={CustomerSuccessNomination}>
+                        <lightning-tabset variant="scoped">
+                            <lightning-tab label="Nominees">
+                                <c-gdcms-nominations-review-tile award-type = "Customer Success Team Award" current-tab-name="false"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                            <lightning-tab label="Winners">
+                                <c-gdcms-nominations-review-tile award-type = "Customer Success Team Award" current-tab-name="true"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </template>
+                    <template if:true={AchiverNomination}>
+                        <lightning-tabset variant="scoped">
+                            <lightning-tab label="Nominees">
+                                <c-gdcms-nominations-review-tile award-type = "Achievers Award" current-tab-name="false"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                            <lightning-tab label="Winners">
+                                <c-gdcms-nominations-review-tile award-type = "Achievers Award" current-tab-name="true"></c-gdcms-nominations-review-tile>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

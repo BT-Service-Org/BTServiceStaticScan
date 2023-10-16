@@ -1,0 +1,122 @@
+<template>
+    <div class="slds-p-around_medium">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_10-of-12">
+                <template for:each={outcomeList} for:item="eachOutcome">
+                    <div class="slds-grid slds-m-around_medium" key={eachOutcome.indexNumber}>
+                        <div class="slds-size_1-of-12 slds-p-around_x-small">Order</div>
+                        <div class="slds-size_2-of-12 slds-p-around_x-small">
+                            <lightning-input
+                                type="number"
+                                variant="label-hidden"
+                                name="orderNumber"
+                                class="orderNumber"
+                                label="Number"
+                                placeholder="Number"
+                                data-index={eachOutcome.index}
+                                data-element="OrderNumber"
+                                onchange={handleOrderChange}
+                                value={eachOutcome.outcomeOrder}
+                                record-type="Stage"
+                                required="true"
+                            >{eachOutcome.outcomeOrder}</lightning-input>
+                        </div>
+                        <div class="slds-size_2-of-12 slds-p-around_x-small">Existing Outcome</div>
+                        <div class="slds-size_5-of-12 slds-p-around_x-small">
+                            <c-playbook-lookup-component
+                                label="Select Outcome"
+                                placeholder="Select Outcome"
+                                s-object-api-name="Outcome__c"
+                                default-record-id={eachOutcome.recordId}
+                                index-number={eachOutcome.index}
+                                onlookupupdate={handleOucomeSelection}
+                                record-type="Stage"
+                            ></c-playbook-lookup-component>
+                        </div>
+                        <div class="slds-size_2-of-12 slds-p-around_x-small">
+                            <button class="slds-button slds-button_brand" onclick={openAddMethodsModal} data-index={eachOutcome.index}>Add Methods</button>
+                        </div>
+                        <div class="slds-size_1-of-12 slds-p-around_x-small">
+                            <button class="slds-button slds-button_destructive" onclick={removeOutcome} data-index={eachOutcome.index}>X</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-size_4-of-12 slds-m-around_medium slds-p-around_x-small"></div>
+            <div class="slds-size_3-of-12 slds-m-around_medium slds-p-around_x-small">
+                <button class="slds-button slds-button_brand" style="width: 100%" onclick={addOutcome}>Add Outcome</button>
+            </div>
+            <div class="slds-size_3-of-12 slds-m-around_medium slds-p-around_x-small">
+                <button class="slds-button slds-button_brand" style="width: 100%" onclick={handleCreateOutcomeModal}>Create New</button>
+            </div>
+        </div>
+
+        <!-- NOTE Create Outcome Modal -->
+        <template if:true={toggleCreateOutcomeModal}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div if:true={isLoading}>
+                    <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+                </div>
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <span class="slds-modal__close">
+                            <lightning-icon icon-name="utility:close" onclick={handleCloseCreateOutcome} variant="inverse" alternative-text="close"></lightning-icon>
+                        </span>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">3.0 OUTCOMES</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <h3>3.1 Outcome Details</h3>
+                        <div class="slds-grid">
+                            <div class="slds-col_padded-around slds-size_8-of-12">
+                                <lightning-input value={outcomeName} onchange={handleChange} type="text" data-element="OutcomeName" label="Name" placeholder=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid">
+                            <div class="slds-col_padded-around slds-size_8-of-12">
+                                <lightning-input type="text" value={outcomeTitle} onchange={handleChange} data-element="OutcomeTitle" label="Title" placeholder=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid">
+                            <div class="slds-col_padded-around slds-size_8-of-12">
+                                <lightning-input-rich-text data-element="OutcomeDescription" onchange={handleChange} placeholder="" value={outcomeDescription} label="Description" label-visible="true">
+                                </lightning-input-rich-text>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" title="Cancel" class="slds-m-right_small" onclick={handleCloseCreateOutcome}></lightning-button>
+                        <lightning-button variant="brand" label="Save" title="Save" onclick={handleCreateOutcomeRecord}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- NOTE Add Methods Modal -->
+        <template if:true={toggleAddMethodModal}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="padding: 5px 5px; width: 100%">
+                    <header class="slds-modal__header">
+                        <span class="slds-modal__close">
+                            <lightning-icon icon-name="utility:close" onclick={handleCloseAddMethods} variant="inverse" alternative-text="close"></lightning-icon>
+                        </span>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">4.0 RELATED METHODS</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" style="flex-grow: 2">
+                        <c-playbook-add-method-screen
+                            data-addmethod
+                            parentmethod-list={currentMethodsForSelectedOutcome}
+                            onmethodsupdate={handleUpdateMethodsForOutcome}
+                        ></c-playbook-add-method-screen>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" title="Cancel" class="slds-m-right_small" onclick={handleCloseAddMethods}></lightning-button>
+                        <lightning-button label="Add Stage" title="Add Stage" class="slds-m-right_small" onclick={handleJumpToStage}></lightning-button>
+                        <lightning-button variant="brand" label="Save" title="Save" onclick={handleDoneAddMethods}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

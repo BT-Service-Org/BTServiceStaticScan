@@ -1,0 +1,152 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" controller="The_Station_CollectionController" access="global" >
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="collectionRecord" type="Station_Pages__c" />
+
+    <aura:attribute name="collectionName" type="String" default="Collection Name"/>
+    <aura:attribute name="collectionCreatedBy" type="String" default="John Doe"/>
+    <aura:attribute name="collectionDescription" type="String" default="Collection Description"/>
+    <aura:attribute name="collectionFollowers" type="Integer" default="0"/>
+    <aura:attribute name="collectionContentCount" type="Integer" default="0"/>
+    <aura:attribute name="contributors" type="List"/>
+<!--
+    <aura:attribute name="contributors" type="List" default="[{'name': 'Ironman', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/3/35/IronMan-EndgameProfile.jpg/revision/latest/top-crop/width/200/height/150?cb=20190423175213'},
+                                                             {'name': 'Captain America', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/d/d7/CapAmerica-EndgameProfile.jpg/revision/latest/top-crop/width/200/height/150?cb=20190423175339'},
+                                                             {'name': 'Winter Soldier', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/41/Winter_Soldier_AIW_Profile.jpg/revision/latest/top-crop/width/200/height/150?cb=20180525203553'},
+                                                             {'name': 'Black Widow', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/9a/BlackWidow-EndgameProfile.jpg/revision/latest/top-crop/width/200/height/150?cb=20190423174842'},
+                                                             {'name': 'Thanos', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/6/63/97d1d9f934a350cee765c5ac1a466605.jpg/revision/latest/top-crop/width/200/height/150?cb=20190527184444'},
+                                                             {'name': 'Scarlet Witch', 'picture': 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/3/39/Scarlet_Witch_AIW_Profile.jpg/revision/latest/top-crop/width/200/height/150?cb=20180518212455'}]"/>
+-->                                                             
+    <aura:attribute name="backgroundColorOptions" type="List" />
+    <aura:attribute name="bannerBackgroundColor" type="String" default="rgb(128, 128, 128, 0.3);"/>
+    <aura:attribute name="bannerBackgroundColorSelectedValue" type="String" />            
+    <aura:attribute name="displayedContributors" type="List" />
+    <aura:attribute name="moreContributors" type="Integer" default="0" />
+    <aura:attribute name="totalContributors" type="Integer" default="0" />
+    <aura:attribute name="editMode" type="Boolean" default="false"/>
+
+    <aura:attribute name="collectionIsFollowedByRunningUser" type="boolean" default="false"/>
+    <aura:attribute name="collectionIsPrivate" type="boolean" default="true"/> 
+    <aura:attribute name="collectionIsShared" type="boolean" default="false"/>     
+    <aura:attribute name="collectionOwnerId" type="String"/>    
+    <aura:attribute name="collectionIsOwnedByRunningUser" type="boolean" default="false"/>  
+    <aura:attribute name="collectionIsEditableByRunningUser" type="boolean" default="false"/>  
+    <aura:attribute name="showSave" type="boolean" default="false"/>   
+
+    <aura:attribute name="collectionNameTemp" type="String" default="Collection Name"/>
+    <aura:attribute name="collectionDescriptionTemp" type="String" default="Collection Description"/>
+    <aura:attribute name="bannerBackgroundColorTemp" type="string" default="rgb(128, 128, 128, 0.3);"/>
+
+    <aura:registerEvent name="modeEvent" type="c:The_Station_CollectionModeEvent"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="container" style="{!'background-color: ' + v.bannerBackgroundColor +';border-radius: 8px;'}">
+        <div class="slds-grid slds-gutters_large">
+            <aura:if isTrue="{! not(v.editMode) }">
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="actions-header-area">
+                        <lightning:button class="back-button" variant="base" label="Back" iconName="utility:chevronleft" onclick="{!c.handleBackClick}"></lightning:button>
+                    </div>
+                    <div class="title slds-text-heading_large">{! v.collectionName }&nbsp;</div>
+                    <aura:if isTrue="{!v.collectionIsShared}">
+                        &nbsp;&nbsp;<lightning:buttonIcon iconName="utility:people" class="title-icon" variant="container" alternativeText="Shared" title="Shared" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.collectionIsPrivate}">
+                        &nbsp;&nbsp;<lightning:buttonIcon iconName="utility:lock" class="title-icon" variant="container" alternativeText="Private" title="Private" />
+                    </aura:if>
+
+                    <div class="created-by slds-text-heading_small slds-p-top_small">Created by <span class="user-full-name">{! v.collectionCreatedBy }</span></div>
+                    
+                    <div class="content slds-p-top_medium">{! v.collectionDescription }</div>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="actions-header-area">
+                        <aura:if isTrue="{!v.collectionIsEditableByRunningUser}">
+                            <lightning:button label="Add Content/Edit" class="slds-float_right white-button-white-border" onclick="{!c.handleEdit}" ></lightning:button>
+                        </aura:if>                        
+                    </div>
+                    <div><span class="followers-number">{! v.collectionFollowers }</span><span class="followers-label"> Followers</span></div>
+                    <div><span class="content-total-number">{! v.collectionContentCount }</span><span class="content-total-label"> Total Content</span></div>
+                    <div class="slds-p-top_medium">
+                        
+                        <aura:if isTrue="{!v.collectionIsFollowedByRunningUser}">
+                            <lightning:button variant="brand" label="Followed Collection" iconName="utility:check" iconPosition="left" class="slds-m-right_x-small white-button-white-border-followed" onclick="{!c.handleFollow}"></lightning:button>
+                            <aura:set attribute="else">
+                                <lightning:button variant="brand" label="Follow Collection" class="slds-m-right_x-small white-button-white-border" onclick="{!c.handleFollow}"></lightning:button>
+                            </aura:set>
+                        </aura:if>
+                        <aura:if isTrue="{!v.collectionIsOwnedByRunningUser}">
+                            <lightning:button variant="brand" label="Share Collection" class="slds-m-right_x-small white-button-white-border" onclick="{!c.handleShare}"></lightning:button>
+                        </aura:if> 
+
+                        <lightning:buttonIcon iconName="utility:alert" iconClass="notification-button-white" alternativeText="Notifications" />
+                    </div>
+                </div>
+            </aura:if>
+            
+            <aura:if isTrue="{! v.editMode }">
+                <div class="slds-col slds-size_2-of-5">
+                    <lightning:input maxlength="80" aura:id="collectionName" class="slds-p-vertical_small main-field" type="text" label="Collection Title" value="{! v.collectionName }"></lightning:input>
+                    <lightning:textarea maxlength="255" aura:id="collectionDescription" class="slds-p-vertical_small main-field" type="text" label="Description" value="{! v.collectionDescription }"></lightning:textarea>
+                    <div class="slds-p-bottom_small created-by-edit-mode"> 
+                        Created By <span class="user-full-name">{! v.collectionCreatedBy }</span>
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <div class="secondary-field">
+                            <div class="slds-form-element__label">Collection Contributors</div>
+                            <div class="slds-form-element__control contributors">
+                                <span class="more-contributors">{!v.totalContributors}</span>
+<!-- contributors -->                                                                
+                                <aura:iteration items="{! v.displayedContributors }" var="contributor">
+                                    <img class="contributor-picture" src="{!contributor.picture}" title="{!contributor.name}"></img>
+                                </aura:iteration>
+                                <aura:if isTrue="{! v.moreContributors }">
+                                    <span class="more-contributors">+{! v.moreContributors }</span>
+                                </aura:if>
+<!-- end -->                                
+                                <aura:if isTrue="{!v.collectionIsOwnedByRunningUser}">
+                                    <lightning:button variant="brand" label="Edit Sharing" class="slds-m-left_small white-button-white-border" onclick="{!c.editSharing}"></lightning:button>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-bottom_small"> 
+                        <lightning:input 
+                                        aura:id="collectionVisibility"
+                                         class="secondary-field"
+                                         type="toggle"
+                                         label="Collection Visibility"
+                                         messageToggleActive="Private"
+                                         messageToggleInactive="Public"
+                                         checked="{!v.collectionIsPrivate}"
+                                         >
+                        </lightning:input>
+                    </div>        
+                    <div class="slds-p-bottom_small"> 
+                        <lightning:combobox
+                                            class="secondary-field color-combobox"
+                                            name="backColorSelect"
+                                            aura:id="backColorSelect"
+                                            label="Background Color"
+                                            variant="label-inline"
+                                            placeholder="Select a color"                                        
+                                            value="{!v.bannerBackgroundColorSelectedValue}"
+                                            options="{!v.backgroundColorOptions}"
+                                            onchange="{!c.changeHeaderBackgroundColor}"
+                                            ></lightning:combobox>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-5 slds-col_bump-left">
+                    <div class="edit-actions">
+                        <lightning:button variant="brand" label="Save" class="slds-size_1-of-2 slds-m-right_x-small edit-save" onclick="{!c.handleSave}"></lightning:button>
+                        <lightning:button variant="brand-outline" label="Cancel" class="slds-size_1-of-2 edit-cancel" onclick="{!c.handleCancel}"></lightning:button>
+                        <lightning:button variant="destructive-text" label="Delete" class="slds-size_1-of-1 slds-m-top_x-small edit-delete" onclick="{!c.handleDelete}"></lightning:button>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,46 @@
+<!--
+  @author - Jonathan Cohen - Salesforce.com
+  @date   - September 2016
+  @group  - Services Org
+  @Ticket - W-000858 : Sign-up as a 9-domain judge in LaunchPAd - self-service
+ 
+  @description - VF Page for the "PABadgeJudgeRequest" Process.
+        The page will allow the user to create/update a Judge request by filling the following information:
+            -   The domains in which he wants to be a judge.
+            -   The region supported.
+            -   The additional languages supported.
+ 
+        Once submitted by the user and if the following validation are true the request will be inserted:
+            - The user must own every domain badge he is requesting to be a judge for.
+            - The domain badges tenure recommended > 1 year but not blocking the proces.
+            - If the user requesting to be a judge is a CTA -> there is no need to verify domain propriety neither tenure and the request is automatically approved.
+ -->
+ <apex:page standardController="Judge__c" extensions="PABadgeJudgeRequest_CTRL" showHeader="true" sidebar="true" tabStyle="Judge__c">
+    
+    <apex:form id="judgeRequestPageForm">
+
+        <apex:pageMessages />
+
+        <apex:pageBlock title="{!$Label.lbl_JudgeSignUp}">
+            <apex:pageBlockSection title="{!$Label.lbl_CandidateInformation}" columns="2" rendered="{!noErrorOnPageLoad}">
+                <apex:outputField value="{!paRelatedToRequest.Name}" />
+                <apex:outputField value="{!paRelatedToRequest.Candidate__c}" />
+                <apex:outputField value="{!paRelatedToRequest.Mentor__c}" />
+                <apex:outputField value="{!paRelatedToRequest.Candidate__r.Name}" />
+                <apex:outputField value="{!paRelatedToRequest.Candidate__r.Email}" />
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="{!$Label.lbl_PABadgesInformation}" columns="2" rendered="{!noErrorOnPageLoad}">
+                <apex:inputField value="{!newJudgeRequest.Nine_Domain_Badges__c}" required="true"/>
+                <apex:inputField value="{!newJudgeRequest.Supported_Regions__c}" required="true"/>
+                <apex:inputField value="{!newJudgeRequest.Additional_Languages__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!$Label.lbl_GoBackButton}" action="{!redirectBackToPaOnboardingPage}" immediate="true"/>
+                <apex:commandButton value="{!$Label.lbl_SubmitJudgeRequestButton}" action="{!submitJudgeRequest}" rendered="{!showSubmitRequestButton && noErrorOnPageLoad}" reRender="judgeRequestPageForm"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+
+    </apex:form>
+</apex:page>

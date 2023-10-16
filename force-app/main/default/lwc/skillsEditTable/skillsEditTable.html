@@ -1,0 +1,255 @@
+<template>
+  <lightning-card>
+        <div style="padding-left: 90%;" >
+            <a href="https://salesforce.quip.com/JFRhA03buudl" target="_blank" title="Skills 360 User Guide" >Skills 360 User Guide</a>
+        </div>  
+        <lightning-tabset active-tab-value={activeTab}>
+  
+            <lightning-tab label="My Skills" value="MySkills" class="slds-m-around_medium" onactive={hanldeChangeView}>
+                
+                <div style={backgroundStyle}>
+                    <div >              
+                        <lightning-layout>
+                            <lightning-layout-item size="3"></lightning-layout-item>
+                            <lightning-layout-item size="6">
+                            
+                            </lightning-layout-item>
+                            <lightning-layout-item size="1"></lightning-layout-item>
+                            <lightning-layout-item size="2">
+      <template if:true={showTriggerBatchButton}>    
+              
+        <lightning-button  variant="brand" label={UpdateSkill} title={UpdateSkill} onclick={updateSkillTaxonomyModal} class="slds-m-left_x-small"  ></lightning-button>
+      
+
+                                </template>
+        </lightning-layout-item>
+        </lightning-layout>
+          <lightning-layout>
+                            <lightning-layout-item size="2" ></lightning-layout-item>
+                            
+                            <lightning-layout-item size="8">
+                                <lightning-layout>
+          <lightning-layout-item size="2">
+                                        <div class="slds-align_absolute-center" style="margin-top: 40px;">
+                                            <img src={skillslogo} style="height:135px;width:135px" alt="">
+                                        </div>
+          </lightning-layout-item>
+                                    <lightning-layout-item size="8" >
+                                <div class="slds-m-around_medium">
+
+                                    <lightning-card >
+                                                
+           
+                                        <div >                                        
+                                            <p class="slds-m-left_small slds-context-bar__label-action slds-context-bar__app-name slds-text-heading_small">
+                                                <strong>{userinfo.Name} 
+                                                    <template if:true={userinfo.AboutMe}>, {userinfo.AboutMe}
+            </template>
+                                                </strong> 
+                  
+                                            </p>
+                
+                                            <p class="slds-m-left_small">
+                                                <strong><template if:true={userinfo.AboutMe}>{userinfo.Title},
+                                                    </template> Reports to <span style="color:rgba(1, 118, 211, 1)">{mgrName}</span><br/>
+                                                    Job Family: <span style="color:rgba(1, 118, 211, 1)">{userinfo.JobFamily__c }</span></strong>
+                                            </p><br/>
+                                            <p class="slds-m-left_small">
+                                                Focus<lightning-helptext content={label.focushelptext}>
+                                                </lightning-helptext>: <span style="color:rgba(1, 118, 211, 1)">{focusStr}</span>
+                                                        <lightning-button-icon icon-name="utility:edit" class="slds-m-left_x-small" size="x-small"
+                                                                    onclick={handleclick} alternative-text="Add/Edit Focus Category"></lightning-button-icon>
+                                                    
+                                            </p>
+                                            <p class="slds-m-left_small">
+                                                Aspirational skills<lightning-helptext content={label.asphelptext}>
+                                                        </lightning-helptext>: <span style="color:rgba(1, 118, 211, 1)"><template if:true={isAspBlank}>Tag aspirational skills below.</template>{aspSkillStr}</span>
+                                            </p><br/>
+            
+                                        </div>
+                                    </lightning-card>
+                                </div>
+          </lightning-layout-item>
+                                <lightning-layout-item size="2" ></lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" >
+           
+        </lightning-layout-item>
+        </lightning-layout>
+        </div>
+        </div>
+                <c-skills-modal-popup-component openfocusmodal={openfocusmodal} onclose={handleModalClosed} boardingrecid={boardingrecid}></c-skills-modal-popup-component>
+
+                
+            </lightning-tab>
+            <template if:true={showTeamSkillsTab}>
+            <lightning-tab label="Team Skills" class="slds-m-around_medium" value="TeamSkills" onactive={hanldeChangeView}>
+
+                      <div >
+                    <lightning-tabset active-tab-value={activesubTab}>
+                        <template if:true={showTeamsTab}>
+                        <lightning-tab label="My Team Skills" value="MyTeamSkills" class="slds-m-around_medium" onactive={hanldeSubtabChangeView}>
+                            <div style={teamSkillbackgroundStyle}>
+                                <template if:true={isdashboardvisible}>
+                                    <lightning-layout >
+                                        <lightning-layout-item size="10">
+                    
+                                        </lightning-layout-item>
+ 
+                                        <lightning-layout-item size="2" >
+                                            <lightning-button  variant="brand" label="Skills 360 Dashboard" title="Skills 360 Dashboard" onclick={handleNavigate} class="slds-m-left_x-small"  ></lightning-button>
+                       
+                     
+
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+                                <lightning-layout>
+                                    <lightning-layout-item size="3"></lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <div class="slds-align_absolute-center slds-m-top_x-large slds-m-bottom_x-large">
+                                            <img src={skillslogo} style="height:135px;width:135px" alt="">
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3"></lightning-layout-item>
+                                </lightning-layout> 
+                      </div>
+                        </lightning-tab>
+                        </template>
+                        <template if:true={showDelegateTab}>
+                        <lightning-tab label="Delegated Team Skills" value="DelegatedTeamSkills" class="slds-m-around_medium" onactive={hanldeSubtabChangeView}>
+                            <div style={teamSkillbackgroundStyle}>
+                                <template if:true={isdashboardvisible}>
+                                    <lightning-layout >
+                                        <lightning-layout-item size="10">
+                     
+                                        </lightning-layout-item>
+
+                                        <lightning-layout-item size="2" >
+
+
+                                            <lightning-button  variant="brand" label="Skills 360 Dashboard" title="Skills 360 Dashboard" onclick={handleNavigate} class="slds-m-left_x-small"  ></lightning-button>
+
+                
+                
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                </template>
+                                <lightning-layout>
+                                    <lightning-layout-item size="3"></lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <div class="slds-align_absolute-center slds-m-top_x-large slds-m-bottom_x-large">
+                                            <img src={skillslogo} style="height:135px;width:135px" alt="">
+                </div>
+
+                                    </lightning-layout-item>
+                                   
+                                    <lightning-layout-item size="3">
+
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </lightning-tab>
+                        </template>
+                    </lightning-tabset>
+                               
+                                   
+                              </div>
+
+               
+            </lightning-tab>
+            </template>
+            <lightning-tab label="Find Skills"  value="AllSkills" class="slds-m-around_medium" onactive={hanldeChangeView}>
+                <div style={findskillbackgroundStyle}>
+                    <template if:true={grps.data}>
+
+                        <lightning-layout>
+                            <lightning-layout-item size="2"></lightning-layout-item>
+                            <lightning-layout-item size="8">
+                               
+                            </lightning-layout-item>
+                            
+                            <lightning-layout-item size="2"></lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                                         
+                            <lightning-layout-item size="3">
+         
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6">
+                                <lightning-layout >
+                                    <lightning-layout-item size="3" >
+                                        <div class="slds-align_absolute-center slds-m-top_x-large slds-m-bottom_x-large">
+                                            <img src={skillslogo} style="height:135px;width:135px" alt="">
+                                        </div>
+                                    </lightning-layout-item>
+                                    
+                                    <lightning-layout-item size="8">
+                                        <div  style="margin-top: 80px;font-style: italic;"> {label.rolehelptext} 
+                                        </div><br>
+                                        <div class="lgc-bg" style="z-index:3;position: relative;">
+                                            <template if:true={selectedgrp}>
+                                                <p class="slds-p-around_x-small">
+                                                    <strong>Selected Group: </strong>{selectedgrp}
+                                                </p>
+                                            </template>
+                                            <lightning-tree items={grps.data}  	onselect={handleSelect}  class="treeCls"  ></lightning-tree>
+                                            
+                                        </div>
+
+                                </lightning-layout-item>
+                                <lightning-layout-item size="1"></lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="3">
+                        
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+
+            </template>
+    </div>
+
+                
+      
+            </lightning-tab>
+            <lightning-tab label="Learning Resources"  value="LearningResources" class="slds-m-around_medium" onactive={hanldeChangeView}>
+              <template if:true={learningView}>
+                <div style={findskillbackgroundStyle}>
+                  <div>
+                        <lightning-layout>
+                            <lightning-layout-item size="3">
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6">
+                                <lightning-layout >
+                                    <lightning-layout-item size="3" >
+                                        <div class="slds-align_absolute-center slds-m-top_x-large slds-m-bottom_x-large">
+                                            <img src={skillslogo} style="height:135px;width:135px" alt="">
+                                        </div>
+                                    </lightning-layout-item>
+                                    
+                                    <lightning-layout-item size="8">
+                                       
+                                            <p class="slds-text-heading_large" style="padding-top:70px;">
+                                            <strong >Learning Resources
+                                            </strong> 
+                                            </p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="1"></lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="3">
+                            </lightning-layout-item>
+                        </lightning-layout>
+                </div>
+              </div>
+              <c-learning-resourcelist-view></c-learning-resourcelist-view>
+             </template>
+            </lightning-tab>
+                              
+        </lightning-tabset>
+       
+            <c-skills-table-component onaspvaluechange={hanldeAspValueChange} currentview={activeTab} currentsubview={activesubTab} myskillsview={mySkillsView} findskillview={findskillview} showmyteam={teamView} onchangeview={hanldeChangeView} showtablecomp={showTablecomp}></c-skills-table-component>
+  </lightning-card>
+</template>

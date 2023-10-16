@@ -1,0 +1,87 @@
+<apex:component controller="sh_projectContainerController">
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectObj" type="sh_Project__c" required="true" assignTo="{!containerProject}"/>
+  <apex:attribute description="" name="domainVar" type="String" required="true" />
+  <!--<apex:attribute description="" name="projectObj" type="sh_Project__c" required="true"/> -->
+  
+  <div class="project-details-container">
+    <div class="project-details-wrapper">
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-1">
+                <span class="detail-label">Type</span>
+            </div>
+            <div class="col-sm-5">
+                <apex:repeat value="{!types}" var="type">
+                      <a href="{!domainVar}/sh_search?projectType={!type}" class="project-detail">{!type}</a>
+                </apex:repeat>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-1">
+                <span class="detail-label">Client</span>
+            </div>
+            <div class="col-sm-5">
+                <a href="{!domainVar}/sh_search?client={!projectObj.Client__c}" class="project-detail">{!projectObj.Client__c}</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-1">
+                <span class="detail-label">Industry</span>
+            </div>
+            <div class="col-sm-5">
+                <apex:repeat value="{!industries}" var="industry">
+                    <a href="{!domainVar}/sh_search?industry={!industry}" class="project-detail">{!industry}</a>
+                 </apex:repeat>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-1">
+                <span class="detail-label">Year</span>
+            </div>
+            <div class="col-sm-5">
+                <a href="{!domainVar}/sh_search?year={!projectObj.Year__c}" class="project-detail">{!projectObj.Year__c}</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-1">
+                <span class="detail-label">Practice</span>
+            </div>
+            <div class="col-sm-5">
+                <apex:repeat value="{!practices}" var="practice" >
+                <a href="{!domainVar}/sh_practice?name={!practice.Practice_Name__c}" class="project-detail">{!practice.Name}</a>
+                </apex:repeat>
+            </div>
+        </div>
+    </div>
+</div> 
+<apex:outputPanel layout="none" rendered="{!(projectObj.Quote_Content__c!=null)}">
+    <div class="project-quote-container container">
+    <div class="project-quote-wrapper row">
+    <div class="col-sm-8 top-quote"><span class="quote-quote"> “ </span>
+    </div>
+    <div class="quote-content-wrapper col-sm-6 col-sm-offset-1" style="">
+    <p class="quote-content">
+        <apex:outputField value="{!projectObj.Quote_Content__c}"></apex:outputField>
+    </p>
+    <p class="quote-author">"{!projectObj.Quote_Author__c}"</p>
+    <style>
+        
+        .quote-content-wrapper *{
+            margin-left:0px;font-family:ProximaNovaSemiBold,Arial,sans-serif; font-size:34px; color:#1aa2de; line-height:48px; font-weight:100;letter-spacing:-0.2px;
+            
+        }
+        .quote-author{
+          font-size: 18px;color: #626262;font-weight: 100;letter-spacing: -0.2px;line-height: 28.5px;margin-bottom: 27px;
+        }
+        .quote-quote{
+        text-align: center;font-size: 302.75px;font-family: ProximaNovaSemiBold,Arial,sans-serif;color: #fff;max-height: 227px;display: inline-block;
+        }
+    </style>
+</div>
+    <div class="col-sm-8 bottom-quote">
+        <span class="quote-quote"> ” </span>
+    </div>
+</div>
+</div>
+</apex:outputPanel>
+</apex:component>

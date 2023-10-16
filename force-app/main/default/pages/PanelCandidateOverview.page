@@ -1,0 +1,242 @@
+<apex:page standardController="Interview_Candidate__c" extensions="PanelCandidateOverviewExtn" readOnly="true" showHeader="false"
+           sidebar="false" standardStylesheets="false" applyBodyTag="false" renderAs="pdf" >
+    <head>
+        <apex:stylesheet value="{!$Resource.PanelCandidateOverviewCss}"/>
+    </head>
+    <body>
+        <div id="divHeader">
+            <apex:image url="{!$Resource.SalesforceLogo}" styleClass="headerImage" />
+            <h2>
+                Panel Summary
+            </h2>
+        </div>
+        <br/>
+        <div id="divBasicInfo">
+            <h3>
+                Key Information
+            </h3>
+            <table class="basicInfoTable">
+                <tr>
+                    <td class="basicInfoCellLabel boldText">
+                        <p>
+                            <apex:outputText value="Candidate Name:" />
+                        </p>
+                        <p>
+                            <apex:outputText value="Years of Experience:" />
+                        </p>
+                        <p >
+                            <apex:outputText value="Region:" />
+                        </p>
+                        <p>
+                            <apex:outputText value="Zone:" />
+                        </p>
+                        <p>
+                            <apex:outputText value="City, State:" />
+                        </p>
+                        <p>
+                            <apex:outputText value="Recruiter Comments:" />
+                        </p>
+                    </td>
+                    <td class="basicInfoCellValue">
+                        <p>
+                            <apex:outputText value="{!Interview_Candidate__c.Name}" />&nbsp;
+                        </p>
+                        <p>
+                            <apex:outputText value="{0, Number, 0}">
+                                <apex:param value="{!Interview_Candidate__c.Years_of_Experience__c}" />
+                            </apex:outputText>&nbsp;
+                        </p>
+                        <p>
+                            <apex:outputText value="{!Interview_Candidate__c.Region__c}" />&nbsp;
+                        </p>
+                        <p>
+                            <apex:outputText value="{!Interview_Candidate__c.Zone__c}" />&nbsp;
+                        </p>
+                        <p>
+                            <apex:outputText value="{0}, {1}">
+                                <apex:param value="{!Interview_Candidate__c.City__c}" />
+                                <apex:param value="{!Interview_Candidate__c.State__c}" />
+                            </apex:outputText>&nbsp;
+                        </p>
+                        <p>
+                            <apex:outputField value="{!Interview_Candidate__c.Recruiter_Intro__c}" />&nbsp;
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br/>
+        <div id="divInterviewSummary">
+            <h3>
+                Interview Summary
+            </h3>
+            <br/>
+            <table class="interviewSummaryTable">
+                <tr>
+                    <td class="boldText">
+                        <p>
+                            <apex:outputText value="Interview Type" />
+                        </p>
+                    </td>
+                    <td class="boldText">
+                        <p>
+                            <apex:outputText value="Interviewer" />
+                        </p>
+                    </td>
+                    <td class="boldText">
+                        <p>
+                            <apex:outputText value="Date" />
+                        </p>
+                    </td>
+                    <td class="boldText">
+                        <p>
+                            <apex:outputText value="Rating" />
+                        </p>
+                    </td>
+                    <td class="boldText">
+                        <p>
+                            <apex:outputText value="Recommended" />
+                        </p>
+                    </td>
+                </tr>
+                <apex:repeat value="{!allInterviews}" var="aInterview">
+                    <tr>
+                        <td class="">
+                            <p>
+                                <apex:outputText value="{!aInterview.interviewType}" />
+                            </p>
+                        </td>
+                        <td class="">
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Interviewer__r.Name}" />
+                            </p>
+                        </td>
+                        <td class="">
+                            <p>
+                                <apex:outputText value="{0, Date, MM/dd/yyyy}">
+                                    <apex:param value="{!aInterview.Interview.Actual_Interview_Date__c}" />
+                                </apex:outputText>
+                            </p>
+                        </td>
+                        <td class="">
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Overall_Interview_Rating__c}" />
+                            </p>
+                        </td>
+                        <td class="">
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Recommendation__c}" />
+                            </p>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </div>
+        <br/>
+        <div id="divInterviewDetails">
+            <h3>
+                Interview Details
+            </h3>
+            <table class="interviewDetailsTable">
+                <apex:repeat value="{!allInterviews}" var="aInterview">
+                    <tr>
+                        <td class="interviewCellLabel boldText">
+                            <p>
+                                <apex:outputText value="Interview Type:" />
+                            </p>
+                            <p>
+                                <apex:outputText value="Interviewer:" />
+                            </p>
+                            <p>
+                                <apex:outputText value="Date:" />
+                            </p>
+                            <p >
+                                <apex:outputText value="Rating:" />
+                            </p>
+                            <p >
+                                <apex:outputText value="Recommended:" />
+                            </p>
+                            <p >
+                                <apex:outputText value="Comments:" />
+                            </p>
+                        </td>
+                        <td class="interviewCellValue">
+                            <p>
+                                <apex:outputText value="{!aInterview.interviewType}" />
+                            </p>
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Interviewer__r.Name}" />
+                            </p>
+                            <p>
+                                <apex:outputText value="{0, Date, MM/dd/yyyy}">
+                                    <apex:param value="{!aInterview.Interview.Actual_Interview_Date__c}" />
+                                </apex:outputText>
+                            </p>
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Overall_Interview_Rating__c}" />
+                            </p>
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Recommendation__c}" />
+                            </p>
+                            <p>
+                                <apex:outputField value="{!aInterview.Interview.Comments__c}" />
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="questionTable">
+                                <tr>
+                                    <td class="questionLeft boldText">
+                                        <p>
+                                            Question
+                                        </p>
+                                    </td>
+                                    <td class="questionRight boldText">
+                                        <p>
+                                            Rating
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="questionCommentCell boldText">
+                                        <p>
+                                            Comment
+                                        </p>
+                                    </td>
+                                </tr>
+                                <apex:repeat value="{!aInterview.InterviewEvaluations}" var="iEval">
+                                    <tr>
+                                        <td class="questionLeft">
+                                            <p>
+                                                <b>(<apex:outputField value="{!iEval.Interview_Question__r.Domain__c}"/>) </b> 
+                                                <apex:outputField value="{!iEval.Interview_Question__r.Question__c}"/>
+                                            </p>
+                                        </td>
+                                        <td class="questionRight">
+                                            <p>
+                                                <apex:outputText value="{!IF(iEval.Skipped__c, "SKIPPED", iEval.Rating__c)}"/>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="questionCommentCell">
+                                            <p>
+                                                <apex:outputField value="{!iEval.Comments__c}"/>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </td>
+                    </tr>
+                    <apex:outputPanel rendered="{!lastInterviewId != aInterview.Interview.Id}">
+                        <br/>
+                        <hr/>
+                        <br/>
+                    </apex:outputPanel>
+                </apex:repeat>
+            </table>
+        </div>
+    </body>
+</apex:page>

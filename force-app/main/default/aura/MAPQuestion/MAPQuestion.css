@@ -1,0 +1,34 @@
+.THIS .question-number{
+    font: bold 40px/1 Sans-Serif;
+    float: left;
+    padding: 10px;
+    padding-left: 0px;
+    padding-top: 0px;
+}
+.THIS .child-number{
+    font: bold 25px/1 Sans-Serif;
+    float: left;
+    padding: 10px;
+    padding-left: 0px;
+    padding-top: 4px;
+}
+.THIS span:hover {
+    position: relative;
+}
+.THIS span[aria-label]:hover:after {
+	content: attr(aria-label);
+	padding: 10px;
+	position: absolute;
+	left: 0;
+	top: 100%;
+	z-index:1000;
+	background: rgb(0, 112, 210);
+    border-radius: .25rem;
+    color: white;
+    width: 400px;
+    height: auto;
+}
+.THIS .naButton{
+    line-height: 1.3rem !important;
+    padding: 0px 10px !important;
+}

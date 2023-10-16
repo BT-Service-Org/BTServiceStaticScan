@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>All_Published_Methods_Access</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>This is to give the access of all the published methods to all the users.</description>
+        <label>All Published Methods Access</label>
+        <sharedTo>
+            <group>All</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Published</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Methodology_Team_Rule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>This is to give access of all the methods to all the methodology group members irrespective of any status.</description>
+        <label>Methodology Team Rule</label>
+        <sharedTo>
+            <group>Methodology_Team</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

@@ -1,0 +1,57 @@
+.THIS .slds-path__nav{
+    width: 100%;
+}
+.THIS .path-complete {
+    background-color: green;
+}
+.THIS .path-complete:before {
+    background-color: green;
+}
+.THIS .path-complete:after {
+    background-color: green;
+}
+.THIS .path-partial {
+    background-color: goldenrod;
+}
+.THIS .path-partial:before {
+    background-color: goldenrod;
+}
+.THIS .path-partial:after {
+    background-color: goldenrod;
+}
+.THIS .path-current {
+    background-color: rgb(0, 95, 178);
+}
+.THIS .path-current:before {
+    background-color: rgb(0, 95, 178);
+}
+.THIS .path-current:after {
+    background-color: rgb(0, 95, 178);
+}
+.THIS .path-default {
+    background-color: rgb(236, 235, 234);
+}
+.THIS .path-default:before {
+    background-color: rgb(236, 235, 234);
+}
+.THIS .path-default:after {
+    background-color: rgb(236, 235, 234);
+}
+.THIS .path-inapplicable {
+    background-color: crimson;
+}
+.THIS .path-inapplicable:before {
+    background-color: crimson;
+}
+.THIS .path-inapplicable:after {
+    background-color: crimson;
+}
+.THIS .slds-path__link {
+    color: white;
+}
+.THIS .path-default .slds-path__title{
+    color: black;
+}
+.THIS .slds-path__track{
+    padding: 0px !important;
+}

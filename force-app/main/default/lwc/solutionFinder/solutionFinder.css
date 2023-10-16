@@ -1,0 +1,23 @@
+.solution-finder {
+    overflow: hidden;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+button {
+    margin-left: 10px;
+    font-weight: normal;
+    font-size: .8em;
+    color: #c0c0c0;
+    border: 1px #c0c0c0 solid;
+    background: #ffffff;
+    border-radius: 3px;
+}
+
+button:hover {
+    border: 1px #3366cc solid;
+    color: #3366cc;
+    background: #fffff0;
+}

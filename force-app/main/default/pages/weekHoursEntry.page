@@ -1,0 +1,30 @@
+<apex:page controller="weekHoursEntry_Controller" tabStyle="Resource_Schedule_Week__c">
+    <apex:form id="theForm">
+        <br />
+        <h1>LAST WEEK'S UNSUBMITTED TIME ENTRIES (week ending&nbsp;<apex:outputText value="{!strLastWeekEnding}" />)</h1>
+        <br />
+        <br />
+        <apex:dataTable value="{!ResourceScheduleWeeks}" var="schedWeek" id="theTable" rowClasses="odd,even" 
+            styleClass="tableClass" cellPadding="5" border="1">
+            <apex:column >
+                <apex:facet name="header">SOW</apex:facet>
+                <apex:outputField value="{!schedWeek.SOW__r.Name}"/>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Resource</apex:facet>
+                <apex:outputField value="{!schedWeek.SOW_Resource_Assignment__r.Resource_Name__c}"/>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Week Hours</apex:facet>
+                <apex:inputField value="{!schedWeek.Week_Hours__c}"/>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Comments</apex:facet>
+                <apex:inputTextArea value="{!schedWeek.Comments__c}" cols="75" rows="3" />
+            </apex:column>
+        </apex:dataTable>
+        <br />
+        <!--  <apex:commandButton action="{!save}" value="Save" id="saveButton"/>  -->
+        <apex:commandButton action="{!saveAndSubmit}" value="Save & Submit" id="saveAndSubmitButton"/>
+    </apex:form>
+</apex:page>

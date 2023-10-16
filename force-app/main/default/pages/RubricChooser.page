@@ -1,0 +1,2 @@
+<apex:page standardController="Rubric__c" extensions="RubricChooserExtensionController" showHeader="false" sidebar="false" action="{!SelectRubric}">
+</apex:page>

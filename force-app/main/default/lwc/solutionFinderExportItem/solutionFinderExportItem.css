@@ -1,0 +1,15 @@
+.label {
+    color: #3366cc;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.description {
+    color: #909090;
+    font-size: 12px;
+}
+
+.next-question {
+    color: #000000;
+    font-size: 12px;
+}

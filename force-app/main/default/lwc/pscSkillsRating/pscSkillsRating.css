@@ -1,0 +1,159 @@
+.user-skill-page {
+    display: block;
+    width: 100%;
+    background-color: white;
+    padding: 30px;
+}
+
+.user-profile-info {
+    width: 100%;
+}
+
+.user-skill-insight {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.profile-summary {
+    width: 60%;
+}
+.skill-insight {
+    width:38%;
+}
+
+.category {
+    color: #032D60;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    margin-top: 8px;
+}
+
+.category_desc {
+    font-size: 14px;
+    cursor: default;
+    text-decoration: none;
+}
+
+.userName {
+    padding: 20px 0px 15px;
+}
+
+.skill-summary {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    background-color: #CFE4FF;
+    padding: 15px;
+}
+
+.skill-matched  {
+
+    color: #032D60;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+}
+  
+.career_paths {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;;
+}
+.career_roles {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.career_roles h2 {
+    color: #032D60;
+    font-size: 20px;
+    letter-spacing: 0.03em;
+    margin-top: 8px;
+}
+
+.role_header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.role_header h2 {
+    width: 50%;
+}
+
+.career_options {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+}
+
+.role {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+
+}
+
+.path {
+    width: 50%;
+}
+
+.manager_validation {
+    display: flex;
+}
+
+.manager_validation p {
+    margin-left:10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.manager_validation span {
+    color: #65b939;
+    font-size: 16px;
+}
+
+.no-results {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #032D60;
+}
+
+@media screen and (max-width:600px) {
+    .user-skill-page {
+        padding: 15px;
+    }
+
+    .userName {
+        padding: 0px;
+    }
+
+    .user-skill-insight {
+        flex-direction: column;
+    }
+
+    .profile-summary {
+        width: 100%;
+    }
+
+    .skill-insight {
+        width: 100%;
+    }
+
+    .skill-summary {
+        margin-top: 15px;
+    }
+
+    .category {
+        font-size: 16px;
+    }
+}

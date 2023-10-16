@@ -1,0 +1,20 @@
+<aura:component implements="lightning:actionOverride,force:hasSObjectName,force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:html tag="style">
+                .slds-modal__content{
+                overflow-y: hidden !important;
+                }
+                .slds-p-around_medium, .slds-p-around--medium {
+                padding: 0;
+                }
+                .slds-modal__container{
+                height : auto; width: 80%; max-width: 70vh;
+                }
+                .modal-body{
+                height : 33.5rem !important;
+                max-height: 33.5rem !important;
+                }
+        </aura:html>
+        <c:gdcmsQuestionAnswerForm recordId="{!v.recordId}" objectName="{!v.sObjectName}" 
+                                   onclose="{!c.closeModal}" isEditMode="false"/>
+</aura:component>

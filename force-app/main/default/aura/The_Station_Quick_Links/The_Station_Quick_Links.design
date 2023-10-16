@@ -1,0 +1,13 @@
+<design:component  label="TheStation: Quick Links"> 
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2" default="Light 1" description="Change component theme"/>
+    <design:attribute name="contentGroupId" label="Content Group Id" default="" required="true" placeholder="Station Page ID"/>
+    <design:attribute name="showGroupTitle" label="Show Content Group Title" default="true"/>
+    <design:attribute name="hideFeedbackButtons" label="Hide Feedback Button" default="false"/>
+    <design:attribute name="titleFontSize" label="Title Font Size" default="42" min="16" max="60" required="true" description="In pixels"/>
+    <design:attribute name="titleAlignment" label="Title Alignment" datasource="Left,Center,Right" default="Center"/>
+    <design:attribute name="leftColumnLimit" label="Left Column Limit" default="6" min="1" max="60" required="true" description="Number of items for left column"/>
+    <design:attribute name="columnTitleFontSize" label="Column Title Font Size" default="30" min="16" max="60" required="true" description="In pixels"/>
+    <design:attribute name="columnTitleAlignment" label="Column Title Alignment" datasource="Left,Center,Right" default="Center"/>
+    <design:attribute name="leftColumnTitle" label="Left Column Title" default="" placeholder="Left Title"/>
+    <design:attribute name="rightColumnTitle" label="Right Column Title" default="" placeholder="Right Title"/>
+</design:component>

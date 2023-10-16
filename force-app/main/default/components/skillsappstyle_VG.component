@@ -1,0 +1,144 @@
+<apex:component >
+
+    
+
+    
+    <style type="text/css">
+    
+        body {
+            font-size: 12px !important;
+        }
+
+        .portal-header {
+            background-color: #5C5C5C;
+            height: 40px;
+            width: 100%;
+            text-align: center;
+            font-family: "Platform-Font",Helvetica,Arial,sans-serif;
+            font-size: 27px;
+            color: #efefef;
+            position: relative;
+            top: 0px;
+            left: 0px;
+            z-index: 9;
+            line-height: 37px;
+        }
+        
+        .sectionFill {
+            padding: 10px;
+            /* background-image: linear-gradient(rgb(140, 140, 140) 0%, rgb(102, 102, 102) 100%);
+               color: white; */
+        }
+        
+        .well {
+            background-color: white;
+            border: 1px solid rgba(250, 84, 0, 0.5);
+            box-shadow: 3px 3px 12px rgba(250, 84, 0, 0.3)
+        }
+        
+        .shoeImg {
+            width: 280px;
+            height: 135px;
+            
+        }
+        
+        .nTHead {
+        -webkit-background-clip: border-box;
+        -webkit-background-origin: padding-box;
+        -webkit-background-size: auto;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: rgba(0, 0, 0, 0);
+        background-image: linear-gradient(rgb(140, 140, 140) 0%, rgb(102, 102, 102) 100%);
+        background-origin: padding-box;
+        background-size: auto;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        box-sizing: border-box;
+        clear: both;
+        color: rgb(255, 255, 255);
+        font-size: 12px;
+        height: 52px;
+        line-height: 22px;
+        margin-top: 20px;
+        padding-bottom: 15px;
+        padding-left: 20px;
+        padding-right: 10px;
+        padding-top: 15px;
+        border-radius: 3px;
+        }
+        
+        .navbar .nav > li {
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        ul li, ol li {
+        margin-left: 0px;
+        }
+        
+        .nav-tabs > li > a {
+        color: white;
+        }    
+        
+        .table-condensed td {
+        padding: 0px;
+        }
+        
+        .nTitle {
+        -webkit-background-clip: border-box;
+        -webkit-background-origin: padding-box;
+        -webkit-background-size: auto;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: rgba(0, 0, 0, 0);
+        background-image: linear-gradient(rgb(140, 140, 140) 0%, rgb(102, 102, 102) 100%);
+        background-origin: padding-box;
+        background-size: auto;
+        
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        clear: both;
+        
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        height: 50px;
+        color:white;
+        display: block;
+        font-family: Platform-Font, Helvetica, Arial, sans-serif;
+        font-size: 15px !important;
+        font-weight: bold;
+        height: 20px;
+        letter-spacing: normal;
+        line-height: 20.984375px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        text-rendering: optimizelegibility;
+        word-spacing: -1px;
+        }
+        
+        .nwell {
+        box-shadow: rgba(0, 0, 0, 0.498039) 0px 1px 2px 0px !important;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.498039) 0px 1px 2px 0px;
+        background-color: rgb(238, 238, 238);
+        border-radius:7px !important;
+        }
+        .grid {
+        padding: 2px; 
+        border: solid 1px #dddddd; 
+        text-align:right;
+        }    
+        .gridLeft {
+        padding: 2px; 
+        border: solid 1px #dddddd; 
+        text-align:left;
+        }  
+    </style>
+    
+</apex:component>

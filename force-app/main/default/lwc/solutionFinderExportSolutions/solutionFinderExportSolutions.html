@@ -1,0 +1,22 @@
+<template>
+    <div class="sidebar">
+        <div class="title">
+            Solutions
+        </div>
+        <div class="content">
+            <template for:each={solutions} for:item="solution">
+                <div key={solution.name}>
+                    <div class="word">
+                        {solution.solutionLabel}
+                    </div>
+                    <div class="definition">
+                        {solution.description}
+                    </div>
+                    <ul if:true={solution.exportNote} class="slds-list_dotted">
+                        <li>{solution.exportNote}</li>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

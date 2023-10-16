@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <masterLabel>FlowNavigation</masterLabel>
+    <description>This is the Flow Navigation component</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="nextButton" type="Boolean" label="nextButton" description="Hide Next Button" />
+            <property name="backButton" type="Boolean" label="backButton" description="Hide Back Button for basic info screen" />
+            <property name="varBackClicked" type="Boolean" label="varBackClicked" description="Check if Back is Clicked" />
+            <property name="created" type="Boolean" label="created" />
+            <property name="MethodRecordId" type="String" label="MethodRecordId" />
+
+            <property name="statusValue" type="String" label="statusValue" />
+            <property name="statusFieldError" type="String" label="statusFieldError" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

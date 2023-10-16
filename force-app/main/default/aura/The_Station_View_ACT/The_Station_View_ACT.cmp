@@ -1,0 +1,18 @@
+<aura:component controller="ACTCoursesController" implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:The_Station_Profile_Overview_Tab">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <aura:attribute name="courses" type="slj_Learning_Path_c__x[]"/>
+    <aura:attribute name="assignedCourses" type="ACTWrapper[]"/>
+    
+    
+    <aura:set attribute="title" value="In-Progress &amp; Completed ACT Courses" />
+    <aura:set attribute="titleLogo" value="{!$Resource.AstroIcon}" />
+    <aura:set attribute="backgroundImageURL" value="{!$Resource.ACTBackgroundImage}"/>
+    <aura:set attribute="showMoreURL" value="https://readiness.lightning.force.com/lightning/n/slj__Dashboard_Home"/>
+    
+    
+    <!--Liste of Courses-->
+        <aura:iteration items="{!v.assignedCourses}" var="course"> 
+            <c:The_Station_ACT_Item course="{!course}"/>
+        </aura:iteration> 
+    </aura:component>

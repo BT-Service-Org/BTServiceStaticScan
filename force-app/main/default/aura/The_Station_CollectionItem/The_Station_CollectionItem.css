@@ -1,0 +1,261 @@
+.THIS.collection-item {
+  border: 1px solid #bbbbbb;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  color: #000;
+}
+
+.THIS .item-header {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.THIS .item-body {
+  height: 14.5rem;
+  padding: 1rem 0.75rem;
+  overflow-y: hidden;
+}
+
+.THIS .overlay-filter {
+  border-radius: 8px;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.57);
+}
+
+.THIS .actions {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  /*align-items:center;*/
+}
+
+.THIS .actions-top {
+  width: fit-content;
+}
+
+.THIS .actions-bottom {
+  width: fit-content;
+}
+
+.THIS .preview-image-container {
+  height: 15rem;
+}
+
+.THIS .predefined-image {
+  max-height: 15rem;
+  max-width: -webkit-fill-available;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+
+.THIS .no-predefined-image {
+  max-height: 7.5rem;
+}
+
+.THIS .title {
+  color: #165fb3;
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+  line-height: normal;
+}
+
+.THIS .content {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: normal;
+  margin-top: 10px;
+}
+
+.THIS .delete-icon {
+  position: absolute;
+  right: 1rem;
+  top: 2rem;
+  z-index: 11;
+}
+
+.THIS .buttonTheme-light1 {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  background-color: #018eda !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-light2 {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  background-color: #018eda !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-dark1 {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #54698d !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-dark2 {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #21466f !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-light1-disabled {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(217, 219, 221);
+}
+
+.THIS .buttonTheme-light2-disabled {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(217, 219, 221);
+}
+
+.THIS .buttonTheme-dark1-disabled {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #54698d !important;
+  color: rgb(217, 219, 221);
+}
+
+.THIS .buttonTheme-dark2-disabled {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #21466f !important;
+  color: rgb(217, 219, 221);
+}
+
+.THIS .slds-button_neutral {
+  font-weight: bold;
+  border: var(--buttonBorder);
+  background-color: var(--buttonBackground);
+  height: var(--buttonHeight);
+  color: #ffffff;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  justify-content: center;
+}
+
+.THIS .slds-button_icon-border-filled {
+  width: var(--buttonHeight);
+  height: var(--buttonHeight);
+  border-width: 2px;
+  /*background-color: transparent;*/
+}
+
+.THIS .slds-button_icon-border {
+  width: var(--buttonHeight);
+  height: var(--buttonHeight);
+  border-width: 2px;
+  /*background-color: transparent;*/
+}
+
+/* Adding CSS for Unapproved Content */
+.THIS .flag {
+  position: absolute;
+  width: 150px;
+  right: 0;
+  top: 20px;
+  cursor: pointer;
+}
+
+.THIS .flag-text {
+  z-index: 9;
+  position: relative;
+  color: white;
+  font-size: 0.75rem;
+  height: 25px;
+  margin-left: 20px;
+  max-width: 125px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.THIS .flag:hover .flag-popover {
+  display: block;
+}
+
+.THIS .flag-popover {
+  max-width: 190px;
+  margin-top: 15px;
+  background: #16315f;
+  color: #ffffff;
+  display: none;
+}
+
+.THIS .shape {
+  width: 125px;
+  height: 25px;
+  margin-left: 25px;
+  background-color: red;
+  position: absolute;
+  display: inline-block;
+}
+
+.THIS .shape::after {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-top: 25px solid red;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}
+
+.THIS .shape::before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-bottom: 25px solid red;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}

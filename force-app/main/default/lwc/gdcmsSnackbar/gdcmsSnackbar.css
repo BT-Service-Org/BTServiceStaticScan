@@ -1,0 +1,133 @@
+.snackbar {
+    visibility: hidden;
+    min-width: 350px;
+    min-height: 500px;
+    margin-left: -125px;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: absolute;
+    z-index: 1;
+    top: 05%;
+    right: 0%;
+    font-size: 17px;
+  }
+
+
+  .show {
+    visibility: visible;
+    -webkit-animation: fadein 1s;
+    animation: fadein 1s;
+  }
+  
+  .remove{
+    visibility: visible;
+    -webkit-animation: fadeout .6s;
+    animation: fadeout 0.6s;
+  }
+
+  @-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 5%; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 5%; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {top: 5%; opacity: 1; visibility: visible;} 
+    to {top: 0; opacity: 0; visibility: hidden;}
+  }
+  
+  @keyframes fadeout {
+    from {top: 5%; opacity: 1;  visibility: visible;}
+    to {top: 0; opacity: 0;  visibility: hidden;}
+  }
+
+  .snackbar-outer-container{
+    width: 350px; 
+    overflow:visible
+  }
+
+  .close-icon{
+    float:right;
+  }
+
+  .snackbar-inner-container{
+    padding-top: 30px;
+    background-color: none;
+    margin-left: 1px;
+    height: 550px;
+    border-radius: 2px;
+  }
+
+  .header-img-margin-container{
+    height: 12.5%;
+    overflow:visible;
+    padding-top: 0px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-bottom-style:none;
+  }
+
+  .header-img{
+    margin-top: -50px;
+    margin-left: 10px;
+    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+  }
+
+  .header-img-no-width{
+    margin-top: -50px;
+    margin-left: 10px;
+    border-radius: 10px;
+    /* width: 100px; */
+    height: 100px;
+  }
+
+  .header-margin{
+    margin-top: -40px;
+    background-color: #000080;
+    height: 10px;
+    width: 100%;
+    border-radius: 1px;
+  }
+
+  .body-container{
+    height: 86.50%;
+    overflow:scroll;
+    padding-top: 0px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-top-style:none;
+    border-bottom-style:none;
+    padding: 0px; 
+    padding-top: 5px; 
+    padding-bottom:5px; 
+  }
+
+  .name{
+    text-align: center; 
+    color: #111672; 
+    font-size: 16px; 
+    font-weight: bold
+  }
+
+  .position{
+    text-align: center ;
+    color: #404040; 
+    font-size: 16px; 
+    margin-top: 4px
+  }
+
+  .scrollbar{
+    height: 1%;
+    overflow:scroll;
+    padding-top: 0px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-top-style:none;
+  }

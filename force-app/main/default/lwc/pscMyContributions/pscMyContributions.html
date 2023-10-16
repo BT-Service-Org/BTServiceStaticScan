@@ -1,0 +1,103 @@
+<template>
+    <h3 class="ITC_font box-title">{containerTitle}</h3>
+    <div class="carousel-container" if:false={isListView}>
+        <div class="carousel-image" style={getBackgroundImage}>
+            
+            <div if:true={showContent}>
+                
+                <div class="carousel-content" if:false={showLastPage}>
+                    <a href={contributionUrl} class="record_title">
+                        <lightning-formatted-rich-text value={contributionTitle} class="carousel-title ITC_font"
+                            if:true={contributionTitle}></lightning-formatted-rich-text>
+                        <template if:true={showSlackUrl}>
+                            <lightning-badge label={status} class="badge-value slds-badge">
+                            </lightning-badge>
+                        </template>
+
+                    </a>
+
+                    <lightning-formatted-rich-text value={contributionDescription}
+                        class="carousel-description salesforce_font"
+                        if:true={contributionDescription}></lightning-formatted-rich-text>
+                    <a href={contributionUrl} target="_blank">
+                        <p if:true={showSlackUrl} class="salesforce_font slack">View in Slack</p>
+                    </a>
+
+                </div>
+
+                <h3 if:true={showLastPage} class="ITC_font last_page_content">{contributionTitle}</h3>
+
+            </div>
+
+            <h2 class="ITC_font last_page_content" if:false={showContent}>No Contribution yet</h2>
+        </div>
+        <div class="button ITC_font" if:true={showViewAll} style="justify-content:end">
+            <a href={detailPageUrl} target="_blank">
+                <span>Show All<lightning-icon icon-name="utility:forward" class="arrow"
+                    size="x-small"></lightning-icon></span>
+            </a>
+        </div>
+
+        <div class="button ITC_font" if:true={showSlackUrl}>
+            <span class="slackurl">
+                <img src={slack_logo} alt="Slack Logo">
+                <a href={communitySlackUrl} target="_blank"><span>Ask
+                        Questions</span></a>
+            </span>
+            <a href={detailPageUrl} target="_blank">
+                <span>Show All<lightning-icon icon-name="utility:forward" class="arrow" size="x-small"></lightning-icon>
+                </span>
+            </a>
+        </div>
+        <button class="prev" onclick={prevBannerHandler} disabled={prevDisabled}>❮</button>
+        <button class="next" onclick={nextBannerHandler} disabled={nextDisabled}>❯</button>
+    </div>
+
+    <div class="carousel-container" if:true={isListView}>
+        <div class="carousel-image" style={getBackgroundImage}>
+           
+            <div if:true={showContent} class={container_type}>
+                <template for:each={recordsToDisplay} for:item="record">
+                    <div key={record.title} class={card_type}>
+                        <a href={record.navigationURL} class="record_title">
+
+                            <lightning-formatted-rich-text value={record.title} class="carousel-title ITC_font"
+                                if:true={record.title}></lightning-formatted-rich-text>
+                            <template if:true={showSlackUrl}>
+                                <lightning-badge label={record.status} class="badge-value slds-badge">
+                                </lightning-badge>
+                            </template>
+
+                        </a>
+                        <lightning-formatted-rich-text value={record.body} class="carousel-description salesforce_font"
+                            if:true={record.body}></lightning-formatted-rich-text>
+                        <a href={record.navigationURL} target="_blank">
+                            <p if:true={showSlackUrl} class="salesforce_font slack" >View in Slack</p>
+                        </a>
+                    </div>
+                </template>
+
+            </div>
+            <h2 class="ITC_font last_page_content" if:false={showContent}>No Contribution yet</h2>
+        </div>
+        <div class="button ITC_font" if:true={showViewAll} style="justify-content:end">
+            <a href={detailPageUrl} target="_blank">
+                <span>Show All<lightning-icon icon-name="utility:forward" class="arrow" size="x-small"></lightning-icon></span>
+            </a>
+         </div>
+        <div class="button ITC_font" if:true={showSlackUrl}>
+            <template if:true={userIsMember}>
+                <span class="slackurl">
+                    <img src={slack_logo} alt="Slack Logo">
+                    <a href={communitySlackUrl} target="_blank"><span>Ask
+                            Questions</span></a>
+                </span>
+            </template>
+            <a href={detailPageUrl} target="_blank" if:true={recordsToDisplay.length}>
+                <span>Show All<lightning-icon icon-name="utility:forward" class="arrow"
+                    size="x-small"></lightning-icon></span>
+            </a>
+        </div>
+
+    </div>
+</template>

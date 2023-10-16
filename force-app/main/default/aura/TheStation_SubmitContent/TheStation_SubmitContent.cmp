@@ -1,0 +1,45 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="recordId" type="String" access="global" required="true"/>
+    <aura:attribute name="buttonLabel" type="String" access="global" required="true"/>
+    <aura:attribute name="align" type="String" access="global" required="true"/>
+    
+    <aura:attribute name="newCaseNumber" type="String"/>
+    <aura:attribute name="sprdRecord" type="Object" />
+    <aura:attribute name="sprdSimpleRecord" type="Object" />
+    <aura:attribute name="sprdError" type="String" />
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    
+    <aura:handler name="change" value="{!v.newCaseNumber}" action="{!c.handleNewCaseNumberChange}"/>
+    
+    <force:recordData aura:id="stationProductRecordCmp"
+                      recordId="{!v.recordId}"
+                      fields="Id,OwnerId"
+                      mode="VIEW"
+                      targetRecord="{!v.sprdRecord}"
+                      targetFields="{!v.sprdSimpleRecord}"
+                      targetError="{!v.sprdError}" />
+<!--    
+    <div class="slds-p-top_medium slds-p-bottom_xx-large">
+        <button class="{!'slds-button slds-button_brand ' + if(v.align == 'Left','slds-float_left slds-m-left_xx-large',if(v.align == 'Right','slds-float_right slds-m-right_xx-large','center'))}" onclick="{!c.handleShowModal}">{!v.buttonLabel}</button>
+    </div>
+-->    
+    
+    <div class="slds-p-vertical_xx-large">
+        <button class="{!'slds-button_brand feedback-widget my-button ' + if(v.align == 'Left','slds-float_left slds-m-left_xx-large',if(v.align == 'Right','slds-float_right slds-m-right_xx-large','center'))}" onclick="{!c.handleShowModal}">
+            <div class="show-me-on-hover">Have Content? Can't find what you're looking for? Click here to Request or Submit Content!</div>
+            <div class="divider"></div>
+            <div class="main-comp">{!v.buttonLabel}</div>
+        </button>
+    </div>
+    
+<!--    
+    <div class="slds-p-vertical_xx-large">
+        <button class="{!'slds-button slds-button_brand feedback-widget ' + if(v.align == 'Left','slds-float_left slds-m-left_xx-large',if(v.align == 'Right','slds-float_right slds-m-right_xx-large','center'))}" onclick="{!c.handleShowModal}">
+            <span class="writing-mode">{!v.buttonLabel}</span>
+        </button>
+    </div>
+-->
+</aura:component>

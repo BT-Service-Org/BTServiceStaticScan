@@ -1,0 +1,13 @@
+<template>
+    <div>
+        <c-solution-finder-details-headers columns={columns}></c-solution-finder-details-headers>
+    </div>
+    <template for:each={details} for:item="detail">
+        <div key={detail.index}>
+            <c-solution-finder-detail detail={detail} columns={columns} onchange={handleChange} ondelete={handleDelete}></c-solution-finder-detail>
+        </div>
+    </template>
+    <div class="slds-p-around_small">
+        <lightning-button-icon icon-name="utility:add" onclick={handleAddRowClick}></lightning-button-icon>
+    </div>
+</template>

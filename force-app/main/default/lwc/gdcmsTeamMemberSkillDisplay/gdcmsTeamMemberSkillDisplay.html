@@ -1,0 +1,13 @@
+<template>
+    <div class="cardtile">
+    <lightning-card>
+        <h1 style="font-weight: 900" slot="title">{skillName}</h1>
+        <div class="cardBody">
+            <template for:each={skillData} for:item="detail">
+                <li style="padding:2px 0px" key={detail}>{detail}</li>
+            </template>
+        </div>
+    </lightning-card>
+
+    </div>
+</template>

@@ -1,0 +1,72 @@
+.THIS.collection-item {
+    border: 2px solid #BBBBBB;
+    border-radius: 8px;
+    margin: .5rem 0;
+    color: #000;
+    min-width: 210px;
+}
+
+.THIS .item-header {
+    padding: 1rem .75rem;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    /*font-size: 1.75rem;*/
+    height:12em;
+    position: relative;
+}
+
+.THIS .title {
+    margin-top: 2.2rem;
+    font-size: 1.75rem;
+    max-lines: 2;
+    overflow:hidden;
+    -webkit-line-clamp: 2;
+    text-overflow:ellipsis;
+    /*white-space: nowrap;*/
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-height: 1.2;
+}
+
+.THIS .subtitle {
+    font-size: .75rem;
+    color: #FFFFFF;
+}
+
+.THIS .font-white {
+    color: #FFFFFF;
+}
+
+.THIS .button-border-white {
+    border-color: #FFFFFF;
+}
+
+.THIS .footer-container {
+    position: absolute;
+    bottom: 0px;
+    padding-bottom: 4px;
+}
+
+.THIS .item-body {
+    padding: 1rem .75rem;
+    /*font-size: 1rem;*/
+    height:15em;
+    position: relative;
+}
+
+.THIS .content {
+    font-size: 1rem;
+    margin-bottom: .75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.THIS .audit-date {
+    font-size: .75rem;
+}
+
+.THIS .actions {
+    float: right;
+}

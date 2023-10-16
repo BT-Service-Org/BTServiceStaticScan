@@ -1,0 +1,104 @@
+<apex:component Controller="TeamsWidgetMyTasksAndMilController" >
+<style>
+	.latter span.gray {
+	color: #FF6666;
+	}
+
+	.latter a {
+	color: #CC0000;
+	font-weight: bold;
+	}
+
+	span.gray {
+	color: #999;
+	font-size: 10px;
+	padding: 0pt;
+	}
+	
+	ul.proj_task{
+		list-style: none;
+		
+	}
+	
+	ul.proj_task li{
+		margin-left: 6px;
+		margin-bottom: 5px;
+	}
+	
+	div.overdue {
+		color: #BF272D;
+		font-size: 11px;
+		font-weight: bold;
+		margin-top: 14px;
+	}
+	
+	.grayColor {
+		color: #00233A;
+		font-size: 11px;
+		margin-top: 14px;
+	}
+	
+	.cont_flag {
+		float: left;
+		margin: 0pt 0px 0px 7px;
+	}
+	
+	.noitems {
+		text-align: center;
+		padding: 5px;
+		font-weight: bold;
+	}
+	
+</style>
+ <div class="box_round forwidget mySmallWidget" style="width: 216px;">
+        <div class="header_blue">
+            <div><div><h4>My Upcoming Tasks & Milestones</h4></div></div>
+        </div>
+        <div class="box_content">
+			<div style="{!IF(listSize > 0, 'display:none', '')}; ">
+				<div class="grayColor noitems" >You have no upcoming Tasks or Milstones</div>
+			</div>
+			<div style="{!IF(listSize > 0, '', 'display:none')}; ">
+				<ul class="proj_task">		
+					<apex:repeat value="{!AllProjectTasks}" var="task" >
+						<li style="{!IF((task.displayTitle),'', 'display:none')}">
+						 
+							<apex:outputPanel rendered="{!IF((task.isToLate == 'latter'),true,false)}" layout="block">
+								<div class="overdue" >Overdue</div>
+							</apex:outputPanel>
+							<apex:outputPanel rendered="{!IF((task.isToLate != 'latter'),true,false)}" layout="block">
+								<div class="grayColor"><b>{!task.DaysCount}</b> ({!task.EndDate})  </div>
+							</apex:outputPanel>
+						</li> 
+						<li>
+							<div class="cont_flag">
+								<img alt="" src="{!IF(task.isMilestone == true, (URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_green.png')), (URLFOR($Resource.TeamsResources, '/images/layout/icons/task.png')))}"/>
+							</div>
+							<div style="{!IF(task.Priority == 'High', '', 'display:none')}; width: 13px; margin-top: 3px;" class="center f_left" >
+								<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/highPriority.png')}"/>
+							</div>
+							<div style="{!IF(task.Priority == 'Low', '', 'display:none')}; width: 13px; margin-top: 3px;" class="center f_left" >
+								<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/lowPriority.png')}"/>
+							</div>
+							<div style="{!IF(task.Priority == 'Normal', '', 'display:none')}; width: 13px; margin-top: 3px;" class="center f_left" >
+							
+							</div>
+							<div class="f_left {!task.isToLate}">
+								<a href="/apex/projecttaskdetail?id={!task.TaskId}">{!task.TaskName}</a><br/>
+								<apex:outputPanel rendered="{!IF((task.isToLate == 'latter'),true,false)}" layout="block">
+									<span class="gray">{!task.DaysCount} due {!task.EndDate}</span>
+								</apex:outputPanel>
+							
+							
+							</div>
+							<div class="clear"></div> 
+						</li>
+					</apex:repeat>
+				</ul>
+			</div>
+        </div>
+        <div class="bottom_borders">
+            <div><div></div></div>
+        </div>
+    </div>
+</apex:component>

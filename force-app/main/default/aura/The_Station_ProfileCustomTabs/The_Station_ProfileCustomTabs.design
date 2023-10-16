@@ -1,0 +1,5 @@
+<design:component label="TheStation: Profile Custom Tabs">
+    <design:attribute name="tabOne" label="First Tab Label"/>
+    <design:attribute name="tabTwo" label="Second Tab Label"/>
+    <design:attribute name="tabThree" label="Third Tab Label"/>
+</design:component>

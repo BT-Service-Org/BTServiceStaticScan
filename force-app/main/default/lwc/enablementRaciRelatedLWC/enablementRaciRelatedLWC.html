@@ -1,0 +1,20 @@
+<template>
+    <lightning-card class="slds-text-body_regular" title="RACI" icon-name="custom:custom14">
+      <!--RACIs Found-->
+      <template if:true={raciAvailable}>
+        <template if:true={racis}>
+          <lightning-datatable
+            key-field="Id"
+            hide-checkbox-column
+            data={racis}
+            columns={columns}
+          >
+          </lightning-datatable>
+        </template>
+      </template>
+      <!--No RACIs Found-->
+      <template if:false={raciAvailable}>
+        <div class="slds-card__body slds-card__body_inner slds-align_absolute-center">{noRACI}</div>
+      </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,17 @@
+.footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px #c0c0c0 solid;
+    text-align: left;
+}
+
+lightning-button {
+    margin: 0 10px 0 10px;
+}
+
+th {
+    background: #3366cc;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+}

@@ -1,0 +1,85 @@
+<apex:component controller="TeamsWidgetRecentWikiPagesController" >
+	<!-- Attribute Definitions -->
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+	
+	<!-- Styles includes -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsWidgetRecentWikiPages.css')}" />
+	
+	<!-- Javascript includes -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>
+	
+		
+	<!-- Wide Widget -->
+	<div class="myBigWidget">
+		<div class="teamBlockTitle">
+			<h4>Recent Wiki Pages</h4>
+		</div>
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!userpermissions.canCreate}"><a class="topRightLinks" href="javascript:;" onclick="createOverlay('','AddChildForm','305','');">New</a> |</apex:outputpanel>  
+			<a class="topRightLinks" href="/apex/WikiTeamOverview?tid={!teamId}">Go To Team Wiki&#187;</a>
+		</div>
+		<div class="threads">
+			<div>		
+				<apex:outputPanel layout="block" id="theFeeds" >
+					<table class="minifeeds padding" cellpadding="0" cellspacing="0">
+						<tr class="head" style="{!IF(WikiPagesCount > 0, '', 'display:none;' )}">
+						<td></td>
+						<td>Name</td>
+						<td >Created By</td>
+						<td>Last Modified</td>
+					</tr>
+						<apex:repeat value="{!Wikis}" var="wiki" >
+							
+							<tr>
+								<td><img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/wiki_page_white.png')}" /></td>
+								<td><a href="/apex/WikiPage?idWP={!wiki.Id}" class="weight_bold"><apex:outputText escape="false" value="{!wiki.Name}" /></a></td>
+								<td><a href="/apex/PeopleProfileDisplay?id={!wiki.CreatedBy.Id}" class="weight_bold"><apex:outputText escape="false" value="{!wiki.CreatedBy.Name}" /></a>
+								</td>
+								<td><apex:outputText value="{!wiki.LastModifiedDate}"/></td>	 					
+							</tr>				 
+						</apex:repeat>
+						<div class="center" style="{!IF(WikiPagesCount > 0, 'display:none;', '' )}" >
+							No Wiki Page Yet.
+						</div>
+					</table>
+				</apex:outputPanel>
+			</div>
+		</div>
+	</div>
+	
+	<!-- thin widget -->
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Recent Wiki Pages</h4></div></div>
+   		</div>
+   		<div class="box_content">
+    		<div class="back_gray">
+     			 <a href="/apex/WikiTeamOverview?tid={!teamId}">Go To Team Wiki&#187;</a>
+    		</div>  
+    		 <div class="center" style="{!IF(WikiPagesCount > 0, 'display:none', '' )}" >
+				No Wiki Pages Yet
+			</div>
+			<div>
+				<ul class="minifeed_wikis">	
+				<apex:repeat value="{!Wikis}" var="wiki" rows="5" >
+					<li><a href="/apex/WikiPage?idWP={!wiki.Id}" class="weight_bold"><apex:outputText escape="false" value="{!wiki.Name}" /></a></li>						
+				</apex:repeat>
+
+				</ul>
+			</div>   
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+	</div>
+	</div>	
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>
+	
+	
+</apex:component>

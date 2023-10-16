@@ -1,0 +1,212 @@
+/* DO NOT MODIFY THIS TEMPLATE
+ * COPY/PASTE INTO YOUR COMPONENT
+ */
+
+ .THIS.backgroundColor-light1 {
+    background-color: #FFFFFF;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+	margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-light2 {
+	background-color: #F8F8F8;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+	margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark1 {
+	background-color: #54698D !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+	margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark2 {
+	background-color: #21466F !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+	margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS .buttonTheme-light1 {
+    padding-left: 20px;
+    padding-right: 20px;
+    /*padding-top:3px;
+    padding-bottom:3px;*/
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light2 {
+    padding-left: 20px;
+    padding-right: 20px;
+    /*padding-top:3px;
+    padding-bottom:3px;*/
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark1 {
+    padding-left: 20px;
+    padding-right: 20px;
+    /*padding-top:3px;
+    padding-bottom:3px;*/
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #54698D !important;
+	color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark2 {
+    padding-left: 20px;
+    padding-right: 20px;
+    /*padding-top:3px;
+    padding-bottom:3px;*/
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #21466F !important;
+	color: #FFFFFF;
+}
+
+/* DO NOT MODIFY THIS TEMPLATE
+ * COPY/PASTE INTO YOUR COMPONENT
+ */
+
+.THIS .main-container {
+    margin-left: 4vw;
+	margin-right: 4vw;
+    margin-bottom: 1.5rem;
+}
+
+.THIS .main-title {
+    margin-left: 50px;
+    margin-right: 50px;
+    background: none;
+	line-height: 2.0;
+    padding-top: 20px;
+}
+
+.THIS .column-outer-container {
+    padding-top: 2rem;
+    vertical-align: top;
+    margin-left: 50px;
+    margin-right: 50px;
+    background: none;
+}
+
+.THIS .item-left-padding {
+    padding-left: 1rem;
+}
+
+.THIS .item-left-padding_large {
+    padding-left: 2rem;
+}
+
+.THIS .item-right-padding {
+    padding-right: 1rem;
+}
+
+.THIS .item-right-padding_large {
+    padding-right: 2rem;
+}
+
+.THIS .item-container {
+    background: none;
+    margin-bottom: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.THIS .item-image {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    margin-bottom:1rem;
+    border-radius: 6px;
+    position: relative;
+    /* aspect clamp if needed */
+    display: flex;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+}
+
+/* DO NOT MODIFY THIS TEMPLATE
+ * COPY/PASTE INTO YOUR COMPONENT
+ */
+
+.THIS .item-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.THIS .item-copy {
+    background: none;
+}
+
+.THIS .item-title {
+    font-size: 28px;
+    font-family: "Salesforce Sans";
+    line-height: 36px;
+    background: none;
+    margin-bottom: 12px;
+}
+
+.THIS .item-subtitle {
+    line-height: 30px;
+    letter-spacing: 0.61px;
+    font-size: 22px;
+    font-family: "Salesforce Sans";
+    font-weight: bold;
+    background: none;
+    margin-bottom: 8px;
+}
+
+.THIS .item-description {
+    font-size: 15px;
+    letter-spacing: 0.56px;
+    line-height: 24px;
+    background: none;
+    margin-bottom: 14px;
+}
+
+.THIS .button-container {
+    background: none;
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+.THIS .item-richtext-container {
+    display:flex;
+    align-items:center;
+    height: 100%
+}
+
+/* DO NOT MODIFY THIS TEMPLATE
+ * COPY/PASTE INTO YOUR COMPONENT
+ */

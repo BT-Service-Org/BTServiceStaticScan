@@ -1,0 +1,208 @@
+<template>
+	<div class="spinner">
+		<template if:true={isLoading}>
+			<lightning-spinner alternative-text="Loading" variant="brand" size="large">
+			</lightning-spinner>
+		</template>
+	</div>
+	
+		<br/> 
+		
+		 
+	<!--onselect={handleSelect} show-filter-area={showFilterAreaCombo}-->
+	<template if:true={data}>
+
+		<lightning-card title="" icon-name="standard:method__c" >
+			<div class="slds-grid slds-no-flex" style="margin-left: 1%">
+				<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+				<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={microLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={SmallLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={largeLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={programlLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={tierlLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				options={filterOptions} 
+				selected-values={searchActivity} 
+				label={tier2Label}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo>
+		</div>
+	</div>
+	<br/>
+	<div class="slds-grid slds-no-flex" style="margin-left: 1%">
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+		<c-multi-select-combo
+				
+				multi-select="true" 
+				hide-combobox="true" 
+				label={methodNameLabel}
+				onselect={handlefilterChange}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				hide-combobox="true" 
+				label={methodNumberLabel}
+				onselect={handlefilterChange}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				hide-combobox="true" 
+				label={groupingLabel}
+				onselect={handlefilterChange}>
+				
+			</c-multi-select-combo>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="filter-container selectfilter-element sortable ui-sortable-handle" style="display: block;">
+			<c-multi-select-combo
+				
+				multi-select="true" 
+				hide-combobox="true" 
+				label={deliveryOwnerLabel}
+				onselect={handlefilterChange}>
+				
+			</c-multi-select-combo>
+		</div>
+		</div>
+		<br>
+		<!--c-multi-select-combo
+				api-name ={MethodNameApiName}
+				multi-select="true" 
+				options=""
+				selected-values={searchActivity} 
+				label={tierlLabel}
+				onselect={handleSelect}>
+				
+			</c-multi-select-combo-->
+		
+			
+			<!--lightning-button label={buttonLabel}
+				icon-name="utility:relate"
+				slot="actions"
+				variant="brand"
+				disabled={isTrue}                          
+				onclick={processRecords} class="fordesktop"></lightning-button>
+				<lightning-button-icon icon-name="utility:filterList" onclick={handleFilterIconClick}   
+				alternative-text="Settings" title="Settings" slot="actions"></lightning-button-icon>
+			<div class="slds-align_absolute-center">
+				<lightning-button label={buttonLabel}
+				icon-name="utility:relate"
+				variant="brand"
+				disabled={isTrue}                          
+				onclick={processRecords} class="formobile slds-button_stretch" style="width: auto"></lightning-button>
+			</div-
+			<br/>
+			<div>
+				<span class="slds-form-element__label slds-text-title_bold">
+				Displaying {displayedRecordsCount} of {linkDataRecordsCount} records</span>
+			</div-->
+			<div style="margin-bottom: 5%">
+				
+				<br/>
+				<div style="height: 500px">
+					<lightning-datatable
+                    data={data}
+                    columns={columns}
+                    key-field="id"
+					onheaderaction={handleHeaderAction}
+					sorted-by={sortBy}
+					sorted-direction={sortDirection}
+					onsort={doSorting}
+                    hide-checkbox-column
+                >
+                </lightning-datatable>
+				<template if:false={data}>
+					<p>No Records present for this stage.</p>
+				</template>
+					<!--c-services-mgmt-custom-datatable key-field="id"
+						data={linkData}
+						columns={linkColumn}
+						load-more-offset="10"
+						onloadmore={handleLoadMore}
+						enable-infinite-loading={enableInfiniteLoading}
+						onrowselection={getSelectedRecordsFromLinkTable}
+						sorted-by={sortBy}
+						sorted-direction={sortDirection}
+						show-row-number-column="false"
+						onpicklistselected={handlePicklistSelected}
+						onsort={doSorting}
+						onheaderaction={handleHeaderAction}>
+					</c-services-mgmt-custom-datatable-->
+				</div>
+			</div>
+			{limitReachedMessage}
+		</lightning-card>
+	</template>
+	
+	
+</template>

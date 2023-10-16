@@ -1,0 +1,109 @@
+<template>
+    <template if:true={playbookData}>
+        <p class="playbook__header ITC_font">
+            {playbookData.playbook.Name}
+        </p>
+        <div class="playbook_detail">
+            <lightning-accordion class="example-accordion"
+                         onsectiontoggle={handleToggleSection}
+                         style="width:100%" allow-multiple-sections-open active-section-name={stageName}>
+                         <template for:each={playbookData.playbook.Stages__r} for:item="stage">
+                            <div key={stage.Id} class="playbook_item">
+                         <lightning-accordion-section name={stage.Name} label={stage.Name}>
+                            <lightning-formatted-rich-text class="desc salesforce_font" value={stage.Description__c} ></lightning-formatted-rich-text>
+                            <p class="stage_title ITC_font" if:true={stage.Objective__c}>
+                                Objectives
+                            </p>
+                            <div class="stage_desc" if:true={stage.Objective__c}>
+                                <div class="stage">
+                                    <div class="inner_stage red">
+                                        <lightning-formatted-rich-text value={stage.Objective__c}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+        
+        
+                            <p class="stage_title ITC_font" if:true={stage.Key_Questions__c}>
+                                KEY QUESTIONS
+                            </p>
+                            <div class="stage_desc" if:true={stage.Key_Questions__c}>
+                                <div class="stage">
+                                    <div class="inner_stage blue">
+                                        <lightning-formatted-rich-text value={stage.Key_Questions__c}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+        
+                            <p class="stage_title ITC_font" if:true={stage.Activities__c}>
+                                ACTIVITIES
+                            </p>
+                            <div class="stage_desc" if:true={stage.Activities__c}>
+                                <div class="stage">
+                                    <div class="inner_stage green">
+                                        <lightning-formatted-rich-text value={stage.Activities__c}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+                         </lightning-accordion-section>
+                        </div>
+                    </template>
+                        </lightning-accordion>
+
+            <p class="stage_title ITC_font" if:true={outcomeData.length}>
+                Outcomes, examples and associated methods
+            </p>
+            <lightning-accordion class="example-accordion"
+            onsectiontoggle={handleToggleSection}
+            style="width:100%" allow-multiple-sections-open>
+            <template for:each={outcomeData} for:item="outcome" if:true={outcomeData.length}>
+                <div key={outcome.Id} class="outcome_item">
+                    <lightning-accordion-section name={outcome.label} label={outcome.label} class="stage_title ITC_font">
+                    <div>
+                        <div class="outcome_desc salesforce_font" if:false={expand}>
+                            
+                            <lightning-formatted-rich-text value={outcome.Outcome__r.Description__c}>
+                            </lightning-formatted-rich-text>
+                        </div>
+
+                    </div>
+                    <template for:each={outcome.methods} for:item="moc" if:false={expand}>
+                        <div key={moc.Id} class="moc_data">
+                            <div class="method_body">
+                            <div class="method_num" if:true={moc.Order__c}><p>{moc.Order__c}</p></div>
+                            <div class="method_desc" if:true={moc.Method_Outcome__r.Outcome__r.Title__c}>
+                                <p class="salesforce_font">{moc.Method_Outcome__r.Outcome__r.Title__c}</p>
+                            </div>
+                                
+                            </div>
+                            <p class="moc_data_name ITC_font">
+                                <a href={moc.navUrl} target="_blank">{moc.Method_Outcome__r.Method__r.Name}</a>
+                            </p>
+                            
+                                <div class="method_no ITC_font">
+                                    <span>Method ID: </span>
+                                    <lightning-formatted-rich-text value={moc.Method_Outcome__r.Method__r.Method_Number__c}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+                        </div>
+                    </template>
+                    </lightning-accordion-section>
+                </div>
+            </template>
+        </lightning-accordion>
+            
+        </div>
+        <div class="rev_history">
+            <c-psc-generic-revision-history parent-id={playbookData.playbook.Id}></c-psc-generic-revision-history>
+        </div>
+
+    </template>
+</template>

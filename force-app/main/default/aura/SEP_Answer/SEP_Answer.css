@@ -1,0 +1,8 @@
+.THIS {
+	cursor: pointer;
+}
+.THIS .naBadge{
+	background-color: crimson !important;
+    cursor: default !important;
+    color: white !important;
+}

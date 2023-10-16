@@ -1,0 +1,102 @@
+<apex:page standardController="Rubric__c" extensions="RubricExtensionController" sidebar="false">
+    <style type="text/css">
+        .xsmallBlock { width: 65px; }
+        .smallBlock { width: 220px; }
+        .medBlock { width: 275px; }
+        .failText { color:white; background-color:red; font-weight:bold }
+        .passText { color:green; background-color:white; font-weight:bold }
+    </style>
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages />
+
+            <!--<apex:pageMessage summary="This candidate does not appear to have passed the quiz. Please verify." 
+                                rendered="{!!rubric.Learning_Domain__r.Quiz_Complete__c}"
+                                severity="warning" strength="3" />-->
+            <apex:pageBlockButtons >
+            <!-- Sriram Venkatraman 4/19/2018 - No one should be using these buttons on legacy Rubrics any more 
+                <apex:commandButton value="Save" action="{!saveScores}"/>
+                <apex:commandButton value="Grade" action="{!grade}"/>
+                <apex:commandButton value="Reset Objectives" action="{!resetObjectives}"
+                                    rendered="{!rubric.Status__c != 'Pass'}"
+                                    immediate="true"/> 
+            -->
+                <apex:commandButton value="Go Back" action="{!cancel}"/> 
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="2" title="Rubric Details" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Skill" for="Skill"/>
+                    <apex:outputField value="{!Rubric__c.Learning_Domain__r.Skill__c}" id="Skill"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Candidate" for="Candidate"/>
+                    <apex:outputField value="{!Rubric__c.Learning_Domain__r.PA_Onboarding__r.Contact__c}" id="Candidate"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Evaluator Name" for="Evaluator"/>
+                    <apex:inputField value="{!Rubric__c.Primary_Evaluator__c}" required="true" id="Evaluator"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Evaluation Date" for="eval_date"/>
+                    <apex:inputField value="{!Rubric__c.Evaluation_Date__c}" required="true" id="eval_date"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Average Score" for="Score"/>
+                    <apex:outputText value="{!averageScore}" id="Score"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Status" for="Status"/>
+                    <apex:outputField value="{!Rubric__c.Status__c}" id="Status"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Rate the Candidate's communication in this session (1 = Not customer facing, 3 = Needs Improvement, 5 = Excellent)" for="CommRating"/>
+                    <apex:inputField value="{!Rubric__c.Communication_Rating__c}" id="CommRating" required="true"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Rate the Candidate's presentation skills in this session (1 = Not customer facing, 3 = Needs Improvement, 5 = Excellent)" for="PresRating"/>
+                    <apex:inputField value="{!Rubric__c.Presentation_Rating__c}" id="PresRating" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Comments" for="Comments"/>
+                    <apex:inputTextArea value="{!Rubric__c.Comments__c}" id="Comments" rows="3" cols="50"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Suppress Chatter Post" for="suppressPost"/>
+                    <apex:inputField value="{!Rubric__c.Suppress_Chatter_Post__c}" id="suppressPost"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Potential Judge" for="judge"/>
+                    <apex:inputField value="{!Rubric__c.Potential_Judge__c}" id="judge"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>           
+            <apex:pageBlockSection columns="1" title="Rubric Objectives" collapsible="false">
+                <apex:pageBlockTable value="{!objectives}" var="ro">
+                    <apex:column styleClass="xsmallBlock" value="{!ro.Objective__c}"/>
+                    <apex:column styleClass="smallBlock" value="{!ro.Skill_Definition__c}"/>
+                    <apex:column styleClass="smallBlock" value="{!ro.Score_Definition_1__c}"/>
+                    <apex:column styleClass="smallBlock" value="{!ro.Score_Definition_3__c}"/>
+                    <apex:column styleClass="smallBlock" value="{!ro.Score_Definition_5__c}"/>
+                    
+                    <apex:column headerValue="Score Comments">
+                        <apex:inputField styleClass="medBlock" value="{!ro.Score_Comments__c}"/>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Score">
+                        <apex:inputField styleClass="xsmallBlock" value="{!ro.Score__c}" required="true"/>
+                        <br/>
+                        <apex:outputPanel rendered="{!ro.Grade_Status__c='Fail'}" styleClass="failText" layout="block">
+                            <apex:outputField value="{!ro.Grade_Status__c}"
+                                    styleClass="failText"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!ro.Grade_Status__c='Pass'}" styleClass="passText" layout="block">
+                            <apex:outputField value="{!ro.Grade_Status__c}"
+                                    styleClass="passText"/>
+                        </apex:outputPanel>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+   </apex:form>
+</apex:page>

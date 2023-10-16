@@ -1,0 +1,213 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="StationSPController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Title" />
+    <aura:attribute name="subtitle" type="String" default="Subtitle" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="textColorStyle" type="String" />
+    <aura:attribute name="dateColorStyle" type="String" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="showItemsImage" type="boolean" default="true" />
+    <aura:attribute name="showItemsDate" type="boolean" default="false" />
+    <aura:attribute name="showItemsAuthor" type="boolean" default="false" />
+    <aura:attribute name="itemsImgClass" type="string" default="" />
+    <aura:attribute name="itemsContentClass" type="string" default="" />
+    <aura:attribute name="itemsContainerClass" type="string" default="" />
+    <aura:attribute name="description" type="string" default="" />
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="22" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="itemsLayout" type="String" default="Full image" />
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isLoading" type="boolean" default="true"/>
+
+    <div aura:id="parent">
+        <aura:if isTrue="{!v.isLoading}">
+            <!-- Loading Spinner -->
+            <div class="exampleHolder">
+                <lightning:spinner variant="brand" alternativeText="Loading" size="medium" />
+            </div>
+            <!-- Loading Spinner -->
+        </aura:if>
+        <div class="main-container">
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleAlignment + v.mainTitleColorStyle}">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="main-subtitle" style="{!v.textColorStyle}">
+                {!v.subtitle}
+            </div>
+            <div class="column-outer-container">
+                <div class="slds-grid slds-wrap" style="height:100%;">
+                    <aura:iteration var="section" items="{!v.groupList}" indexVar="index">
+                        <div class="slds-col slds-size_12-of-12">
+                            <div class="{!'item-container slds-grid ' + v.itemsContainerClass}">
+                                <aura:if isTrue="{!section.content.freshContent}">
+                                    <div class="flag" style="position: unset;">
+                                        <span class="shape"></span>
+                                        <span class="flag-text">New/Updated!</span>
+                                    </div>
+                                </aura:if>
+                                <div class="{!'slds-col ' + v.itemsImgClass}">
+                                    <aura:if isTrue="{!v.showItemsImage}">
+                                        <div class="item-image">
+                                            <aura:if isTrue="{!section.content.Upload_Image__c != null}">
+                                                <div class="uiOutputRichText item-img" linkify="true">
+                                                    <div class="item-richtext-container">
+                                                        <aura:unescapedHtml
+                                                            value="{!section.content.Upload_Image__c}" />
+                                                    </div>
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <aura:if
+                                                        isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                        <c:The_Station_Component_Image_Preview>
+                                                            <aura:set attribute="ContentDocumentId"
+                                                                value="{!section.contentPiece.ContentDocumentId__c}" />
+                                                            <aura:set attribute="ContentDocumentExternalId"
+                                                                value="{!section.contentPiece.ExternalDocumentInfo2__c}" />
+                                                            <aura:set attribute="ContentVersionId"
+                                                                value="{!section.contentPiece.ExternalId}" />
+                                                            <aura:set attribute="IconPreviewUrl"
+                                                                value="{!section.previewIcon}" />
+                                                        </c:The_Station_Component_Image_Preview>
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                        <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                            class="item-img" />
+                                                    </aura:if>
+                                                    <aura:if
+                                                        isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                        <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                                            class="item-img" />
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                                <div class="{!'slds-col ' + v.itemsContentClass}">
+                                    <div class="item-copy">
+                                        <aura:if isTrue="{!v.showItemsDate}">
+                                            <div class="item-date" style="{!v.dateColorStyle}">
+                                                <lightning:formattedDateTime
+                                                    value="{!section.contentPiece.LastModifiedDate__c}" />
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                            <div class="item-title">
+                                                <aura:if isTrue="{!section.contentPiece.FileType__c == 'PDF'}">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!'https://org62.lightning.force.com/'+section.contentPiece.ContentDocumentId__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:set attribute="else">
+                                                        <aura:if isTrue="{!section.contentPiece.ContentUrl__c != null}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!section.contentPiece.ContentUrl__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <a style="{!v.hrefColorStyle}"
+                                                                    href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+section.contentPiece.ExternalId+'&amp;operationContext=S1'}"
+                                                                    target="_blank">{!section.content.Name}</a>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                            <aura:if isTrue="{!v.showItemsAuthor}">
+                                                <div class="item-author" style="{!v.textColorStyle}">
+                                                    {!if(section.contentPiece.Primary_Contact__r.Name != null,
+                                                    section.contentPiece.Primary_Contact__r.Name,
+                                                    section.contentPiece.OwnerId__r.Name)}
+                                                </div>
+                                            </aura:if>
+                                            <div class="item-description" style="{!v.textColorStyle}">
+                                                {!section.contentPiece.Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                            <div class="item-title">
+                                                <a style="{!v.hrefColorStyle}"
+                                                    href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+section.contentPiece.ExternalId+'/view'}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                            <aura:if isTrue="{!v.showItemsAuthor}">
+                                                <div class="item-author" style="{!v.textColorStyle}">
+                                                    {!if(section.contentPiece.Primary_Contact__r.Name != null,
+                                                    section.contentPiece.Primary_Contact__r.Name,
+                                                    section.contentPiece.OwnerId__r.Name)}
+                                                </div>
+                                            </aura:if>
+                                            <div class="item-description" style="{!v.textColorStyle}">
+                                                {!section.contentPiece.Description_c__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                            <div class="item-title">
+                                                <a style="{!v.hrefColorStyle}"
+                                                    href="{!section.contentPiece.Trailhead_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                            <aura:if isTrue="{!v.showItemsAuthor}">
+                                                <div class="item-author" style="{!v.textColorStyle}">
+                                                    {!if(section.contentPiece.Primary_Contact__r.Name != null,
+                                                    section.contentPiece.Primary_Contact__r.Name,
+                                                    section.contentPiece.OwnerId__r.Name)}
+                                                </div>
+                                            </aura:if>
+                                            <div class="item-description" style="{!v.textColorStyle}">
+                                                {!section.contentPiece.Trailhead_Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                            <div class="item-title">
+                                                <a style="{!v.hrefColorStyle}" href="{!section.content.Content_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                            <aura:if isTrue="{!v.showItemsAuthor}">
+                                                <div class="item-author" style="{!v.textColorStyle}">
+                                                    {!if(section.contentPiece.Primary_Contact__r.Name != null,
+                                                    section.contentPiece.Primary_Contact__r.Name,
+                                                    section.contentPiece.OwnerId__r.Name)}
+                                                </div>
+                                            </aura:if>
+                                            <div class="item-description" style="{!v.textColorStyle}">
+                                                {!section.content.Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                            <div class="item-title">
+                                                <a style="{!v.hrefColorStyle}" href="{!section.content.Content_URL__c}"
+                                                    target="_blank">{!section.content.Name}</a>
+                                            </div>
+                                            <aura:if isTrue="{!v.showItemsAuthor}">
+                                                <div class="item-author" style="{!v.textColorStyle}">
+                                                    {!if(section.contentPiece.Primary_Contact__r.Name != null,
+                                                    section.contentPiece.Primary_Contact__r.Name,
+                                                    section.contentPiece.OwnerId__r.Name)}
+                                                </div>
+                                            </aura:if>
+                                            <div class="item-description" style="{!v.textColorStyle}">
+                                                {!section.content.Description__c}
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

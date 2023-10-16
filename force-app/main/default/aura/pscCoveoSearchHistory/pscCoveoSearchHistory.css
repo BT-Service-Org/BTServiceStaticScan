@@ -1,0 +1,150 @@
+.THIS .ContainerTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0 24px;
+  gap: 10px;
+  width: auto;
+  height: 32px;
+  font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.004em;
+  color: #032D60;
+  margin-bottom: 4px;
+}
+
+.THIS .CoveoSearchHistory .coveo-search-value>* {
+  cursor: pointer;
+    position: relative;
+    bottom: 3px;
+    font-size: 16px;
+    font-family: 'Salesforce Sans',sans-serif;
+    font-style: normal;
+    line-height: 22px;
+    color: #032D60;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 350px;
+}
+
+.THIS .CoveoSearchHistory .coveo-search-value {
+  display: flex;
+  padding: 4px 5px;
+  font-size: 12px;
+  align-items: baseline;
+}
+
+.THIS .CoveoSearchHistory .coveo-facet-header-title {
+  font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.004em;
+  color: #032D60;
+}
+
+.THIS .CoveoSearchHistory .coveo-facet-header {
+  background: none;
+  padding: 0px;
+  
+}
+.THIS .coveo-no-values-available{
+  background: #ffffff;
+  margin: -20px 0px 10px 0px;
+  width: 100%;
+  border-radius: 8px;
+  padding: 5px;
+}
+.THIS .coveo-facet-values{
+  background: #ffffff;
+    /* box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%); */
+    border-radius: 8px;
+    margin-top: 5px;
+    padding: 20px 0 6px;
+    width: 100%;
+}
+
+.THIS .CoveoSearchHistory {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 6px;
+  
+}
+.THIS .cPscCoveoSearchHistory {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 6px;
+  background: #ffffff;
+  box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+  border-radius: 8px;
+}
+.THIS .CoveoSearchHistory .coveo-facet-searchable:before {
+  content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADnSURBVHgBxVJLDoIwEJ3BC3gED6FGV+oJ1BOoO3+Y3oAj2ERRXAE3wCOww7Aw3IAruNVYbAsqEDS60Zd20pn2zXuZFODXwHyBzCc9QOwmqUtXG6uIqGRI6swERTF5u1O8UZO1d4pEnQ55psGZdahhhLJGSAXY5QiMjeh66xQrIrZ53N9JApRSfo7slPViq9/gSWTIreCAjMeVh31hFaSamydmpkoWM4tbawnLyfWAhzJeYbjUdTv9tpROvIPvNOo1MdEGbyDWTjZR0GpW66Hn+0Gh4ivEE0czrfzRcOQnYNiPoiiAv+EGDYZM2aOTIYAAAAAASUVORK5CYII=");
+  padding: 0 14px;
+  cursor: pointer;
+}
+.THIS .CoveoSearchHistory .coveo-facet-searchable-label {
+  white-space: nowrap;
+  cursor: pointer;
+}
+.THIS .CoveoDocumentOpenHistory .coveo-facet-searchable-label {
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+
+.THIS .CoveoResultActionsMenu.coveo-user-actions-collapsed,
+.THIS .CoveoResultActionsMenu.coveo-user-actions-collapsed .coveo-result-actions-menu-menu-item,
+.THIS .CoveoResultActionsMenu.coveo-user-actions-collapsed .coveo-result-actions-menu-menu-item:not(.coveo-hidden):not([style*="display: none"])~.coveo-result-actions-menu-menu-item:not(.coveo-hidden):not([style*="display: none"]) {
+  border: none;
+}
+.THIS .CoveoSearchInterface .hidden {
+  display: none;
+}
+.THIS .CoveoProjectSearch.coveo-hidden-element {
+  display: none !important;
+}
+.THIS .CoveoProjectSearchSubmitButton.coveo-hidden-element {
+  display: none !important;
+}
+
+@media screen and (max-width: 1500px) and (min-width: 1400px) {
+  .THIS .CoveoSearchHistory {
+    max-width: none;
+
+    min-height: 345px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .THIS .CoveoSearchHistory {
+    max-width: none;
+    margin-top: 0px;
+    min-height: 345px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .THIS .CoveoSearchHistory {
+    margin-top: 0px;
+    min-height: 345px;
+  }
+}
+@media screen and (max-width: 730px) {
+  .THIS .CoveoSearchHistory {
+    margin-top: 25px;
+    min-height: 345px;
+  }
+}
+@media screen and (max-width: 540px) {
+  .THIS .CoveoSearchHistory {
+    margin-top: 25px;
+    max-width: none;
+  }
+}

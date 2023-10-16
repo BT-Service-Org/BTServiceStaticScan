@@ -1,0 +1,13 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+	<aura:attribute name="headerCopy" type="String"/>
+    <aura:attribute name="redirectURL" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <a href="{!v.redirectURL}" target="__blank" class="main-container">
+        <div class="image-container">
+        	<img src="{!$Resource.The_Station_Sunset + '/Hero/Hero_3@2x.png'}" />
+        </div>
+        <div class="copy-container">
+	    	{!v.headerCopy}
+        </div>
+    </a>
+</aura:component>

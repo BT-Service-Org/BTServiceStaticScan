@@ -1,0 +1,214 @@
+.THIS .title {
+    color: #165FB3;
+    font-size: 1.5rem;
+}
+
+.THIS .content {
+    font-size: 1rem;
+    margin-top: .75rem;
+}
+
+.THIS .infos {
+    margin: 1rem 0;
+}
+
+.THIS .info-label {
+    font-family: StationWOFFFontsBold;
+    padding-right: .5rem;
+}
+
+.THIS .preview {
+    text-align: center;
+}
+
+.THIS .preview img{
+    max-height: 20rem;
+}
+
+.THIS .actions-top {
+    width: fit-content;
+}
+
+.THIS .actions-bottom {
+    width: fit-content;
+}
+
+.THIS .buttonTheme-light1 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light2 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark1 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #54698D !important;
+	color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark2 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #21466F !important;
+	color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light1-disabled {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    background-color: rgb(255,255,255) !important;
+    color: rgb(217,219,221);
+}
+
+.THIS .buttonTheme-light2-disabled {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    background-color: rgb(255,255,255) !important;
+    color: rgb(217,219,221);
+}
+
+.THIS .buttonTheme-dark1-disabled {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #54698D !important;
+	color: rgb(217,219,221);
+}
+
+.THIS .buttonTheme-dark2-disabled {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    background-color: #21466F !important;
+	color: rgb(217,219,221);
+}
+
+.THIS .slds-button_neutral {
+    font-weight: bold;
+    border: var(--buttonBorder);
+    background-color: var(--buttonBackground);
+    height: var(--buttonHeight);
+    color: #FFFFFF;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+.THIS .bt-flex{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-flow: wrap;
+    height: auto;
+    margin: 5px 0px;
+}
+
+.THIS .button-container {
+    width:100%;
+    height:100%;
+    align-items:center;
+    align-content:center;
+}
+.THIS .button-three-row {
+    /*  height:120px; */
+    align-items:center;
+    align-content:center;
+    /*width:360px;*/
+}
+
+.THIS .button-column {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    width:120px;
+    margin-top: 15px;
+}
+
+.THIS .square-button-light {
+    height:100px;
+    width:100px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-image: initial;
+    transition: border 0.15s linear 0s;
+    border-color: rgb(3, 46, 97);
+    position: relative;
+    line-height: 1.875rem;
+    color: rgb(3, 46, 97);
+    -webkit-appearance: none;
+    white-space: normal;
+    user-select: none;
+    padding: 0px;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.THIS .square-button-light-disabled {
+    height:100px;
+    width:100px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-image: initial;
+    transition: border 0.15s linear 0s;
+    border-color: rgb(3, 46, 97);
+    position: relative;
+    line-height: 1.875rem;
+    color: rgb(217, 219, 221);
+    -webkit-appearance: none;
+    white-space: normal;
+    user-select: none;
+    padding: 0px;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}

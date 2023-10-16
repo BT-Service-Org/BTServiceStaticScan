@@ -1,0 +1,34 @@
+<aura:component>
+    <aura:attribute name="connectedUser" type="User"/>
+    <aura:attribute name="viewingPublic" type="boolean" default="true"/>
+    <aura:attribute name="buttonSelected" type="String" default="dashboard"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="switchViewEvent" type="c:The_Station_SwitchProfileView"/>
+
+    <div style="margin-top: 1rem;">
+        <h3>
+            <lightning:button aura:id="dashboard" class="slds-button slds-button_neutral buttonTheme selected-button" onclick="{!c.switchProfileView}">My Dashboard</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="favorites" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">My Favorites</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="cases" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Cases</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="requestsAndSubmissions" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Requests/Submissions</lightning:button>
+        </h3>      
+        <h3>
+            <lightning:button aura:id="activityFeed" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Activity Feed</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="collections" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Collections</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="content" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Content</lightning:button>
+        </h3>
+        <h3>
+            <lightning:button aura:id="skills" class="slds-button slds-button_neutral buttonTheme" onclick="{!c.switchProfileView}">Skills</lightning:button>
+        </h3>
+    </div>
+</aura:component>

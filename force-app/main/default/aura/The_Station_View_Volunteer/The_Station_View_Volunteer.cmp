@@ -1,0 +1,44 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="StationVTOController" extends="c:The_Station_Profile_Overview_Tab">
+	<aura:set attribute="title" value="My VolunteerForce" />
+    <aura:set attribute="titleLogo" value="{!$Resource.LionHeartIcon}" />
+    <aura:set attribute="backgroundImageURL" value="{!$Resource.BackgroundVolunteer}"/>
+    <aura:set attribute="showMoreURL" value="https://aloha.my.salesforce.com/idp/login?app=0sp0W000001Hisy"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <aura:attribute name="records" type="Object"/>
+    <aura:attribute name="headerTitle" type="String" default="Total Volunteer Hours"/>
+    <aura:attribute name="overviewTitle" type="String" default="Volunteer Activities Overview"/>
+    <aura:attribute name="activitiesTitle" type="String" default="Recent Volunteer Activities"/>
+    <aura:attribute name="currentHoursTotal" type="Integer" default="0"/>
+    <aura:attribute name="maxHours" type="Integer" default="56"/>
+    <aura:attribute name="hoursPercent" type="Decimal" default="0"/>
+    <aura:attribute name="noDataToDisplay" type="Boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.noDataToDisplay}">
+        <div class="slds-card no-data-message slds-p-around_medium slds-m-top_medium">Looks like there are no hours to report! <br/> Visit Volunteerforce to sign up for your next VTO activitiy!</div>
+         <aura:set attribute="else">
+            <div class="slds-grid slds-gutters" style="margin-top: -12px;">      
+                <c:The_Station_Volunteer_Header 
+                    title="{!v.headerTitle}" 
+                    currentHours="{!v.currentHoursTotal}" 
+                    maxHours="{!v.maxHours}" 
+                    percent="{!v.hoursPercent}"
+                />
+            </div>           
+            <div class="slds-grid slds-gutters" style="margin-top:-6px;">
+                <div class="slds-col slds-size_6-of-12" style="padding-right:0.5rem;height:300px;">
+                    <c:The_Station_Volunteer_Activities
+                        title="{!v.activitiesTitle}"
+                        records="{!v.records}"
+                    />
+                </div>
+                <div class="slds-col slds-size_6-of-12" style="padding-left:0.5rem;height:300px;">
+                    <c:The_Station_Volunteer_Overview
+                        title="{!v.overviewTitle}"
+                        records="{!v.records}"
+                    />
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,4 @@
+<apex:page controller="resource_scheduler">
+	<apex:flash flashvars="assignmentId={!$CurrentPage.parameters.assignmentId}&sowId={!$CurrentPage.parameters.sowId}&session_id={!$Api.Session_ID}&server_url={!$Api.Partner_Server_URL_130}" 
+		height="500" play="true" src="{!$Resource.NewScheduleEntry}" width="100%" />
+</apex:page>

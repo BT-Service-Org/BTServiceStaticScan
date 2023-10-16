@@ -1,0 +1,101 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div if:false={isCommentFeature} class="back-position slds-var-p-around_medium">
+        <lightning-button variant="brand-outline" label="Back" title="Go Back" icon-name="utility:back"
+            onclick={handleBack}></lightning-button>
+    </div>
+    <lightning-card if:true={isCommentFeature} title="Comments/Notes on the Asset" icon-name="standard:feed"
+        style="padding: 0 2%;">
+
+        <div class="comment-parent">
+
+            <lightning-input-rich-text data-id="commentBody" value={commentInput} onchange={handleCommentInput}
+                placeholder="Write a comment..." required></lightning-input-rich-text>
+            <br />
+            <c-gdcms-combobox-with-search if:true={isComponentVisible} options={assetMembers}
+                label="Comment for Asset Member" onselect={handleMembersSelections}
+                selected-value={selectedAssetMembers} multi-select disabled={isAssetMembersDisabled}>
+            </c-gdcms-combobox-with-search>
+
+            <br />
+            <lightning-button data-id="postCommentButton" variant="brand" label="Post" title="Post the Feed"
+                onclick={handleCommentPost} class="slds-var-m-left_x-small" style="float: right;" disabled>
+            </lightning-button>
+            <br /><br /><br />
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+            <template if:true={areCommentsAvailable}>
+                <div class="comments-list" data-id="comments-list">
+                    <template iterator:comment={listAssetComments}>
+                        <li key={comment.value.Id} style="list-style-type: none;">
+                            <div class="comment-card" data-id={comment.value.Id} style="">
+                                <lightning-card title={comment.value.CreatedBy.Name} icon-name="standard:avatar">
+                                    <div slot="actions">
+                                        <lightning-button-icon data-id={comment.value.Id} icon-name="utility:delete"
+                                            variant="border-filled" label="Delete" title="Delete the Comment"
+                                            onclick={deleteCommentPost} class="slds-m-left_x-small"
+                                            style="float: right;"
+                                            disabled={comment.value.isCommentAccessToModifyDisabled}>
+                                        </lightning-button-icon>
+
+                                        <lightning-button-icon data-id={comment.value.Id}
+                                            data-comment_body={comment.value.gdc_ms_Comment_Body__c}
+                                            icon-name="utility:edit" variant="border-filled" label="Edit"
+                                            title="Edit the Comment" onclick={editCommentPost}
+                                            class="slds-m-left_x-small" style="float: right;"
+                                            disabled={comment.value.isCommentAccessToModifyDisabled}>
+                                        </lightning-button-icon>
+                                    </div>
+                                    <div class="slds-var-p-horizontal_small" style="font-family:Salesforce-Sans;padding-left:8%">
+                                        <p style="text-align: justify;">
+                                            <lightning-formatted-rich-text value={comment.value.gdc_ms_Comment_Body__c}
+                                                style="font-size: 18px; line-height: 1.5;font-family:Salesforce-Sans;">
+                                            </lightning-formatted-rich-text>
+                                        </p>
+                                        <br />
+                                    </div>
+                                    <div class="slds-var-p-horizontal_small" style="padding-left:7.5%;font-family:Salesforce-Sans;padding-bottom:2%;font-size: 18px;">
+                                        <p class="slds-truncate">
+                                            <span style="font-weight: 600;">Added on </span>
+                                            <lightning-formatted-date-time value={comment.value.CreatedDate}
+                                                year="numeric" month="short" day="2-digit" hour="2-digit"
+                                                minute="2-digit" weekday="long"></lightning-formatted-date-time>
+                                        </p>
+                                    </div>
+                                </lightning-card>
+                            </div>
+                        </li>
+                    </template>
+                </div>
+                <!--Modal Popup for Edit Mode-->
+                <template if:true={isEditCommentMode}>
+                    <c-gdcms-base-modal onclose={closeModalCreate} width="40%" show-footer=true>
+                        <div slot="Title">
+                            Edit the comment
+                        </div>
+                        <div slot="Body">
+                            <lightning-input-rich-text value={editCommentSubject} name="editCommentSubject"
+                                onchange={handleEditCommentSubject} style="font-size: 15px; line-height: 1.5;">
+                            </lightning-input-rich-text>
+                        </div>
+                        <div slot="Footer">
+                            <lightning-button class="slds-var-m-right_x-small" label="Save" variant="brand"
+                                onclick={editSubmitCommentPost}></lightning-button>
+                            <lightning-button label="Cancel" onclick={closeModalEdit}>
+                            </lightning-button>
+                        </div>
+                    </c-gdcms-base-modal>
+                </template>
+                <!--Modal Popup for Edit Mode-->
+            </template>
+            <template if:false={areCommentsAvailable}>
+                <div class="slds-var-p-around_medium comment-card">
+                    No comments are available.
+                </div>
+            </template>
+            <br />
+        </div>
+    </lightning-card>
+</template>

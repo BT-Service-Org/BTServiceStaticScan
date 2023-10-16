@@ -1,0 +1,127 @@
+<apex:component controller="sh_SearchController">
+
+<!-- JQuery Files -->
+
+  <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'jquery-1.11.2.js')}" />
+
+  <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'jquery-ui.min.js')}" />
+
+  <apex:stylesheet value="{!URLFOR($Resource.ServicesHubJS,'jquery-ui.min.css')}"/>
+
+  <!-- Attributes Required For Component -->
+  <apex:attribute name="objectname" description="The object name you want to look for." type="String" required="true"/>
+  <apex:attribute name="additionalfield" description="Any additional fields you'd like to search and include in the display." type="String" required="false"/>
+  <apex:attribute name="profilename" description="To filter on the basis of profile name and include in the display." type="String" required="false"/>
+  <apex:attribute name="autocomplete_textbox" description="The ID for the Autocomplete List Textbox." type="String" required="true"/>
+  
+  
+  <style>
+      .ui-autocomplete{
+          z-index:99999;
+      }
+  </style>
+  
+  
+  <!-- Javascript -->
+  <script type="text/javascript">
+    var j$ = jQuery.noConflict();
+    j$(document).ready(function() 
+    {
+
+        var sObjects;
+        var queryTerm;
+        //alert(typeof $.autocomplete);
+        j$(esc('{!autocomplete_textbox}')).autocomplete(
+        {
+            minLength: 1,
+            source: function(request, response) {
+                        queryTerm = request.term;
+                        
+                        var findingWord = queryTerm;
+                        //console.log(findingWord);
+                        
+                        if(queryTerm.indexOf(',') != -1){
+                            //console.log('in if');
+                            var terms = queryTerm.split(',');
+                            findingWord = terms[terms.length-1].trim();
+                            
+                        }
+                        if (findingWord.length > 0 && findingWord.length < 3) {
+                           return;
+                        }
+                        else{
+                            console.log(1);
+                            Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.sh_SearchController.search}',findingWord, function(result, event)
+                            {
+                                if(event.type == 'exception') 
+                                {
+                                  alert(event.message);
+                                } else 
+                                {
+                                     console.log(result);
+                                     sObjects = result;
+                                     response(sObjects);
+                                }
+                            });
+                        }
+                        
+                   },
+            focus: function( event, ui ) {
+                    //j$(esc('{!autocomplete_textbox}')).val( ui.item.Name );
+                    return false;
+                    },
+            select: function( event, ui ) {
+                        console.log(2);
+                        var val = j$(esc('{!autocomplete_textbox}')).val();
+                        var term = ui.item.Name;
+                        if(val.indexOf(',') != -1){
+                            term = val.substring(0, val.lastIndexOf(',')) + ',' + ui.item.Name;
+                        }
+                        
+                        j$(esc('{!autocomplete_textbox}')).val(term);
+                        j$(esc('{!autocomplete_textbox}_lkid')).val(term);
+                        j$(esc('{!autocomplete_textbox}_lkold')).val(term);
+                        if (event.keyCode == 13) { 
+                            console.log(4);
+                            event.preventDefault();
+                        }
+                        return false;
+                    },
+         })
+         .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            var entry = item.name;
+            if("{!additionalfield}" !='')
+            {
+                j$.each("{!additionalfield}".split(",") , function(key, value) {
+                    entry = entry + " " + item[value];
+                });
+            }
+            //entry = entry + "</a>";
+            //entry = entry.replace(queryTerm, "<b>" + queryTerm + "</b>");
+            entry = entry.replace( new RegExp( "(" + queryTerm + ")" , "gi" ), "<strong>$1</strong>" );
+            
+            
+            var aTag = "";
+            if(item.resultType == 'Bio'){
+               aTag = "<a href='{!domainVariable}/sh_bio?name="+item.code+"'>" + entry + "</a>";
+            } 
+            else if(item.resultType == 'Project'){
+                aTag = "<a href='{!domainVariable}/sh_project?name="+item.code+"'>" + entry + "</a>";
+            }   
+                
+            return j$( "<li></li>" )
+                .data( "item.autocomplete", item ).append(aTag).appendTo( ul );
+        };
+        
+        
+        
+    });
+
+    function esc(myid) 
+    {
+           return '#' + myid.replace(/(:|\.)/g,'\\\\$1');
+    }
+
+  </script>
+
+</apex:component>

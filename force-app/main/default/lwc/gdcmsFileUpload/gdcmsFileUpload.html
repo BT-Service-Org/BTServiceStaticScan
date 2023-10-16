@@ -1,0 +1,19 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-4">
+            <lightning-input
+                type="file"
+                accept={acceptedFormats}
+                onchange={handleFilesChange}
+            ></lightning-input>
+        </div>
+        <div if:true={fileName} class="slds-col slds-size_1-of-4 slds-m-top_x-large">
+            <p style="color:grey; font-weight:600; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{fileName}</p>
+        </div> 
+        <div class="slds-col slds-size_1-of-4 slds-clearfix">
+            <div class="slds-m-top_large slds-float_right">
+            <lightning-button variant="success" label="Upload" title="Upload" disabled={uploader} onclick={saveFile}></lightning-button>
+        </div>
+        </div>
+    </div>
+</template>

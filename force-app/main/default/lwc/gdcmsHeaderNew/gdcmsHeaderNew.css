@@ -1,0 +1,35 @@
+.one {
+    height : 22rem;
+    position: relative;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
+.dot {
+    height: 40rem;
+    width: 50rem;
+    background: #7772B5;
+    border-radius: 50%;
+    position: absolute;
+    left: -9rem;
+    top: -17rem;
+    z-index: -1;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  img {
+    height: 22rem;
+  }
+
+  .my-css {
+    --slds-c-button-text-color: white;
+  }
+
+  /* a {
+    color: white;
+    text-decoration: underline;
+    font-size: 1rem;
+  } */

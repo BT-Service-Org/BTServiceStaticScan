@@ -1,0 +1,20 @@
+.container{ 
+    display: flex;
+} 
+.img-badge{
+    padding:0px 3px;
+    width:100%;
+    height:100%;
+    margin: 0.3rem 0;
+}
+
+.hover-effect{
+    margin: 0% 5%;
+    transform-origin: 50% 0%;
+    transition: 1s transform cubic-bezier(.155,1.105,.295,1.12),1s box-shadow,1s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+}
+
+.hover-effect:hover{
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}

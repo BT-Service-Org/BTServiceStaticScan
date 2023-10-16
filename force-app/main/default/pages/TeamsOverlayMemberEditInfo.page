@@ -1,0 +1,312 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamMembersListController">
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/MemberEditInfo.css')}" />
+	
+	<style>
+		.editInfoTables td img.memberImg {
+			float: right;
+			margin-right: 10px;
+		}
+	</style>
+
+	<style>		
+		.tooltip3 {
+			background-color:#F9F8CD;
+			border:1px solid #221E1F;
+			bottom: 37px;
+			font-family:"Lucida Grande",Verdana;
+			font-size:9px;
+			padding:5px;
+			position:absolute;
+			text-align:left;
+			width:120px;
+			right: 0;
+			z-index:10000;
+			color: #000000;
+			font-weight: normal;
+		}
+		
+		.savingMemberInfo , .loadingMemberInfo {
+			margin: 30px; 
+			font-size: 15px; 
+			font-weight: bold; 
+			color: #297B9C;
+		}
+		
+		.bottom_border_gray {
+			border:1px solid #E5E5E5;
+			border-left:1px solid #FFFFFF;
+			border-right:1px solid #FFFFFF;
+			border-top:1px solid #FFFFFF;
+			overflow: visible !important;
+			position:relative;
+		}
+	</style>
+	<!--[if IE 6]>
+	<style>
+	.tooltip3 {
+		bottom: 180px;
+	}
+	<![endif]-->
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		var showingBubble3 = false;		
+		var time3 = '';
+		
+		function tooltip3(obj, selectId){
+			
+			// Tooltip
+			var selectValue = $F(selectId);
+			var tooltip = $('divToolTip3');
+			var tooltipMessage = $('messageTooltip3');
+			var markup = '';
+			var height = 0;
+			if (navigator.appName == "Microsoft Internet Explorer"){
+				height = -230;
+			}
+			init();
+			queryString ="Select Id, Description__c, Name, PostWikiComments__c, PostDiscussionTopicReplies__c, PostBookmarkComments__c, PostBlogComments__c, ManageWikis__c, ManageTeams__c, ManageProjectTasks__c, ManageDiscussionForums__c, ManageBookmarks__c, ManageBlogs__c, CreateWikiPages__c, CreateProjectTasks__c, CreateDiscussionTopics__c, CreateBookmarks__c, CreateBlogs__c from TeamProfile__c where Id = '" + selectValue + "'";
+			result = sforce.connection.query(queryString);
+			records = result.getArray("records");
+			//Teams permissions
+			if(records[0].ManageTeams__c == 'true'){
+				markup += '<b>Team</b><br/>-Manage Team<br/>';
+				height += 10;
+			}
+			//Blogs permissions
+			if(records[0].ManageBlogs__c == 'true'){
+				markup += '<b>Blogs</b><br/>-Manage Blogs<br/>-Post comments<br/>-Create blogs<br/>';
+				height += 19;
+			}else if(records[0].PostBlogComments__c == 'true'){
+				markup += '<b>Blogs</b><br/>-Post comments<br/>';
+				height += 10;
+				if(records[0].CreateBlogs__c == 'true'){
+					markup += '-Create blogs<br/>';
+					height += 5;
+				}
+			}else if(records[0].CreateBlogs__c == 'true'){
+				markup += '<b>Blogs</b><br/>-Create blogs<br/>';
+				height += 10;
+			}
+			//Discussions permissions
+			if(records[0].ManageDiscussionForums__c == 'true'){
+				markup += '<b>Discussion</b><br/>-Manage forums<br/>-Post topic replies<br/>-Create topics<br/>';
+				height += 19;
+			}else if(records[0].PostDiscussionTopicReplies__c == 'true'){
+				markup += '<b>Discussion</b><br/>-Post topic replies<br/>';
+				height += 10;
+				if(records[0].CreateDiscussionTopics__c == 'true'){
+					markup += '-Create discussion topics<br/>';
+					height += 5;
+				}
+			}else if(records[0].CreateDiscussionTopics__c == 'true'){
+				markup += '<b>Discussion</b><br/>-Create discussion topics<br/>';
+				height += 10;
+			}
+			//Wiki permissions
+			if(records[0].ManageWikis__c == 'true'){
+				markup += '<b>Wiki</b><br/>-Manage wiki<br/>-Post comments<br/>-Create wiki pages<br/>';
+				height += 19;
+			}else if(records[0].PostWikiComments__c == 'true'){
+				markup += '<b>Wiki</b><br/>-Post comments<br/>';
+				height += 10;
+				if(records[0].CreateWikiPages__c == 'true'){
+					markup += '-Create wiki pages<br/>';
+					height += 5;
+				}
+			}else if(records[0].CreateWikiPages__c == 'true'){
+				markup += '<b>Wiki</b><br/>-Create wiki pages<br/>';
+				height += 10;
+			}
+			//Project permissions
+			if(records[0].ManageProjectTasks__c == 'true'){
+				markup += '<b>Project</b><br/>-Manage project tasks<br/>-Create project tasks<br/>';
+				height += 15;
+			}else if(records[0].CreateProjectTasks__c == 'true'){
+				markup += '<b>Project</b><br/>-Create project tasks<br/>';
+				height += 10;
+			}
+			//Bookmark permissions
+			if(records[0].ManageBookmarks__c == 'true'){
+				markup += '<b>Bookmark</b><br/>-Manage bookmarks<br/>-Post comments<br/>-Create bookmarks<br/>';
+				height += 19;
+			}else if(records[0].PostBookmarkComments__c == 'true'){
+				markup += '<b>Bookmark</b><br/>-Post comments<br/>';
+				height += 10;
+				if(records[0].CreateBookmarks__c == 'true'){
+					markup += '-Create bookmarks<br/>';
+					height += 5;
+				}
+			}else if(records[0].CreateBookmarks__c == 'true'){
+				markup += '<b>Bookmark</b><br/>-Create bookmarks<br/>';
+				height += 10;
+			}
+			tooltipMessage.innerHTML = markup;				
+			tooltip.style.bottom = ((height - (height * 2)) / 2) + 'px';
+			$('divToolTip3').show();
+			showingBubble3 = true;
+			clearTimeout(time3);
+			time3 = setTimeout("Effect.Fade('divToolTip3')",3000);	
+		}
+	
+		function tooltipoff3(){
+			// Tooltip
+			showingBubble3 = false;
+			clearTimeout(time3);
+			$('divToolTip3').hide();			
+		}
+		
+		function showSaving () {
+			$('savingMemberInfo').style.display = '';
+			$$('.editMemberInfoForm')[0].style.display = 'none';
+		}
+		
+		function hideLoading () {
+			$$('.loadingMemberInfo')[0].style.display = 'none';
+			$$('.editMemberInfoForm')[0].style.display = '';
+		}
+		
+	</script>
+	
+	<div id="editMemberInfoLoading" style="display:none;">
+		<!-- Title of Dialog -->
+		<div class="modalTitle">
+			<div class="title">Edit member's team information</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>	
+		
+		<div class="loadingMemberInfo" id="loadingMemberInfo">
+			Loading Member Info...
+		</div>
+	</div>
+	
+	<!-- Edit Member Info -->
+	<div id="editMemberInfo" style="display:none;">
+	
+		<!-- Title of Dialog -->
+		<div class="modalTitle">
+			<div class="title">Edit member's team information</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>	
+		<!-- Content  -->
+		
+		
+		<div class="savingMemberInfo" id="savingMemberInfo" style="display: none;">
+			Saving...
+		</div>
+		
+		<apex:form styleclass="editMemberInfoForm">	
+			<div class="modalContent">
+				<div class="requireLegend">= Required Information</div>
+				<!-- Dialog Body  -->
+				<div class="modalMessage padding_Tables bottom_border_gray">
+					<table border="0" class="editInfoTables">
+						<tr>
+							<td width="73px">
+								<apex:outputpanel rendered="{!IF(imgEditMember == '',true,false)}">
+									<img class="memberImg" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="50" />
+								</apex:outputpanel>									 
+								<apex:outputpanel rendered="{!IF(imgEditMember == '',false,true)}">
+									<img class="memberImg" src="/servlet/servlet.FileDownload?file={!imgEditMember}" width="50"/>
+								</apex:outputpanel>
+								<!-- <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/user_not_picture.gif')}" /> -->
+							</td>
+							<td>
+								<apex:outputtext value="{!editMember.User__r.name}" /><br>
+								<span>Company:</span> <apex:outputtext value="{!editMember.User__r.companyName}" /><br>
+								<span>Title:</span> <apex:outputtext value="{!editMember.User__r.Title}" />
+							</td>
+						</tr>
+					</table>
+					<table border="0" class="editInfoTables">
+						<tr>
+							<td align="right" class="label">Team Profile</td>
+							<td><div class="requireInput"></div></td>
+							<td>
+								<apex:outputpanel rendered="{!NOT(itsLastAdmin)}">
+									<apex:selectList style="width: 200px;" id="teamEditProfileSelect" value="{!editMemberProfile}" multiselect="false" size="1">
+										<apex:selectOptions value="{!profilesOptions}"/>
+									</apex:selectList>
+									
+									<script>
+										function showSelectEdit () {		
+											var inputSelect = $('{!$Component.teamEditProfileSelect}');
+											if (inputSelect != null) {
+												inputSelect.style.visibility = 'visible';
+											}
+										}
+									</script>
+									<a style="position: relative;" href="Javascript:;" onclick="tooltip3(this, '{!$Component.teamEditProfileSelect}');">
+										<img class="imgAlign" onmouseover="tooltip3(this, '{!$Component.teamEditProfileSelect}');" onmouseout="tooltipoff3();" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/infoWhite.gif')}" border="0" />
+										<!-- info tooltip -->
+										<div id="divToolTip3" style="display: none;" class="tooltip3">
+											<div id="messageTooltip3" class="messageTooltip"></div>
+										</div>
+									</a>
+								</apex:outputpanel>
+								<apex:outputpanel rendered="{!itsLastAdmin}">
+									<apex:selectList style="width: 200px;" id="teamEditProfileSelect2" value="{!editMemberProfile}" multiselect="false" size="1">
+										<apex:selectOptions value="{!profilesOptionsFilter}"/>
+									</apex:selectList>
+									
+									<script>
+										function showSelectEdit () {		
+											var inputSelect = $('{!$Component.teamEditProfileSelect2}');
+											if (inputSelect != null) {
+												inputSelect.style.visibility = 'visible';
+											}
+										}
+									</script>
+									<a style="position: relative;" href="Javascript:;" onclick="tooltip3(this, '{!$Component.teamEditProfileSelect2}');">
+										<img class="imgAlign" onmouseover="tooltip3(this, '{!$Component.teamEditProfileSelect2}');" onmouseout="tooltipoff3();" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/info.gif')}" border="0" />
+										<div id="divToolTip3" style="display: none;" class="tooltip3">
+											<div id="messageTooltip3" class="messageTooltip"></div>
+										</div>
+									</a>
+								</apex:outputpanel>
+										
+								<!-- 
+								<select id="teamProfileSelect">
+									<option>Member</option>
+									<option>Contributor</option>
+									<option>Team Administrator</option>
+								</select> 
+								-->
+								
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="label">Team Role</td>
+							<td></td>
+							<td>
+								<apex:inputText value="{!editMemberRole}" styleclass="teamRoleInput" />
+							</td>
+						</tr>
+					</table>	
+				</div>
+				<!--Actions  -->
+				<div class="actionsSaveCancel">
+					<apex:commandLink action="{!editMemberAction}" onclick="showSaving();" oncomplete="modal.close();" value="Save" styleclass="button" rerender="auxPanel" />
+					<!-- <a href="javascript:;" class="button">Save</a> -->
+					<a href="javascript:;" onclick="modal.close();" class="button gray">Cancel</a>
+				</div>
+			</div><!-- END Modal Content -->
+		</apex:form>
+	</div><!-- END announcement delete -->     
+	
+
+</apex:page>

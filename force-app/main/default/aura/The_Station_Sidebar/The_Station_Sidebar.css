@@ -1,0 +1,261 @@
+.THIS.backgroundColor-light1 {
+  background-color: #ffffff;
+  color: #21466f;
+  width: 100%;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-light2 {
+  background-color: #f8f8f8;
+  color: #21466f;
+  width: 100%;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark1 {
+  background-color: #54698d !important;
+  color: #ffffff;
+  width: 100%;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark2 {
+  background-color: #21466f !important;
+  color: #ffffff;
+  width: 100%;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS .main-container {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 1.5rem;
+  padding-top: 30px;
+}
+
+.THIS .main-title {
+  font-family: "Salesforce Sans";
+  background: none;
+  line-height: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 0.61px;
+  margin-bottom: 26px;
+}
+
+.THIS .main-subtitle {
+  font-family: "Salesforce Sans";
+  font-size: 15px;
+  letter-spacing: 0.56px;
+  line-height: 24px;
+  margin-bottom: 24px;
+}
+
+.THIS .column-outer-container {
+  vertical-align: top;
+  background: none;
+}
+
+.THIS .item-left-padding {
+  padding-left: 1rem;
+}
+
+.THIS .item-left-padding_large {
+  padding-left: 2rem;
+}
+
+.THIS .item-right-padding {
+  padding-right: 1rem;
+}
+
+.THIS .item-right-padding_large {
+  padding-right: 2rem;
+}
+
+.THIS .item-container {
+  background: none;
+  margin-bottom: 20px;
+}
+
+.THIS .item-container.item-full-img {
+  margin-bottom: 22px;
+}
+
+.THIS .item-container.item-img-hidden {
+  margin-bottom: 35px;
+}
+
+.THIS .img-left {
+  margin-right: 20px;
+  width: 100px;
+}
+
+.THIS .item-image {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 26px;
+  border-radius: 6px;
+  position: relative;
+  /* aspect clamp if needed */
+  display: flex;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+}
+
+.THIS .img-left .item-image {
+  margin-bottom: 0;
+  width: 100px;
+  padding-bottom: 0;
+  overflow: hidden;
+  height: 60px;
+  text-align: center;
+}
+
+.THIS .item-img {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.THIS .img-left .item-img {
+  position: relative;
+  height: auto;
+  max-width: 100%;
+  max-height: 60px;
+  display: inline-block;
+}
+
+.THIS .item-copy {
+  background: none;
+}
+
+.THIS .item-title {
+  font-family: "Salesforce Sans";
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 20px;
+  background: none;
+}
+
+.THIS .item-date {
+  text-transform: uppercase;
+  font-family: "Salesforce Sans";
+  font-size: 12px;
+  line-height: 15px;
+  margin-bottom: 6px;
+}
+
+.THIS .item-author {
+  font-family: "Salesforce Sans";
+  font-size: 15px;
+  letter-spacing: 0.56px;
+  line-height: 24px;
+}
+
+.THIS .item-description {
+  background: none;
+  font-family: "Salesforce Sans";
+  font-size: 14px;
+  letter-spacing: 0.53px;
+  line-height: 20px;
+  margin-top: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.THIS .item-richtext-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.THIS .img-left .item-richtext-container {
+  justify-content: center;
+}
+
+.THIS .img-left .item-richtext-container img {
+  max-height: 60px;
+  max-width: 100%;
+}
+
+.THIS .content-img-left {
+  width: 100%;
+}
+
+/*increase padding between items for no image*/
+
+
+
+
+
+/* Adding CSS for Tag */
+.THIS .flag {
+  position: relative;                                                             
+}
+
+.THIS .flag-text {
+  z-index: 12;
+  position: absolute;
+  color: white;
+  font-size: .75rem;
+  height: 25px;
+  right:7px;
+  margin-left: 10px;
+  max-width: 125px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/*
+.THIS .flag:hover .flag-popover {
+  display: block
+}
+*/
+.THIS .flag-popover {
+max-width: 190px;
+margin-top: 15px;
+background: #16315F;
+color: #FFFFFF;
+display: none;                                                                        
+}
+
+.THIS .shape {
+  width: 90px;
+  height: 25px;
+  right:0;
+  background-color: #66AB48;
+  position: absolute;
+  z-index: 12;
+  display: inline-block;
+}
+
+.THIS .shape::after {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-top: 25px solid #66AB48;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}
+
+.THIS .shape::before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-bottom: 25px solid #66AB48;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}
+/* Adding CSS for Tag*/

@@ -1,0 +1,97 @@
+.skill-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.skill-label {
+    font-size: 16px;
+    width:50%;
+}
+
+.skill-label:hover {
+    cursor: pointer;
+    font-weight: 700;
+}
+.skills-group {
+    margin: 5px 0px;
+}
+.skill-bar {
+    display: flex;
+    position: relative;
+    width: 50%;
+    height: 16px;
+    justify-content: space-between;
+}
+.skill-valid {
+    position: relative;
+    width: 10%;
+    height: 16px;
+}
+.slider-user-point {
+    position: absolute;
+    height: 16px;
+    border-radius: 2%;
+    color: #FFFFFF;
+    text-align: right;
+    vertical-align: text-top;
+    background-color: #0000cc;
+    border: 1px solid #0000cc;
+    cursor: pointer;
+}
+.slider-target-point {
+    position: absolute;
+    height: 16px;
+    border-radius: 2%;
+    color: #000000;
+    text-align: right;
+    vertical-align: text-top;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    cursor: pointer;
+}
+
+.skill_group {
+    color: #0070D2;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.currentLevel {
+    background: #3a81b1;
+    color: white;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.targetLevel {
+    background:white;
+    text-align: right;
+    padding-right: 5px;
+
+}
+
+.modal_head {
+    color: #032D60;
+    margin-bottom: 10px;
+}
+.learning_resource {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(0 0 0 / 10%), 0px 2px 4px 1px rgb(0 0 0 / 10%);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.learning_resource a {
+    color: #032D60 !important;
+    font-size: 14px;
+    margin-bottom: 3px;
+
+}
+
+.validation_icon {
+    color: #65b939
+}

@@ -1,0 +1,45 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="domain" type="Object" access="public"/>
+	<aura:attribute name="assessment" type="Object" access="public"/>
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="dimension" type="Object" access="public"/>
+	<aura:attribute name="capability" type="Object" access="public"/>
+	
+    <aura:attribute name="onNext" type="Aura.Action" access="public"/>
+    <aura:attribute name="onPrevious" type="Aura.Action" access="public"/>
+
+   	<!--Content-->
+   	<div class="slds-p-bottom_xx-small">
+   		<aura:if isTrue="{!!empty(v.capability.query)}">
+	   		<div class="slds-m-bottom_small slds-text-heading_small query">
+	   			<b><i>{!v.capability.query}</i></b>
+	   		</div>
+	   	</aura:if>
+		<table class="slds-table slds-table_fixed-layout slds-no-row-hover slds-table_bordered">
+	   		<thead>
+	   			<tr class="slds-text-title_caps">
+	   				<th scope="col" style="width:25%;">Question</th>
+	   				<aura:iteration items="{!v.domain.levels}" var="column">
+	   					<th scope="col" class="slds-cell-wrap" style="width:12%;">
+	   						<div class="slds-truncate" title="{!column}">{!column}</div>
+	   					</th>
+	   				</aura:iteration> 
+	   				<th scope="col" style="width:5%;">N/A</th>
+	   			</tr>
+	   		</thead>
+	   		<tbody>
+	   			<aura:iteration items="{!v.capability.questions}" var="question">
+	   				<c:SEP_Question domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}" 
+	   					dimension="{!v.dimension}" capability="{!v.capability}" question="{!question}"/>
+	   				<aura:iteration items="{!question.children}" var="child">
+		   				<c:SEP_Question domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}" 
+		   					dimension="{!v.dimension}" capability="{!v.capability}" question="{!child}" isChild="true"/>
+		   			</aura:iteration>
+	   			</aura:iteration>
+	   		</tbody>
+	   	</table>
+	</div>
+
+</aura:component>

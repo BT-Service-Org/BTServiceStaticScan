@@ -1,0 +1,21 @@
+<template>
+	<!-- <template if:true={mdtRef.data}>
+		<template for:each={mdtRef.data} for:item="mdt">
+			<p key={mdt.Id}>{mdt.gdc_ms_Image_URL__c}</p>
+		</template>
+	</template>
+	<template if:true={mdtRef.error}>
+		<p>{mdtRef.error}</p>
+	</template> -->
+	<template if:true={showImage}>
+		<div class="container">
+			<div class="image-holder">
+			  <div class="back-screen">
+				<div class="headline">
+				  {gdcBannerText}
+				</div>
+			  </div>
+			</div>
+		</div>
+	</template>
+</template>

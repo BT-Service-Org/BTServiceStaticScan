@@ -1,0 +1,109 @@
+.templates {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.templates-bp-resources {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.templates-bp-title {
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+    margin-right: 5px;
+}
+
+.templates-bp-title-icon-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.templates-bp-icon-badge {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 6px;
+    background: rgba(45, 175, 249, 0.1);
+    border: 2px solid rgba(45, 175, 249, 0.1);
+    border-radius: 30px;
+
+}
+
+.templates-bp-icon {
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem 0 0;
+    padding: 6px;
+    background-color: #2DAFF9;
+}
+.template-link a {
+    font-family: 'Segoe UI', sans-serif;
+font-style: normal;
+font-weight: 700;
+font-size: 13px;
+line-height: 18px;
+color: #535353;
+}
+
+.templates-bp-icon img {
+    width: 15px;
+}
+@media screen and (max-width:920px) {
+    .templates-bp-resources {
+        padding: 10px 15px;
+    }
+    .templates-bp-icon-badge {
+        padding: 5px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .templates-bp-resources {
+        width:100%;
+    }
+
+}
+@media screen and (max-width:540px) {
+    .templates-bp-resources {
+        width:100%;
+    }
+    .templates-bp-title {
+        font-size: 12px;
+    }
+    .templates-bp-title-icon-row {
+        align-items: center;
+    }
+    .templates-bp-desc-row p {
+        font-size: 12px;
+    }
+    .templates-bp-icon-badge {
+        gap:0px;
+        padding: 2px 4px;
+    }
+    .templates-bp-icon {
+        padding: 5px;
+    }
+    .templates-bp-icon img {
+        width: 10px
+    }
+    .template-link a {
+        font-size: 10px;
+        line-height: 12px;
+    }
+    
+}

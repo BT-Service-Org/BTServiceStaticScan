@@ -1,0 +1,9 @@
+<template>
+    <span style="font-size: var(--lwc-formLabelFontSize,0.75rem); color: black;">{fieldLabel}</span>
+    <br/><br/>
+    <lightning-input-rich-text
+        value={value}
+        onchange={handleChange}>
+    </lightning-input-rich-text>
+    <br/>
+</template>

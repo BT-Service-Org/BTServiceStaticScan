@@ -1,0 +1,82 @@
+<aura:component>
+    <!-- Required attributes-->
+    <aura:attribute name="contentpiece" type="StationContentWrapper" />
+    <aura:attribute name="runningUser" type="User" />
+    <aura:attribute name="buttonMenuTheme" type="String" />
+    <aura:attribute name="stationContentGroup" type="string" />
+    <aura:attribute name="originUrl" type="String" />
+
+    <!-- Optional  attributes-->
+    <aura:attribute name="showFavorite" type="Boolean" default="true" />
+    <aura:attribute name="showCollection" type="Boolean" default="true" />
+    <aura:attribute name="showShare" type="Boolean" default="true" />
+    <aura:attribute name="showFeedback" type="Boolean" default="true" />
+    <aura:attribute name="showLike" type="Boolean" default="true" />
+    <aura:attribute name="showDownload" type="Boolean" default="false" />
+
+    <div
+        style="{! '--buttonColor:' + (or(v.buttonMenuTheme == 'buttonMenuTheme-light1', v.buttonMenuTheme == 'buttonMenuTheme-light2')? 'gray' : 'white' )+ ';' }">
+        <!--Favorite-->
+        <aura:if isTrue="{!v.showFavorite}">
+            <c:The_Station_ContentFavoriteButton showButton="{!v.contentpiece.content.Id != null}"
+                runningUserInput="{!v.runningUser}" contentName="{!v.contentpiece.content.Name}"
+                contentRecordId="{!v.contentpiece.content.Id}"
+                contentFavoriteState="{!v.contentpiece.isFavoriteByRunningUser}" />
+        </aura:if>
+        <!-- ADD CONTENT TO COLLECTION BUTTON -->
+        <aura:if isTrue="{!v.showCollection}">
+            <div style="float:left;margin-right:6px;color:black;">
+                <c:The_Station_CollectionAddContentToCreateButton showAddToCollection="true"
+                    contentRecordId="{!v.contentpiece.content.Id}" buttonTheme="{!v.buttonMenuTheme}" />
+            </div>
+        </aura:if>
+        <!--Share-->
+        <aura:if isTrue="{!v.showShare}">
+            <div style="float:left;margin-right:6px;margin-bottom:6px;">
+                <c:The_Station_ShareButton contentpiece="{!v.contentpiece}" buttonTheme="{!v.buttonMenuTheme}"
+                    stationContentGroup="{!v.stationContentGroup}" runningUser="{!v.runningUser}"
+                    fileType="URLorAppEx" />
+            </div>
+        </aura:if>
+        <!-- New Feedback -->
+        <aura:if isTrue="{!v.showFeedback}">
+            <c:The_Station_ContentFeedbackButton showButton="{!v.contentpiece.content.Id != null}"
+                runningUserInput="{!v.runningUser}" contentName="{!v.contentpiece.content.Name}"
+                contentRecordId="{!v.contentpiece.content.Id}"
+                contentPieceId="{!v.contentpiece.contentPiece.ExternalId}"
+                contentOwnerId="{!v.contentpiece.content.OwnerId}"
+                contentPrimaryContactId="{!v.contentpiece.content.Primary_Contact__c}" contentOriginURL="{!v.originUrl}"
+                contentType="{!v.contentpiece.content.Content_Type__c}" showIconButton="true" />
+        </aura:if>
+        <!-- Download -->
+        <aura:if isTrue="{!v.showDownload}">
+            <div style="float:left;margin-right:6px;">
+                <aura:if isTrue="{!v.downloadHidden}">
+                    <lightning:buttonIcon iconName="utility:download" disabled="true" alternativeText="Download"
+                        title="Download" />
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Content Version'}">
+                            <a href="{!'https://org62.lightning.force.com/sfc/servlet.shepherd/document/download/'+v.contentpiece.contentPiece.ContentDocumentId__c+'?operationContext=S1'}"
+                                target="_blank" onclick="{!c.onDownloadClick}" name="{!v.contentpiece.content.Id}">
+                                <lightning:buttonIcon iconName="utility:download" alternativeText="Download"
+                                    title="Download" onclick="{! c.onDownloadClick }" />
+                            </a>
+                            <aura:set attribute="else">
+                                <a href="{!v.contentpiece.content.Content_URL__c}" target="_blank"
+                                    onclick="{!c.onDownloadClick}" name="{!v.contentpiece.content.Id}">
+                                    <lightning:buttonIcon iconName="utility:download" alternativeText="Download"
+                                        title="Download" onclick="{! c.onDownloadClick }" />
+                                </a>
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.showLike}">
+            <c:The_Station_ContentLikeButton showButton="{!v.contentpiece.content.Id != null}"
+                runningUserInput="{!v.runningUser}" contentName="{!v.contentpiece.content.Name}"
+                contentRecordId="{!v.contentpiece.content.Id}" />
+        </aura:if>
+    </div>
+</aura:component>

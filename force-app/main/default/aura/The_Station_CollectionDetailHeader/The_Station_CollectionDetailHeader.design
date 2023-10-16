@@ -1,0 +1,16 @@
+<design:component  label="TheStation: Collection Detail Header">
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2" default="Light 1" description="Change component theme"/>
+    <design:attribute name="showBack" label="Show Back Button" default="true"/>
+    <design:attribute name="showTitle" label="Show Collection Title" default="true"/>
+    <design:attribute name="titleFontSize" label="Title Font Size" default="24" min="16" max="60" required="true" description="In pixels"/>
+    <design:attribute name="titleAlignment" label="Title Alignment" datasource="Left,Center,Right" default="Center"/>
+    <design:attribute name="otherFontSize" label="Other Font Size" default="14" min="10" max="24" required="true" description="In pixels"/>
+    <design:attribute name="otherAlignment" label="Other Alignment" datasource="Left,Center,Right" default="Center"/>
+    <design:attribute name="showEdit" label="Show Edit Button" default="true"/>    
+    <design:attribute name="showFollowerCount" label="Show Follower Count" default="true"/>
+    <design:attribute name="showFollowButton" label="Show Follow Button" default="true"/>
+    <design:attribute name="showShareButton" label="Show Share Button" default="true"/>
+    <design:attribute name="showNotification" label="Show Notification Icon" default="true"/>
+    <design:attribute name="showCreatedBy" label="Show Created By" default="true"/>
+    <design:attribute name="showDescription" label="Show Collection Description" default="true"/>
+</design:component>

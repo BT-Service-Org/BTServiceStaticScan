@@ -1,0 +1,226 @@
+.THIS .slds-tree__item-label {
+    width: auto;
+    height: auto;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 0.0012em;
+    line-height: 24px;
+    color: #032D60;
+}
+
+.THIS .slds-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.THIS .Mobile_Logo {
+    width: 20%;
+    height: 10%;
+}
+
+.THIS .head-flex-container {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.THIS .page_logo {
+    margin-right: auto;
+}
+
+
+.THIS .search_box {
+    margin-right: 4%;
+    position: relative;
+    margin-top: 15px;
+}
+
+.THIS .user_profile {
+    margin-right: 4%;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.THIS .underheader__search {
+    width: auto;
+}
+
+.THIS .search_icon {
+    position: absolute;
+    top: 10px;
+    left: 9px;
+    z-index: 1;
+    opacity: 1;
+}
+
+.THIS .search_icon:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.THIS .CoveoV2CommunitySearchBox .magic-box-input>input {
+    text-indent: 32px !important;
+    top: -5px;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.THIS .CoveoV2CommunitySearchBox .magic-box-input {
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+    height: 39px;
+    border: 1px solid #c9c9c9;
+}
+
+.THIS .CoveoV2CommunitySearchBox .coveo-accessible-button {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin-top: -1px;
+    width: 70px;
+    height: 48px;
+    left: 676px;
+    top: 0;
+    display: none;
+}
+
+.THIS .ccnavmenu-hamburger-button-close[ccnavmenus-navMenu_navMenu] {
+    box-shadow: none
+}
+.THIS .magic-box-hasSuggestion {
+    top: 39px !important;
+}
+.THIS .coveo-magicbox-suggestions {
+    border:none !important
+}
+
+@media (max-width: 768px) {
+    .THIS .head-flex-container {
+        display: flex;
+        flex-direction: row;
+
+        align-items: flex-start;
+    }
+
+    .THIS .page_logo {
+        flex: 0%;
+        flex-shrink: 1;
+
+    }
+
+    .THIS .search_box {
+        flex: 0%;
+        margin-left: 4%;
+        flex-grow: 2;
+        display: none;
+
+    }
+
+    .THIS .underheader__search {
+        background-color: pink;
+        width: 118px;
+    }
+
+    .THIS .CoveoSearchInterface {
+        min-width: 200px;
+    }
+
+    .THIS .hamburgerIconContainer[ccnavmenus-navMenu_navMenu] {
+        position: absolute;
+        top: 49px;
+        left: 0;
+    }
+    .THIS .ccnavmenu-hamburger-button[ccnavmenus-navMenu_navMenu] {
+        height: 19px;
+        width: 28px;
+        background-color: white;
+    }
+    .THIS .user_profile {
+        margin-top: 0px;
+    }
+    .THIS .ccnavmenu-hamburger-icon-toggle[ccnavmenus-navMenu_navMenu] {
+        font-size: 24px;
+    }
+    .THIS .ccnavmenu-hamburger-icon-close[ccnavmenus-navMenu_navMenu] {
+        font-size: 30px;
+    }
+    .THIS .hamburgerMenuContainer[ccnavmenus-navMenu_navMenu] {
+        top: 30px
+
+    }
+    .THIS .closeButtonDiv[ccnavmenus-navMenu_navMenu] {
+        position: absolute;
+        top: -34px;
+        left: 0;
+    }
+
+}
+
+@media (max-width: 540px) {
+    .THIS .head-flex-container {
+        display: flex;
+        flex-direction: row;
+
+        align-items: flex-start;
+    }
+
+    .THIS .page_logo {
+        flex: 0%;
+        flex-shrink: 1;
+
+    }
+
+    .THIS .search_box {
+        flex: 0%;
+        margin-left: 3%;
+        flex-grow: 2;
+        display: none;
+    }
+
+    .THIS .user_profile {
+        margin-top: 0px;
+    }
+
+    .THIS .underheader__search {
+        background-color: pink;
+        width: 118px;
+    }
+
+    .THIS .CoveoSearchInterface {
+        min-width: 200px;
+    }
+
+    .THIS .hamburgerIconContainer[ccnavmenus-navMenu_navMenu] {
+        position: absolute;
+        top: 35px;
+        left: 0;
+    }
+
+    .THIS .ccnavmenu-hamburger-button[ccnavmenus-navMenu_navMenu] {
+        height: 19px;
+        width: 28px;
+        background-color: white;
+    }
+
+    .THIS .hamburgerMenuContainer.hamburgerMenuContainerDefault[ccnavmenus-navMenu_navMenu] {
+        padding: 1rem;
+        width: 240px;
+    }
+
+    .THIS .ccnavmenu-hamburger-icon-close[ccnavmenus-navMenu_navMenu] {
+        font-size: 24px;
+    }
+    .THIS .ccnavmenu-hamburger-icon-toggle[ccnavmenus-navMenu_navMenu] {
+        font-size: 24px;
+    }
+    .THIS .hamburgerMenuContainer.hamburgerMenuContainerDefault[ccnavmenus-navMenu_navMenu] {
+        top: 35px;
+        padding: 1rem;
+    }
+
+ 
+}

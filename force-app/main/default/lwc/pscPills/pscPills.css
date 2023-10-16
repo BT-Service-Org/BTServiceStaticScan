@@ -1,0 +1,64 @@
+.custom_pills {
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+
+}
+
+.badges {
+    display: inline;
+    margin-top: 10px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+}
+
+.badges span {
+    font-size: 10px;
+    color: black;
+    background: grey;
+    border-radius: 20px;
+    padding: 0px 5px;
+    color: white;
+    font-weight: 700;
+}
+
+.badge-value {
+    white-space: break-spaces;
+    background: #ffffff;
+    color: #736565;
+}
+
+.badge-icon {
+        margin-right: 8px;
+        cursor: pointer;
+}
+
+.header {
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-size: 14px;
+    background: transparent;
+    color: #032D60;
+}
+
+.addBadge {
+    background: #736a6b;
+    color: white;
+}
+
+.addBadge:hover {
+    cursor: pointer;
+}
+
+.icon {
+    --lwc-colorTextIconDefault: white;
+    --sds-c-icon-color-background: #736a6b;
+}
+
+@media screen and (max-width:768px) {
+    .badge-value {
+        font-size: 10px;
+    }
+}

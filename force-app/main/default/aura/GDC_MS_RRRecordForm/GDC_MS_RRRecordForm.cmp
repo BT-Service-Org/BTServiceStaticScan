@@ -1,0 +1,4 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:actionOverride">
+    <aura:attribute name="recordId" type="String"/>
+    <c:gdcmsRewardsRecognitionForm recordId="{!v.recordId}"></c:gdcmsRewardsRecognitionForm>
+</aura:component>

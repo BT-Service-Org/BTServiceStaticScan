@@ -1,0 +1,91 @@
+<template>
+   <div class="backArrow" onclick={handleBackClick}>
+      <span class="back_arrow">&#8592;</span>
+      <p class="ITC_font">Back</p>
+  </div>
+  <div class="contentreq_page">
+   <template if:true={contentRequest}>
+      <div class="slds-m-left_large slds-m-bottom_large slds-m-top_large ">
+  <div slot="title" class="slds-m-right-small">
+
+   <div class="article_header ITC_font">
+       <div class="author">
+           <span >
+               <lightning-icon icon-name="utility:user" size="x-small" class="my-icon">
+
+               </lightning-icon>
+               {authorTitle}: {authFirstName} {authLastName}
+           </span>
+       </div>
+   </div>
+</div> <div class="slds-m-top_small content_info">
+   <div class="content_published">
+       <div class="publish_date ITC_font" if:true={contentData.CreatedDate}>
+           <lightning-icon icon-name="utility:clock" size="x-small" name="Created Date">
+           </lightning-icon>
+           <lightning-formatted-date-time value={contentData.CreatedDate} year="numeric"
+               day="2-digit" month="long"></lightning-formatted-date-time>
+           <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip"
+               id="help13">
+               <div class="slds-popover__body">Created Date</div>
+           </div>
+       </div>
+       <div class="publish_date ITC_font" if:true={assigneeName}>
+         <lightning-icon icon-name="utility:user" size="x-small" name="Assignee">
+         </lightning-icon>
+         {assigneeName}
+         <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip"
+             id="help14">
+             <div class="slds-popover__body">Assignee</div>
+         </div>
+     </div>
+   </div>
+</div>
+            <div class="slds-m-top_medium">
+                <p class="title ITC_font">
+                    {contentData.Name}
+                </p>
+                <div class="slds-m-top_small badges">
+
+                 <template if:true={status}><lightning-badge label={status}
+                      class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;</template> 
+                      <template if:true={product}>   <lightning-badge label={product}
+                      class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;</template>
+                     <template if:true={industry}><lightning-badge label={industry}
+                      class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;</template>
+                      <template if:true={audience}> <lightning-badge label={audience}
+                      class=" slds-m-top_medium badge-value slds-badge"></lightning-badge>&nbsp;&nbsp;</template>
+              </div>
+                <div class="content_detail">
+                    <div class="content_body">
+
+                        <div>
+                            <p class="summary ITC_font">
+                                Description
+                            </p>
+                            <p>
+                                {description}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <div class="slds-m-top_medium">
+                <c-psc-display-related-files parent-id={contentId}></c-psc-display-related-files>
+            </div>
+            <div>
+                <c-psc-reusable-voting record-id={contentId} parent-type="Content_Requests__c">
+                </c-psc-reusable-voting>
+            </div>
+        </div>
+
+    </template>
+    <template if:false={contentRequest}>
+        <lightning-spinner></lightning-spinner>
+    </template>
+</div>
+<div class="backArrow" onclick={handleBackClick}>
+   <span class="back_arrow">&#8592;</span>
+   <p class="ITC_font">Back</p>
+</div>
+</template>

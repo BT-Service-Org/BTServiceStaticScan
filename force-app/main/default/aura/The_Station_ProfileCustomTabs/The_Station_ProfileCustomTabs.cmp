@@ -1,0 +1,23 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="tabOne" type="String" default="Requests/Submissions"/>
+    <aura:attribute name="tabTwo" type="String" default="Content Feedback"/>
+    <aura:attribute name="tabThree" type="String" default="General Feedback"/>
+
+    <div class="slds-p-around_large">
+        
+        <lightning:tabset>
+            <lightning:tab label="{!v.tabOne}">
+                One Content !
+            </lightning:tab>
+            <lightning:tab label="{!v.tabTwo}" onactive="{! c.handleActive }" id="cases">
+                Two Content !
+            </lightning:tab>
+            <lightning:tab label="{!v.tabThree}">
+                Three Content !
+            </lightning:tab>
+        </lightning:tabset>
+
+    </div>
+
+</aura:component>

@@ -1,0 +1,17 @@
+.THIS .buttonColumn {
+    min-width: 180px;
+}
+
+.THIS .title-case{
+    font-size:20px;
+}
+
+.THIS article{
+    min-width: 100px !important;
+}
+
+@media screen and (max-width: 1024px){
+    .THIS .overview-tab{
+        margin-top: 10px;
+    }
+}

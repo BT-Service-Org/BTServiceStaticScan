@@ -1,0 +1,84 @@
+<apex:page controller="ValidateTeamSharingController" tabStyle="Team__c" sidebar="false">
+    <style>
+      	div.progressContainer {
+        	background-color:#CCCCCC;
+        	padding:1px;
+        	margin:20px;
+        	width:496px;
+      	}
+      
+      	.goodResult {
+      		color: green;
+      		font-weight: bold;
+      		padding-left: 20px;
+      		background: url({!URLFOR($Resource.ValidateTeamSharingResources, 'images/check.jpg')}) no-repeat left top;
+      	}
+      
+      	.badResult {
+      		color: red;
+      		font-weight: bold;
+      		padding-left: 20px;
+      		background: url({!URLFOR($Resource.ValidateTeamSharingResources, 'images/error.gif')}) no-repeat left top;
+      	}
+      
+		.identAction {
+      		margin-left: 20px;
+      		width: 100%;
+      		position: relative;
+      		overflow: hidden;
+      		padding-left: 20px;
+      		background: url({!URLFOR($Resource.ValidateTeamSharingResources, 'images/bandPatch.gif')}) no-repeat left top;
+      	}
+      	
+      	.detailList {
+      		width: 100%;
+      	}
+      	
+      	.detailList .dataCol {
+      		width: 100% !important;
+      	}
+      	
+      	.teamName {
+      		font-weight: bold;
+      		font-size: 20px;
+      		color: #00709E;
+      	}
+      	
+      	.stadistics {
+      		border: 0px;
+      		width: 400px;
+      	}
+      	
+      	.stadistics .label {
+      		width: 300px;
+      		vertical-align: text-bottom;
+      	}
+    </style>
+    
+    <apex:sectionHeader title="Team Sharing Validation" description="Clicking the &quot;Validate&quot; button executes a process to ensure that all Teams data structures are properly set up."/>
+    
+    <apex:form >
+    	<apex:pageBlock id="block">
+			<apex:actionPoller action="{!processValidation}" enabled="{!processing}" rerender="block" interval="8"/>
+	    		
+    		<apex:pageBlockButtons location="top">
+            	<apex:commandButton action="{!startValidation}" value="Validate" disabled="{!processing}" styleClass="{!IF(processing,'btnDisabled','btn')}" rerender="block"/>
+       		</apex:pageBlockButtons>
+       		
+ 	       	<apex:pageBlockSection title="Status" rendered="{!processing}">
+				<apex:outputPanel layout="block" style="text-align:left">
+					{!remainingTeams} Teams Remaining To Be Processed<br/>
+					<apex:outputPanel layout="block" styleClass="progressContainer">
+						<apex:outputpanel layout="block" style="width:{!496 * progressPercent}px; height:24px;overflow: hidden; position:relative; background: url({!URLFOR($Resource.ValidateTeamSharingResources, 'images/progressBar.gif')}) left top" />
+					</apex:outputPanel>
+				</apex:outputPanel>
+	    	</apex:pageBlockSection>
+			
+			<apex:pageBlockSection title="Execution Log">
+				<apex:repeat value="{!results}" var="result">
+					<apex:outputText escape="false" value="{!result}"/><br>
+				</apex:repeat>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+    </apex:form>
+</apex:page>

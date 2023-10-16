@@ -1,0 +1,209 @@
+<apex:page tabStyle="PeopleProfile__c" controller="PeopleEditEmploymentHistoryController" sidebar="false">
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<!-- Autocompleter -->		
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/autocomplete.js')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}" />	
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />	
+	<!-- Stylesheets for people Editions -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/peopleEditions.css')}" />
+	<!-- Form Validator -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/Validator.js')}" />
+	<style>
+	
+	div.separator {
+		float:left;
+		width:10px;
+		height:20px;
+	}
+		
+	.f_left {
+		float:left !important;
+	}
+	
+	div.form_fields span.interField {
+		float:left !important;
+		padding-top:3px;
+	}
+	
+	div.form_fields div.require {
+		margin-top:0px;
+	}
+	
+	div.form_fields .top_padding_3px {
+		padding:3px !important;
+	}
+	
+	.clear {
+		clear:both;
+		overflow:hidden;
+	}
+	
+	.message_to_user { 
+		color:#B62A2F;
+	}
+	</style>
+	<!-- Common Js for Edition Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/editionScripts.js')}" />
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Edit Profile</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container (always Centered) -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />
+		</div> 
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<apex:include pageName="PeopleSidebarProfile" />	
+		</div>
+	</div><!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+					<a href="peopleprofiledisplay">< Go back to My Profile</a>
+					<br />
+					<h2>{!IF(IsNewRecord,'New','Edit')}  Work Experience</h2>
+					<br />
+				</div>
+				<div class="main_form">
+				<div id="warning_to_user" class="message_to_user" style="display:none;">
+			      <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+			      Some required fields are empty or its format is incorrect.<br />
+			      Please enter the data correctly.
+			    </div>
+			    <div id="warning_to_user_year" class="message_to_user" style="display:none;">
+			      <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+			      <span id="year_message">The Date To must be greater than de date from.</span><br />
+			      Please enter the data correctly.
+			    </div>
+			    <div id="warning_to_user_not_owner" class="message_to_user" style="{!IF((error == ''),'display:none;','')}">
+			      <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+			      {!error}<br />
+			    </div>								 
+					<div class="require_reference">
+						<span class="reference">&nbsp;</span>
+						<span> = Required Information</span>
+					</div>
+					<apex:form id="workExp" onsubmit="if(validator('{!$Component.workExp}', 'warning_to_user')){ return false;} else if (yearValidation('{!$Component.yearFrom}', '{!$Component.toYear}')){return false;} "> 
+					<div class="form_fields">
+						<div class="f_left">
+							<div class="field">
+								<label>Company</label>
+								<div class="require">&nbsp;</div>
+								<div id="ajaxResult" style="display:none;"></div>
+								<script>
+										function hideSuggest(){
+											Effect.Fade('ac_{!$Component.EmployerName}',{duration: 0.2});
+										}
+									</script>
+								<apex:inputText value="{!em.Employer}" id="EmployerName" styleClass="RQ_String" onblur="checkValue(this,'Employer__c');" onFocus="javascript:
+									var options = {
+											script: function (input) { return ('SuggestDispatcher?input='+input+'&class=Employer'); },
+									        callback: function (obj) {}    
+											};
+											var xml=new AutoComplete('{!$Component.EmployerName}',options);return true;" onBlur="hideSuggest();" />
+							</div> 
+							<div class="field" id="Employer__c_dependant" style="display:none;">
+								<label>Location</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!em.EmployerLocationCity}" id="locationCity" styleClass="RQ_String" style="diplay:none;" />
+								&nbsp;
+								<apex:selectList value="{!em.EmployerLocationState}" title="Choose a State" multiselect="false" size="1" >
+						  	 	 	<apex:selectOptions value="{!states}"/>
+						  	 	</apex:selectList>
+							</div>
+							<div class="field">
+								<label>Title</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!em.Title}" id="Title" styleClass="RQ_String" />
+							</div>
+							<div class="field clear">
+								<label>Time Period</label>
+								<div class="require">&nbsp;</div>									
+								<apex:selectList value="{!em.workedFromMonth}" title="Choose a Month from" multiselect="false" size="1" styleClass="f_left">
+						  	 	 	<apex:selectOptions value="{!months}"/>
+						  	 	</apex:selectList>
+						  	 	<span class="interField">&nbsp; / &nbsp;</span>
+								<apex:inputText value="{!em.YearFrom}" id="yearFrom" styleClass="small RQ_Year f_left" maxlength="4" />
+								
+								<div id="toDateWrapper">
+									<span class="interField">&nbsp; to &nbsp;</span>
+									<apex:selectList value="{!em.WorkedToMonth}" title="Choose a Month to" multiselect="false" size="1" styleClass="f_left" id="toMonth">
+							  	 	 	<apex:selectOptions value="{!months}"/>
+							  	 	</apex:selectList> 
+							  	 	<span class="interField">&nbsp; / &nbsp;</span>
+									<apex:inputText value="{!em.YearTo}" id="YearTo" styleClass="small RQ_Year f_left" maxlength="4" id="toYear"/>
+								</div>
+								
+								<span class="explain top_padding_3px f_left">Select the month and enter the year</span>
+							</div>
+							
+							<div class="field clear">
+								<label>&nbsp;</label>
+								<apex:inputCheckbox value="{!em.CurrentJob}" id="isCurrentJob" onchange="currentJob(this, '{!$Component.toMonth}','{!$Component.toYear}');"/>
+								<span>This is my current job</span>
+								<script>
+								if('{!em.CurrentJob}' == 'true'){
+									currentJob(document.getElementById('{!$Component.isCurrentJob}'), '{!$Component.toMonth}','{!$Component.toYear}');
+								}
+								</script>
+							</div>
+							<div class="field">
+								<label>Description</label>
+								<apex:inputTextarea value="{!em.Description}" id="Description"/>
+							</div>							
+						</div>
+					</div>
+					<div class="title_from_section">&nbsp;</div>
+					<div class="form_action">
+						<div class="buttons">
+							<apex:commandButton action="{!save}" value="Save" id="saveButton"/>
+							<div class="form_optional_action grayButton" style="{!IF(isNewRecord,'','display:none;')}">
+								<apex:commandLink action="{!saveAndAddAnother}" value="Save & new" id="save" onclick="if(validator('{!$Component.workExp}', 'warning_to_user')){ return false;} else if (yearValidation('{!$Component.yearFrom}', '{!$Component.toYear}')){return false;}"/>
+							</div>	
+							<div class="form_optional_action grayButton" style="{!IF(isNewRecord,'display:none;','')}">
+								<apex:commandLink action="{!remove}" value="Remove this experience" id="delete" onclick="if(!confirm('Are You Sure ?')) return false;" />
+							</div>							
+							<div class="cancel grayButton">
+								<a href="Javascript:;" onclick="if(confirm('Are You Sure ?')){location.href='./peopleprofiledisplay'; return false;}">Cancel</a>	
+							</div>
+						</div>
+					</div>
+					<div class="form_optional_action">
+						
+					</div>
+				</div>
+				</apex:form>
+			</div>
+		</div>
+	</div>
+</apex:page>

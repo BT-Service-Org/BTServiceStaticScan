@@ -1,0 +1,188 @@
+<template>
+
+    <!--new gdcTile-->
+    <div class="slds-align_absolute-center slds-m-top_x-large slds-m-bottom_x-large">
+
+        <lightning-layout multiple-rows class="slds-align_absolute-center " >
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3">
+                <c-gdcms-tiles data-id="/instant-recognition" class="tileBox" onclick={navigate} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px" >
+                    <div data-id="/instant-recognition" >
+                        <lightning-icon data-id="/instant-recognition" icon-name="utility:ribbon" class="my-icon1"
+                            alternative-text="Wall Of Fame" size="large" title="Wall of Fame">
+                        </lightning-icon>
+                    </div>
+                    <div data-id="/instant-recognition" class="heading">Wall Of Fame</div>
+                    <p data-id="/instant-recognition" class="description">Wall Of Fame team is aimed at recognising and
+                        appreciating employees for their achievements.</p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3" >
+                <c-gdcms-tiles data-id="https://sfdc.co/Daily_Dose" class="tileBox" onclick={navigateExternal} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px">
+                    <div data-id="https://sfdc.co/Daily_Dose" >
+                        <lightning-icon data-id="https://sfdc.co/Daily_Dose" class="my-icon1" icon-name="utility:light_bulb"
+                            alternative-text="Daily dose of knowledge" size="large" title="Daily dose of knowledge">
+                        </lightning-icon>
+                    </div>
+                    <div data-id="https://sfdc.co/Daily_Dose" class="heading">Daily Dose of Knowledge</div>
+                    <p data-id="https://sfdc.co/Daily_Dose" class="description"></p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3" >
+                <c-gdcms-tiles data-id={labels.gdcms_Knowledge_Sharing_Sessions} class="tileBox" onclick={navigateExternal} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px" >
+                    <div data-id={labels.gdcms_Knowledge_Sharing_Sessions} >
+                        <lightning-icon data-id={labels.gdcms_Knowledge_Sharing_Sessions} class="my-icon1"
+                        icon-name="utility:knowledge_base" alternative-text="Knowledge Sharing Sessions" size="large" title="Knowledge Sharing Sessions">
+                        </lightning-icon>
+                    </div>
+                    <div data-id={labels.gdcms_Knowledge_Sharing_Sessions} class="heading">Knowledge Sharing Sessions</div>
+                    <p data-id={labels.gdcms_Knowledge_Sharing_Sessions} class="description"></p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3" >
+                <c-gdcms-tiles data-id="/mentor-coach" class="tileBox" onclick={navigate} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px" >
+                    <div data-id="/mentor-coach" >
+                        <lightning-icon data-id="/mentor-coach" class="my-icon1" icon-name="utility:talent_development"
+                        alternative-text="Mentor-Coach" size="large" title="Mentor-Coach">
+                        </lightning-icon>
+                    </div>
+                    <div data-id="/mentor-coach" class="heading">Mentor-Coach</div>
+                    <p data-id="/mentor-coach" class="description">Mentor-Coach program is to share our expertise across GDC to support
+                        one another to move our careers forward.</p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3" >
+                <c-gdcms-tiles data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" class="tileBox" onclick={navigateExternal} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px" >
+                    <div data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" >
+                        <lightning-icon data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" class="my-icon1"
+                        icon-name="utility:smiley_and_people" alternative-text="Team Fun Events" size="large" title="Team Fun Events">
+                        </lightning-icon>
+                    </div>
+                    <div data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" class="heading">Team Fun Events</div>
+                    <p data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" class="description">FunForce is a team of passionate, fun loving and enthusiastic members who organise some really fun
+                        events for the team.</p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-p-around_x-large" size="12" medium-device-size="6" small-device-size="12" large-device-size="3" >
+                <c-gdcms-tiles data-id={labels.rampUpOnboarding} class="tileBox" onclick={navigateExternal} height="365px" hover-height="380px" transform="scale(1.1)" background-color="#6ac2f4" border-radius="0px" >
+                    <div data-id={labels.rampUpOnboarding}>
+                        <lightning-icon data-id={labels.rampUpOnboarding} class="my-icon1" icon-name="utility:trail"
+                         alternative-text="Ramp Up Onboarding" size="large" title="Ramp Up Onboarding">
+                        </lightning-icon>
+                    </div>
+                    <div data-id={labels.rampUpOnboarding} class="heading">Ramp Up Onboarding</div>
+                    <p data-id={labels.rampUpOnboarding} class="description">The Objective of Ramp-Up Onboarding program is
+                        to provide a seamless world-class onboarding experience.</p>
+                </c-gdcms-tiles>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    
+    </div>
+
+
+    <!-- <div class="home-container slds-m-top_x-large">
+  <div class="row">
+      <div class="d-flex text-center justify-content-center">
+					
+<div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Instant Recognition</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={asset}>
+          </span>
+          <p></p>
+      </div>
+      <div data-id="/instant-recognition" onclick={navigate} class="back-tile">
+      	Instant Recognition
+				<p data-id="/instant-recognition" class="font-weight-300">Instant Recognition team is aimed at recognising and appreciating employees for their achievements, tenure, or service.</p>                 
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Knowledge Sharing</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={engage}>
+          </span>
+          <p></p>
+      </div>
+      <div data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/knowledge-sharing" onclick={navigateExternal} class="back-tile">
+         Knowledge Sharing
+        <p data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/knowledge-sharing" class="font-weight-300">The main objective of the Knowledge Sharing program is to enhance the technical knowledge of an individual and a team. This program also covers multiple knowledge domains like Technical Implementations, Project knowledge, Salesforce Releases, and Salesforce Products.</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Mentor-Coach</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={enab}>
+          </span>
+          <p></p>
+      </div>
+      <div data-id="/mentor-coach" onclick={navigate} class="back-tile">
+            Mentor-Coach
+        <p data-id="/mentor-coach" class="font-weight-300">The Objective of Mentor-Coach program  is to share our expertise across and within disciplines to support one another as we use what we’ve learned to move our careers forward.</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Team Fun Events</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={asset}>
+          </span>
+          <p></p>
+      </div>
+      <div data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" onclick={navigateExternal} class="back-tile">
+            Team Fun Events
+        <p data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/team-fun-events" class="font-weight-300">FunForce is a team of passionate, fun loving and enthusiastic members who organise some really fun events for the team. Join us if you love to be #backstagecrew.</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Ramp Up Onboarding</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={process}>
+          </span>
+          <p></p>
+      </div>
+      <div data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/ramp-up-onboarding" onclick={navigateExternal} class="back-tile">
+            Ramp Up Onboarding
+        <p data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/ramp-up-onboarding" class="font-weight-300">The Objective of Ramp-Up Onboarding program is to provide a seamless world-class onboarding experience
+
+</p>
+      </div>
+  </div>
+  
+</div>
+          
+          
+          
+      </div>
+  </div>
+</div> -->
+
+
+
+</template>

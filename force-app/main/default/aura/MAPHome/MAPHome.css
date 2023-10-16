@@ -1,0 +1,69 @@
+.THIS{
+    min-width: 1200px;
+    min-height: 500px;
+}
+.THIS .td-progress{
+	width: 150px;
+}
+.THIS .td-padding{
+	padding-right: 10px !important;
+}
+.THIS .progress-bar-bg-green .slds-progress-bar__value {
+	background: green;
+}
+.THIS .inline-block{
+	display: inline-block;
+}
+.THIS .bold{
+	font-weight: 600;
+}
+.THIS .alert-top{
+    position: fixed;
+    top: 5px; 
+    left:2%;
+    width: 96%;
+}
+.THIS .alert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+.THIS .alert-success{
+	color: white;
+    background-color: green;
+    border-color: #d6e9c6;
+}
+.THIS .alert{
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    z-index: 1;
+}
+.THIS .close{
+	float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+.THIS .alert-danger{
+	color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.THIS .slds-button {
+	line-height: 1.7rem;
+	margin-right: 6px;
+}
+.THIS .slds-button-group .slds-button, .THIS .slds-path__scroll-controls .slds-button {
+	line-height: 1.7rem;
+	margin-right: 0px;
+}
+.THIS .slds-file-selector__text{
+    display: none;
+}

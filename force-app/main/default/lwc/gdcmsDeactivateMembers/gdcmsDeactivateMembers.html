@@ -1,0 +1,28 @@
+<template>
+    <lightning-card variant="Narrow"  title="Select Team Member to Deactivate" icon-name="standard:user">
+        <div class="slds-m-around_medium">
+            <lightning-input type="search" label="Search User" onchange={filter}></lightning-input><br/><br/>
+            <!-- <lightning-button label="Search" variant="brand" onclick={handleSearch}></lightning-button><br/><br/> -->
+           <lightning-dual-listbox options={options} value={selected} label="Select/Remove Team Member" source-label="Available Team Member"
+		selected-label="Selected Team Member" onchange={handleFilter}>
+	</lightning-dual-listbox><br/><br/>
+
+            <lightning-button label="Deactivate" variant="destructive" onclick={handleDeactivate} disabled={disableButton}></lightning-button><br/><br/>
+
+        </div>
+    </lightning-card>
+    <lightning-card variant="Narrow"  title="Select Team Member to Activate" icon-name="standard:user">
+        <div class="slds-m-around_medium">
+            <lightning-dual-listbox
+                label="Select/Remove Inactive Team Member"
+                source-label="Available Inactive Team Member"
+                selected-label="Selected Inactive Team Member"
+                options={availableInactiveUsers}
+                onchange={handleInactiveUsersChange}>
+            </lightning-dual-listbox><br/><br/>
+
+            <lightning-button label="Activate" variant="destructive" onclick={handleActivate} disabled={disableInactiveUserButton}></lightning-button><br/><br/>
+
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,40 @@
+<apex:page id="caseAssessmentStep1" showHeader="true" controller="CaseAssessmentController" title="Case Assessment Process" action="{!checkPreConditions}">
+
+    <head>
+    </head>
+    <script>   
+    </script>
+    <apex:sectionHeader title="CTA Review Session Process" subtitle="Step 1 of 3" />
+    <apex:form id="AssessmentForm" forceSSL="true">
+        <apex:pageMessages id="error" />
+
+        <apex:pageBlock title="Do you wish to create a CTA Review Session Request for " mode="view">
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton rendered="{!autoAssignEnabled}" action="{!feelLucky}" value="Create Request" title="Auto Assign Judge using Round Robin" />
+                <apex:commandButton rendered="{!validctaReviewSession}" action="{!fineTune}" value="Select Judge" title="Manually choose Judge" />
+                <apex:commandButton value="Cancel" action="{!cancel}" immediate="true" />
+            </apex:pageBlockButtons>
+            <apex:panelGrid columns="2" id="profileGrid">
+                <apex:outputText value="Candidate Name" id="firstName" />
+                <apex:outputText value="{!ctaReviewSession.PA_Onboarding__r.Contact__r.Name}" />
+                <apex:outputText value="Mentor Name" />
+                <apex:outputText value="{!ctaReviewSession.PA_Onboarding__r.Mentor__r.Name}" />
+                <apex:outputText value="Leaarning Domain" />
+                <apex:outputText value="{!ctaReviewSession.Name}" />
+                <!-- apex:outputText value="Skill" /-->  
+                <!-- apex:outputText value="{!ctaReviewSession.Skill__c}" /-->
+                <apex:outputText value="Region" />
+                <apex:outputText value="{!ctaReviewSession.PA_Onboarding__r.Region__c}" />
+
+            </apex:panelGrid>
+
+            <p/>
+            <!-- Turning off for now since it is causing confusion for people
+                  <apex:outputText value="Include Judges from Other Regions?"  />
+                  <apex:inputCheckbox id="allowOtherRegionJudges" value="{!allowOtherRegionJudges}"/>-->
+            <br/>
+            <!-- apex:outputLink target="_Blank" value="https://org62.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F930000000HBdn">Click here to learn more about the Badging Process</apex:outputLink-->
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

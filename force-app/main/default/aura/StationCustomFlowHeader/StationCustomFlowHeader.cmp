@@ -1,0 +1,31 @@
+<aura:component access="global" implements="lightning:availableForFlowScreens">
+    
+    <aura:attribute name="title" type="String" access="global" />
+    <aura:attribute name="subtitle" type="String" access="global" />
+    <div style="padding-bottom:.75rem;">
+    <div class="slds-grid header">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__body">
+                <h2>
+                    <span class="slds-card__header-link slds-text-heading_small">
+                        {!v.title}
+                    </span>
+                </h2>
+            </div>
+        </header>
+        <br/>
+        <aura:if isTrue="{!v.subtitle}">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h3>
+                        <span class="slds-card__header-link slds-text-heading_small">
+                            Sub Title here: {!v.subtitle}
+                        </span>
+                    </h3>
+                </div>
+            </header>    
+        </aura:if>
+    </div>
+    </div>
+    
+</aura:component>

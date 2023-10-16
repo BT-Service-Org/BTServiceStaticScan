@@ -1,0 +1,254 @@
+<apex:page tabStyle="PeopleProfile__c" sidebar="false" controller="PeopleKeywordSearchController">
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>	
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	<!-- People Browsing CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/peopleBrowsing.css')}" />
+		<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/DiscussionSearchResults.css')}" />
+	<style>
+		div.people_list_container div.people_card div.actions ul li.no_margin {
+
+		padding-left:0px;
+		margin-bottom: 20px;
+		}
+		
+		div.people_list_container div.people_card div.actions ul li a {
+			display:inline;
+		}
+		
+		
+		
+	</style>
+	<!-- Subscribe Module Js  -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/subscribing.js')}" />
+	
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Browsing</h2>
+			</div>		
+		</div>		
+		<!-- Search Box -->
+		<div class="searchBox">
+			<c:PeopleFinder />
+		</div>
+		<!-- Help for this page --> 
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<apex:include pageName="PeopleSidebarProfile" />			
+	</div>
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">		
+			<!-- The center div at content -->
+			<div class="holder">
+				<h4>{!title}</h4> 
+				<!-- People List Container --> 
+				<div class="people_list_container"> 
+					<!-- Paginator -->
+					<apex:outputPanel layout="block" id="searchResult">
+						 
+						 <div class="searchResultsPagination"> 
+							<div class="data">
+								Results {!paginator.firstItem} - {!paginator.lastItem} of {!paginator.totalItemsNumber} 
+							</div>
+							<div class="navigation">
+								<apex:form >
+									<ul> 
+										<li>
+											<apex:commandLink action="{!paginator.firstPage}" rerender="searchResult" rendered="{!paginator.prevPageLinkShow}" >
+												<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.prevPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+										
+										<li>
+											<apex:commandLink styleclass="prevPage" action="{!paginator.prevPage}" value="Previous Page" rerender="searchResult" rendered="{!paginator.prevPageLinkShow}"/>	
+											<apex:outputpanel rendered="{!paginator.prevPageShow}">
+												<a href="javascript:;" class="prevPageDisabled">Previous Page </a>
+											</apex:outputpanel>
+										</li>
+										
+										<li>&nbsp; | &nbsp; </li>
+										
+										<li>
+											<apex:commandLink styleclass="nextPage" action="{!paginator.nextPage}" value="Next Page" rerender="searchResult" rendered="{!paginator.nextPageLinkShow}"/>	
+											<apex:outputPanel rendered="{!paginator.nextPageShow}">
+												<a href="javascript:;" class="nextPageDisabled">Next Page</a>
+											</apex:outputPanel>
+										</li>
+										
+										<li>
+											<apex:commandLink action="{!paginator.lastPage}" rerender="searchResult" rendered="{!paginator.nextPageLinkShow}" >
+												<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.nextPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+									</ul>	
+								</apex:form>						
+							</div>
+							<div class="pagecount">
+								<apex:form id="jumpToPageFormUp" onkeypress="return submitForm(event, '{!$Component.jumpToPageBtnUp}')">
+									Page <apex:inputText maxlength="3" size="1" id="jumpToPageInputUp" value="{!paginator.jumpPage}" disabled="{!IF(paginator.disabledInput,'true','false')}"  onkeypress="submitForm(event,'{!$Component.jumpToPageBtnUp}')"/> of {!paginator.cntPagination}
+									<apex:commandButton style="display:none;" id="jumpToPageBtnUp" value="Jump to Page" action="{!paginator.jumpToPage}" rerender="searchResult"/>
+								</apex:form>
+							</div>
+						</div>		
+						<apex:outputPanel layout="block" rendered="{!IF((SizeList == 0) ,'true','false')}" >
+							 <h4 style="text-align: center; margin: 10px 0px;">No results on {!title}</h4>  
+						</apex:outputPanel>
+						
+						<apex:repeat value="{!People}" var="personVar" id="searchResultsRepeat" first="{!paginator.firstItem}" rows="{!paginator.numberOfItemsToShow}">
+						<!-- People Card -->
+						<div class="people_card"> 
+							<div class="avatar">
+								<apex:outputPanel rendered="{!IF((personVar.Picture != '') ,'true','false')}"><img src="/servlet/servlet.FileDownload?file={!personVar.Picture}" alt="" width="50" />	</apex:outputPanel> 
+								<apex:outputPanel rendered="{!IF((personVar.Picture != '') ,'false','true')}"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/images/user.gif')}" alt="" width="50" /></apex:outputPanel>							
+							</div>
+							<div class="info">
+								<h3>	
+									<apex:outputLink value="/apex/PeopleProfileDisplay">
+										{!personVar.Name}
+									<apex:param name="id" value="{!personVar.Id}" />
+									</apex:outputLink>
+								</h3>
+								<h4 class="weight_normal">
+									<apex:outputPanel rendered="{!IF((personVar.Title != '') ,'true','false')}">{!personVar.Title} </apex:outputPanel> 
+									<apex:outputPanel rendered="{!IF((personVar.Title != '') ,'false','true')}">No Title</apex:outputPanel> 
+								</h4>
+									<p class="contact" style="{!IF((personVar.isPrivate ) ,'display: none;','')}">
+										<apex:outputPanel rendered="{!IF((personVar.Department != '') ,'true','false')}">{!personVar.Department} - </apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.Department != '') ,'false','true')}">No departament -</apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.Division != '') ,'true','false')}">{!personVar.Division} | </apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.Division != '') ,'false','true')}">No Division |</apex:outputPanel> 		
+										San Francisco, CA | 				
+										<apex:outputPanel rendered="{!IF((personVar.Phone != '') ,'true','false')}">{!personVar.Phone} | </apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.Phone != '') ,'false','true')}">No Phone |</apex:outputPanel>	
+										<apex:outputPanel rendered="{!IF((personVar.Email != '') ,'true','false')}"> {!personVar.Email} | </apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.Email != '') ,'false','true')}">No Email |</apex:outputPanel>  
+									</p>
+									<p class="match" style="{!IF((personVar.isPrivate ) ,'display: none;','')}">
+										<apex:outputPanel rendered="{!IF((personVar.AboutMe != '') ,'true','false')}">{!personVar.AboutMe} </apex:outputPanel> 
+										<apex:outputPanel rendered="{!IF((personVar.AboutMe != '') ,'false','true')}">No About Me </apex:outputPanel> 
+									</p>
+							</div>
+							<div class="actions" style="{!IF((personVar.isPrivate ) ,'display: none;','')}, width:15%;" > 
+								<ul>
+								
+									<li {!IF((typeAction == 'SubscribesToMe'),'style=\"display:none;\"','')} class="no_margin">
+										<!--  <c:PeopleSuscribe subscribeId="{!personVar.Id}" />  -->
+									</li>
+									<li class="contact">
+										<a href="javascript:;" onmouseover="showDropContact(this);" onmouseout="showDropContact(this);" onclick="dropDownContact(this);">Contact</a><ul style="display:none;">
+											<li><a href="mailto:{!personVar.Email}">
+													<img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/people_browsing/icons/contact.gif')}" alt="" />
+													Mail 
+													
+												</a> 
+											</li>
+											<li {!IF((personVar.Yahoo == ''),'style=\"display:none;\"','')}>
+												<a href="http://edit.yahoo.com/config/send_webmesg?.target={!personVar.Yahoo}&.src=pg">
+													<img src="http://opi.yahoo.com/online?u={!personVar.Yahoo}" />
+													Yahoo 
+													
+												</a> 
+											</li>
+											<li {!IF((personVar.Skype == ''),'style=\"display:none;\"','')}>
+												<a href="skype:{!personVar.Skype}?call">
+												<img src="http://mystatus.skype.com/smallicon/{!personVar.Skype}" style="border: none;" width="16" height="16" alt="My status" />
+												Skype 
+												</a> 							
+											</li>
+										</ul>
+									</li>
+			
+								</ul>
+							</div>
+							<br /> 
+						</div>
+						<!-- Ends People Card -->
+						</apex:repeat>
+						
+						<div class="searchResultsPagination" style="z-index:-500"> 
+							<div class="data">
+								Results {!paginator.firstItem} - {!paginator.lastItem} of {!paginator.totalItemsNumber} 
+							</div>
+							<div class="navigation">
+								<apex:form >
+									<ul>
+										<li>
+											<apex:commandLink action="{!paginator.firstPage}" rerender="searchResult" rendered="{!paginator.prevPageLinkShow}" >
+												<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.prevPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+										
+										<li>
+											<apex:commandLink styleclass="prevPage" action="{!paginator.prevPage}" value="Previous Page" rerender="searchResult" rendered="{!paginator.prevPageLinkShow}"/>	
+											<apex:outputpanel rendered="{!paginator.prevPageShow}">
+												<a href="javascript:;" class="prevPageDisabled">Previous Page </a>
+											</apex:outputpanel>
+										</li>
+										
+										<li>&nbsp; | &nbsp; </li>
+										
+										<li>
+											<apex:commandLink styleclass="nextPage" action="{!paginator.nextPage}" value="Next Page" rerender="searchResult" rendered="{!paginator.nextPageLinkShow}"/>	
+											<apex:outputPanel rendered="{!paginator.nextPageShow}">
+												<a href="javascript:;" class="nextPageDisabled">Next Page</a>
+											</apex:outputPanel>
+										</li>
+										
+										<li>
+											<apex:commandLink action="{!paginator.lastPage}" rerender="searchResult" rendered="{!paginator.nextPageLinkShow}" >
+												<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.nextPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+									</ul>	
+								</apex:form>						
+							</div>
+							<div class="pagecount">
+							
+								<apex:form id="jumpToPageFormUp2" onkeypress="return submitForm(event, '{!$Component.jumpToPageBtnUp}')">
+									Page <apex:inputText maxlength="3" size="1" id="jumpToPageInputUp" value="{!paginator.jumpPage}" onkeypress="submitForm(event,'{!$Component.jumpToPageBtnUp}')" disabled="{!IF(paginator.disabledInput,'true','false')}"/> of {!paginator.cntPagination}
+									<apex:commandButton style="display:none;" id="jumpToPageBtnUp" value="Jump to Page" action="{!paginator.jumpToPage}" rerender="searchResult"/>
+								</apex:form>
+							</div>
+						</div>
+								
+					</apex:outputPanel>
+			</div>				
+		</div>
+	</div>
+</apex:page>

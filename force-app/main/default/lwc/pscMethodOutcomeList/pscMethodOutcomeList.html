@@ -1,0 +1,7 @@
+<template>
+    <ul class="slds-list_dotted">
+        <template for:each={outcomes} for:item="item">
+            <li key={item.Id} if:true={item.Outcome__r}> {item.Outcome__r.Title__c} </li>
+        </template>
+    </ul>
+</template>

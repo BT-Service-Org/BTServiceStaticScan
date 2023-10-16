@@ -1,0 +1,251 @@
+<apex:component controller="TeamsWidgetTasksMainController">
+
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a teams catalog widget
+	-->
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+	
+	
+	<!-- ### Styles ### -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/projectLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsWidgetTasksMain.css')}" />
+	
+	
+	<!-- ### Javascript ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetTasksMain.js')}"></script>	
+	
+	<!-- Swirly Style -->
+	<style>
+	.swirly_task
+		{
+			background: #FFFFFF url({!URLFOR($Resource.TeamsResources, 'images/layout/small_loader.gif')}) no-repeat center center;
+			left: 0pt;
+			opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			z-index: 9999;
+		}
+	</style>
+	
+	<!-- Swirly Function -->
+	<script> 
+		
+		function showSwirly(elemClass)
+		{
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+			divLoaders.each(function(elem) {
+				var div = elem.ancestors()[0];
+				elem.style.height = div.getHeight()+'px';
+				Effect.Appear(elem, { duration: 0.1, to: 0.8 });
+			});
+		}
+		
+		function hideSwirly(elemClass){
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+				divLoaders.each(function(elem) {
+				Effect.Fade(elem);
+			});
+		}
+	</script>	
+		<!--### Rerender Method ###-->
+		<apex:form >
+			<apex:actionFunction name="reloadProjectTask" action="{!getAllProjectTasks}"
+	       		rerender="noTopicList,TaskWidgetFull" onComplete="hideSwirly('swirly_task')" />
+	    </apex:form>
+		
+		<!-- ### Wide Widget ### --> 
+		<div class="myBigWidget">
+			<div class="teamBlockTitle">
+				<h4 class="tasks">All Tasks</h4>
+			</div>
+			<!-- Widget Links Holder -->
+			<div class="linkAction">
+			<apex:form >
+				<ul class="links_sup">
+					<apex:outputpanel rendered="{!userPermissions.canCreate}"  > 
+						<li><a class="topRightLinks" href="javascript:;" onclick="fixedModalNewTask.open();">New</a>  |</li>
+					</apex:outputpanel>
+					<li class="contact_border_active" style="position: relative;">
+						<a href="javascript:;" id="filter" class="contact_border"  onclick="dropDownContact(this);">View: All Tasks</a><ul style="display:none;">
+							<li >
+								<apex:commandLink action="{!getAllProjectTasks}"  value="View..." rerender="{!$Component.noTopicList}" onclick="dropDownContact(document.getElementById('filter'));">
+									<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/sortUp.png')}"/>
+								</apex:commandLink>
+							</li>						
+							<li>
+								<apex:commandLink action="{!getAllProjectTasks}" id="refreshTaskWidget" value="All Tasks" rerender="{!$Component.TaskWidgetFull}" onclick="showLoader('filter');" onComplete="hideLoader('results_task_loader');" />
+							</li>
+							<li>
+								<apex:commandLink action="{!getMyProjectTasks}" value="My Tasks" rerender="{!$Component.TaskWidgetFull}" onclick="showLoaderMy('filter');" onComplete="hideLoader('results_task_loader');" />
+							</li>	
+						</ul>
+						 
+					</li>
+					<li> | <a href="ProjectTimeLine?id={!TeamId}">Timeline</a>  |</li>
+					<li> <a href="ProjectTaskList?id={!TeamId}" class="topRightLinks" >See More&#187;</a></li>
+				</ul>
+			</apex:form>
+			<div class="clear" ></div>
+			</div>
+			<div class="clear" ></div>
+			<div id="iehack" style="position: relative; overflow: hidden;">
+				<div class="swirly_task" style="display: none;"></div>
+				<div id="results_task_loader" style="display: none;"></div>
+				<apex:outputpanel id="TaskWidgetFull" layout="block" >
+					<div style="{!IF(listSize > 0, 'display:none', '')};" class="empty">
+						<ul class="notasks">
+							<li>
+							No Tasks<br/>
+							<a  onclick="fixedModalNewTask.open();" href="javascript:;" >Create New Task</a>
+							</li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+					<apex:dataTable value="{!taskResults}" var="task" styleClass="discussion">
+						<apex:column width="16px" styleClass="icon">
+							<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/task.png')}"/>
+						</apex:column>
+	
+						<apex:column styleClass="first">
+							<div style="{!IF(task.Priority == 'High', '', 'display:none')};" class="prior" >
+								<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/highPriority.png')}"/>
+							</div>
+							<div style="{!IF(task.Priority == 'Low', '', 'display:none')};" class="prior" >
+								<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/lowPriority.png')}"/>
+							</div>
+							<div class="{!task.isToLate} f_left">
+								<a href="projecttaskdetail?id={!task.TaskId}">{!task.TaskName}</a><br/>
+								<span class="gray"> {!task.EndDate}</span>
+							</div>
+						</apex:column>
+				
+						<apex:column >
+							<apex:outputpanel rendered="{!IF(task.Picture == 'nopicture',false,true)}">	
+								<div class="photoWrapper_32px">
+									<a href="PeopleProfileDisplay?id={!task.UserId}"><img alt="{!task.UserName}" src="/servlet/servlet.FileDownload?file={!task.Picture}" width="32" /></a>
+								</div>
+							</apex:outputpanel>
+							<apex:outputpanel rendered="{!IF(task.Picture == 'nopicture',true,false)}">	
+								<div class="photoWrapper_32px">
+									<a href="PeopleProfileDisplay?id={!task.UserId}"><img  src="{!URLFOR($Resource.TeamsResources, 'images/placeholders/unknownperson32x32.jpg')}"  width="32" /></a>
+								</div>
+							</apex:outputpanel>						
+							<a href="PeopleProfileDisplay?id={!task.UserId}"  class="name_margin">{!task.UserName}</a>	
+						</apex:column>
+						
+						<apex:column >
+							<span class="percent">{!task.Percent} %</span>
+							<div class="proj_percent_complete_outline">
+	                        	<div class="proj_percent_complete_value" style="width: {!task.Percent}%;"></div>
+	                       	</div>
+						</apex:column>
+					</apex:dataTable>
+				</apex:outputpanel>			
+			</div>
+		</div>
+		
+		<!--  ### Thin Widget ###  -->
+		<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+			<div class="header_blue">
+	    		<div><div><h4 class="tasksSmall">All Tasks</h4></div></div>
+	   		</div>
+	   		<div class="box_content">
+	    		<div class="back_gray">
+	    			<apex:form >
+	    				<ul style="margin-left:31px;" class="links_sup_thin">
+							<li><a class="topRightLinks" href="javascript:;" onclick="fixedModalNewTask.open();" >New</a> |</li>
+							<li class="contact_border_active" style="position: relative;">
+								<a href="javascript:;"  class="contact_border" id="filter2"  onclick="dropDownContact(this);">View: All Tasks</a><ul style="display:none;">	
+									<li>
+										<apex:commandLink action="{!getAllProjectTasks}" value="View..." rerender="{!$Component.noTopicList}" onclick="dropDownContact(document.getElementById('filter2'));">
+											<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/sortUp.png')}"/>
+										</apex:commandLink>
+									</li>									
+									<li>
+										<apex:commandLink action="{!getAllProjectTasks}" value="All Tasks" rerender="{!$Component.noTopicList}" id="rerenderSmallWidgetTaskList" onclick="showLoaderSmall('filter2');" onComplete="hideLoader('results_task_loader2');" />
+									</li>
+									<li>
+										<apex:commandLink action="{!getMyProjectTasks}" value="My Tasks" rerender="{!$Component.noTopicList}" onclick="showLoaderMySmall('filter2');" onComplete="hideLoader('results_task_loader2');" />
+									</li>	
+								</ul>
+							</li>
+							<li>| <a href="ProjectTimeLine?id={!TeamId}" class="topRightLinks" >Timeline</a></li>
+						</ul>
+						<a href="ProjectTaskList?id={!TeamId}" class="topRightLinks" >See More&#187;</a>
+					</apex:form>
+	     			<div class="clear" ></div> 
+	    		</div>  
+	    		<div class="clear" ></div>
+	    		
+	    		
+	    		<div style="{!IF(listSize > 0, 'display:none', '')}; " class="empty">
+					<ul class="notasks">
+						<li>
+						No Tasks<br/>
+						<a  href="TeamsCreateNewTask?id={!TeamId}" >Create New Task</a>
+						</li>
+					</ul>
+				<div class="clear"></div>
+				</div>
+				  
+				<div style="{!IF(listSize > 0, '', 'display:none')};">
+				<div style="position: relative;">
+					<div id="results_task_loader2" style="display: none;"></div>
+					<div class="swirly_task" style="display: none;"></div>
+					<apex:outputPanel id="noTopicList" layout="block" >
+						<div style="{!IF(listSize > 0, 'display:none', '')};" class="empty">
+							<ul class="notasks">
+								<li>
+								No Tasks<br/>
+								<a onclick="fixedModalNewTask.open();" href="javascript:;" >Create New Task</a>
+								</li>
+							</ul>
+						</div>
+						<ul class="minifeed_task">		
+							<apex:repeat value="{!taskResults}" var="task" rows="5">
+								<li>
+									<div style="{!IF(task.Priority == 'High', '', 'display:none')}; width: 13px; margin-top: 3px;" class="center f_left" >
+										<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/highPriority.png')}"/>
+									</div>
+									<div style="{!IF(task.Priority == 'Low', '', 'display:none')}; width: 13px; margin-top: 3px;" class="center f_left" >
+										<img alt="" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/lowPriority.png')}"/>
+									</div>
+									<div class="f_left {!task.isToLate}">
+										<a href="projecttaskdetail?id={!task.TaskId}">{!task.TaskName}</a><br/>
+										<span class="gray"> {!task.EndDate}</span>
+									</div>
+									<div class="clear"></div> 
+								</li>
+							</apex:repeat>
+							
+						</ul>
+					</apex:outputPanel>  
+					<div class="clear"></div>
+					</div>
+					
+				</div>    
+	   		</div>
+	   		<!-- Refresh List -->
+
+			<div class="bottom_borders"><div><div/></div>
+		</div>
+		</div>	
+		
+		<!--  
+			### Widget Intelligence ###  
+			This method execution is required
+		-->
+		<script>
+			//This method determinie if widget live in main o rigth holder
+			widgetPosition();
+		</script>	
+	
+</apex:component>

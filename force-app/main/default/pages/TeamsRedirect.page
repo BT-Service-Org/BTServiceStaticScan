@@ -1,0 +1,12 @@
+<apex:page controller="TeamsRedirectController" action="{!redirect}" >
+
+	This page will never be rendered.  
+	<br/>
+	It will redirect the user to the appropriate teamspace
+	<br/>
+	If you are seeing this page it means your teamspace does not 
+	have the type attribute set
+	<apex:form >
+		<apex:commandLink value="go!"/>
+	</apex:form>
+</apex:page>

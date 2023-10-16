@@ -1,0 +1,93 @@
+<template>
+    <template if:true={winner}>
+        <div class="item curvedBorder">
+            <lightning-card class="curvedBorder" title={winner.gdc_ms_AwardCategory__c}>
+                <lightning-input type="checkbox" label="Remove Winner" name="input1" class="slds-text-heading_small" slot="actions" data-id={winner.Id} onchange={handleChecked}></lightning-input>
+                <div class="demo-only">
+                    <article class="slds-tile slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-tile__detail">
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col slds-size_4-of-12">
+                                            <div class="slds-grid">
+                                                <div class="slds-col slds-size_12-of-12" style="padding-right: 5px">
+                                                    <div class="slds-media__figure">
+                                                        <!--span class="slds-avatar slds-avatar_profile-image-large"-->
+                                                        <img alt="" src={photoUrl} title={name} class="myimg"/>
+                                                        <!--/span-->
+                                                        <h3 class="slds-tile__title slds-truncate slds-text-heading_small" title={name}>
+                                                            <a href="#" class="slds-text-heading_small">{name}</a>
+                                                            </h3>
+                                                            <h4 class="slds-tile__title slds-truncate slds-text-heading_small" title={groupleader} style="font-size: small;">
+                                                                Group Leader : <a href="#" class="slds-text-heading_small">{groupleader}</a>
+                                                            </h4>
+                                                            <h4 class="slds-tile__title slds-truncate slds-text-heading_small" title={quarter} style="font-size: small;">
+                                                                Quarter : <a href="#" class="slds-text-heading_small">{quarter}</a>
+                                                            </h4>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="slds-col slds-size_8-of-12">
+
+                                                        <dl class="slds-list_horizontal slds-wrap">
+                                                            <dt class="slds-item_label slds-text-color_weak slds-text-heading_small slds-truncate" title="Award Category">Award Category</dt>
+                                                            <dd class="slds-item_detail slds-truncate slds-text-heading_small" title={winner.gdc_ms_AwardCategory__c}>{winner.gdc_ms_AwardCategory__c}</dd>
+                                                            <dt class="slds-item_label slds-text-color_weak slds-text-heading_small slds-truncate" title="Quarter">Quarter</dt>
+                                                            <dd class="slds-item_detail slds-truncate slds-text-heading_small" title={winner.gdc_ms_Quarter__c}>{winner.gdc_ms_Quarter__c}</dd>
+                                                        </dl>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_8-of-12">
+                                            <lightning-accordion class="example-accordion"
+                                            onsectiontoggle={handleToggleSection}
+                                            active-section-name="">
+                                               <template if:true={trailblazerAward}>
+                                                    <lightning-accordion-section name="Drive GDC goals as per vision" label="Drive GDC goals as per vision">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_DriveGDCGoalsAsPerVision__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="Team player & Recognised mentor" label="Team player & Recognised mentor">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_TeamPlayerRecognisedMentor__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="C" label="Measurable contribution to GDC">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_MeasurableContributionToGDC__c}</p>
+                                                    </lightning-accordion-section>
+                                                </template>
+                                                <template if:true={teamAward}>
+                                                    <lightning-accordion-section name="Demonstrate Win as a team characteristic" label="Demonstrate Win as a team characteristic">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_WinAsTeamCharacteristic__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="Customer Appreciation OR High CSAT score" label="Customer Appreciation OR High CSAT score">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_CustomerAppreciationHighCSATScore__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="Project complexity & Value delivered" label="Project complexity & Value delivered">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_ProjectComplexityValueDelivered__c}</p>
+                                                    </lightning-accordion-section>
+                                                </template>
+                                                <template if:true={achieverAward}>
+                                                    <lightning-accordion-section name="Customer/ Geo feedback" label="Customer/ Geo feedback">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_CustomerGeoFeedback__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="Personal Achievement's" label="Personal Achievement's">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_PersonalAchievements__c}</p>
+                                                    </lightning-accordion-section>
+
+                                                    <lightning-accordion-section name="Demonstrate Win as a team characteristic" label="Demonstrate Win as a team characteristic">
+                                                        <p class="paraHeight slds-scrollable_y">{winner.gdc_ms_WinAsTeamCharacteristic__c}</p>
+                                                    </lightning-accordion-section>
+                                                </template>
+                                            </lightning-accordion>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+</template>

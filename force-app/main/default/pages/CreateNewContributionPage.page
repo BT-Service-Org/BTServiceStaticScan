@@ -1,0 +1,3 @@
+<apex:page standardController="Community_Contribution__c" extensions="ContributionController" action="{!redirect}">
+	
+</apex:page>

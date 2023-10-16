@@ -1,0 +1,35 @@
+.TextContainer{
+    font-family: 'Salesforce Sans';
+    padding: 1rem;
+    color: #0B0B0B;
+    margin-bottom: 50px;
+    width: 90%;
+    margin: 0 auto;
+}
+.bodyContainer{
+    font-family: 'Salesforce Sans';
+    font-size: 20px;
+    line-height: 20px;
+    color: #0B0B0B;
+    /* 
+    font-style: normal;
+    margin-bottom: 10px; 
+    font-weight: 300;*/
+    
+    text-align: justify;
+}
+.contentbox{
+    padding: 10px;
+    display: flex;
+    align-content: stretch;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap
+}
+
+.title-class{
+    color: #032D60;
+    font-weight: 600;
+    font-size: 2rem;
+    margin-left: 33px;
+}

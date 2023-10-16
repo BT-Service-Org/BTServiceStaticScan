@@ -1,0 +1,23 @@
+.slds-card__header {
+    background-color: #f3f2f2 !important;
+    padding-bottom: 15px !important;
+    height:65px;
+
+}
+
+.slds-card_boundary {
+    display: block !important;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.slds-form-element__label{
+    max-width: auto !important;
+}
+
+.actions-container {
+    flex:1;
+    padding-top: 12px;
+}

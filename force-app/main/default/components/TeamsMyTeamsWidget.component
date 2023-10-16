@@ -1,0 +1,471 @@
+<apex:component controller="TeamsMyTeamsWidgetController">
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/sorttable.js')}"></script>
+	
+	<!-- Ovelay CSS -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />
+	
+	<style>
+		.divLinks{
+			float:left;
+			color:#0F6CB0;
+		}
+		.actionLinks{
+			color:#0F6CB0;
+			font-weight:bold;
+			margin-left:5px;
+			margin-right:5px;
+		}
+		.divManageTeams{
+			overflow:hidden; 
+			width:100%; 
+			height:430px;
+		}
+		.divHeader{
+			width:515px;
+			clear:both;
+			height:15px;
+			padding:5px 0px;
+			border-top:1px solid #CCCCCC;
+			border-bottom:1px solid #CCCCCC;
+			overflow:hidden;
+			margin-top:8px;
+		}
+		.divHeader div{
+			float:left; 
+			color:#575757; 
+			font-family:Arial,Helvetica,sans-serif; 
+			font-size:12px; 
+			font-weight:bold; 
+			text-decoration:underline;
+		}
+		
+		div.box_round_blue div.box_content div.membersDescription {
+			width: 110px;
+		}
+		
+	</style>
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		  
+		  function init(){
+		      sforce.connection.sessionId = '{!$Api.Session_ID}';
+		  }
+	      function deleteTeam(teamSelectedId){
+	      	init();
+	      	var remove = sforce.connection.deleteIds([teamSelectedId],
+	          {onSuccess:function(){ modal.close(); }, onFailure:function(){ alert('This Team Could Not Be Delete, Please Contact Your System Administrator'); }}
+	       );
+	     }  
+		  function getCountMembersForTeamProfile (idTeam, name){
+			init();
+			result = sforce.connection.query("select count() from TeamMember__c where Team__c ='" + idTeam + "'");    		
+			
+			if(result.size > 0){
+				$('teamNameLabel').innerHTML = name;
+				$('removeTeamEvent').innerHTML = '<a href="javascript:;" class="button" onclick="deleteTeam (\''+idTeam+'\')">Continue</a>';
+				$('countTeamUsers').innerHTML = result.size + ' members in this team';
+				result = sforce.connection.query("select Id, Name from Team__c where Name !='" + name + "'");
+				records = result.getArray("records");
+				createOverlay('', 'deleteTeamOverlay', '250');
+			}else{
+			
+				deleteTeamProfile (idTeam, false);
+			}
+		 }
+		 
+		 
+		 var API_SESSION_ID = '{!$Api.Session_ID}';
+		 
+		 /**
+		*	Function to show the dialog to leave the team
+		*/
+		function leaveTeamDialog(teamId, userId, teamName, teamMemberId ){
+			
+			$('teamMemberId').innerHTML = teamMemberId;
+			$('leaveTeamOverlay-teamName').innerHTML = teamName;
+			$('deleteTeamOverlay-teamName').innerHTML = teamName;
+			
+			$('leavebuttonContainer').innerHTML = '<a onclick="leaveTeam(\'' + teamId + '\',\'' + userId + '\');" class="button" href="javascript:;">Leave</a> ';
+			
+			$('deleteTeamButtonContainer').innerHTML = '<a onclick="deleteTeam(\'' + teamId + '\');" class="button" href="javascript:;">Delete</a>';
+			
+			$('leaveOptions').innerHTML = '<a href="TeamsMembersList?id=' + teamId + '" class="linkOverlay">Team Members Page</a>. Or, you can <a href="javascript:;" onclick="deleteTeamDialog();" class="linkOverlay">delete this team</a>';
+			
+			createOverlay('','leaveTeamDialog','215');
+		}
+		
+		/**
+		*	Function to leave the team
+		*/
+		function leaveTeam(teamId,userId){
+		
+			sforce.connection.sessionId = API_SESSION_ID;
+			var memberRow = 'widgetRow-'+ teamId;
+			var tableRow = 'tableRow-' + teamId;
+			
+			var mbrObj = $(memberRow);
+			
+			var q = 'Select User__c, Team__c, TeamProfile__r.Name, TeamProfile__c From TeamMember__c where Team__c =\'' + teamId + '\' and User__c = \'' + userId + '\'';
+			
+			sforce.connection.query(q, {
+				onSuccess:function(result){
+					
+					records = result.getArray("records");
+					
+					if(records[0].TeamProfile__r.Name != 'Team Administrator'){
+						
+						var userIdData = $('teamMemberId').innerHTML;
+						var usertodel = [];			
+						var user = new sforce.SObject("TeamMember__c");
+						user.Id = userIdData;
+						usertodel.push(user);
+							
+						result = sforce.connection.deleteIds([user.Id], {
+							onSuccess:function(result){
+								modal.close();
+								
+								$(memberRow).remove();
+								$(tableRow).remove();
+								setTimeout(doThat,2000);
+								// highlight(mbrObj);					
+							},
+							onFailure:function(error){
+							   	modal.close();
+							}
+						});
+										
+					} else {
+					
+						var qteamAdmins = 'Select User__c, Team__c, TeamProfile__r.Name, TeamProfile__c From TeamMember__c where TeamProfile__r.Name = \'Team Administrator\' and Team__c = \'' + teamId + '\'';
+					
+						sforce.connection.query(qteamAdmins, {
+							
+							onSuccess:function(result){
+								var records = result.getArray("records");
+								
+								if(records.length <= 1 ){
+								
+									$('leaveModal').style.display = 'none';
+									$('leaveConfirm').style.display = '';
+									
+								} else {
+									alert('a');
+									modal.close();
+								}								
+							},
+							onFailure:function(error){
+								//console.warn(error);
+							}
+						});	
+					}										
+				},
+				onFailure:function(error){
+					console.warn(error);
+				}
+			});
+			
+						
+		}	
+		
+		/**
+		*	Function to delete the team
+		*/		
+		function deleteTeam(teamId){
+		
+			var widgetRow = 'widgetRow-'+ teamId;
+			var tableRow = 'tableRow-' + teamId;
+			
+			var teamstodel = [];
+			var team = new sforce.SObject("Team__c");
+			team.Id = teamId;
+			teamstodel.push(team);
+				
+			result = sforce.connection.deleteIds([team.Id], {
+				onSuccess:function(result){
+				
+					// location.href = '\apex\TeamsOverview';
+					// var t=setTimeout("highlight(" +  widgetRow.Id + " )",2000); 
+				 	$(tableRow).remove();
+				 	$(widgetRow).remove();
+				 	modal.close();
+				 	
+				},
+				onFailure:function(error){
+					alert('ERROR!!!! may day! , team cannot be deleted :(');
+				   	modal.close();
+				}
+			});
+		}
+		
+		function highlight (rowDeleted){
+
+ 			new Effect.Highlight(rowDeleted, { startcolor: "#D10404", endcolor: "#ffffff",duration: 0.5,
+	 			afterFinish: function(){
+	 				$(rowDeleted).remove();
+	 			}
+ 			});
+ 		};
+		
+		/**
+		*	Function to delete the team
+		*/		
+		function deleteTeamDialog(){
+			$('leaveConfirm').style.display = 'none';
+			$('deleteConfirm').style.display = '';	
+		}
+		
+		
+	</script>
+	
+	 <!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<div class="box_round_blue">
+		<!-- Header -->
+		<div class="header">
+			<div><div><h3>My Teams</h3></div></div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+			<div class="contentHolder"> 
+				<div class="linkAction">
+					<a href="javascript:;" onclick="createOverlay('','TeamMemberPermision','450'); reinitializeSort=true; sorttable.init();">Manage Teams</a>
+				</div>				
+			</div>
+			<apex:repeat value="{!teams}" var="t">
+				<div id="widgetRow-{!t.teamMember.Team__c}">
+					<div class="membersImageHolder">
+						<img width="29" height="29" src="{!IF(t.picture != '', t.picture, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_small.gif'))}" />
+					</div>
+					<div class="membersDescription">
+						<a href="/apex/TeamsRedirect?id={!t.teamMember.Team__r.Id}">{!t.teamMember.Team__r.Name}</a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</apex:repeat>
+		</div>
+		<div class="bottom_borders"><div><div></div></div></div>
+	</div>
+	
+	<!------------------------------->		
+	<!----- MANAGE TEMAS OVERLAY ---->
+	<!------------------------------->
+	
+	<div id="TeamMemberPermision" style="display:none;">
+	  <!-- Title of Dialog -->
+	  <div class="modalTitle">
+		  <div class="title">  Manage Teams</div>
+		  <div class="closeEvent">
+			  <a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+		  </div>
+	  </div>
+	  
+	  <apex:outputPanel id="myTeamsList" >
+	  	<apex:form >
+		  <div class="divManageTeams">
+		  <!--  
+	           <table cellspacing="0" cellpadding="0" class="pageList" width="502">
+	              <thead>
+	                  <tr>
+	                      <td class="manage_title_description" width="155">
+	                          Action
+	                      </td>
+	                      <td width="75">&nbsp;</td>
+	                      <td class="manage_title_description" width="110">
+	                      	<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Name" rerender="myTeamsList">
+								<apex:param name="sb" value="Team__r.Name" />
+							</apex:commandLink>&nbsp;
+							<apex:outputpanel rendered="{!IF(sortBy == 'teamName',true,false)}">
+								<apex:outputpanel rendered="{!sortByDesc}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+								</apex:outputpanel>
+								<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+								</apex:outputpanel>
+							</apex:outputpanel>
+	                      </td>
+	                      <td class="manage_title_description" width="180">
+	                      	<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Your Team Profile" rerender="myTeamsList">
+								<apex:param name="sb" value="TeamProfile__r.Name" />
+							</apex:commandLink>&nbsp;
+							<apex:outputpanel rendered="{!IF(sortBy == 'teamProfile',true,false)}">
+								<apex:outputpanel rendered="{!sortByDesc}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+								</apex:outputpanel>
+								<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+								</apex:outputpanel>
+							</apex:outputpanel>	                          
+	                      </td>
+	                  </tr>
+	              </thead>
+	          </table>
+	          -->
+	          <div class="divHeader">
+	          	<div style="width:225px; margin-left:7px">
+	          		Action
+	          	</div>
+				<div style="width:112px;">
+	          		<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Name" rerender="myTeamsList">
+						<apex:param name="sb" value="Team__r.Name" />
+					</apex:commandLink>&nbsp;
+					<apex:outputpanel rendered="{!IF(sortBy == 'teamName',true,false)}">
+						<apex:outputpanel rendered="{!sortByDesc}">
+							<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+						</apex:outputpanel>
+						<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+							<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+						</apex:outputpanel>
+					</apex:outputpanel>
+	          	</div>
+	          	<div style="width:130px;">
+	          		<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="Your Team Profile" rerender="myTeamsList">
+						<apex:param name="sb" value="TeamProfile__r.Name" />
+					</apex:commandLink>&nbsp;
+					<apex:outputpanel rendered="{!IF(sortBy == 'teamProfile',true,false)}">
+						<apex:outputpanel rendered="{!sortByDesc}">
+							<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+						</apex:outputpanel>
+						<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+							<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+						</apex:outputpanel>
+					</apex:outputpanel>	    
+	          	</div>	          	
+	          </div>
+	          <div style="height: 382px; width:100%; overflow-y:auto; overflow-x:hidden;clear:both;">
+		          <table cellspacing="0" cellpadding="0" class="pageList" width="100%">
+		              <!-- Description  -->
+		              <tbody>
+		              	<apex:repeat value="{!teams}" var="t">
+		                  <tr id="tableRow-{!t.teamMember.Team__c}">
+		                      <td width="155">
+		                      	<div style="{!IF(t.teamMember.TeamProfile__r.ManageTeams__c, 'display:block', 'display:none')};" class="divLinks">
+		                        	<a href="/apex/TeamsCreateNewTeam?id={!t.teamMember.Team__r.Id}" class="actionLinks">Edit</a> 
+		                        	|
+		                        	<a href="javascript:;" onclick="modal.close();getCountMembersForTeamProfile('{!t.teamMember.Team__r.Id}','{!t.teamMember.Team__r.Name}');" class="actionLinks">Delete</a> 
+		                        	| 
+		                        </div>
+		                      	<div class="divLinks">                		
+		                        	<a href="javascript:;" class="actionLinks" onclick="leaveTeamDialog('{!t.teamMember.Team__r.Id}','{!t.teamMember.User__c}','{!t.teamMember.Team__r.Name}', '{!t.teamMember.Id}');">Leave</a>
+		                        </div>	
+		                      </td>
+		                      <td align="right" width="76">
+		                          <img width="29" height="29" src="{!IF(t.picture != '', t.picture, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_small.gif'))}" style="margin-right:5px;"/>
+		                      </td>
+		                      <td style="color:#85A0CF;" width="113">
+		                      	<div class="divLinks">
+		                          <a class="actionLinks" href="/apex/TeamsRedirect?id={!t.teamMember.Team__r.Id}">{!t.teamMember.Team__r.Name}</a>
+		                         </div>
+		                      </td>
+		                      <td style="padding-left:5px;" width="180">
+		                         {!t.teamMember.TeamProfile__r.Name}
+		                      </td>
+		                  </tr>
+		             	</apex:repeat>
+		              </tbody>
+		          </table>
+		       </div>
+           </div>
+        </apex:form>
+	 </apex:outputPanel>
+</div>
+ </div>
+       
+       <!------------------------------->		
+	   <!------- DELETE OVERLAY -------->
+	   <!------------------------------->
+       <div id="deleteTeamOverlay" style="display:none;">
+	   	<!-- Title of Dialog -->
+	   	<div class="modalTitle">
+		    <div class="title">Delete Team</div>
+		    <div class="closeEvent">
+		        <a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.BlogsResources, 'images/common/icons/close_dialog.gif')}" alt="Close Window" title="Close Window" /></a>
+		    </div>
+		 </div>
+		 <!-- Content  -->
+		 <div class="modalContent">
+		    <!-- Dialog Body  -->
+		    <div class="modalMessage padding_30px bottom_border_gray">
+		        Are you sure you want to delete <span id="teamNameLabel"></span>? <br/> <br/>
+				<span style="font-weight:normal;" id="countTeamUsers">
+					107 users are assigned to this team
+				</span>
+				<br/>
+				<span style="font-weight:normal">Once a team is deleted, there is no way to undo this action.</span>
+		    </div>
+		    
+		    <!--Actions  -->
+		    <div class="actions">
+		    	<span id="removeTeamEvent">
+		        	<a href="javascript:;" class="button">Continue</a>
+		        </span>	
+		        <a href="javascript: modal.close();"  class="button gray">Cancel</a>
+		    </div>
+		 </div><!-- END Modal Content -->
+		</div>
+		
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+		
+		<div id="leaveTeamDialog" style="display:none;height:215px;">
+			<div class="modalTitle">
+		   		<div class="title">Leave team ?</div>
+		   		<div class="closeEvent">
+		    		<a href="Javascript:;" onclick="modal.close();">X</a>
+		   		</div>
+		  	</div>
+		  	<div class="modalContent">
+		  		<!-- Some modal Contents  -->
+		  		<!-- Leave the team -->
+		  		<div id="leaveModal">
+			   		<div class="modalMessage" style="padding:50px;text-align:center;" >
+			    		Are you sure you want to leave <span id="leaveTeamOverlay-teamName">Team Name</span> ? 
+			   		</div>
+			   		<div class="actions" style="width:180px;" > 
+			    		<div id="leavebuttonContainer">
+			    			<a onclick="leaveTeam('teamid','currentuser');" class="button" href="javascript:;">Leave</a>
+			    		</div>
+			    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+			   		</div>
+			   	</div>
+			   	<!-- Cannot Leave  -->
+		  		<div id="leaveConfirm" style="display:none;">
+			   		<div class="modalMessage" style="padding-top:50px;text-align:center;">
+			    		You cannot leave this team because you are the only Team Administrator.<br>
+			    		Please promote another member to Team Administrator profile from the <span id="leaveOptions"><a href="TeamsMembersList?id=teamid" class="linkOverlay">Team Members Page</a>. Or, you can <a href="javascript:;" onclick="deleteTeamDialog();" class="linkOverlay">delete this team</a></span>
+			   		</div>
+			   		<div class="actions" style="width:90px;" > 		    		
+			    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+			   		</div>
+			   	</div>
+			   	<!-- Delete Team  -->
+		  		<div id="deleteConfirm" style="display:none;">
+			   		<div class="modalMessage" style="padding-top:50px;text-align:center;">
+			    		Are you sure you want to delete <span id="deleteTeamOverlay-teamName">Team Name</span> ?There are <span id="deleteTeamOverlay-teamCount">Teamcount</span> members in this team. Once a team is deleted, there is no way to undo this action.
+			   		</div>
+			   		<div class="actions" style="width:180px;" > 
+			    		<div id="deleteTeamButtonContainer">
+			    			<a onclick="deleteTeam('TeamId');" class="button" href="javascript:;">Delete</a>
+			    		</div>
+			    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+			   		</div>
+			   	</div>
+		  	</div>
+		  	<div id="teamMemberId" style="display:none;" >
+		  	</div>
+		</div>
+		
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+		<!-- Leave team dialog -->
+</apex:component>

@@ -1,0 +1,16 @@
+<apex:page sidebar="false" showHeader="false" controller="WikiPageImagesController">
+	<script>
+		
+		function SelectFile( fileUrl ) {
+			window.opener.SetUrl( fileUrl ) ;
+			window.close() ;
+		}
+		
+	</script>
+	
+	<apex:repeat value="{!attachments}" var="item">
+		<apex:outputpanel rendered="{!IF(item.attachImage == '', false, true)}">
+			<a href="javascript:SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">{!item.Name}</a><br>
+		</apex:outputpanel>
+	</apex:repeat> 
+</apex:page>

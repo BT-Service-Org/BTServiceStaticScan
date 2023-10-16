@@ -1,0 +1,46 @@
+<template>
+    <div class="member-list">
+        <div class="slds-grid slds-wrap">
+            <template for:each={orgMembers} for:item="member">
+                <div data-id={member.id} onclick={navigateToTeamMember} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-small-size_1-of-1 memberTile slds-m-horizontal_x-small slds-m-top_small slds-p-around_small"
+                    key={member.id}> 
+                    <article class="slds-tile slds-media">
+                        <div class="slds-media__figure">
+                            <span>
+                                <img src={member.imageUrl} class="memberPic">
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h3 title={member.name} style="margin-bottom: 5px;">
+                                <span class="slds-tile__title slds-truncate slds-text-heading_medium"
+                                    data-id={member.id}
+                                    style="color: #444;">
+                                    <p class="slds-truncate">{member.name}</p></span>
+                                <span>
+                                    <!-- <lightning-button-icon class="progress-ring" name={member.id} icon-name="utility:share" variant="bare"
+                                        alternative-text="View Profile" title="View Profile" size="large" onclick={navigateToTeamMember}></lightning-button-icon> -->
+                                </span>
+                            </h3>
+
+                            <div class="slds-tile__detail">
+                                <dl>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-heading_small"
+                                        title="First Label" style="color: #444; font-size: 16px;
+                                        margin-bottom: 5px;">
+                                        <span style="font-weight: 500;">Position: </span>
+                                        {member.positionName}</dt>
+                                </dl>
+                                <dl>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-heading_small"
+                                        title="Third Label" style="color: #444; font-size: 16px;">
+                                        <span style="font-weight: 500;">Manager: </span>
+                                        {member.managerName}</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,225 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="The_Station_CollectionContentController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:attribute name="section" type="The_Station_CollectionContentWrapper"/>
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="originUrl" type="String" default="blank" />
+    <aura:attribute name="recordId" type="String" default="blank" />
+    <aura:attribute name="editMode" type="Boolean" default="false" />
+    <aura:attribute name="buttonBorder" type="String" default="2px solid #FFFFFF;"/>
+    <aura:attribute name="buttonBackground" type="String" default="#018EDA !important;"/>
+    <aura:attribute name="buttonHeight" type="String" default="34px;"/>
+    <aura:attribute name="isDeleted" type="Boolean" default="false" />
+    <aura:registerEvent name="delEvent" type="c:The_Station_CollectionDeleteEvent"/>
+    
+    <article class="{!v.isDeleted?'slds-hide':'collection-item slds-is-relative slds-show'}" style="{! '--buttonBorder:' + v.buttonBorder + ';' + '--buttonBackground:' + v.buttonBackground + ';' + '--buttonHeight:' + v.buttonHeight +  ';'}">
+        <aura:if isTrue="{!v.editMode}">
+        <div class="overlay-filter" />
+            <lightning:buttonIcon class="delete-icon" iconName="utility:delete" variant="bare-inverse" size="large" alternativeText="Delete" title="Delete" onclick="{! c.handleDeleteContent }"/>
+        </aura:if>
+        <div class="item-header">
+            <div class="preview-image-container slds-align_absolute-center">
+                <aura:if isTrue="{!v.section.content.Content_Type__c == 'Success Program'}">
+                    <img class="no-predefined-image" src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"></img>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.section.contentImageURL != null}">
+                            <img class="predefined-image" src="{!v.section.contentImageURL}"></img>
+                        <aura:set attribute="else">
+                            <img class="no-predefined-image" src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"></img>
+                        </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>                
+            </div>
+            <!-- Unapproved Content Flap -->
+            <aura:if isTrue="{!v.section.content.Unapproved_Content__c}">
+                <div class="flag">
+                    <span class="shape"></span>
+                    <span class="flag-text">Unapproved content</span>
+                    <section class="flag-popover slds-popover slds-nubbin_top-left" role="dialog">
+                        <div class="slds-popover__body">
+                            <p>Unapproved Content is only visible in a collection. To upgrade to Approved, submit this content to the appropriate Product/Offering page.</p>
+                        </div>
+                    </section>
+                </div>
+            </aura:if>    
+        </div>
+        <div class="item-body">
+            <div class="actions">
+                <aura:if isTrue="{!v.section.contentType == 'Content Version'}">
+                    <div class="actions-top">
+                        <!-- Favorite Button -->
+                        <c:The_Station_ContentFavoriteButton 
+                            showButton="{!v.section.content.Id != null}" 
+                            runningUserInput="{!v.runningUser}" 
+                            contentName="{!v.section.contentTitle}" 
+                            contentRecordId="{!v.section.content.Id}" 
+                            />
+                        <!-- Add to Collection Button -->
+                        <div style="float:left;margin-right:6px;">
+                            <c:The_Station_CollectionAddContentToCreateButton
+                            showAddToCollection="true"
+                            contentRecordId="{!v.section.content.Id}"
+                            /> 
+                        </div>
+                        <!-- Share Button -->
+                        <!-- <aura:if isTrue="{!v.section.content.FileType__c == 'PDF'}">
+                            <c:The_Station_ShareButton contentpiece="{!v.section}" stationContentGroup="{!v.recordId}" runningUser="{!v.runningUser}" fileType="CV_PDF"/>
+                                        
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.section.contentURL != null}">
+                                <c:The_Station_ShareButton contentpiece="{!v.section}" stationContentGroup="{!v.recordId}" runningUser="{!v.runningUser}" fileType="CV_URL"/>
+                                                
+                                <aura:set attribute="else"> -->
+                                    <c:The_Station_ShareButton contentpiece="{!v.section}" stationContentGroup="{!v.recordId}" runningUser="{!v.runningUser}" fileType="CV_else"/>
+                                                            
+                                <!-- </aura:set>
+                            </aura:if>
+                        </aura:set>
+                        </aura:if> -->
+                        <!-- Feedback Button -->
+                        <c:The_Station_ContentFeedbackButton 
+                            showButton="{!v.section.content.Id != null}" 
+                            runningUserInput="{!v.runningUser}" 
+                            contentName="{!v.section.contentTitle}" 
+                            contentRecordId="{!v.section.content.Id}"  
+                            contentOwnerId="{!v.section.content.OwnerId__r.ExternalId}" 
+                            contentPrimaryContactId="{!v.section.content.Primary_Contact__c}" 
+                            contentOriginURL="{!v.originUrl}" 
+                            contentType="Content Version" 
+                            showIconButton="true"/>
+                        <!-- Download -->
+                        <div style="float:left;margin-right:6px;">
+                            <a href="{!'https://org62.lightning.force.com/sfc/servlet.shepherd/document/download/'+v.section.contentDocumentId+'?operationContext=S1'}" target="_blank" onclick="{!c.onDownloadClick}" name="{!v.section.content.Title__c}">
+                                <lightning:buttonIcon iconName="utility:download"  alternativeText="Download" title="Download" onclick="{! c.onDownloadClick }"/>
+                                </a>
+                        </div>
+                        <c:The_Station_ContentLikeButton 
+                            showButton="{!v.section.content.Id != null}" 
+                            runningUserInput="{!v.runningUser}" 
+                            contentName="{!v.section.contentTitle}" 
+                            contentRecordId="{!v.section.content.Id}" 
+                            divStyle="float:right;margin-left:6px;margin-bottom:6px;"
+                            />
+                        
+                        <div style="clear:both;"></div>
+                    </div>
+
+                    
+                        
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.section.content.Content_Type__c == 'Success Program'}">
+                            <div class="actions-top">
+                                <!-- Favorite Button -->
+                                <c:The_Station_ContentFavoriteButton 
+                                    showButton="{!v.section.content.Id != null}" 
+                                    runningUserInput="{!v.runningUser}" 
+                                    contentName="{!v.section.contentTitle}" 
+                                    contentRecordId="{!v.section.content.Id}" 
+                                    />
+
+                                    <!-- Add to Collection Button CHECK-->
+                                <div style="float:left;margin-right:6px;">
+                                    <c:The_Station_CollectionAddContentToCreateButton
+                                    showAddToCollection="true"
+                                    contentRecordId="{!v.section.content.Id}"
+                                    /> 
+                                </div>
+                                <c:The_Station_ShareButton 
+                                    contentpiece="{!v.section}" 
+                                    stationContentGroup="{!v.recordId}" 
+                                    runningUser="{!v.runningUser}" 
+                                    fileType="Success Program"/>
+                                <c:The_Station_ContentFeedbackButton 
+                                    showButton="{!v.section.content.Id != null}" 
+                                    runningUserInput="{!v.runningUser}" 
+                                    contentName="{!v.section.contentTitle}" 
+                                    contentRecordId="{!v.section.content.Id}"  
+                                    contentOwnerId="{!v.section.content.OwnerId__r.ExternalId}" 
+                                    contentPrimaryContactId="{!v.section.content.Primary_Contact__c}" 
+                                    contentOriginURL="{!v.originUrl}" 
+                                    contentType="Success Program" 
+                                    showIconButton="true"/>
+                                    <c:The_Station_ContentLikeButton 
+                                showButton="{!v.section.content.Id != null}" 
+                                runningUserInput="{!v.runningUser}" 
+                                contentName="{!v.section.contentTitle}" 
+                                contentRecordId="{!v.section.content.Id}" 
+                                divStyle="float:right;margin-left:6px;margin-bottom:6px;"
+                                />
+                                <div style="clear:both;"></div>
+                            </div>
+                            
+                        <aura:set attribute="else">
+                        <aura:if isTrue="{!or(v.section.contentURL != null, v.section.content.Content_Type__c == 'App Exchange')}">
+                            <div class="actions-top">
+                                <!-- Favorite Button -->
+                                <c:The_Station_ContentFavoriteButton 
+                                    showButton="{!v.section.content.Id != null}" 
+                                    runningUserInput="{!v.runningUser}" 
+                                    contentName="{!v.section.contentTitle}" 
+                                    contentRecordId="{!v.section.content.Id}" 
+                                    />
+                                   
+                                    <!-- Add to Collection Button -->
+                                <div style="float:left;margin-right:6px;">
+                                    <c:The_Station_CollectionAddContentToCreateButton
+                                    showAddToCollection="true"
+                                    contentRecordId="{!v.section.content.Id}"
+                                    /> 
+                                </div>
+                                <!-- Feedback Button -->
+                                <c:The_Station_ContentFeedbackButton 
+                                    showButton="{!v.section.content.Id != null}" 
+                                    runningUserInput="{!v.runningUser}" 
+                                    contentName="{!v.section.contentTitle}" 
+                                    contentRecordId="{!v.section.content.Id}"  
+                                    contentOwnerId="{!v.section.content.OwnerId__r.ExternalId}" 
+                                    contentPrimaryContactId="{!v.section.content.Primary_Contact__c}" 
+                                    contentOriginURL="{!v.originUrl}" 
+                                    contentType="URL" 
+                                    showIconButton="true"/>
+                                <!-- Share Button -->
+                                <c:The_Station_ShareButton 
+                                    contentpiece="{!v.section}" 
+                                    stationContentGroup="{!v.recordId}" 
+                                    runningUser="{!v.runningUser}" 
+                                    fileType="URLorAppEx"/>
+
+                                <c:The_Station_ContentLikeButton 
+                                showButton="{!v.section.content.Id != null}" 
+                                runningUserInput="{!v.runningUser}" 
+                                contentName="{!v.section.contentTitle}" 
+                                contentRecordId="{!v.section.content.Id}" 
+                                divStyle="float:right;margin-left:6px;margin-bottom:6px;"
+                                />
+                                <div style="clear:both;"></div>
+                            </div>
+                            
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.section.content.Content_Type__c == 'Trailhead'}">
+                                <!-- Trailhead Button -->
+                                <aura:if isTrue="{!v.section.contentPiece.Trailhead_URL__c != null}">
+                                    <button class="slds-button slds-button_brand">
+                                        <a href="{!v.section.contentPiece.Trailhead_URL__c}" 
+                                            target="_blank" 
+                                            onclick="{!c.onViewTrailhead}" 
+                                            name="{!v.section.contentPiece.Name__c}">View in Trailhead
+                                        </a>
+                                    </button>
+                                </aura:if>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                    </aura:set>
+                    </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <h3 class="title" title="{! v.section.contentTitle }" onclick="{! c.handleTitleClick }">{!v.section.contentTitle}</h3>
+            <div class="content">
+                {!v.section.contentDescription}
+            </div>
+        </div>
+    </article>
+</aura:component>

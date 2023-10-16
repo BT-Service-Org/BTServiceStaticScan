@@ -1,0 +1,732 @@
+<apex:component controller="TeamDetailsWidgetController" allowDml="true">
+	<!-- Attribute Definitions -->
+	<apex:attribute name="teamId" description="The team ID" type="String" required="true" assignTo="{!team}" />
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+
+		function trunkText(text, len){
+			if(text.length > len){
+				text = text.substring(0, len) + '...';
+			}
+			document.write(text);
+		}    
+    </script>
+	<!-- Css Styling for this component -->
+	<style>
+		/* Info Bubbles */ 
+		
+		.bubble {
+			z-index:999999;
+			position:absolute;
+			width:379px;
+			height:600px;
+			overflow:visible; 
+			display:none;
+			top:10px;
+			left:10px;				 
+		}
+		
+		
+		
+		.bubble .bottom_border {
+			width:379px;
+			overflow:hidden;
+			position:relative;
+			background:url({!URLFOR($Resource.TeamsResources, 'images/layout/bubbles/bg_bubble_bottom.png')}) no-repeat;
+			background-position:  bottom right;
+		}
+
+		* html .bubble .bottom_border {background:none;}
+		* html .bubble .bottom_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/layout/bubbles/bg_bubble_bottom.png')}", sizingMethod="scale")}			
+		
+		.bubble .top_border {
+			width:379px;
+			overflow:hidden;
+			position:relative;
+			background:url({!URLFOR($Resource.TeamsResources, 'images/layout/bubbles/bg_bubble_top.png')}) no-repeat;
+			background-position:  bottom right;
+		}
+		
+		* html .bubble .top_border {background:none;}
+		* html .bubble .top_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/layout/bubbles/bg_bubble_top.png')}", sizingMethod="scale")}			
+
+		
+		.bubble .content .innerContBubble {
+			position:relative;
+			margin-left:18px;
+		}
+		
+		.bubble .arrowBubble {
+			position:absolute;
+			top:20px;
+			left:5px;					
+		}
+		
+		.bubble .content .innerContBubble .teamBubbleOverlay .swirl {
+			width:150px;
+			height:10px;
+			margin-left:130px;
+			margin-top:65px;
+			width:150px; 
+			height:10px; 
+		}
+		
+		.bubble .content .innerContBubble .teamTitle {
+			float:left;
+			font-weight:bold;
+			margin-top:16px;
+			width:180px;
+		}
+		
+		.bubble .content .innerContBubble .teamInfoTop {
+			clear:both;
+			height:70px;
+			position:relative;
+		}
+		
+		.bubble .content .innerContBubble .teamBubbleContent .editLink {
+			width:70px;
+			height:15px;
+			right:0;
+			top:0;
+			position:absolute;
+		}
+		
+		.bubble .content .innerContBubble .teamBubbleContent {
+			height:250px; 
+			width:92%; 
+			position:relative; 
+			overflow:visible; 
+			margin-left:10px; 
+		}
+		
+		.teamBubble .content .innerContBubble .teamBubbleOverlay {
+			position:absolute;
+			background:#FFFFFF;
+			width:348px;
+			right:10px;
+			height:500px;
+			z-index:999999;			
+		}
+		
+		#teamBubbleContent .image_holder {
+			width:100px;
+			float:left;
+			margin:20px 0px 0px 5px;
+			height:100px;
+			overflow:hidden;
+		}
+		
+		* html #teamBubbleContent .team_info {
+			width:200px;
+		}
+		
+		#teamBubbleContent .team_info {
+			float:left;
+			font-size:11px;				
+			width:210px;
+			margin:15px 1px 0px 15px;		
+		}
+			
+		#teamBubbleContent .team_info .team_title {
+			font-size:14px;
+			font-weight:bold;
+		}
+		
+		#teamBubbleContent .teamInfoAbout {
+			clear:both;
+			margin-top:5px;			
+		}
+		
+		* html div.box_round div.box_content div.description, div.box_round_blue div.box_content div.description {
+			width:110px;
+		}
+		
+		.teamBubble .content .innerContBubble .bubbleOverlay .swirl {
+			width:150px;
+			height:10px;
+			margin-left:130px;
+			margin-top:110px;
+		}		
+	</style>
+	<!-- Hover bubble Team-->
+	<div id="teamBubble" class="bubble" >			
+		<div class="top_border">&nbsp;</div>		
+		<div class="content">
+			<img class="arrowBubble" src="{!URLFOR($Resource.TeamsResources, '/images/layout/bubbles/arrow.gif')}" />				
+			<!-- Content here -->
+			<div class="innerContBubble" onmouseover="clearTimeout(hideBubbleTimeout);" onmouseout="setTimeoutToHide();" >
+				<div class="teamBubbleOverlay" id="teamBubbleOverlay" >
+					<div class="swirl blue" >
+						<img src="{!URLFOR($Resource.TeamsResources, '/images/layout/small_loader.gif')}" /> Loading.....
+					</div>
+				</div>
+				<div id="teamBubbleContent" class="teamBubbleContent" >
+				</div>
+			</div><!-- End Content here -->					
+		</div>
+		<div class="bottom_border">&nbsp;</div>
+	</div>
+	
+	<!-- END Hover Bubble Team -->
+	<!-- Team Details Widget -->
+	<div class="box_round_blue">
+		<!-- Header --> 
+		<div class="header">
+			<div>
+				<div>
+					<h3>
+					<script>trunkText("{!Teamspace.Name}", 26)</script>
+					
+					</h3>
+				</div> 
+			</div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+			<!-- Additional info fetched to not overload the ajax requests -->
+			<div id="adminstatus" style="display:none;">{!IsTeamAdmin}</div>
+			<div id="teamMembercount" style="display:none;">{!TeamCount}</div>
+			<div id="teamMemberId" style="display:none;">{!TeamMemberId}</div>
+			<div id="teamAdmins" style="display:none;"><apex:outputText value="{!TeamAdmins}" escape="false" /></div>
+			
+				<apex:outputPanel styleClass="editLinkSidebar" layout="block" id="teamAction">
+					<apex:outputPanel rendered="{!IsTeamMember}">
+						<a href="Javascript:;" onclick="leaveTeamDialog();">Leave Team</a>
+					</apex:outputPanel>
+					<apex:outputPanel rendered="{!userPermissions.canManage}">
+						| <a href="TeamsCreateNewTeam?parent={!Teamspace.Id}">Create Sub Teams</a> | 
+						<a href="TeamsCreateNewTeam?id={!Teamspace.Id}">Edit</a>
+					</apex:outputPanel>				
+				</apex:outputPanel>
+			
+			<div class="imageHolder">
+				<apex:image width="48" height="48" url="{!IF(TeamspaceImage != '', TeamspaceImage, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif'))}" />
+			</div>
+			<apex:outputPanel layout="block" styleClass="description f_right" rendered="{!IF(LEN(Teamspace.Description__c) == 0, false, true)}">
+				<script>trunkText("{!Teamspace.Description__c}", 52)</script><br /> 
+				<apex:outputPanel layout="block" onmouseover="showBubble('team',this,'{!Teamspace.Id}');"> 
+					(<a href="javascript:;" >More</a>) 
+				</apex:outputPanel>		  
+			</apex:outputPanel> 
+			</div>
+		<div class="bottom_borders">
+			<div>
+				<div></div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Leave team dialog -->
+	<div id="leaveTeamDialog" style="display:none;height:215px;">
+		<div class="modalTitle">
+	   		<div class="title">Leave Team ?</div>
+	   		<div class="closeEvent">
+	    		<a href="Javascript:;" onclick="modal.close();">X</a>
+	   		</div>
+	  	</div>
+	  	<div class="modalContent">
+	  		<!-- Some modal Contents  -->
+	  		
+	  		<!-- Leave the team -->
+	  		<div id="leaveModal">
+		   		<div class="modalMessage" style="padding:50px;text-align:center;" >
+		    		Are you sure you want to leave {!Teamspace.Name} ? 
+		   		</div>
+		   		<div class="actions" style="width:180px;" > 
+		    		<div id="removeButtonContainer">
+		    			<apex:form >
+		    				<apex:commandLink action="{!leaveTeam}" styleClass="button" onclick="updateAction(this);" value="Leave" oncomplete="modal.close(); location.href='';" rerender="teamAction" />
+		    			</apex:form>
+		    		</div>
+		    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+		   		</div>
+		   	</div>
+		   	
+		   	<!-- Cannot Leave  -->
+	  		<div id="leaveConfirm" style="display:none;">
+		   		<div class="modalMessage" style="padding-top:50px;text-align:center;">
+		    		You cannot leave this team because you are the only Team Administrator.<br>
+		    		Please promote another member to Team Administrator profile from the <a href="TeamsMembersList?id={!Teamspace.Id}" class="linkOverlay">Team Members Page</a>. Or, you can <a href="javascript:;" onclick="deleteTeamDialog();" class="linkOverlay">delete this team</a>
+		   		</div>
+		   		<div class="actions" style="width:90px;" > 		    		
+		    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+		   		</div>
+		   	</div>
+		   
+		   	<!-- Delete Team  -->
+	  		<div id="deleteConfirm" style="display:none;">
+		   		<div class="modalMessage" style="padding-top:50px;text-align:center;">
+		    		Are you sure you want to delete {!Teamspace.Name} ?There are {!TeamCount} members in this team. Once a team is deleted, there is no way to undo this action.
+		   		</div>
+		   		<div class="actions" style="width:180px;" > 
+		    		<div id="removeButtonContainer">
+		    			<a onclick="deleteTeam('{!Teamspace.Id}');" class="button" href="javascript:;">Delete</a>
+		    		</div>
+		    			<a class="button gray" href="javascript:;" onclick="modal.close();">Cancel</a>
+		   		</div>
+		   	</div>
+	  	</div>
+	</div>
+	
+	<!-- Js to show Bubble -->
+	<script type="text/javascript">		
+		var rootResource = "{!URLFOR($Resource.TeamsResources)}";	
+		
+		
+		
+		// Toolkit Connection
+		function initSession(){
+				sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		var hideBubbleTimeout;
+		var lastUserId = '';
+		var form;
+		var announcementTitle;
+		var currentIdObject;
+		var lastTypeBubble = '';
+		var teamLoaded = '';
+		var teamIDActive = '{!Teamspace.Id}';
+		
+		//Hold new id object when overlay is shown
+		var state = false;
+	
+	//////////////////////////////////
+	///////////////////////////////////
+	// Show bubbles			
+	function showBubble(type, elementToShow, userId){	
+		
+		lastTypeBubble = type;
+		clearTimeout ( hideBubbleTimeout );
+		hideBubbleTimeout = setTimeout ( 'hideBubble()' , 5000 );
+		
+		// Get element to Hover position		
+		var position = getXY(elementToShow);
+		
+		// Get Hover Container
+		var container = null;
+		if(type == 'team'){ 
+			container = $('teamBubble');
+			var TeamId = (userId);
+		}
+		else{
+			container = $('bubble');
+		}
+		
+		if(type == 'team')
+		{
+			$('bubble').style.display = 'none';
+		}else
+		{
+			$('teamBubble').style.display = 'none';
+		}
+	
+		// Show the Box	
+		
+		if(Prototype.Browser.IE){
+			if(type == 'team')
+				{
+					container.style.top = '40px';												
+					container.style.left = '165px';
+				} else {
+					topPosition = position.y2 - 250;	
+					leftPosition = position.x2 - 30;
+					container.style.top = topPosition + 'px';												
+					container.style.left = leftPosition + 'px';
+				}	
+		
+		} else {
+			if(type == 'team')
+				{
+					container.style.top = '40px';												
+					container.style.left = '165px';
+				} else {
+					topPosition = position.y2 - 190;	
+					leftPosition = position.x2 - 30;
+					container.style.top = topPosition + 'px';												
+					container.style.left = leftPosition + 'px';
+				}				
+		}
+		if(type == 'team') showTeamInfo(TeamId);
+		else showUserInfo(userId);
+		container.style.display = 'block';
+	}
+	
+	function setTimeoutToHide(){
+		hideBubbleTimeout = setTimeout ( 'hideBubble()' , 1000 );
+	}
+	
+	function hideBubble(){
+		// Get Hover Container
+		var container = null;
+		
+		if(lastTypeBubble == 'team') container = $('teamBubble');
+		else container = $('bubble');
+		
+		//container.style.display = 'none';
+		Effect.Fade(container,{duration: 0.5});
+	}
+			
+	// Get X and Y						
+	function getXY(obj){				
+		var pos = Position.cumulativeOffset(obj)
+		var y = pos[1];
+		var x = pos[0];
+		var x2 = x + parseInt(obj.offsetWidth);
+		var y2 = y + parseInt(obj.offsetHeight);
+		return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
+	}
+	
+	///////////////////////////////////
+	///////////////////////////////////
+		
+	function showLoader(){
+		$('overDiv').innerHTML = 'Loading...';
+	}
+	
+	function showUserInfo(UserID){
+		initSession();
+		
+		if(lastUserId != UserID){
+			$('bubbleOverlay').style.opacity = '10';
+			$('bubbleOverlay').style.display = 'block';
+		} 
+		
+		var id = UserID;
+		
+		var theQuery =' SELECT u.Phone, u.Name, u.Id, u.Email, u.Title, u.CompanyName, \
+						(SELECT Skype__c, YahooIM__c, Aol__c, Picture__c	FROM People__r),\
+						(SELECT OwnerId, Name, CreatedDate, Message__c, User__c, Type__c FROM User__r ORDER BY CreatedDate DESC LIMIT 3)\
+						FROM User u\
+						WHERE u.Id = \'' + id + '\'';
+		
+		var result = sforce.connection.query(theQuery, {
+			onSuccess : function(result) {
+				var records = result.getArray("records");
+				var prof = records[0].People__r.records;
+				var minif = (records[0].User__r != null) ? records[0].User__r : null;
+				var teamprof = records[0].TeamMember__r;
+				
+				var theQuery2 ='Select User__c, TeamRole__c, TeamProfile__c From TeamMember__c where Team__c = \'' + teamIDActive + '\'';
+				
+				var queryteamMember = sforce.connection.query(theQuery2, {
+					onSuccess : function(result) {
+						var teamprof = result.getArray("records");	
+						u_id = (teamprof.User__c != null) ? teamMember.User__c : '';		
+						u_teamprofile = (teamprof.TeamProfile__c != null) ? teamMember.TeamProfile__c : '';				
+						u_role = (teamprof.TeamRole__c != null) ? teamMember.TeamRole__c : '';
+						u_company = (minif != null) ? minif.CompanyName : '';
+						u_name = (records[0].Name != null) ? records[0].Name : '';
+						u_title = (records[0].Title != null) ? records[0].Title : '';
+						u_email = (records[0].Email != null) ? records[0].Email : '';
+						u_phone = (records[0].Phone != null) ? records[0].Phone : '';
+						p_yahoo = (prof.YahooIM__c != null) ? prof.YahooIM__c : '';
+						p_aol = (prof.Aol__c != null) ? prof.Aol__c : '';
+						p_skype = (prof.Skype__c != null) ? prof.Skype__c : '';
+		 
+						p_pic_src = (prof.Picture__c != null) ? 'src="/servlet/servlet.FileDownload?file=' + prof.Picture__c + '"' : 'src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/user_not_picture.gif')}"';
+		
+						var outputMemberInfo = '<div class="img_holder"><a href="PeopleProfileDisplay?id="' + UserID + '"><img width="72px" ' + p_pic_src + '  />\
+													</a></div>\
+													<div class="memberInfo"  ><a href="PeopleProfileDisplay?id="' + UserID + '" style="font-size:13px;">' + u_name + '</a>\
+															<br /><strong style="font-size:11px;">Company:</strong><span class="memberInfoTitle" > ' + u_company + '</span>\
+															<br /><strong style="font-size:11px;">Title:</strong><span class="memberInfoTitle" > ' + u_title + '</span>\
+															<br /><strong style="font-size:11px;">Team Role:</strong><span class="memberInfoTitle"> ' + u_role + '</span>\
+															<br /><strong style="font-size:11px;">Team Profile:</strong><span class="memberInfoTitle"> ' + u_teamprofile + '</span>\
+													</div><div style="clear: both"></div>';
+					
+					
+						var outputContactInfo = '<div class="contact_info_title" >Contact Info</div>\n';
+						
+						outputContactInfo += '<table class="contact_info_desc" cellpadding="0" cellspacing="1" width="100%" >\n<tr>';
+						
+						if( u_email != ''){
+							outputContactInfo += '<td class="c_email  blue" >' + u_email + '</td>';
+						} else {
+							outputContactInfo += '<td></td>';
+						}
+						
+						if( p_yahoo != ''){
+							outputContactInfo += '<td class=" blue" ><a href="http://edit.yahoo.com/config/send_webmesg?.target=' + p_yahoo + '&.src=pg"><img border=0 src="http://opi.yahoo.com/online?u=' + p_yahoo + '&m=g&t=0"></a> ' + p_yahoo + '</td></tr>';
+						} else {
+							outputContactInfo += '<td></td>';
+						}
+						
+						outputContactInfo += '<tr>';
+						
+						if( u_phone != ''){
+							outputContactInfo += '<tr><td class="c_phone  blue" >' + u_phone + '</td>';
+						} else {
+							outputContactInfo += '<td></td>';
+						}
+						
+						if( p_aol != ''){
+						outputContactInfo += '<td class=" blue">' + p_aol + '</td>';
+						} else {
+							outputContactInfo += '<td></td>';
+						}
+						outputContactInfo += '</tr></table>';
+						
+						var outputRecentActivity = '<div class="clear" >';
+						
+						
+						if(minif.records != null){
+							for (var i=0; i < minif.records.length; i++){
+								var recAct =  minif.records[i];
+								outputRecentActivity += '<a style=" margin-top:3px; overflow:hidden; clear:both; position:relative; border-bottom:1px solid #F3F3F3;" class="' + recAct.Type__c + '" href="javascript:;"></a><span class="blue">'+ u_name +'</span> '+ recAct.Message__c  + '</div><div class="clear" />';
+							}
+						}				
+						
+						$('bubbleTopLink').innerHTML = '<a href="peopleprofiledisplay?id=' + UserID + '" > View Full Profile</a>';				
+						$('memberInfo').innerHTML = outputMemberInfo;
+						
+						if((u_email != '') || (p_yahoo != '') || (u_phone != '') || (p_skype != '')){
+							$('contact_info').innerHTML = outputContactInfo;
+						} 					
+						
+						$('recent_activity_desc').innerHTML = outputRecentActivity;
+						
+						Effect.Fade('bubbleOverlay');
+						
+					},
+					onFailure : function(error) {
+						alert(error);
+					}
+				});
+			},
+			onFailure : function(error) {
+				alert(error);
+				Effect.Fade('bubbleOverlay');				
+			}
+		});
+
+	}
+		
+	function showError()
+	{
+		$('memberInfo').innerHTML = 'Error';
+	}
+	
+	function parseValue(value)
+	{
+		if(value != null) return value;
+		else return '';
+	}
+		
+	//////////////////////////
+	/////Team Information/////
+	//////////////////////////
+	
+	function showTeamInfo(TeamId)
+		{
+			initSession();
+			
+			var id = TeamId;
+			if(!teamLoaded){
+			$('teamBubbleOverlay').style.opacity = '10';
+			$('teamBubbleOverlay').style.display = 'block';
+			}
+			
+			var theQuery = 'SELECT t.Name, t.Id, t.CreatedById, t.PublicProfile__c, t.NewMemberProfile__c,  t.Description__c, t.CreatedDate, t.Picture__c FROM Team__c t WHERE t.Id =\'' + id + '\'';
+			
+			result = sforce.connection.query(theQuery, {
+				onSuccess : function(result) {
+					
+					records = result.getArray("records");
+					
+					var idCreatedBy = records[0].CreatedById;
+					resultaux = sforce.connection.query('SELECT Name From User Where Id =\'' + idCreatedBy + '\'');
+					recordsaux = resultaux.getArray("records");
+	
+	
+					var relTeam = records[0].Teamspace__r;
+					var teamName = '';
+					var countTeamMembers = 0;
+					var aboutTeam = '';
+					var teamImage = '';
+				
+					////////////////////////
+					//////Data to show//////
+					////////////////////////					
+					teamName = (records[0].Name != null) ? records[0].Name : '';
+				
+					aboutTeam = (records[0].Description__c != null) ? records[0].Description__c : '';
+					teamImage = (records[0].Picture__c != null) ? '/servlet/servlet.FileDownload?file=' + records[0].Picture__c : "{!URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif')}";
+					createdDate = (records[0].getDateTime("CreatedDate") != null) ? parseDate(records[0].getDateTime("CreatedDate")) : '';
+					
+					// Check the team status
+					var publicProfile = records[0].PublicProfile__c;
+					var memberProfile = records[0].NewMemberProfile__c;
+					var teamPermissionStatus = 'Closed';
+					
+					if((publicProfile != null) && (memberProfile != null)){
+						teamPermissionStatus = 'Open';
+					}else if((publicProfile == null) && (memberProfile == null)){
+						teamPermissionStatus = 'Private';
+					}
+					
+					var editionLink = '';
+					
+					if($('adminstatus').innerHTML == 'true'){
+						editionLink = '<apex:outputpanel styleClass="editLink" rendered="{!userPermissions.canManage}"><a href="TeamsCreateNewTeam?id=' + TeamId + '">Edit Details</a></apex:outputpanel>';
+					}
+					
+					
+					var teamAdmins;
+					
+					if($('teamAdmins').innerHTML != ''){
+						teamAdmins = $('teamAdmins').innerHTML;
+					}
+					
+					countTeamMembers = '';
+					
+					if($('teamMembercount').innerHTML < 0 ){
+						countTeamMembers = 'No members yet.';
+					} else {
+						countTeamMembers = $('teamMembercount').innerHTML;
+					}
+					
+					////////////////////////
+					////////////////////////
+					//////////////////////// 
+				
+					var output = '<div class="teamInfoTop">'+ editionLink + '<div class="image_holder" >\
+									<img width="100px" src="' + teamImage + '"/></div>\
+									<div class="team_info" >\
+									<table>\
+									<tr><td colspan="2" class="team_title bold" >' + teamName + '</td></tr>\
+									<tr><td class="bold" >Creator:</td><td  ><a class="blue" href="PeopleProfileDisplay?id=' + idCreatedBy + '" >' + recordsaux[0].Name + '</a></td></tr>\
+									<tr><td class="bold" >Create Date:</td><td class="team_info_text" > ' + createdDate + '</td></tr>\
+									<tr><td class="bold" >Access:</td><td class="team_info_text" >' + teamPermissionStatus + '</td></tr>\
+									<tr><td class="bold" >Team Members:</td><td ><a class="blue" href="TeamsMembersList?id='+TeamId+'" >' + countTeamMembers + ' Members</a></td></tr>\
+									<tr><td class="bold" valign="top" >Administrators:</td><td>'+ teamAdmins +'</td></tr></table></div>\
+									<div class="teamInfoAbout" ><strong>About the Team:</strong><br /><span class="team_info_text" > ' + aboutTeam + ' </span></div>';
+									
+					Effect.Fade('teamBubbleOverlay');
+					var f = function(){$('teamBubbleContent').innerHTML = output;};
+					setTimeout(f,1000);
+					
+					teamLoaded = true;
+					
+				},
+				onFailure : function(error) {
+					alert(error);
+					Effect.Fade('teamBubbleOverlay');				
+				}
+			});
+		}
+		
+		function leaveConfirm(teamId,userId){
+		
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+			var q = 'Select User__c, Team__c, TeamProfile__r.ManageTeams__c, TeamProfile__r.Name, TeamProfile__c From TeamMember__c where Team__c =\'' + teamId + '\' and User__c = \'' + userId + '\'';
+			var idQueue = 'Select id from group where name = \'team' + teamId + '\' limit 1';
+			var resultMember = sforce.connection.query(idQueue);
+			var recordsMembers = resultMember.getArray("records");
+			var adminMembersMe = 'Select UserOrGroupId From GroupMember where groupId = \'' + recordsMembers[0].Id + '\' and UserOrGroupId = \''+ userId +'\'';
+			var resultAdminMe = sforce.connection.query(adminMembersMe);
+			var recordsAdminMe = resultAdminMe.getArray("records");
+			var adminMembers = 'Select UserOrGroupId From GroupMember where groupId = \'' + recordsMembers[0].Id + '\'';
+			var resultAdmin = sforce.connection.query(adminMembers);
+			var recordsAdmin = resultAdmin.getArray("records");
+			var adminNum = recordsAdmin.length;
+			
+			sforce.connection.query(q, {
+				onSuccess:function(result){
+					records = result.getArray("records");
+					if (records[0].TeamProfile__c != null) {
+						if(adminNum == 1 && resultAdminMe.size > 0) {
+							var qteamAdmins = 'Select User__c, Team__c, TeamProfile__r.Name, TeamProfile__c From TeamMember__c where TeamProfile__r.ManageTeams__c = true and Team__c = \'' + teamId + '\'';
+							sforce.connection.query(qteamAdmins, {
+								onSuccess:function(result){
+									var records = result.getArray("records");
+									if(records.length <= 1 ){
+										$('leaveModal').style.display = 'none';
+										$('leaveConfirm').style.display = '';
+									}								
+								},
+								onFailure:function(error){
+									//console.warn(error);
+								}
+							});	
+						}
+					}
+				},
+				onFailure:function(error){
+					//console.warn(error);
+				}
+			});		
+		}		
+		
+		function parseDate(myDate)
+		{
+			var dateStr = myDate.toGMTString();
+			dateStr = dateStr.split(',').join('');
+			var aux = dateStr.split(' ');
+			var output = aux[2] + ' ' + aux[1] + ', ' + aux[3];
+			return output;
+		}	
+		
+		/**
+		*	Function to disable the button while processing the request
+		*/
+		function disableAndShowProgress(link) {
+			link.innerHTML = '<span>Wait...</span>';
+			link.style.color= 'gray';
+			link.onclick = 'alert(\'please wait..\');'			
+		}	
+		
+		/**
+		*	Function to show the dialog to leave the team
+		*/
+		function leaveTeamDialog(teamId){
+			createOverlay('','leaveTeamDialog','215');
+		}
+		
+		/**
+		*	Function to delete the team
+		*/		
+		function deleteTeam(teamId){
+			var teamstodel = [];
+			var team = new sforce.SObject("Team__c");
+			team.Id = teamId;
+			teamstodel.push(team);
+			result = sforce.connection.deleteIds([team.Id], {
+				onSuccess:function(result){
+					//location.href = 'TeamsOverview';									
+				},
+				onFailure:function(error){
+					alert('ERROR!!!! may day! , team cannot be deleted :(');
+				   	modal.close();
+				}
+			});
+		}
+		
+		/**
+		*	Function to delete the team
+		*/		
+		function deleteTeamDialog(){
+			$('leaveConfirm').style.display = 'none';
+			$('deleteConfirm').style.display = '';	
+		}
+		
+		function highlight (rowDeleted){
+ 			new Effect.Highlight(rowDeleted, { startcolor: "#D10404", endcolor: "#ffffff",duration: 0.5,
+	 			afterFinish: function(){
+	 				$(rowDeleted).remove();
+	 			}
+ 			});
+ 		};
+ 		
+ 		function updateAction(element){
+ 			element.innerHTML = 'Wait...';
+ 		}
+ 		
+ 		
+ 		leaveConfirm('{!Teamspace.Id}','{!$User.Id}');
+	</script>
+			
+</apex:component>

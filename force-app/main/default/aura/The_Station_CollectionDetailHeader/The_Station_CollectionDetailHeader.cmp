@@ -1,0 +1,171 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" controller="The_Station_CollectionController" access="global" >
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="collectionRecord" type="Station_Pages__c" />
+    <aura:attribute name="collectionName" type="String" default="Collection Name"/>
+    <aura:attribute name="collectionCreatedBy" type="String" default="Anonymous"/>
+    <aura:attribute name="collectionDescription" type="String" default="Collection Description"/>
+    <aura:attribute name="bannerBackgroundColor" type="String" default="rgb(128, 128, 128, 0.3);"/>        
+    <aura:attribute name="backgroundColorOptions" type="List" />
+    <aura:attribute name="collectionFollowers" type="Integer" default="0"/>
+    <aura:attribute name="collectionContentCount" type="Integer" default="0"/>        
+    <aura:attribute name="collectionIsFollowedByRunningUser" type="boolean" default="false"/>
+    <aura:attribute name="collectionIsPrivate" type="boolean" default="true"/> 
+    <aura:attribute name="collectionIsShared" type="boolean" default="false"/>     
+    <aura:attribute name="collectionOwnerId" type="String"/>    
+    <aura:attribute name="collectionIsOwnedByRunningUser" type="boolean" default="false"/>        
+    <aura:attribute name="hrefColorStyle" type="String"/>
+    <aura:attribute name="intTitleFontSize" type="String" default="24px"/>
+    <aura:attribute name="intTitleAlignment" type="String" default="Center"/>
+    <aura:attribute name="intOtherFontSize" type="String" default="14px"/>
+    <aura:attribute name="intOtherAlignment" type="String" default="Center"/>
+    <aura:attribute name="editMode" type="boolean" default="false"/>    
+    <aura:attribute name="showSave" type="boolean" default="false"/>     
+
+    <aura:attribute name="collectionNameTemp" type="String" default="Collection Name"/>
+    <aura:attribute name="collectionDescriptionTemp" type="String" default="Collection Description"/>
+    <aura:attribute name="bannerBackgroundColorTemp" type="string" default="rgb(128, 128, 128, 0.3);"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="backgroundColor" type="string"/>
+    <aura:attribute name="showBack" type="boolean" default="true"/>
+    <aura:attribute name="showTitle" type="boolean" default="true"/>
+    <aura:attribute name="titleFontSize" type="Integer" default="24" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />    
+    <aura:attribute name="otherFontSize" type="Integer" default="14" />
+    <aura:attribute name="otherAlignment" type="String" default="Center" />    
+    <aura:attribute name="showEdit" type="boolean" default="true"/>
+    <aura:attribute name="showFollowerCount" type="boolean" default="true"/>
+    <aura:attribute name="showFollowButton" type="boolean" default="true"/>
+    <aura:attribute name="showShareButton" type="boolean" default="true"/>
+    <aura:attribute name="showNotification" type="boolean" default="true"/>
+    <aura:attribute name="showCreatedBy" type="boolean" default="true"/>
+    <aura:attribute name="showDescription" type="boolean" default="true"/>
+    <aura:registerEvent name="modeEvent" type="c:The_Station_CollectionModeEvent"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+<!-- DO NOT MODIFY THIS TEMPLATE
+  	 COPY/PASTE INTO YOUR COMPONENT
+-->
+    
+    <div aura:id="XXparentXX" style="{!'background-color: ' + v.bannerBackgroundColor +';'}">
+        <div class="main-container">
+            <aura:if isTrue="{!v.showBack}">
+                <div class="">
+                    <lightning:button label="Back" iconName="utility:chevronleft" iconPosition="left" variant="brand" onclick="{!c.handleBackClick}" />
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.showTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.collectionName}
+                    <aura:if isTrue="{!v.collectionIsShared}">
+                        &nbsp;&nbsp;<lightning:buttonIcon iconName="utility:people" variant="bare" alternativeText="Shared" title="Shared" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.collectionIsPrivate}">
+                        &nbsp;&nbsp;<lightning:buttonIcon iconName="utility:lock" variant="bare" alternativeText="Private" title="Private" />
+                    </aura:if>
+                </div>
+            </aura:if>            
+            <aura:if isTrue="{!v.editMode}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    <lightning:input aura:id="collectionName" label="Collection Name" value="{!v.collectionName}" required="true" />
+                </div>
+            </aura:if>            
+        </div>
+        <div class="column-outer-container">
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showCreatedBy}">
+                    <div class="item-description" style="{!v.intOtherFontSize + v.intOtherAlignment}">
+                        Created By {!v.collectionCreatedBy}
+                    </div>
+                </aura:if>
+            </div>                        
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showDescription}">
+                    <div class="item-description" style="{!v.intOtherFontSize + v.intOtherAlignment}">
+                        {!v.collectionDescription}
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.editMode}">
+                    <div class="item-description" style="{!v.intOtherFontSize + v.intOtherAlignment}">
+                        <lightning:input aura:id="collectionDescription" label="Collection Description" value="{!v.collectionDescription}" required="true" />                        
+                    </div>
+                    <div class="item-description">
+                        <lightning:input aura:id="collectionVisibility" type="toggle" messageToggleActive="Private" messageToggleInactive="Public" label="Collection Visibility" name="Collection Visibility" checked="{!v.collectionIsPrivate}" />
+                    </div>
+                </aura:if>                  
+            </div>
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.collectionIsOwnedByRunningUser}">
+                    <aura:if isTrue="{!v.showEdit}">
+                        <lightning:button variant="brand" label="Edit" title="Edit" onclick="{!c.handleEdit}" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.showSave}">                        
+                        <lightning:select name="colorselect" label="Select a color:" aura:id="backColorSelect" value="{!v.bannerBackgroundColor}" onchange="{!c.changeHeaderBackgroundColor}">
+                            <aura:iteration items="{!v.backgroundColorOptions}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <br/>
+                        <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.handleSave}" />
+                        <br/>
+                        <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{!c.handleCancel}" />
+                        <br/>
+                        <lightning:button variant="brand" label="Delete Collection" title="Delete Collection" onclick="{!c.handleDelete}" />
+                        <br/>
+                        <br/>
+                        <br/>
+                        <!-- <lightning:button variant="brand" label="Add Content to Collection" title="Add Content to Collection" onclick="{!c.handleAddContent}" /> -->
+                    </aura:if>
+                </aura:if>                    
+            </div>
+            <br/>            
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showFollowerCount}">
+                    <div class="item-description" style="{!v.intOtherFontSize + v.intOtherAlignment}">
+                        {!v.collectionFollowers} Followers
+                    </div>
+                </aura:if>
+            </div>            
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showFollowButton}">
+                    <aura:if isTrue="{!v.collectionIsFollowedByRunningUser}">
+                        <lightning:button variant="brand" label="Followed Collection" iconName="utility:check" iconPosition="left" title="Followed Collection" onclick="{!c.handleFollow}" />
+                        <aura:set attribute="else">
+                            <lightning:button variant="brand-outline" label="Follow Collection" title="Follow Collection" onclick="{!c.handleFollow}" />                            
+                        </aura:set>
+                    </aura:if>                    
+                </aura:if>
+            </div>            
+            <br/>
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showShareButton}">
+                    <aura:if isTrue="{!v.collectionIsOwnedByRunningUser}">
+                        <aura:if isTrue="{!v.collectionIsShared}">                    
+                            <lightning:button variant="brand-outline" label="Shared Collection" title="Shared Collection" onclick="{!c.handleShare}" />                    
+                            <aura:set attribute="else">
+                                <lightning:button variant="brand" label="Share Collection" title="Share Collection" onclick="{!c.handleShare}" />
+                        </aura:set>
+                        </aura:if>                        
+                    </aura:if>                        
+                </aura:if>
+            </div>  
+            <br/>
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <aura:if isTrue="{!v.showNotification}">
+                    <lightning:buttonIcon iconName="utility:alert" alternativeText="Notifications" title="Notifications" />
+                </aura:if>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <div class="slds-grid slds-wrap" style="height:100%;">
+                <div class="item-description" style="{!v.intOtherFontSize + v.intOtherAlignment}">
+                    {!v.collectionContentCount} items
+                </div>            
+            </div>
+        </div>
+    </div>
+</aura:component>

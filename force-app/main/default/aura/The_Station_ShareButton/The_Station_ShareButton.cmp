@@ -1,0 +1,137 @@
+<aura:component controller="ShareButtonController" access="global">
+    <aura:attribute name="contentpiece" type="StationContentWrapper" /> 
+    <aura:attribute name="buttonTheme" type="String" default="buttonMenuTheme-light1"/>
+    <aura:attribute name="stationContentGroup" type="String" />
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="dataSeparator" type="String" default="|;;|" />
+    <aura:attribute name="urlExtension" type="String" />
+    <aura:attribute name="baseUrl" type="String" />
+    <aura:attribute name="fileType" type="String"/>
+    <aura:attribute name="emailSubject" type="String" />
+    <aura:attribute name="emailRecipient" type="String" />
+    <aura:attribute name="emailBody" type="String" />
+    <aura:attribute name="shareVariant" type="String" default="border"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:if isTrue="{!v.fileType == 'CV_PDF'}">
+        <lightning:buttonMenu aura:id="share-button" name="{!v.contentpiece.content.Name}" class="test" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem
+            value="{!'Copy' + v.dataSeparator + 'https://org62.lightning.force.com/'+v.contentpiece.contentPiece.ContentDocumentId__c + v.dataSeparator + v.contentpiece.content.Name}"
+                label="Copy content link" prefixIconName="utility:copy" />
+            <lightning:menuItem
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c  + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+ v.baseUrl +'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link" prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl +'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <aura:if isTrue="{!v.fileType== 'CV_URL'}">
+        <lightning:buttonMenu aura:id="share-button" name="{!v.contentpiece.content.Name}" class="{!v.buttonTheme}" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.contentpiece.contentPiece.ContentUrl__c + v.dataSeparator + v.contentpiece.content.Name}"
+                label="Copy content link"
+                prefixIconName="utility:copy" />
+            <lightning:menuItem
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c  + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link"
+                prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <aura:if isTrue="{!v.fileType== 'CV_else'}">
+        <lightning:buttonMenu aura:id="share-button" name="{!v.contentpiece.content.Name}"
+            class="{!v.buttonTheme}"
+            alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto"
+            onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + 'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+v.contentpiece.contentPiece.ExternalId+'&amp;operationContext=S1' + v.dataSeparator + v.contentpiece.content.Name}"
+                label="Copy content link"
+                prefixIconName="utility:copy" />
+            <lightning:menuItem
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c  + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link"
+                prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <aura:if isTrue="{!v.fileType == 'Success Program'}">                  
+        <lightning:buttonMenu aura:id="share-button" name="{!v.contentpiece.content.Name}" class="{!v.buttonTheme}" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + 'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+v.contentpiece.contentPiece.ExternalId+'/view' + v.dataSeparator + v.contentpiece.content.Name}"
+                label="Copy content link" prefixIconName="utility:copy" />
+            <lightning:menuItem
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c   + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link" prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <aura:if isTrue="{!v.fileType == 'Trailhead'}">                  
+        <lightning:buttonMenu aura:id="share-button" name="{!v.contentpiece.content.Name}" class="{!v.buttonTheme}" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + section.contentPiece.Trailhead_URL__c + v.dataSeparator + section.content.Name}"
+                label="Copy content link" prefixIconName="utility:copy" />
+            <lightning:menuItem
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c   + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link" prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <aura:if isTrue="{!v.fileType == 'URLorAppEx'}"> 
+        <lightning:buttonMenu aura:id="share-button" class="{!v.buttonTheme}" name="{!v.contentpiece.content.Name}" alternativeText="Share" iconName="utility:internal_share" menuAlignment="auto" onselect="{! c.onShareSelect }" variant="{!v.shareVariant}">
+            <lightning:menuItem value="{!'Copy' + v.dataSeparator + v.contentpiece.content.Content_URL__c + v.dataSeparator + v.contentpiece.content.Name}"
+                label="Copy content link" prefixIconName="utility:copy" />
+            <lightning:menuItem 
+                value="{!'Email' + v.dataSeparator + v.contentpiece.content.Content_URL__c  + v.dataSeparator +v.contentpiece.content.Name+ v.dataSeparator+v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Email content link" prefixIconName="utility:email" />
+            <lightning:menuItem
+                value="{!'Copy' + v.dataSeparator + v.baseUrl+'/thestation/s/station-pages/'+v.stationContentGroup+'?piece='+v.contentpiece.content.Id+'&amp;originurl='+v.urlExtension}"
+                label="Copy content group link" prefixIconName="utility:copy" />
+        </lightning:buttonMenu>
+    </aura:if>
+
+    <div style="display:inline-block;">
+        <section aura:id="sendEmailPopup" role="dialog" tabindex="-1" class="slds-modal slds-modal_medium"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close">
+
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Email Content Link</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input aura:id="field" type="email" class="slds-p-vertical_xx-small" name="recipient" label="To"
+                        value="{! v.emailRecipient }" placeholder="Type the recipient's email here..." required="true" />
+                    <lightning:input aura:id="field" class="slds-p-vertical_xx-small" name="subject" label="Subject"
+                        value="{! v.emailSubject }" placeholder="Type the subject here..." required="true" />
+                    <lightning:inputRichText class="slds-p-vertical_medium" value="{! v.emailBody }"
+                        placeholder="Type the content you would like to send here..."/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick="{! c.onCancelClick }">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{! c.onSendClick }">Send</button>
+                </footer>
+            </div>
+        </section>
+        <div aura:id="backdrop" class="slds-backdrop"></div>
+    </div>
+
+</aura:component>

@@ -1,0 +1,21 @@
+<template>
+    <div if:false={bioData} class="slds-align_absolute-center" style="height:5rem">
+        <lightning-card>
+            <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+        </lightning-card>
+    </div>
+    <div class="slds-m-top_large" if:true={bioData}>
+        <template for:each={bioData} for:item="skill">
+            <div key={skill.skillKey} class="slds-m-vertical_xx-small">
+                <button class="accordion slds-p-vertical_large slds-text-align_center" data-target-id={skill.skillKey} title={skill.skillKey} onclick={handleOpenClose}>{skill.skillKey}</button>
+                <div class="panel slds-p-horizontal_small slds-p-vertical_medium slds-hide" data-id={skill.skillKey}>
+                    <ul>
+                        <template for:each={skill.skillDetails} for:item="detail">
+                            <li key={detail} class="skill-detail">{detail}</li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

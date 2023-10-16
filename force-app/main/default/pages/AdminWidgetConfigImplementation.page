@@ -1,0 +1,470 @@
+<apex:page sidebar="false" id="AdminWidgetConfigImplementation" tabStyle="Team__c" controller="AdminWidgetConfigImpController" action="{!verifyAdminPerm}">
+    
+    <!-- ### Toolkit Stuff ### -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	
+    <!-- ### Prototype + Scriptaculous ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- ### Common Js ### -->
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}" />
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/AdminWidgetConfigAdd.js')}"></script> 
+	<script src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/AddWidget.js')}"></script>	   
+    
+    <!-- ### Common Layout ### -->
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/AdminWidgetConfig.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/profileEdition.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/modal.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/AddWidget.css')}" />    
+   
+	<script>
+	/*************************/
+	/*          init()       */
+	/*************************/	
+	
+	sforce.connection.sessionId = API_SESSION_ID;	
+	function init(){
+		sforce.connection.sessionId = API_SESSION_ID;	
+	}
+
+	/***************************/
+	/*getWidgetSelecctionList()*/
+	/***************************/	
+		function getWidgetSelecctionList(){
+			
+			var widgetsCont = $('salesforceWidgets'); 
+			var itemCount = $('itemCount');
+			var markup = '';
+			
+			init();
+			result = sforce.connection.query("Select Id, Name, Image__c From Widget__c where Type__c = 'Widget'");
+			records = result.getArray("records");
+			
+			itemCount.innerHTML = records.length + ' items';
+			markup = '<div class="widgetsLine">';
+				
+			var j = 5;
+			for (var i = 0; i < records.length; i++){
+				
+				//Divisor Line
+				if(((i % j) == 0) && (i != 0)) {
+					markup += '</div><div class="separateLine"></div>';
+					markup += '<div class="widgetsLine">';
+				}
+				//Add Widget
+				markup += '\
+					<div onmouseOver="selectedItem(this);" onmouseout="selectedItem(this);">\
+						<div>\
+							<img src="{!URLFOR($Resource.TeamsResources, 'images/AddWidget/widgetImage.jpg')}" />\
+							<br>\
+							<a href="javascript:;">' + records[i].Name + '</a>\
+						</div>\
+					</div>';
+				if(i == (records.length - 1))
+					markup += '</div>';
+			}
+			widgetsCont.innerHTML = markup;
+				
+		}
+
+		
+	/************************************************
+		Get google gadget list
+	************************************************/
+		var activeCategory = 'all';
+	
+		function filterGadgets() {
+			// Get gadget category
+			var cat = $F('gadgetListFilter');
+			url='http://www.google.com/ig/directory?synd=open&source=gghx&cat=' + cat;
+			activeCategory = cat;	
+			$('googleWidgets').innerHTML = '';
+			getGoogleGadgetList(url);
+			
+		}
+		
+		function gadgetListNextPage(){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var currentItemCount = tempSpacers[2].innerHTML;
+			var itemTotalNumber = tempSpacers[3].innerHTML;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + currentItemCount + '&sa=N';
+			url = url + '&cat=' + activeCategory;						
+			$('googleWidgets').innerHTML = '';
+			getGoogleGadgetList(url);
+		}
+	
+		function gadgetListPrevPage(){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var prevItemCount = tempSpacers[1].innerHTML - 25;
+			var itemTotalNumber = tempSpacers[3].innerHTML;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + prevItemCount + '&sa=N';	
+			url = url + '&cat=' + activeCategory;
+			$('googleWidgets').innerHTML = '';
+			getGoogleGadgetList(url);
+		}
+		
+		function getGoogleGadgetList(url) { 
+			
+			if($('gadgetListFilter').style.display == 'none'){
+				$('gadgetListFilter').style.display = '';
+			}
+			
+		    if (url != '') {
+		        var l = window.location;
+		        if ( l.protocol == 'https:' ) {
+		            // This code replaces the iframe protocol to match google
+		            l.href = l.href.replace(/https/,'http');
+		            return;
+		        }
+		        sforce.connection.remoteFunction({
+		            url : url, 
+		            onSuccess : function(response) {		            		
+		            		// Initialize Arrays to store valid data
+		            		var titleArray = [];
+		            		var imageArray = [];
+		            		var linkArray = [];		            		
+		            		// Put the response into a hidden div
+		            		$('response').innerHTML = response;
+		            	
+		            		// Get all images into the container
+		            		gadgetsImages = $$('#response #container img');
+							// Get all divs into the container
+							gadgetsContainers = $$('#response #container div');
+							// Get all inputs into te container
+							gadgetsParams = $$('#response #container input');														
+							// Take only the gadgets thumbnails
+							for(var i = 0; i < gadgetsImages.size(); i++){
+								if(gadgetsImages[i].title){
+							    	imageArray[imageArray.length] = gadgetsImages[i];
+							    }
+							}
+							// Get links
+							for(var i = 0; i < gadgetsParams.size(); i++){	
+													
+								var inputOnClick = new String((gadgetsParams[i]).getAttribute('onclick'));
+								/*
+								var urlpos = inputOnClick.split('&url=');
+								var trimmed = urlpos[1];
+								var finalUrl = 'http://gmodules.com/ig/ifr?' + trimmed;
+								*/
+								// consoleinfo('The onclick url: ',inputOnClick);	
+								
+								var urlpos = inputOnClick.indexOf('&url=');								        
+						        var urlpos = urlpos + 1;
+								var trimmed = inputOnClick.substr(urlpos, inputOnClick.length);
+								var urlpos = trimmed.split('&pt=');
+								var finalUrl = 'http://gmodules.com/ig/ifr?' + urlpos[0];
+								
+								// consoleinfo('The final url: ', finalUrl);	
+								
+								linkArray[linkArray.length] = finalUrl;	
+
+							}
+							// take only the Title Divs
+							for(var i = 0; i < gadgetsContainers.size(); i++){
+							    var checkTitle = (gadgetsContainers[i].id).indexOf('title');
+							    if(checkTitle != '-1'){
+							    	titleArray[titleArray.length] = gadgetsContainers[i].innerHTML;
+							   }					
+							}
+							gadgetCount = 0;							
+							var parsedOutput;							
+							// mix it all into parsetOutput 
+							for(var i = 0; i < imageArray.size(); i++){
+								if(imageArray[i].title){
+									gadgetCount++;
+									var title = titleArray[i];
+									title = title.substr(13, (titleArray[i].length - 13));
+									title = title.substr(0, (title.length - 15));
+									var src = linkArray[i];
+									src = src.replace (/'/g, "\\'");
+									if(title.length > 23){ 
+										title = title.substr(0,23) + '...';
+									 }
+									var widgetDiv = '<div class="widgetContainer">\n <div onmouseover="selectedGadgetItem(this)" onmouseout="selectedGadgetItem(this)" > \n <img alt="" width="70" src="' + imageArray[i].src + '\"/> \n <br>\n<a href="javascript:;" onclick="WidgetConfig.setWidget(\'' + linkArray[i] + '\', true, \'gadget\');" style="display:block;">' + title + '</a>\n</div>\n </div> \n ';
+									parsedOutput += widgetDiv;
+									if( gadgetCount % 5 == 0 ){
+										parsedOutput += '<div style="clear:both;"></div>';
+										parsedOutput += '<div class="separateLine"></div>';
+							    	}
+								}
+							}			
+							
+							$('googleWidgets').show();	
+							$('noResultContainer').hide();
+										
+							$('googleWidgets').innerHTML = parsedOutput;
+							// Paginate the gadgets
+							var tempSpacers = $$('#response table b');
+							var prevItem = tempSpacers[1].innerHTML;
+							var currentItemCount = tempSpacers[2].innerHTML;
+							var itemTotalNumber = tempSpacers[3].innerHTML;
+							var paginationElements = document.createElement('div');
+							paginationElements.style.clear = "both";
+							if(prevItem == 1){
+								paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+							} else {
+								if(currentItemCount == itemTotalNumber){
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a>';
+								} else{
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a> <a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+								}
+							}								
+							$('googleWidgets').appendChild(paginationElements);
+							var bolds = $$('#response b');
+							var multiplier = bolds[3].innerHTML;
+							var numberofGadgets = multiplier * 24;
+							$('gadgetItemCount').innerHTML = numberofGadgets + ' items'; 
+		            	},
+		            onFailure : function(error) {}
+		            });     
+		        }
+		}    
+		
+		// Gadget Hover		
+		function selectedGadgetItem(e){
+			var gadgetItem = e.parentNode;
+			if(gadgetItem.className == 'widgetContainer'){
+				gadgetItem.className = 'widgetContainerSelected';
+			} else {
+				gadgetItem.className = 'widgetContainer';
+			}
+		}	
+	
+		function doSearch(){
+			
+			var searchTerm = $F('searchCriteria');
+			$('searchCriteriaWords2').innerHTML = searchTerm;
+			$('searchCriteriaWords1').innerHTML = searchTerm;
+			
+			searchTerm = searchTerm.replace(/\s/, "+");			
+			var url = 'http://www.google.com/ig/directory?synd=open&q=' + searchTerm + '&btnG=Search+Google+Gadgets';
+			gadgetSearch(url);			
+		}
+		
+		
+		// Gadget Search Core
+		function gadgetSearch(url){
+		
+			 if (url != '') {
+			 	
+		        var l = window.location;
+		        if ( l.protocol == 'https:' ) {
+		            // This code replaces the iframe protocol to match google
+		            l.href = l.href.replace(/https/,'http');		           
+		        };
+		        
+		        sforce.connection.remoteFunction({
+			            url : url, 
+			            onSuccess : function(response) {
+			            	          	
+			            	$('response').innerHTML = response;
+			            	
+			            	// Erase broken styles            		           	            		
+		            		styles = $$('#response style');
+		            		styles[0].innerHTML = '';	
+		            		
+			            	// Initialize Arrays to store valid data
+		            		var titleArray = [];
+							var imageArray = [];
+							var linkArray = [];
+							
+							tables = $$('#response table');
+							
+							// // consoleinfo(tables.size());
+							if(tables.size() > 6 ){
+								var cells = $A(tables[8].getElementsByTagName('td'));						
+								
+								for(var i = 0; i < cells.size(); i++ ){
+								    if(cells[i].className == 'j'){
+								
+								        var inputDir;
+								        var title;
+								
+								        var tempTitle = $A(cells[i].getElementsByTagName('a'));
+								        var tempInputDir = $A(cells[i].getElementsByTagName('input'));
+										
+								        var inputOnClick = new String((tempInputDir[0]).getAttribute('onclick'));
+								        
+								        // consoleinfo(inputOnClick);
+								        // var urlpos = inputDir.split('&url=');
+								        var urlpos = inputOnClick.indexOf('&url=');
+								        
+								        var urlpos = urlpos + 1;
+										var trimmed = inputOnClick.substr(urlpos, inputOnClick.length);
+										var urlpos = trimmed.split('&pt=');
+										var finalUrl = 'http://gmodules.com/ig/ifr?' + urlpos[0];
+										linkArray[linkArray.length] = finalUrl;								        
+								        
+								        // linkArray[linkArray.length] = urlpos[1];
+								        titleArray[titleArray.length] = tempTitle[0].innerHTML;        
+								    }
+								};
+								
+								var imgs = $A(tables[8].getElementsByTagName('img'));
+								for(var i = 0;i < imgs.size(); i++ ){
+								    if(imgs[i].title == 'Preview before adding'){
+								        imageArray[imageArray.length] = imgs[i];
+								    }
+								}
+								$('gadgetList').innerHTML = '';
+								
+								var output = ' '; 
+								var gadgetCount = 0;
+								
+								for(var i = 0 ; i < imageArray.size(); i++){
+								    var widgetDiv = '<div class="widgetContainer">\n <div onmouseover="selectedGadgetItem(this)" onmouseout="selectedGadgetItem(this)" > \n <img alt="" width="70" src="' + imageArray[i].src + '\"/> \n <br>\n<a href="javascript:;" onclick="WidgetConfig.setWidget(\'' + linkArray[i] + '\', true, \'gadget\');">' + titleArray[i] + '</a>\n</div>\n </div> \n ';
+								    output += widgetDiv;
+								    gadgetCount++;
+								    if( gadgetCount % 5 == 0 ){
+										output += '<div style="clear:both;"></div>';
+										output += '<div class="separateLine"></div>';
+							    	}
+								}
+								// Build Pagination 						
+								var bolds = $$('#response b');								
+								var currentIndex = Math.round(bolds[1].innerHTML);
+								var index = Math.round(bolds[2].innerHTML);
+								var total = Math.round(bolds[3].innerHTML);
+
+								var next_prev = $$('#response a.npi');
+				
+								if((next_prev.size() != 0) && (next_prev != null)){
+									
+									if((currentIndex == 1)) {
+										var next_prev = $A($$('#response a.npi'));
+										var nextLink = next_prev[next_prev.size() - 1].href;
+										var t = nextLink.split('salesforce.com');
+										nextLink = 'http://www.google.com' + t[1];
+										output += '\n <a onclick="gadgetSearch(\'' + nextLink + '\');" href="javascript:;">Next Page</a>';										
+									} else {
+										if((currentIndex + 24) >= total){
+											var next_prev = $$('#response a.npi');
+											var prevLink = next_prev[0].href;
+											t = prevLink.split('salesforce.com');								
+											prevLink = 'http://www.google.com' + t[1];
+											output += '\n <a onclick="gadgetSearch(\'' + prevLink + '\')" href="javascript:;">Prev Page</a>';											
+										} else {
+											var next_prev = $$('#response a.npi');
+											var nextLink = next_prev[next_prev.size() - 1].href;
+											var prevLink = next_prev[0].href;								
+											var t = nextLink.split('salesforce.com');								
+											nextLink = 'http://www.google.com' + t[1];								
+											t = prevLink.split('salesforce.com');								
+											prevLink = 'http://www.google.com' + t[1];
+											output += '\n<br />\n <a onclick="gadgetSearch(\'' + prevLink + '\')" href="javascript:;">Prev Page</a> <a onclick="gadgetSearch(\'' + nextLink + '\')" href="javascript:;">Next Page</a>';	
+										}
+									}
+								}								
+								// Build List (for testing only now)
+								$('noResultContainer').hide();										
+								$('googleWidgets').innerHTML = ' ';
+								$('googleWidgets').show();
+								$('googleWidgets').innerHTML = output;								
+							} else { 
+								$('googleWidgets').hide();
+								$('gadgetItemCount').hide();
+								$('noResultContainer').show();							
+							}
+			            },
+			            onFailure : function(error) {
+			            	// console.warn('Error: ', error);
+			            }
+			     	});			     
+				}
+			}
+	</script>
+	<style>
+	
+	/* For testing purposes only, must be moved to a static resource */ 
+	
+	div.widgetContainer {
+		background:#FFFFFF none repeat scroll 0%;
+		border:0px none;
+		float:left;
+		height:92px;
+		margin:0px;
+		padding:5px;
+		width:84px;
+	}
+	
+	div.widgetContainer div {
+		background:#FFFFFF none repeat scroll 0%;
+		border:1px solid #FFFFFF;
+		height:80px;
+		margin:0px;
+		padding:5px;
+		text-align:center;
+		width:70px;
+	}
+	
+	
+	div.widgetContainerSelected {
+		background:#DDF0F7 none repeat scroll 0%;
+		border:0px none;
+		float:left;
+		height:92px;
+		margin:0px;
+		padding:5px;
+		width:84px;
+	}
+	
+	div.widgetContainerSelected div {
+		background:#EFEFEF none repeat scroll 0%;
+		border:1px solid #99CCE7;
+		height:80px;
+		margin:0px;
+		padding:5px;
+		text-align:center;
+		width:70px;
+	}
+	
+	/* Overlay */
+	
+	div#overlayLoader {
+ 		background:#FFFFFF;
+ 		height:79%;	 		
+ 		position:absolute;
+ 		bottom:0;
+ 		left:0;
+ 		z-index:9999;
+ 		width:100%;
+ 		opacity: 0.6;
+		-moz-opacity: 0.6;
+		filter: alpha(opacity=60);
+ 	}
+ 	
+ 	div#overlayLoader div.loader {
+ 		width:60px;
+ 		margin:0 auto;
+ 		height:60px;
+ 		margin-top:145px;
+ 	}
+ 	
+	</style>
+		
+	<div id="response" style="display:none;"></div>	
+	<div id="gadgetList" ></div>
+	
+	
+	<!-- ### Initialize the overlay box for modal.js ### -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>	
+	
+	<!-- ### Overlay's Includes ### -->
+	<apex:include pageName="AdminOverlayAddWidgetImplementation" />
+	
+	<a href="javascript:;" onclick="createOverlay('','addWidget', 490, 'getWidgetSelecctionList();');"> Add Widget </a>
+	
+	
+</apex:page>

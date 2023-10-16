@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Fire when any answer changes" >
+	<aura:attribute name="questionId" type="String" required="true"/>
+</aura:event>

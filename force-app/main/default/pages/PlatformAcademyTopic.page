@@ -1,0 +1,111 @@
+<apex:page showHeader="false" standardStylesheets="false"
+	sidebar="false" standardController="Academy_Prework__c"
+	extensions="AcademyPreworkExtension,AttachmentControllerExtension">
+
+	<apex:composition template="PlatformAcademyTemplate">
+
+		<apex:define name="mainContent">
+			<script type="text/javascript">
+                    function LinkInput(){
+                      this.recordId='{!Academy_Prework__c.Id}' ; 
+                      this.linkUrl;
+                      this.linkType;
+                    }
+                function displayLink(url,type){
+            
+                        var jsRemoteParams = new LinkInput();
+                        jsRemoteParams.linkUrl = url;
+                        jsRemoteParams.linkType=type;
+                        Visualforce.remoting.Manager.invokeAction(
+                            '{!$RemoteAction.AcademyPreworkExtension.updatePreworkStatus}', 
+                            jsRemoteParams,
+                            function(result, event){
+                                var has_logger = !!(window.console && window.console.log);
+                                if(has_logger){
+                                    console.log('Updated status successfully');
+                                  
+                                }
+                                location.reload();
+                            }, 
+                            {escape: true}
+                        );
+                
+                
+                }
+            </script>
+			<div class="tabbable">
+				<!-- Only required for left/right tabs -->
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#mindmap" data-toggle="tab">Upload your mind map</a></li>
+					<li><a href="#quiz" data-toggle="tab">Quiz : {!Academy_Prework__c.Subject_Area__c}</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="mindmap">
+						<p>
+							<apex:datatable value="{!Academy_Prework__c.Attachments}" var="doc" styleClass="table table-striped">
+
+								<apex:column headerValue="File Name">
+									{!doc.Name}&nbsp;
+									(<apex:outputLink target="_blank" value="{!URLFOR($Action.Attachment.Download,doc.id)}">
+      										View
+      								</apex:outputLink>
+									)
+								</apex:column>
+							
+							</apex:datatable>
+						</p>
+						<p>
+							<apex:form enctype="multipart/form-data"
+								styleClass="form-horizontal">
+								<div class="control-group">
+									<label class="control-label" for="inputEmail">MindMap</label>
+									<div class="controls">
+										<apex:inputFile value="{!document.body}"
+											styleClass="input-medium" filename="{!document.name}"
+											id="file" />
+									</div>
+								</div>
+								<div class="control-group">
+									<div class="controls">
+										<apex:commandButton action="{!uploadMindMap}" value="Upload"
+											styleClass="btn" />
+									</div>
+								</div>
+							</apex:form>
+						</p>
+					</div>
+					<div class="tab-pane" id="quiz">
+							<apex:form >
+							<table class="table">
+							<apex:repeat value="{!questions}" var="question">
+								<tr>
+									<td><b>Question:</b> &nbsp;<apex:outputText value="{!question.Question__c}" escape="false"/></td>
+								</tr>
+								<tr>
+									<td>
+										<table class="table-striped">
+										<apex:repeat value="{!question.Candidate_Answers__r}" var="answer">
+											<tr>
+												<td><apex:inputField value="{!answer.Selected__c}"/></td>
+												<td><apex:outputText value="{!answer.Answer_Text__c}"/></td>
+											</tr>
+										</apex:repeat>
+										</table>
+									</td>
+								</tr>					
+							</apex:repeat>
+							</table>
+							<apex:commandButton action="{!saveAnswers}" value="Submit" styleClass="btn btn-primary"/>
+							</apex:form>
+					</div>
+
+
+
+				</div>
+			</div>
+		</apex:define>
+	</apex:composition>
+
+
+
+</apex:page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="SFDCobjectApiName" label="Related Object API Name" type="String" default=""/>
+            <property name="fieldSetName" label="Field Set Name" type="String" default=""/>
+            <property name="criteriaFieldAPIName" label="Reference FieldAPIName" type="String" default=""
+                            description="The field on which query to be performed. 
+                            e.g. it can be AccountId from which Case records will be fetched."/>
+            <property name="firstColumnAsRecordHyperLink" label="First Column As RecordHyperLink" 
+                            type="String" datasource="Yes,No" default="Yes"/>
+            <property name="getAllArticleVersionData" label="Get All Version Data" 
+                            description="This field gets the data for all the article versions"
+                            type="String" datasource="Yes,No"/>                        
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

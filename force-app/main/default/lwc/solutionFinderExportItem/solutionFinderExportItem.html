@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-p-top_x-small" style={style}>
+        <div>
+            <b class="label">{item.label}</b>
+        </div>
+        <div class="description">
+            {item.metatext}
+        </div>
+        <div class="next-question">
+            {item.nextQuestion}
+        </div>
+        <template for:each={item.items} for:item="childItem">
+            <c-solution-finder-export-item key={childItem.name} item={childItem} indent={nextIndent}></c-solution-finder-export-item>
+        </template>
+    </div>
+</template>

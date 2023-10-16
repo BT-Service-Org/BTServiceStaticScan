@@ -1,0 +1,34 @@
+<apex:page sidebar="false" controller="DiscussionOverviewController" tabStyle="DiscussionForum__c">
+	
+		<!-- /////////////////////////////////////////////////////
+		                THIS WEEK'S Most Active People
+		     //////////////////////////////////////////////////// -->
+		     
+	 <div class="box_round_blue">
+		<div class="header"  >
+			<div>
+				<div>
+					<div class="subtitle">This Week's</div>
+					<h3>Most Active People</h3>					
+				</div>
+			</div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+			<div class="contentHolder">
+				<apex:repeat value="{!MostActiveUsers}" var="activeUser" rows="5">
+					<div class="sideBarItemLeft" style="clear:both;">
+						<apex:image styleClass="f_left" style="width:25px;" value="/servlet/servlet.FileDownload?file={!activeUser.Picture}" />
+						<div class="sideBoxLinks" >
+							<a href="/apex/PeopleProfileDisplay?id={!activeUser.Id}">{!activeUser.Name}</a>
+						</div>
+						<div class="sideBoxUnderLink" >
+							{!activeUser.MostActive} posts | {!activeUser.CommentsCount} comments 
+						</div>
+					</div>
+				</apex:repeat>
+			</div>
+		</div>
+		<div class="bottom_borders"><div><div></div></div></div>
+	</div>
+</apex:page>

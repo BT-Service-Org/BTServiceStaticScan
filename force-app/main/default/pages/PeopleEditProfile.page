@@ -1,0 +1,220 @@
+<apex:page sidebar="false"  standardController="PeopleProfile__c" extensions="PeopleNewEditProfileController" action="{!getPeopleProfile}">
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';		
+	</script>
+	
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}" />
+	<!-- Form Validator -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/Validator.js')}" />
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	<!-- People Browsing CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	<!-- Common Js for Edition Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/editionScripts.js')}" />
+	<!-- Js for specific Form validation -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/peopleProfileEdition.js')}" />
+	<!-- Stylesheets for people Editions -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/peopleEditions.css')}" />
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container (always Centered) -->
+		<!-- Search Box -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />			
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+			<!-- Sidebar -->
+			<div class="sidebar">
+			<apex:include pageName="PeopleSidebarProfile" />		
+		</div>
+		</div><!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+						<a href="peopleprofiledisplay">< Go back to My Profile</a>
+					<h1>My Profile</h1>
+					<h2>Edit Basic Information</h2>
+				</div>
+					
+				<div class="main_form">				
+						
+					 <div id="warning_to_user_not_owner" class="message_to_user" style="{!IF((error == ''),'display:none;','')}">
+			   		  	 <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" style="float:left;"/>
+			     		 <div id="errorContainer">{!error}</div><br />
+			    	</div>	
+					<div class="require_reference">
+						<span class="reference">&nbsp;</span>
+						<span> = Required Information</span>
+					</div>
+						<apex:form onsubmit="return validateNetworks();">
+					<div class="title_from_section">Identity</div>
+					<div class="form_fields">
+				
+						<div class="f_left">
+						
+							<div class="field">
+								<label>First Name</label>
+									<apex:inputText value="{!newUser.FirstName}" styleclass="disabled"  disabled="true"/>
+							</div>
+							
+							<div class="field">
+								<label>Last Name</label>
+									<apex:inputText value="{!newUser.LastName}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Title</label>
+									<apex:inputText value="{!newUser.Title}" styleclass="disabled"  disabled="true"/>
+							</div>						
+						</div>
+						<div class="f_left">
+							<div class="field">
+								<label>Department</label>
+									<apex:inputText value="{!newUser.Department}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Division</label>
+									<apex:inputText value="{!newUser.Division}" styleclass="disabled"  disabled="true"/>
+							</div>
+							
+						</div>						
+					</div>
+					<div class="separator"></div>					
+					<div class="title_from_section">General</div>
+					<div class="form_fields">
+						<div class="field">
+							<label>About me</label>
+					<apex:inputTextarea value="{!pProfile.AboutMe__c}"  />
+
+						</div>
+						<div class="f_left">
+							<div class="field">
+								<label>Homepage URL</label>
+								<apex:inputText value="{!pProfile.HomePageUrl__c}" />
+							</div>
+							<div class="field">
+								<label>Linkedin <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/social/linkedin_icon.gif')}" alt="" /></label>
+							<apex:inputText value="{!pProfile.Linkedin__c}" styleClass="rq_linkedin"/>
+
+							</div>
+						</div>
+						<div class="f_left">
+							<div class="field">
+								<label>Facebook <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/social/facebook_icon.gif')}" alt="" /></label>
+								<apex:inputText value="{!pProfile.Facebook__c}" styleClass="rq_facebook"/>
+							</div>
+							<div class="field">
+								<label>Delicious <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/social/delicious_icon.gif')}" alt="" /></label>
+								<apex:inputText value="{!pProfile.Delicious__c}" styleClass="rq_delicious"/>
+							</div>
+						</div>						
+					</div>
+					<div class="separator"></div>
+					<div class="title_from_section">Contact Information</div>
+					<div class="form_fields">
+						<div class="f_left">
+							<div class="field">
+								<label>E-mail Address</label>
+									<apex:inputText value="{!newUser.Email}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Business Phone</label>
+									<apex:inputText value="{!newUser.Phone}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Mobile Pone</label>
+									<apex:inputText value="{!newUser.MobilePhone}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Business Fax</label>
+								<apex:inputText value="{!newUser.Fax}" styleclass="disabled"  disabled="true"/>
+							</div>							
+									
+						</div>
+						<div class="f_left">
+							<div class="field">
+								<label>Yahoo IM</label>
+								<apex:inputText value="{!pProfile.YahooIM__c}" />
+							</div>
+							<div class="field">
+								<label>AOL IM</label>
+								<apex:inputText value="{!pProfile.Aol__c}" />
+							</div>
+							<div class="field">
+								<label>Google Talk</label>
+								<apex:inputText value="{!pProfile.Gtalk__c}" />
+							</div>
+							<div class="field">
+								<label>Skype</label>
+								<apex:inputText value="{!pProfile.Skype__c}" />
+							</div>						
+						</div>
+						<br />						
+						<div class="f_left">
+							<div class="field">
+								<label>Business Address</label>
+							<apex:inputTextarea value="{!newUser.Street}" styleclass="small disabled" disabled="true" />
+							</div>
+						</div>
+						<div class="f_left">
+							<div class="field">
+								<label>Business City</label>
+								<apex:inputText value="{!newUser.City}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Business State</label>
+								<apex:inputText value="{!newUser.State}" styleclass="disabled"  disabled="true"/>
+							</div>							
+							<div class="field">
+								<label>Business Zip</label>								
+								<apex:inputText value="{!newUser.PostalCode}" styleclass="disabled"  disabled="true"/>
+							</div>
+							<div class="field">
+								<label>Business Country</label>
+								<apex:inputText value="{!newUser.Country}" styleclass="disabled"  disabled="true"/>
+							</div>
+							
+						</div>	
+										
+					</div>		
+									
+					<div class="title_from_section">&nbsp;</div>
+					<div class="form_action">
+				
+						<div class="buttons">
+							<apex:commandButton action="{!savePeopleProfile}" value="Save"/>							
+							<div class="cancel grayButton">
+									<a href="Javascript:;" onclick="if(confirm('Are You Sure ?')){document.location.href='./peopleprofiledisplay'}">Cancel</a>															
+						</div>
+					</div>					
+				</div></apex:form>
+			</div>
+		</div>
+	</div>
+</apex:page>

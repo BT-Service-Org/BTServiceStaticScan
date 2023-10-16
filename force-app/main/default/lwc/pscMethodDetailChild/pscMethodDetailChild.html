@@ -1,0 +1,29 @@
+<template>
+    
+    <!-- HTML Block to render field values-->
+    <template if:true={displayFieldValueCmp}>
+        <template if:true={fieldApiName}>
+            <c-psc-single-field-value record-id={recordId} field-api-name={fieldApiName} object-api-name="Method__c" ></c-psc-single-field-value>
+        </template>
+    </template>
+
+    <!-- html block to render matrix component-->
+    <template if:true={displayMatrixCmp}>
+        <c-psc-r-a-s-i-c-matrix rec-id={recordId}></c-psc-r-a-s-i-c-matrix>
+    </template>
+
+    <!-- html block to render Related values component-->
+    <template if:true={displayRelatedValueCmp}>
+        <c-psc-deliverables-list rec-id={recordId}></c-psc-deliverables-list>
+    </template>
+
+    <!-- html block to render Related values component-->
+    <template if:true={displayRelatedTilesCmp}>
+        <c-psc-template-best-practice rec-id={recordId}></c-psc-template-best-practice>
+    </template>
+
+    <!-- html block to render Related outcomes component-->
+    <template if:true={displayRelatedOutcomesCmp}>
+        <c-psc-method-outcome-list rec-id={recordId}></c-psc-method-outcome-list>
+    </template>
+</template>

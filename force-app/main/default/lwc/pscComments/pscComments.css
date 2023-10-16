@@ -1,0 +1,133 @@
+.comments-container {
+    background: #eaf5ff;
+    border-radius: 8px;
+    margin: auto;
+    width: 98%;
+    margin-right: 4%;
+    padding: 15px 14px;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+}
+
+.comments-header {
+    color: #032D60;
+    font-size: 21px;
+    line-height: 20px;
+    margin: 24px 0px 10px;
+}
+
+.comment-section {
+    display: flex;
+    margin: 5px 0px;
+    align-items: baseline;
+    background: white;
+    padding: 10px;
+    margin-bottom: 13px;
+    border-radius: 8px;
+}
+
+.reply-section {
+    display: flex;
+    margin: 5px 0px;
+    align-items: baseline;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.user-comment {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    width: 96%;
+}
+.feedback {
+    display: flex;
+}
+.feedback-header {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+}
+.feedback_icon {
+    width: 5%;
+    margin: auto;
+}
+lightning-icon {
+    margin-left: 10px;
+}
+.vote_icon {
+    --sds-c-icon-color-foreground-default: #0070D2;
+}
+
+.slds-avatar {
+    border-radius: 20px !important
+}
+
+.submit-button {
+    font-size: 16px;
+    font-family: 'DIN Pro Bold', sans-serif;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: #0070D2;
+    border-radius: 20px;
+    padding: 4px 28px;
+}
+
+lightning-icon:hover {
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    cursor: pointer;
+}
+
+.feedback-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 40px;
+    gap: 10px;
+    border-radius: 8px;
+    margin: auto;
+    width: 100%;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    margin-right: 4%;
+    margin: 10px 0px;
+}
+.user_info {
+    display: flex;
+    align-items: baseline;
+}
+.comment_time {
+    font-size: 12px;
+    color:#3b3838;
+    margin-left: 8px
+}
+.feedback-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Suggestion {
+    display: flex;
+    margin: 5px 0px;
+    align-items: baseline;
+    background: white;
+    padding: 10px;
+    margin-bottom: 13px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+}
+.Comment {
+    display: flex;
+    margin: 5px 0px;
+    align-items: baseline;
+    background: white;
+    padding: 10px;
+    margin-bottom: 13px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+}

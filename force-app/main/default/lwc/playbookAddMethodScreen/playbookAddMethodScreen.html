@@ -1,0 +1,73 @@
+<template>
+    <div class="slds-p-around_medium">
+        <div class="slds-grid slds-wrap">
+            <h3>4.0 Related Methods</h3>
+            <div class="slds-size_12-of-12">
+                <template for:each={methodList} for:item="eachMethod">
+                    <div class="slds-grid slds-m-around_medium" key={eachMethod.indexNumber}>
+                        <div class="slds-size_1-of-12 slds-p-around_x-small">Order</div>
+                        <div class="slds-size_2-of-12 slds-p-around_x-small slds-required">
+                            <lightning-input
+                                type="number"
+                                variant="label-hidden"
+                                name="orderNumber"
+                                class="orderNumber"
+                                label="Order Number"
+                                placeholder="Number"
+                                data-index={eachMethod.index}
+                                data-element="OrderNumber"
+                                onchange={handleChange}
+                                value={eachMethod.orderNumber}
+                                required="true"
+                            >{eachMethod.index}</lightning-input>
+                        </div>
+                        <div class="slds-size_5-of-12 slds-p-around_x-small">
+                            <c-playbook-lookup-component
+                                label="Select Method"
+                                placeholder="Select Method"
+                                s-object-api-name="Method__c"
+                                default-record-id={eachMethod.methodId}
+                                index-number={eachMethod.index}
+                                onlookupupdate={handleMethodUpdate}
+                                status-condition-added= true
+                            ></c-playbook-lookup-component>
+                        </div>
+                        <div class="slds-size_1-of-12 slds-p-around_x-small">
+                            <button class="slds-button slds-button_destructive" data-index={eachMethod.index} onclick={removeMethod}>X</button>
+                        </div>
+                        <div class="slds-size_3-of-12 slds-p-around_x-small">
+                            <button class="slds-button slds-button_brand" style="width: 100%" onclick={openAddMethodOutcomeModal} data-index={eachMethod.index}>Add Method Outcome</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-size_5-of-12 slds-m-around_medium slds-p-around_x-small"></div>
+            <div class="slds-size_2-of-12 slds-m-around_medium slds-p-around_x-small">
+                <div class="slds-m-vertical_small">
+                    <button class="slds-button slds-button_brand" style="width: 100%" onclick={addMethod}>Add More</button>
+                </div>
+            </div>
+        </div>
+        <!-- NOTE Add Methods Modal -->
+        <template if:true={toggleAddMethodOutcomeModal}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="padding: 5px 5px; width: 100%">
+                    <header class="slds-modal__header">
+                        <span class="slds-modal__close">
+                            <lightning-icon icon-name="utility:close" onclick={handleCloseAddMethods} variant="inverse" alternative-text="close"></lightning-icon>
+                        </span>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">5.0 METHOD OUTCOMES</h2>
+                    </header>
+                    <c-playbook-add-method-outcome-screen
+                    current-method-id={currentMethodId}
+                    selected-outcome={currentOutcomeId}
+                    current-method-outcome-index={currentMethodOutcomeIndex}
+                    oncloseaddmethodoutcome={closeMethodOutcome}
+                    onselectoutcome={addMethodOutcome}>
+                    </c-playbook-add-method-outcome-screen>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

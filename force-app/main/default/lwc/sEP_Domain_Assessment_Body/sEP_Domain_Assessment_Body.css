@@ -1,0 +1,14 @@
+:host {
+    --sds-c-button-success-color-background: white;
+    --sds-c-button-success-color-background-hover: red;
+    --slds-c-button-success-color-border: white;
+    --slds-c-button-success-color-border-active: white;
+    --slds-c-button-line-height: 1rem
+    --slds-c-button-sizing-border: 0px
+    --slds-c-button-success-text-color: black;
+    --slds-c-button-success-text-color-active: black; 
+}
+
+.inline-header {
+    display: inline;
+}

@@ -1,0 +1,67 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="StationSPController" access="global">
+    <aura:attribute name="contentpiece" type="Station_Content__c" />
+    <aura:attribute name="contentOwner" type="String" default="Name"/>
+    <aura:attribute name="contentContact" type="String"/>
+    <aura:attribute name="contentGroups" type="String[]"/>
+    <aura:attribute name="ReviewStatus" type="String"/>
+    <aura:attribute name="moreBtnStr" type="String"/>
+    <aura:attribute name ="isButtonShown" type="Boolean" default="false"/>
+    <aura:attribute name="isExtendedList" type="Boolean" default="false"/>
+    <aura:attribute name="reviewTextcolor" type="Integer" default="0"/>
+    <aura:attribute name="navUrl" type="String"/>
+    <aura:attribute name="refreshValue" type="Boolean" default="false"/>
+    <aura:attribute name ="isDisablebutton" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.getContent}" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    
+    <div class="Table-row">
+        <div class="cellType-1 width-15">
+            <p>{!v.contentpiece.Name}</p>
+        </div>
+        <div class="cellType-1 width-9">
+            <!-- <p>{!v.contentpiece.Visibility__c}</p> -->
+            <aura:if isTrue="{! v.contentpiece.Visibility__c != 'Public'}">
+                <lightning:icon iconName="utility:privately_shared" alternativeText="Private" title="Private" />
+                <aura:set attribute="else">
+                    <lightning:icon iconName="utility:people" alternativeText="Public" title="Public" />
+                </aura:set>
+            </aura:if>
+        </div>
+        <div class="cellType-1 width-15">
+            <ul id="{!'Station-group-list' + v.contentpiece.Id}"></ul>
+        <ul id="{!'Station-group-more'+ v.contentpiece.Id}" class="{!v.isExtendedList ? 'slds-show' : 'slds-hide'}"></ul>
+        <button aura:id="moreBtn" class="{! v.isButtonShown ? 'slds-show slds-button buttonTheme-small slds-align_absolute-center' : 'slds-hide slds-button buttonTheme-small'}" onclick="{!c.onmorebtnClick}">More({!v.moreBtnStr})</button>
+        </div>
+        <!-- <div class="cellType-1 width-9">
+            <p>{!v.contentpiece.Owner.Name}</p> 
+        </div>
+        <div class="cellType-1 width-9">
+            <p>{!v.contentpiece.Primary_Contact__r.Name}</p>
+        </div> -->
+        <div class="cellType-1 width-9">
+            <p><lightning:formattedDateTime value="{!v.contentpiece.LastModifiedDate}"/></p>
+        </div>
+        <!-- <div class="cellType-1 width-9">
+            <p><lightning:formattedDateTime value="{!v.contentpiece.Next_Review_Date__c}"/></p>
+        </div> -->
+        <div class="cellType-1 width-9" >
+            <p><lightning:formattedText class="{! ((v.reviewTextcolor=='1')? 'color-red': (v.reviewTextcolor=='2')? 'color-yellow': (v.reviewTextcolor=='3')? 'color-orange': 'color-green')  }" value="{!v.contentpiece.Review_Status__c}" /></p>
+        </div>
+        <!-- style="border-right: 1px solid black;" -->
+        <div class="cellType-1 width-16">
+        <span onclick="{! c.contentUpdateclick}" data-scid="{!v.contentpiece.Id}" >
+         <lightning:buttonIcon iconName="utility:edit"   alternativeText="Update Content" title="Update Content" />
+        </span>
+         <span onclick="{! c.reviewDateUpdate}" data-scid="{!v.contentpiece.Id}" data-flowtype="ReviewDateChange" data-name="{!v.contentpiece.Name}" >
+            <lightning:buttonIcon iconName="utility:date_time"   alternativeText="Review Date" title="Change Review Date" />
+         </span>
+        <span onclick="{! c.contentGroupDelete}" onmouseover="{!c.showToolTip}" onmouseout="{!c.HideToolTip}" data-scid="{!v.contentpiece.Id}" data-flowtype="DeleteStationGroup" data-name="{!v.contentpiece.Name}" >
+            <lightning:buttonIcon iconName="utility:hide" disabled="{!v.isDisablebutton ? 'true' : 'false'}"  alternativeText="Delete Group" title="{!v.isDisablebutton ? 'Content Archived' : 'Archive Content'}" />
+        </span>
+          <!-- <br/>  <button aura:id="reviewdate" class="slds-button buttonTheme-light2" onclick="{!c.reviewDateUpdate}" name="{!v.contentpiece.Name}" data-flowtype="ReviewDateChange" data-scid="{!v.contentpiece.Id}" style="margin-top:10px">Change Review Date</button>
+          <br/> <button aura:id="DeleteStationGroup" class="slds-button buttonTheme-light3" onclick="{!c.contentGroupDelete}" id="{!v.contentpiece.Id}" data-flowtype="DeleteStationGroup" data-scid="{!v.contentpiece.Id}" data-name="{!v.contentpiece.Name}" style="margin-top:10px">Delete Groups</button> -->
+        </div>
+    </div>
+</aura:component>

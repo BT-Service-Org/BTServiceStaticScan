@@ -1,0 +1,13 @@
+.THIS .collection-name {
+    font-size: 1rem;
+    color: #484848;
+}
+
+.THIS .filter-selector {
+    float: right;
+    padding: 5px;
+}
+
+.THIS collection-items {
+    padding: .5rem 0;
+}

@@ -1,0 +1,29 @@
+<aura:component >
+        <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	    <aura:attribute name="opendate" type="Date"/>
+		<aura:attribute name="lastcommentdate" type="Date"/>
+    	<aura:attribute name="supportforce_Case" type="Supportforce_Case__x"/>
+ <table class="slds-table  slds-table_header-hidden slds-table_bordered slds-table_fixed-layout">
+  <tbody>
+    <tr >
+      <th  scope="row">
+          <a href="{!v.supportforce_Case.DisplayUrl}" target="_blank" tabindex="-1">
+              <div class="subject">{!v.supportforce_Case.Subject__c}</div>
+            </a>
+           <div class="slds-grid">
+        <div  class="slds-col slds-size_10-of-12 slds-truncate" style="color:#929292;">
+            Ticket #{!(v.supportforce_Case.Case_Number__c) +' | Opened: '} 
+            <lightning:formattedDateTime value="{!v.supportforce_Case.Date_Time_Opened__c}" year="numeric" month="numeric" day="numeric"/>
+           <aura:if isTrue="{!v.supportforce_Case.Last_Case_Owner_Comment_Time__c}">
+               | Modified: <lightning:formattedDateTime value="{!v.supportforce_Case.Last_Case_Owner_Comment_Time__c}" year="numeric" month="numeric" day="numeric"/>  
+  		   </aura:if> 
+        </div>
+        <div  class="slds-col slds-size_2-of-12 slds-text-align_left" style="color:green;">
+            {!v.supportforce_Case.Status__c}
+        </div>  
+    </div>
+      </th>
+    </tr>
+  </tbody>
+</table>
+</aura:component>

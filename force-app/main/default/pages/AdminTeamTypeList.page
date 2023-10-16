@@ -1,0 +1,336 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="AdminTeamTypeListController">
+   
+    <!-- ### Prototype + Scriptaculous ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+      
+      <!-- ### JS Includes ### -->
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}" />
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/admin.js')}" />
+    <script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/sorttable.js')}"></script>
+	  
+    <!-- #### CSS Includes ### -->
+    <apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamDetailEdit.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMemberList.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamTypeList.css')}" />
+		
+	<!-- ### Ajax Toolkit Include ### -->
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		/**
+		* Get URL param
+		*@return string param
+		*@param string param
+		*/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}
+		
+		/**
+		* Show message to user div
+		*@void
+		*@param string message
+		*@param string type
+		*/
+		function showMessageToUser(message, type){
+			var messageDiv = $('infoToUser');
+			var imageInfo = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoBig.gif')}';
+			var imageSuccess = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/checkNew.gif')}';
+			var currentSource = (type == 'success') ? imageSuccess : imageInfo;
+			markup = '<img src="'+currentSource+'" />';
+			markup += '<div>' + message + '</div>';
+			messageDiv.innerHTML = markup;
+			Effect.Appear('infoToUser');
+		}		
+		
+		/**
+		* Show message on action success
+		*@void
+		*/
+		function showActionSuccess (){
+			var success = getURLParam('success');
+			var message = '';
+			switch(success){
+				case 'Clone':
+					message = 'Cloned new Team Type.';
+				break;
+				case 'Edit':
+					message = 'Updated Team Type.';
+				break;
+				case 'Create':
+					message = 'Created new Team Type.';				
+				break;
+			}
+			if(message != ''){
+				showMessageToUser(message, 'success');
+			}
+		}	
+		window.onload = showActionSuccess	
+	</script>
+	<style>
+		.informationPanel {
+			background-color:#FFFFBF;
+			border:1px solid #ADD1E7;
+			font-size:12px;
+			font-weight:bold;
+			margin: 8px 5px 0px 5px;
+			overflow:hidden;
+			padding:5px;
+			position:relative;
+			width: 97%;
+		}
+		
+		.informationPanel img {
+			float:left;
+			margin:0px 8px 0px 0px;
+		}
+		
+		.informationPanel div {
+			clear:none;
+			margin-top:10px;
+			overflow:hidden;
+			padding:0px;
+			position:relative;
+		}					
+	</style>    
+	<style>
+		div.divblackbtnProfileCenterMargin {
+			margin-left: 0px !important;
+		}
+		
+		div.holder {
+			min-height: 0px !important;
+		}
+		* html div.main_cont div.holder {
+			height: auto;
+		}
+		.Button_fixed a.blackbtnTitleBottom{
+			
+			display:block;
+			height:24px;
+			left: 50%;
+			margin-left: -45px;
+
+		}
+		
+		.Button_fixed {
+			background-color:#E0E0E0;
+			clear:both;
+			height:30px;
+			padding-top:5px;
+			position:relative;
+			margin-left:200px;
+		}
+	</style>
+    
+    <!-- ### Overlay's Includes ### -->
+    <apex:include pageName="AdminOverlayNewTeamType" />
+	<apex:include pageName="AdminOverlayDeactivateTeamType" />
+	<apex:include pageName="AdminOverlayRemoveTeamType" />
+	<apex:include pageName="AdminOverlayNewProfile" />	
+
+	<!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>    
+     
+    <!-- Header -->
+    <div class="header">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Teams</h1>
+                <h2 class="arial_black">Administrator</h2>
+            </div>
+        </div>
+		<!-- Search Box Container -->
+		<div class="searchBox">
+			<div>
+				<div>
+					<!-- Search Form -->
+					<form action="/apex/TeamSearchResult" method="get">
+						<div class="search_box_input f_left">
+							<div class="legend">
+								Find Teams
+							</div>
+							<input type="text" value="Enter keyword or name" name="key"   onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+						</div><input type="submit" value="Search" class="search_btn f_left"/>
+					</form>
+					<!-- Advanced Search Link -->
+					<!-- <div class="advanced_search_cont">
+						<a href="javascript:;">Advanced Search</a>
+					</div>  -->
+				</div>
+			</div>
+		</div>
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/help_icon.gif')}" alt=""/>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="top_content">
+		<div class="breadCrumb">
+			<a class="smallLinkColor" href="/apex/AdminMainSetup">Administrator Setup</a>
+			<span class="linkSeparator"> > </>
+			
+			<span class="smallLink">Team Type List</span>
+			<span class="linkSeparator"> 
+			
+			<span class="breadcrumb_actualpage"></span>
+			
+		</div>
+	</div>
+	
+	<div class="Button_fixed" >
+		<a class="blackbtnTitleBottom" href="/apex/AdminWidgetConfig">
+			<span>New</span>
+		</a>
+	</div> 
+	
+	<!-- Sidebar -->
+	<div class="sidebar">			
+		<!-- Quick links sidebar -->
+		<c:TeamAdminQuickLinks />
+	</div>
+	
+    <!-- Main Content Div -->
+    <div class="main_cont">
+        <div>
+            <div class="main_cont">
+                <div>
+                     <div class="informationPanel" id="infoToUser" style="display:none;"></div>
+                     <div class="holder">
+                        <table>
+                        	<tr>
+                        		<td class="teamTitleButton" >                        	
+									 Team Type List 							
+                        		</td>
+								<td></td>	
+							</tr>
+						</table> 
+                        </div>						
+                        <div class="border_body_top">
+                            &nbsp;
+                        </div> 
+		                <apex:form >
+		                     <apex:outputPanel layout="block" id="theGrid">
+			                     <table cellspacing="0" cellpadding="0" class="pageListProfile sortable">
+			                        <thead>
+			                            <tr>
+			                                <td  class="manage_title_descriptionNoUnderline sorttable_nosort" width="20%" >
+			                                    Actions
+			                                </td>
+			                                <td class="manage_title_description" width="20%">
+			                                    Name
+			                                </td>
+											<td class="manage_title_alignCenter_description sorttable_numeric" width="21%">
+												Number of Teams
+											</td>
+			                                <td class="manage_title_description" width="20%">
+			                                    Creator
+			                                </td>
+											  <td class="manage_title_description" width="19%">
+			                                    Created date
+			                                </td>
+			                            </tr>
+			                        </thead>
+			                        <!-- Description  -->
+			                        <tbody>
+			                            <apex:repeat value="{!types}" var="type">
+				                            
+				                            <tr onmouseover="rollOver(this);" onmouseout="rollOut(this)">
+				                                <td>
+													<apex:outputPanel rendered="{!IF(type.teamType.IsActive__c, true, false)}">		                                
+														<span class="manage_detail_description_underline">
+															<a href="/apex/AdminWidgetConfig?id={!type.teamType.Id}">Edit</a> 
+														</span>
+														<span class="separator"> | </span>
+														<span class="manage_detail_description_underline">
+															<a href="Javascript:;" onclick="createOverlay('','AdminDeactivateteamType', '290', 'getTeams(\'{!type.teamType.Id}\')');">Deactivate</a>
+														</span>
+														<span class="separator"> | </span>
+														<span class="manage_detail_description_underline">
+															<a href="/apex/AdminWidgetConfig?clone={!type.teamType.Id}">Clone</a>
+														</span>
+				                                	</apex:outputPanel>
+		                 							
+		                 							<apex:outputPanel rendered="{!IF(!type.teamType.IsActive__c, true, false)}">	
+														<span class="manage_detail_description_underline">
+															<a href="Javascript:;" onclick="activateTeamType('{!type.teamType.Id}','true');">Reactivate</a>
+														</span>
+														<apex:outputPanel styleClass="separator" rendered="{!IF(type.hasTeams, false, true)}"> | </apex:outputPanel>
+														<apex:outputPanel styleClass="manage_detail_description_underline" rendered="{!IF(type.hasTeams, false, true)}">
+															<a href="Javascript:;" onclick="createOverlay('', 'removeTeamType', '165', 'injectEventRemove(\'{!type.teamType.Id}\')');">Delete</a>
+														</apex:outputPanel>                							
+		                 							</apex:outputPanel>
+				                                
+				                                </td>
+				                                <td class="manage_detail_description_underlineColorBold{!IF(!type.teamType.IsActive__c, ' red', '')}">
+				                                   <a href="/apex/AdminWidgetConfig?view={!type.teamType.Id}">{!type.teamType.Name}</a>
+				                                </td>
+												<td class="number_teams_field">
+													{!type.teams}
+												</td>
+				                                <td class="manage_detail_description_underlineColor">
+				                                    <a href="/apex/peopleprofiledisplay?id={!type.teamType.createdBy.Id}">{!type.teamType.createdBy.Name}</a>
+				                                </td>
+												  <td class="manage_detail_description">
+				                                    {!type.createdDate}
+				                                </td>
+				                            </tr>
+				                            
+			                              </apex:repeat>   
+			                        </tbody>
+			                    </table>
+			                 </apex:outputPanel>
+			                 
+			                 
+			                 <!-- Reload Event -->
+			                 <apex:commandLink action="{!getTeamTypes}" oncomplete="reinitializeSort=true; sorttable.init();" rerender="theGrid" id="reloadGrid" style="display:none;">Reload</apex:commandLink>
+	                	 	 <script>reloadEvent = '{!$Component.reloadGrid}'</script>
+	                	 
+	                	 </apex:form>                   
+                    </div> 
+                </div>
+					
+            </div>
+            
+        </div>	
+        <div class="Button_fixed" >
+						<a class="blackbtnTitleBottom" href="/apex/AdminWidgetConfig">
+							<span>New</span>
+						</a>
+					</div> 
+					
+    </div>
+</apex:page>

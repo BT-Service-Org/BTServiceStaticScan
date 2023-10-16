@@ -1,0 +1,12 @@
+<aura:component controller="PSCCoveoSerachTokenGenerator" >
+    <!-- GET THE ENDPOINT INITIALIZATION DATA -->
+    <aura:method name="getEndpoint" action="{!c.getTokenAction}" access="global">
+        <aura:attribute name="name" type="String" />
+        <aura:attribute name="searchHub" type="String" />
+    </aura:method>
+    <!-- RENEW THE ENDPOINT ACCESS TOKEN -->
+    <aura:method name="renewAccessToken" action="{!c.getTokenAction}" access="global">
+        <aura:attribute name="name" type="String" />
+        <aura:attribute name="searchHub" type="String" />
+    </aura:method>
+</aura:component>

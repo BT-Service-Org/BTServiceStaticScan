@@ -1,0 +1,120 @@
+<template>
+    <!--lightning-card-->
+        <!-- <span slot="Title">
+            <p style="color: black;">Submit your Idea</p>
+        </span> -->
+        <div class="slds-text-heading_large slds-p-bottom_small slds-p-top_small headingCss" style={genericPaddingCss}>
+            Submit your Idea 
+        </div>
+        <span>
+            <lightning-spinner if:true={isLoading} alternative-text="Loading" size="medium">
+            </lightning-spinner>
+            <lightning-record-edit-form object-api-name={objectApiName} onsubmit={handleSubmit}
+                onsuccess={handleSuccess} onerror={handleError} density="comfy">
+                <lightning-messages></lightning-messages>
+                <lightning-layout multiple-rows class={layoutCSS}>
+                    <!-- <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={submittedBy}></lightning-input-field>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={proposedByUser} required value={loggedInUserId}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={description}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={title}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <c-gdcms-combobox-with-search options={domains} label="Intended Domain/Industries"
+                            onselect={handleDomainsSelections} selected-value={selectedDomainValues} multi-select
+                            required data-id="requiredField-Domain">
+                        </c-gdcms-combobox-with-search>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={cloudCompetency}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={ideaClassified}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <c-gdcms-combobox-with-search options={benefits}
+                            label="The benefit of this Asset when it will be used in any project"
+                            onselect={handleBenefitsSelections} selected-value={selectedBenefitsValues} multi-select
+                            required data-id="requiredField-Benefit">
+                        </c-gdcms-combobox-with-search>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field field-name={problmSolved}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="slds-p-left_medium" size="1" small-device-size="1"
+                        medium-device-size="1" large-device-size="1">
+                        <lightning-input-field variant="label-hidden" field-name={isDesignReady} onchange={handleDesignCheck}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item  class={designClass} style="Salesforce-Sans; color: rgba(0, 0, 0, 0.6);" size="11" small-device-size="11"
+                        medium-device-size="11" large-device-size="11">
+                        <p > Is Proposed Design Document Ready?</p>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        medium-device-size="12" large-device-size="12">
+                        <lightning-input-field disabled={isDesignUploadDisabled} label="Design Document URL"
+                            field-name="gdc_ms_Proposed_Design_Document__c" value={proposedDesignURL}
+                            onchange={handleProposedDesign}></lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <footer class="slds-modal__footer slds-hide">
+                    <lightning-button data-id="buttonSave" class="slds-var-m-right_x-small" type="submit" label="Save"
+                        variant="brand">
+                    </lightning-button>
+                    <lightning-button label="Cancel" onclick={closeModalCreate}>
+                    </lightning-button>
+                </footer>
+            </lightning-record-edit-form>
+        </span>
+        <!--span slot="footer"-->
+            <div style={footerPadingCss}>
+                    <div class="slds-form-element ">
+                        <div class="slds-form-element__control">
+                            <div class="slds-checkbox">
+                                <input type="checkbox" name="options" id="checkbox-unique-id-75"
+                                    value="checkbox-unique-id-75" onchange={handleTermsCondition} />
+                                <label class="slds-checkbox__label" for="checkbox-unique-id-75">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>
+                                        <span style="font-family: Salesforce-Sans;font-size: 15px;">I have gone through this article and
+                                            hereby agree to abide by the </span>
+                                        <br />
+                                        <lightning-formatted-url
+                                            value="https://confluence.internal.salesforce.com/display/EPGC/Code+of+Conduct"
+                                            tooltip="Code of Conduct" label="Code of Conduct." target="_blank" class="slds-p-left_x-large slds-p-bottom_small">
+                                        </lightning-formatted-url>
+                                        <br />
+                                        <div class="slds-p-top_medium" style="font-family: Salesforce-Sans;font-size: 15px;">
+                                            <span style="font-weight: bold">Note: </span>
+                                            <span>In case of any doubt please connect with your mentor / people manager.</span>
+                                        </div>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        <!--/span-->
+        <div class="slds-p-around_x-large" style={genericPaddingCss}>
+            <lightning-button class="slds-var-m-right_x-small" label="Save" variant="brand" onclick={handleSave}
+                disabled={isSaveButtonDisabled}></lightning-button>
+            <lightning-button label="Cancel" onclick={closeModalCreate}></lightning-button>
+        </div>
+    <!--/lightning-card-->
+</template>

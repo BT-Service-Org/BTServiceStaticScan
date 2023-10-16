@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-p-around_x-small slds-border_bottom">
+        <button if:true={showRecommend} onclick={handleRecommend}>
+            <lightning-icon icon-name="utility:check" variant="success" size="xx-small"></lightning-icon>
+        </button>
+        <button if:true={showRemove} onclick={handleRemove}>
+            <lightning-icon icon-name="utility:close" variant="error" size="xx-small"></lightning-icon>
+        </button>
+        <span class="slds-p-left_small slds-p-right_x-small">
+            {solution.label}
+        </span>
+        <span class='slds-float_right'>
+            <button onclick={handleEditClicked}>Edit</button>
+        </span>
+    </div>
+</template>

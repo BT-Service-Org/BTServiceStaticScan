@@ -1,0 +1,107 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading......" size="medium" style="position: fixed">
+        </lightning-spinner>
+    </template>
+    <lightning-card title="Book Slot based on criteria">
+        <lightning-button label="Create Hiring Event" slot="actions" variant="brand" onclick={openHiringEventModal}></lightning-button>
+        <lightning-layout>
+            <lightning-layout-item size="3" padding="around-small">
+                <lightning-combobox
+                    name="jobPosting"
+                    label="Job Posting"
+                    value={filters.jobPosting}
+                    placeholder="Select Posting"
+                    options={postingOptions}
+                    onchange={handleFilterChange} 
+                    required></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="3" padding="around-small">
+                <!--<lightning-combobox
+                    name="hiringManager"
+                    label="Hiring Manager"
+                    value={filters.hiringManager}
+                    placeholder="Select Hiring Manager"
+                    options={hiringManagerOptions}
+                    onchange={handleFilterChange} 
+                    required></lightning-combobox>-->
+                <c-gdc-multi-select-picklist name="hiringManager" options={hiringManagerOptions} onvaluechange={handleFilterChange} label="Hiring Manager"></c-gdc-multi-select-picklist>
+            </lightning-layout-item>
+            <lightning-layout-item size="3" padding="around-small">
+                <lightning-combobox
+                    name="skill"
+                    label="Skill"
+                    value={filters.skill}
+                    placeholder="Select Skill"
+                    options={skillOptions}
+                    onchange={handleFilterChange} 
+                    required></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="3" padding="around-small">
+                <!-- interviewers go here-->
+                <template if:true={showInterviewers}>
+                    <c-gdc-multi-select-picklist options={interviewerOptions} onvaluechange={handleInterviewerChange} label="Interviewers"></c-gdc-multi-select-picklist>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div class="slds-var-p-top_small slds-align_absolute-center">
+            <lightning-button variant="brand" label="Check Available Slots" title="Check Available Slots"  onclick={refreshCalendar} disabled={disableCheckSlotsButton}></lightning-button>
+        </div>
+        <div class="calendar-div">
+            <template if:true={showCalendar}>
+                <div class="slds-var-p-top_small slds-var-p-horizontal_small">
+                    <c-gdcisb-recruiter-calender selected-interviewers={selectedInterviewers} filters={filters}></c-gdcisb-recruiter-calender>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+    <template if:true={showHiringEventModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create Hiring Events</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-left_medium slds-p-right_medium" id="modal-content-id-1">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading......" size="medium" style="position: fixed">
+                        </lightning-spinner>
+                    </template>
+                    <div class="slds-p-top_small"></div>
+                    <template if:true={showExistingHiringEvents}>
+                        <div class="slds-text-heading_small">Existing Hiring Events</div>
+                        <ul class="slds-has-dividers_bottom-space slds-p-top_small">
+                            <template for:each={existingHiringEvents} for:item="evt">
+                                <li class="slds-item" key={evt.Id}><ul class="slds-list_horizontal"><lightning-input type="checkbox" data-id={evt.Id} onchange={handleCheckboxChange}></lightning-input><lightning-formatted-date-time value={evt.ActivityDate}></lightning-formatted-date-time></ul></li>
+                            </template>
+                        </ul>
+                    </template>
+                    <div class="slds-p-top_small"></div>
+                    <div class="slds-text-heading_small">Create New Hiring Event</div>
+                    <lightning-input placeholder="Select Hiring Event Date" type="date" message-when-range-underflow = "Past dates are not accepted"
+                                     name="hiringEventDate" variant="label-hidden" label="Hiring Event Date" min={minDate} value={hiringEvtDate}
+                                    class="slds-p-bottom_medium slds-p-top_small dateinput" onchange={handleHiringEvtDateChange}>
+                    </lightning-input>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <template if:true={showDelete}>
+                        <button class="slds-button slds-button_destructive" onclick={deleteSelectedEvents} title="delete">Delete Selected Events</button>
+                    </template>
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={createHiringEvent} title="Create Hiring Event">Create</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

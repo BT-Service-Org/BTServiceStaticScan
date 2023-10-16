@@ -1,0 +1,12 @@
+<template>
+    <div onkeyup={handleKeyUp} class="coveo_searchbox">
+        <div class="search_icon">
+            <lightning-icon icon-name="utility:search" size="x-small" alternative-text="Indicates approval">
+            </lightning-icon>
+        </div>
+        <div class="search_input salesforce_font">
+            <input type="search" name={name} placeholder={placeholder} value={queryTerm}>
+
+        </div>
+    </div>
+</template>

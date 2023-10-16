@@ -1,0 +1,93 @@
+<template>
+    <lightning-card>
+        <div slot="title" class="slds-text-heading_large pageHeading heading">
+            Check Asset Status
+        </div>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="3" medium-device-size="5"
+                small-device-size="12">
+                <lightning-input type="search" onchange={handleSearch} class="slds-var-m-left_x-small" label="Search Assets"
+                    value={searchText} name="enter-search" is-loading={isLoading} onkeypress={initiateSearchOnEnter}>
+                </lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="3" medium-device-size="5"
+                small-device-size="12">
+                <lightning-combobox name="Status" label="Status" value={assetStatusSelectedValue}
+                    placeholder="Select Status" options={assetStatusOptions} onchange={handleStatusChange}>
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="2" medium-device-size="2"
+                small-device-size="12" class="slds-var-m-top_large horizontal-center" style="justify-content: left;">
+                <span class="slds-var-m-top_large slds-var-p-horizontal_xx-small">
+                    <lightning-button if:true={isSmallDevice} variant="brand" label="Reset Filters" title="Reset"
+                        onclick={resetSearchedResultFilters}>
+                    </lightning-button>
+                    <lightning-button-icon if:false={isSmallDevice} variant="container" title="Reset Filters"
+                        icon-name="utility:refresh" onclick={resetSearchedResultFilters}>
+                    </lightning-button-icon>
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="4" medium-device-size="12"
+                small-device-size="12" class="slds-var-m-top_large horizontal-center" style="justify-content: right;">
+                <span if:true={resultsFound} class="slds-var-m-top_large">
+                    <span class="slds-var-m-top_large slds-var-p-left_x-small">
+                        <lightning-button-icon title="Previous" onclick={onPrevious} icon-name="utility:chevronleft"
+                            variant="container" disabled={disablePreviousButton}>
+                        </lightning-button-icon>
+                    </span>
+                    <span class="slds-var-m-top_large slds-var-m-horizontal_small">
+                        <template for:each={pageNumberList} for:item="page">
+                            <span key={page.pageNumber} data-pagenumber={page.pageNumber} class={page.style} onclick={pageNumberHandler}>
+                                <!-- Page {currentPage} out of {noOfPages} -->
+                                {page.pageNumber}
+                            </span>
+                        </template>
+                    </span>
+                    <span class="slds-var-m-top_large slds-var-p-right_medium">
+                        <lightning-button-icon title="Next" onclick={onNext} icon-name="utility:chevronright"
+                            variant="container" icon-position="right" disabled={disableNextButton}>
+                        </lightning-button-icon>
+                    </span>
+                </span>
+
+            </lightning-layout-item>
+        </lightning-layout>
+        <br />
+        <div class="assets-list" onscroll={onScroll}>
+            <template if:true={resultsFound}>
+
+                <template if:true={paginatedResult} for:each={paginatedResult} for:item="assetData" for:index="index">
+                    <c-gdcms-assets-status-card asset-data={assetData} onaction={handleRowAction} show-footer="true"
+                        key={assetData.Id}>
+                    </c-gdcms-assets-status-card>
+                </template>
+            </template>
+            <template if:false={resultsFound}>
+                <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-align_absolute-center noResult">
+                    <p>Sorry, there are no assets found. <br />
+                        Please help us in collaborating your ideas.
+                    </p>
+                </div>
+            </template>
+        </div>
+        <template if:true={isModalOpen}>
+            <c-gdcms-base-modal show-footer="true" onclose={handleClose} height="1000px" width="1000px"
+                max-height="1000px" max-width="1000px">
+
+                <span slot="Title">
+                    <p style="color: black;">{modelDetails.gdc_ms_Title__c}</p>
+                </span>
+                <span slot="Body">
+                    {modelDetails.gdc_ms_Proposed_ByName}
+                </span>
+                <span slot="Footer">
+                    {modelDetails.gdc_ms_CloudCompetency__c}
+                </span>
+
+            </c-gdcms-base-modal>
+        </template>
+    </lightning-card>
+</template>

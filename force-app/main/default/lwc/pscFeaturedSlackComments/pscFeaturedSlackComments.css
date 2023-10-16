@@ -1,0 +1,173 @@
+.section-title {
+    font-size: 24px;
+    color: #032d60;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    margin: auto;
+    padding: 0px 10px;
+}
+
+.title-width {
+    width: 90%;
+    margin: auto;
+}
+
+.container-width {
+    width: 90%;
+    margin: auto;
+    padding: 15px;
+}
+
+.section-container {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: auto;
+    margin-bottom: 20px;
+
+}
+
+.spinner-container {
+    margin-top: 16px;
+}
+
+.comment-card-container {
+    /* max-height: 700px; */
+    column-count: 3;
+}
+
+.comment-card {
+    background-color: #f8f7f7;
+    border-radius: 8px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+    padding: 25px 15px 15px;
+    margin-bottom: 20px;
+    break-inside: avoid;
+    min-width: 200px;
+}
+
+.comment-card__header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.comment-card__header div:last-child {
+    margin-left: auto;
+}
+
+.comment-card__body {
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+.comment-card__body-content {
+    font-size: 14px;
+    color: rgb(8, 7, 7);
+}
+
+.user-info {
+    max-width: 75%;
+    overflow-wrap: anywhere;
+}
+
+.user-name {
+    color: black;
+}
+
+.user_detail {
+    color: #444444;
+    font-size: 11px;
+}
+
+
+.profile-img-container,
+.slack-img-container {
+    align-self: baseline;
+}
+
+.profile-image {
+    min-width: 30px;
+    width: 60px;
+    border-radius: 100%;
+}
+
+.slack-logo-img {
+    min-width: 15px;
+    width: 30px;
+}
+
+.pagination-btn-container {
+    padding-top: 16px;
+    border-top: var(--lwc-borderWidthThin, 1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder, #D4D4D4));
+    margin-top: 30px;
+}
+
+
+a:hover {
+    text-decoration: none;
+}
+
+.comment_load {
+    margin-top: 14px;
+}
+
+
+@media screen and (max-width: 910px) {
+    .comment-card-container {
+        column-count: 2;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .comment-card-container {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+    }
+
+    .comment-card {
+        margin: 0 auto 20px;
+    }
+
+    .comment-card:first-child {
+        margin-top: 2px;
+    }
+
+    .comment-card:last-child {
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    .comment-card-container {
+        display: flex;
+        flex-direction: column;
+
+        padding: 0 10px;
+    }
+
+    .comment-card {
+        margin: 0 auto 20px;
+    }
+
+    .comment-card:first-child {
+        margin-top: 2px;
+    }
+
+    .comment-card:last-child {
+        margin-bottom: 5px;
+    }
+
+    .pagination-btn-container,
+    .profile-img-container,
+    .slack-img-container {
+        /* display: none; */
+    }
+
+    .user-info {
+        max-width: 100%;
+    }
+}

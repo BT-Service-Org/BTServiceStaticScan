@@ -1,0 +1,20 @@
+<template>
+    <lightning-spinner if:true={isSearching} alternative-text="Searching..." size="large"></lightning-spinner>
+    <div class="slds-p-horizontal_small">
+        <div if:true={showError} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <h2><b>Please enter at least 3 characters for search</b></h2>
+        </div>
+        <div>
+            <lightning-input label="User Search" data-id="input" value={searchCriteria} onchange={handleInputChange}></lightning-input>
+            <div if:true={usersFound} class="slds-p-top_small">
+                <lightning-datatable key-field="id" data={userList} columns={columns} is-loading={tableLoadingState}
+                    onrowselection={handleRowSelection}>
+                </lightning-datatable>
+            </div>
+            <template if:true={userList.error} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error"
+                role="alert">
+                <h2><b>{userList.error}</b></h2>
+            </template>
+        </div>
+    </div>
+  </template>

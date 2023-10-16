@@ -1,0 +1,223 @@
+<apex:component allowDML="true" controller="OverlayNewDiscussionController" >
+
+<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/DiscussionOverlayNewTopic.css')}" />
+<script>	
+
+	
+	//this method is to execute after the fckEditor is created
+	function FCKeditor_OnComplete( editorInstance ) {	
+
+		Effect.Fade('FCKloader');
+		assignFCKHTML(topicFirstMessage);
+		var divContentFck = $('fckContentDiv');
+		divContentFck.style.visibility = 'visible';
+		topicFirstMessage = '';
+		
+	}
+
+	//this var contains the first topic message id 
+	var topicFirstMessageId;
+	var topicFirstMessage='';
+	/* it indecate when you have to insert or update, if this var is null you are going to insert else update*/
+	var topicId = null;
+	
+	// Get X and Y						
+	function getXY(obj){				
+		var pos = Position.cumulativeOffset(obj)
+		var y = pos[1];
+		var x = pos[0];
+		var x2 = x + parseInt(obj.offsetWidth);
+		var y2 = y + parseInt(obj.offsetHeight);
+		return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
+	}
+	
+	function getFCKContent(){
+		try {
+			var b = document.getElementsByTagName('iframe');
+			for(var it = 0; it < b.length; it++){
+				var aux = b[it].src.split('fckeditor');
+				if(aux.length > 1){
+					var iframes = b[it].contentWindow.document.getElementsByTagName('iframe');
+					var markup = iframes[0].contentWindow.document.body.innerHTML; 
+				}
+			}
+			setFocus();
+			return markup;		 	
+			
+			/*var b = document.getElementsByTagName('iframe');
+			var c = b[3].contentWindow.document.getElementById('xEditingArea').getElementsByTagName('iframe');
+			var d = c[0].contentWindow.document.body.innerHTML;
+			return d;*/
+		
+		} catch(e){
+			
+		}
+	}
+
+		function getIframe() {
+			var b = document.getElementsByTagName('iframe');
+			for(var it = 0; it < b.length; it++){
+				var aux = b[it].src.split('fckeditor');
+				if(aux.length > 1){
+					var iframes = b[it].contentWindow.document.getElementsByTagName('iframe');						
+				}
+			}
+			return iframes;
+		}	
+		
+		function assignFCKHTML(newContent) {
+			var frame = getIframe();
+			frame[0].contentWindow.document.body.innerHTML = newContent;
+		}
+		
+		
+	
+	//set the fields to show in the overlay
+	function getTopicToEdit(topicIdToEdit,  topicFirstMessageToEditId, page){
+	 	
+	 	topicId = topicIdToEdit;
+		createFCKEditor('discussionMessage');
+		var title = document.getElementById('overlaytitle');
+		var topicName = document.getElementById('topicName');
+		title.innerHTML = 'Edit Discussion Topic';
+		topicFirstMessageId = topicFirstMessageToEditId;
+		
+		if(page == 'details'){
+			var discussiontitle = $('DiscussionTopicTitle').innerHTML; 
+			topicName.value = discussiontitle;
+			
+			
+			var m = $('{!$Component.DiscussionTopicMessage}').innerHTML;
+			
+			topicFirstMessage = m;
+		}
+		else{
+			if(page == 'topics'){
+				var idtitle = 'topicTitle-' + topicIdToEdit;
+				var idMessage = 'topicMessage-' + topicIdToEdit;
+				var discussionTitle = document.getElementById(idtitle);
+				var discussionMessage = document.getElementById(idMessage);
+				
+				
+				topicName.value = discussionTitle.innerHTML;
+				
+				topicFirstMessage = discussionMessage.innerHTML;
+				
+			}
+		}
+		setFocus();
+	}
+	
+	
+	function saveTopic(teamID, forumID, teamName, topicId , auxInputSubject, auxInputId, auxInputForum, auxInputContent, formId){
+		
+		var topicName = $F('topicName');
+		var topicContent = getFCKContent();
+			
+		$(auxInputSubject).value = topicName;
+		$(auxInputId).value = topicId;
+		$(auxInputForum).value = forumID;
+		$(auxInputContent).value = topicContent;
+		
+		$(formId).style.display = 'none';
+		$('savingDiscussion').style.display = '';
+		
+		if(topicName == '' || topicContent == ''  || topicContent == '<p><br></p>'|| topicContent == '<p></p>' || topicContent == '<p>&nbsp;</p> ' || topicContent == null){
+			alert('Information requeried');
+		}
+	}
+	
+	function refreshPage () {
+		var buttonForm = $$('.auxLinkClass');
+		//buttonForm.focus();
+		buttonForm[0].onclick();
+		
+	}		
+	
+	function setNewFocus(){
+		createFCKEditor('discussionMessage');
+		document.getElementById('topicName').focus();	
+	}
+	
+	function setFocus(){
+		document.getElementById('topicName').focus();		
+	}
+	
+</script>
+<style>
+	.savingDiscussion {
+		margin: 30px; 
+		font-size: 15px; 
+		font-weight: bold; 
+		color: #297B9C;
+	}
+</style>	
+
+<!-- Create New Topic Overlay-->
+<div id="NewTopicForm" style="display:none;" >
+	<!-- 				FCK LOADER 				 -->
+	
+	<!-- Title of Dialog -->
+	<div class="modalTitle">
+		<div class="title" id="overlaytitle">Create New Topic</div>
+		<div class="closeEvent">
+			<a href="Javascript:;" onclick="modal.close();">
+				<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" />
+			</a>
+		</div>
+	</div>
+	<!-- Content of Dialog -->
+	<div>
+		<div id="savingDiscussion" class="savingDiscussion" style="display:none;">
+			Saving...
+		</div>
+		<apex:form id="formNew">
+			<div align="right">
+				<table border="0">
+					<tr>
+						<td style="width:4px;"><span style="display:block;width:4px; height:12px; background-color: #C0272D;"></span></td>
+						<td><span class="infoText" style="font-size:10px;"> = &nbsp;&nbsp; Required Information </span></td>
+					</tr>
+				</table>
+			</div>
+			<table border="0" style="width:95%;">
+				<tr>
+					<td style="width:85px;text-align:right;"><span class="inputInfo">Topic</span></td>
+					<td style="width:4px;"><span style="display:block;width:4px; height:21px; background-color: #C0272D;"></span></td>
+					<td><input id="topicName" type="text" style="width:98%"/></td>
+				</tr>
+				<tr>
+					<td valign="top" style=text-align:right;><span class="inputInfo">Message</span></td>
+					<td valign="top" style="width:4px;"><span style="display:block;width:4px; height:199px; background-color: #C0272D;"></span></td>
+					<td style="height:130px;">
+						<div class="FCKloader" id="FCKloader" style="display:block;"><center><img src="{!URLFOR($Resource.WikiResource, 'images/layout/FCKloader.gif')}" /></center><br />Loading...</div>
+						<div id="fckContentDiv" style="visibility:hidden;">
+							<textarea escape="false" id="discussionMessage" name="discussionMessage" style="width:98%;height:110px;"></textarea>
+						</div>
+						<!-- <input type="checkbox" id="emailNewDiscussion" name="email" /><span class="inputInfo">Email new team members about new discussion topic</span>-->
+					</td>
+				</tr>
+			</table>
+			<hr color="#999999" size="1px">
+			<div align="center">
+				<!--  <apex:commandButton action="{!saveTopic}" rerender="topicList, noTopicList" styleclass="saveBtn" value="Save" onclick="saveTopic('{!forumData.Team__c}','{!forumData.Id}','{!forumData.Team__r.Name}', topicId);" /> -->
+				<span id="savebutton">
+						<apex:inputText id="auxInputSubject" value="{!newTopic.subject}" style="display:none;" />
+						<apex:inputText id="auxInputId" value="{!newTopic.id}" style="display:none;" />
+						<apex:inputText id="auxInputForum" value="{!newTopic.forum}" style="display:none;" />
+						<apex:inputTextArea id="auxInputContent" value="{!newTopic.content}" style="display:none;" />
+																		
+						<apex:commandButton rerender="auxNewTopicPanel, TaskWidgetLeft,TaskWidgetFull" styleClass="saveBtn" value="Save" onclick="saveTopic('{!forumData.Team__c}','{!forumData.Id}','{!forumData.Team__r.Name}', topicId, '{!$Component.auxInputSubject}', '{!$Component.auxInputId}', '{!$Component.auxInputForum}', '{!$Component.auxInputContent}', '{!$Component.formNew}');" action="{!saveNewTopic}" oncomplete="modal.close();reloadDiscussionList();showSwirly('swirly_discussion');" />
+					<!-- <input class="saveBtn" type="button" value="Save" onclick="saveTopic('{!forumData.Team__c}','{!forumData.Id}','{!forumData.Team__r.Name}', topicId);" /> -->
+				</span>
+				<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+			</div>   
+		
+		</apex:form>
+	</div>
+</div>
+<apex:form id="auxForm" style="border:none;">
+	<!--<apex:commandButton value="auxLink" id="auxLink" styleclass="auxLinkClass" style="visibility:hidden;margin-top: 350px;" action="{!saveTopic}" reRender="noTopicList ActiveDiscussionTable" />-->
+</apex:form>
+<apex:outputpanel id="auxNewTopicPanel" />
+</apex:component>

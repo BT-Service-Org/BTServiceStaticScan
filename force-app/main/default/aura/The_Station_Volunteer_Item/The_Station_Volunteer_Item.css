@@ -1,0 +1,36 @@
+.THIS .slds-progress-bar{
+    display: block;
+    background: #EBEBEB;
+    height: 13px;
+    width: 15px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-width: 30px;
+    float:left;
+    margin-left: 5px;    
+}
+.THIS .slds-progress-bar__value{
+    background: #3AC44C  ;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+
+.THIS .slds-box{
+    
+    border:none;
+    
+}
+.THIS .slds-card__header-title{
+    color: #1180C0; 
+    font-style: gras;
+}
+
+.THIS .desc-Style{
+    color: #929292 ; 
+    margin-top: 6px;
+}

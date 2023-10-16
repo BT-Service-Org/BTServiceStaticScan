@@ -1,0 +1,50 @@
+<template>
+	<lightning-spinner if:true={isContentNotLoaded} alternative-text="Loading" size="large"></lightning-spinner>
+	<lightning-card title="Asset Members" icon-name="standard:avatar" variant="Narrow"
+		if:true={isMembersAvailable_EditOnly}>
+		<template for:each={memberList} for:item="item" for:index="index">
+			<lightning-record-edit-form size="12" key={item.Id} object-api-name="gdc_ms_AssetMember__c">
+				<lightning-messages> </lightning-messages>
+				<lightning-layout multiple-rows>
+					<lightning-layout-item flexibility="auto" padding="around-small" size="5" medium-device-size="5"
+						large-device-size="5">
+						<lightning-input-field data-id={item.Id} field-name="gdc_ms_Role__c" value={item.gdc_ms_Role__c}
+							variant="label-stacked" required onchange={handleRole}>
+						</lightning-input-field>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="auto" padding="around-small" size="5" medium-device-size="5"
+						large-device-size="5">
+						<lightning-input-field data-id={item.Id} field-name="gdc_ms_TeamMember__c"
+							value={item.gdc_ms_TeamMember__c} variant="label-stacked" required
+							onchange={handleTeamMember}>
+						</lightning-input-field>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="auto" padding="around-small" size="1" medium-device-size="1"
+						large-device-size="1">
+						<div class="slds-p-top_medium" style="margin-top: 10%">
+							<lightning-icon icon-name="utility:add" access-key={item.Id} id={index}
+								alternative-text="Add Row" size="small" title="Add Row" onclick={addRow}>
+							</lightning-icon>
+						</div>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="auto" padding="around-small" size="1" medium-device-size="1"
+						large-device-size="1">
+						<div class="slds-p-top_medium" style="margin-top: 10%">
+							<lightning-icon icon-name="utility:delete" access-key={item.Id} id={index}
+								alternative-text="Delete Row" size="small" title="Delete Row" onclick={removeRow}>
+							</lightning-icon>
+						</div>
+					</lightning-layout-item>
+				</lightning-layout>
+			</lightning-record-edit-form>
+		</template>
+	</lightning-card>
+	<lightning-card title="Asset Members" icon-name="standard:avatar" variant="Narrow"
+		if:true={isMembersAvailable_ReadOnly}>
+		<div style="padding: 0 1rem;">
+			<lightning-datatable class="slds-table_header-fixed_container slds-scrollable_x slds-border_top"
+				key-field="Id" data={staticMemberList} columns={columns} hide-checkbox-column>
+			</lightning-datatable>
+		</div>
+	</lightning-card>
+</template>

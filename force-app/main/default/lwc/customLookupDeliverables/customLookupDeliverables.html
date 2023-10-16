@@ -1,0 +1,34 @@
+<template>
+    <div class="slds-box slds-p-top_small" style="background-color: white;">
+        <lightning-record-edit-form object-api-name="Method_by_Deliverables__c" id="createMethodDeliverables" >
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <p>Deliverable</p>
+                </div>
+                <div class="slds-col">
+                    <p style="padding-left:3em">Responsible Role</p>
+                </div>
+            </div>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-input-field field-name="Deliverable__c" variant="label-hidden" onchange={handleDeliverableChange} value={deliverableValue} required> </lightning-input-field>
+                </div>
+                <div class="slds-col">
+                    <lightning-input-field field-name="Role__c" variant="label-hidden" onchange={handleRoleChange} required> </lightning-input-field>
+                </div>
+            </div>
+            <p style="color: red;">{requiredField}</p>
+            <br />
+            <lightning-button label="Add New Deliverable" title="Non-primary action" onclick={createDeliverable} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button label="Add Another" title="Non-primary action" onclick={handleAdd} class="slds-m-left_x-small"></lightning-button>
+        </lightning-record-edit-form>  
+        
+        <br />
+        <template if:true={showMessage}>
+            <span><h2>You have added the below Deliverables for this method:</h2></span>
+            <template for:each={addedDeliverables} for:item="deliverables">
+                <p key={deliverables.id}>{deliverables.id}. {deliverables.deliverable} - {deliverables.role}</p>
+            </template>
+        </template>
+    </div>
+</template>

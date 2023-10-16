@@ -1,0 +1,55 @@
+.THIS .titleColor {
+    color: #0070D2;
+}
+
+.THIS .forwardIconStyle svg {
+    border-color: #0070D2;
+    color: #0070D2; 
+}
+
+.THIS .no-data-message{
+    height:350px;
+	line-height: 3;
+    padding-left: 30px;
+    padding-top: 35px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.THIS .tutorial-button{
+    color: #0070d2;
+    border-color: #0070d2;
+}
+
+.THIS .connect-account-button{  
+    border-color: #0070d2;
+    background-color: #0070d2;
+    padding: 2px;
+    line-height: 1.5;
+}
+
+.THIS .astro-character{
+    position: absolute;
+    bottom: 0;
+    width: 145px;
+    right: 25px;
+}
+
+.THIS .titleLogo {
+    width: 40px; 
+    height: 40px;
+}
+
+
+@media only screen and (max-width: 1210px) and (min-width: 1155px){
+    .THIS .no-data-message{
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1155px){
+    .THIS .no-data-message{
+        font-size: 14px;
+    }
+}

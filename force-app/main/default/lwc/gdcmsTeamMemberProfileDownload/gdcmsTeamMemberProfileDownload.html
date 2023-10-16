@@ -1,0 +1,12 @@
+<template>
+    <template if:false={loaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:true={displayView}>
+        <div class="slds-align_absolute-center">
+            <lightning-icon icon-name="utility:print" class="iconCss" title="Print Profile" onclick={printPDF}></lightning-icon>
+            <lightning-button label="Print Profile" title="Print Profile" onclick={printPDF}
+                 class="slds-var-m-left_x-small print-btn" variant="base"></lightning-button>
+        </div>
+    </template>
+</template>

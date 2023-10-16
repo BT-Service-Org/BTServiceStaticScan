@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>PSC All Bookmarks</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+
+            <property name="containerTitle" type="String" label="Container Title"  datasource="My Bookmarks,My Knowledge Article, My Reusable Assets, My Questions, My Answers, Recent Questions"/>
+<!-- 
+            <property name="containerTitle" type="String" label="Container Title" required="true" default="All Bookmarks"/> -->
+            <property name="pageTitle" type="String" label="Page Title" required="true" default="Bookmarked Article"/>
+            <property name="maxResultPerPage" type="String" label="Max results per page" required="true" default="5"/>
+            <property name="noResultLabel" type="String" label="No Result Label" default="No Article Found"/>
+            <property name="showFavorite" type="Boolean" label="Show Favorite?"/>
+        </targetConfig>
+     </targetConfigs> 
+</LightningComponentBundle>

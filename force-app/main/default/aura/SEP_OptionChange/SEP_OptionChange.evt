@@ -1,0 +1,2 @@
+<aura:event type="APPLICATION" description="Fire when any option changes" >
+</aura:event>

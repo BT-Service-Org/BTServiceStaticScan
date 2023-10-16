@@ -1,0 +1,16 @@
+<apex:page >
+	<div class="box_round_team">
+		<div class="header">
+			<div>
+			  <div>
+					<h3>Recently Created Teams</h3>			
+			  </div>
+			</div>
+		</div>			
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+
+		</div>
+		<div class="bottom_borders"><div><div></div></div></div>
+	</div>
+</apex:page>

@@ -1,0 +1,158 @@
+<apex:page controller="Controller_Methodology">
+    <script src="{!URLFOR($Resource.DJP_Resources,'jquery-1.9.1.min.js')}"/>
+    <script>
+        var $j = jQuery.noConflict();
+        function ChangeFocus(){
+           
+           $j(window).scrollTop($j('.contentDiv').offset().top);
+           
+        }
+    </script>
+    
+    <style>
+        fieldset{
+            min-height: 90px;
+        }
+        
+        .header{
+            font-size:2em;
+            font-weight: bold;
+            color:#1797c0;
+        }
+        .phaseLink{
+            cursor: pointer;
+        }
+        tab{
+            background-color: white;
+        }
+        .activeTab {
+            background-color: #236FBD; color:white; 
+            background-image:none
+        }
+        .inactiveTab {
+            background-color: lightgrey; color:black; 
+            background-image:none;
+        }
+        
+        .pbTitle{
+            width:100%;
+        }
+    </style>
+    <apex:stylesheet value="/sCSS/28.0/sprites/1297816277000/Theme3/default/gc/versioning.css" />
+    <apex:form >
+    <apex:tabPanel switchType="client" selectedTab="Methodology 3.0" id="theTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab">
+        <apex:tab label="Methodology 3.0" name="Methodology 3.0" id="tabOne" style="background-color:white;">
+        
+        
+        
+            <apex:actionFunction name="changeMethodology" action="{!ChangeMethodology}" oncomplete="ChangeFocus();" rerender="contentPanelReq,contentPanelOpt,phaseBlock">
+                <apex:param name="phase" value="" />
+            </apex:actionFunction>
+            
+            <center>
+                <apex:image value="{!URLFOR($Resource.DJP_Resources,'DJP_Resources.jpeg')}" height="600" width="800" usemap="#implementationmethodology">
+                    <map name="implementationmethodology">
+                        <apex:outputPanel layout="block">
+                            <area alt="Prepare" coords="72,540,0,388,80,339,185,540" onclick="changeMethodology('Prepare');" href="javascript:void(0)" class="phaseLink" shape="poly" title="Click here for PREPARE templates, best practices, tools and supplemental resources"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel layout="block" styleClass="phaseLink">
+                            <area alt="Architect" coords="127,402,59,244,158,183,303,402" onclick="changeMethodology('Architect');" href="javascript:void(0)" class="phaseLink" shape="poly" title="Click here for ARCHITECT templates, best practices, tools and supplemental resources"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <area alt="Construct" coords="290,287,210,116,358,78,425,287" onclick="changeMethodology('Construct');" href="javascript:void(0)" class="phaseLink" shape="poly" title="Click here for CONSTRUCT templates, best practices, tools and supplemental resources"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <area alt="Validate" coords="500,297,479,102,628,89,631,297" onclick="changeMethodology('Validate');" href="javascript:void(0)" class="phaseLink" shape="poly" title="Click here for VALIDATE templates, best practices, tools and supplemental resources"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <area alt="Deploy" coords="629,491,626,308,802,260,771,491" onclick="changeMethodology('Deploy');" href="javascript:void(0)" class="phaseLink" shape="poly" title="Click here for DEPLOY templates, best practices, tools and supplemental resources"/>
+                        </apex:outputPanel>
+                        <area alt="Default" shape="default" title="Default"/>
+                    </map>
+                </apex:image>
+                </center>
+                <apex:outputPanel id="phaseBlock"><apex:outputPanel layout="block" style="font-weight:bold;text-align:center;margin:2px;font-size:1.3em;color:#007fcc;" rendered="{!phase!=null}">{!phase} Phase</apex:outputPanel></apex:outputPanel>    
+                <apex:outputPanel id="contentPanelReq" layout="block" styleClass="contentDiv" style="display:inline-table;width:49%;margin-right:5px;vertical-align: top;">
+                        
+                        <apex:pageBlock rendered="{!showContent}" title="Key Deliverable" >
+                           
+                           <apex:outputPanel layout="block"  rendered="{!total_size_req > 0}" >
+                                <apex:outputPanel style="text-align:left;font-weight:bold;">Showing {!counterReq +1} - {!counterReq+RequiredContent.size} of Total {!total_size_req} Records </apex:outputPanel>    
+                                <apex:outputPanel layout="block" style="text-align:center;">
+                                    <apex:commandButton action="{!reqPrevious}" title="Previous" value="<" rendered="{!reqDisablePrevious}" reRender="contentPanelReq"/>   
+                                    <apex:commandButton action="{!reqNext}" title="Next" value=">" rendered="{!reqDisableNext}" reRender="contentPanelReq"/>  
+                                    <apex:pageBlockTable value="{!RequiredContent}" var="rc">
+                                        <apex:column style="text-align:left;" headerValue="Title" >
+                                            <apex:outputLink value="/sfc/#version?id={!rc.Id}" target="_blank">{!rc.Title}</apex:outputLink>
+                                        </apex:column>  
+                                    </apex:pageBlockTable>
+                                    <apex:commandButton action="{!reqPrevious}" title="Previous" value="<" rendered="{!reqDisablePrevious}" reRender="contentPanelReq"/>   
+                                    <apex:commandButton action="{!reqNext}" title="Next" value=">" rendered="{!reqDisableNext}" reRender="contentPanelReq"/>
+                                </apex:outputPanel>
+                           </apex:outputPanel>  
+                        </apex:pageBlock>
+                    
+                </apex:outputPanel>   
+                
+                <apex:outputPanel id="contentPanelOpt" layout="block" styleClass="contentDiv"  style="display:inline-table;width:49%;vertical-align: top;"  >
+                    
+                        <apex:pageBlock rendered="{!showContent}" title="Supplemental Material" >
+                           <apex:outputPanel layout="block"  rendered="{!total_size_opt > 0}">
+                                <apex:outputPanel style="text-align:left;font-weight:bold;">Showing {!counterOpt +1} - {!counterOpt+OptionalContent.size} of Total {!total_size_opt} Records </apex:outputPanel>    
+                                <apex:outputPanel style="text-align:center;" layout="block">
+                                    <apex:commandButton action="{!optPrevious}" title="Previous" value="<" rendered="{!optDisablePrevious}" reRender="contentPanelOpt"/>   
+                                    <apex:commandButton action="{!optNext}" title="Next" value=">" rendered="{!optDisableNext}" reRender="contentPanelOpt"/>  
+                                    <apex:pageBlockTable value="{!optionalContent}" var="rc">
+                                        <apex:column style="text-align:left;" headerValue="Title" >
+                                            <apex:outputLink value="/sfc/#version?id={!rc.Id}" target="_blank">{!rc.Title}</apex:outputLink>
+                                        </apex:column>    
+                                    </apex:pageBlockTable>
+                                    <apex:commandButton action="{!optPrevious}" title="Previous" value="<" rendered="{!optDisablePrevious}" reRender="contentPanelOpt"/>   
+                                    <apex:commandButton action="{!optNext}" title="Next" value=">" rendered="{!optDisableNext}" reRender="contentPanelOpt"/>  
+                                    </apex:outputPanel>
+                           </apex:outputPanel>  
+                        </apex:pageBlock>
+                <script>
+                   $j(".pbTitle").css("width","100%");
+               </script>     
+                </apex:outputPanel>    
+               
+               
+               
+        
+    </apex:tab>
+   
+    <apex:tab label="CSE" name="CSE" style="background-color:white;">
+        <center>
+        <apex:outputLabel styleClass="header">
+            Coming Soon
+        </apex:outputLabel>
+        </center>
+    </apex:tab>
+    <apex:tab label="Program Architect" name="Program Architect" style="background-color:white;">
+        <center>
+        <apex:outputLabel styleClass="header">
+            Coming Soon
+        </apex:outputLabel>
+        </center>    
+    </apex:tab>
+    
+    <apex:tab label="Mobile" name="Mobile" style="background-color:white;">
+        
+        <apex:pageBlock id="mobileContent">
+                <apex:outputPanel style="text-align:left;font-weight:bold;">Showing {!counterMob +1} - {!counterMob+mobileContent.size} of Total {!total_size_Mob} Records </apex:outputPanel>    
+               <apex:pageBlockButtons >
+                <apex:commandButton action="{!mobPrevious}" title="Previous" value="<" rendered="{!mobDisablePrevious}" reRender="mobileContent"/>   
+                <apex:commandButton action="{!mobNext}" title="Next" value=">" rendered="{!mobDisableNext}" reRender="mobileContent"/>  
+                </apex:pageBlockButtons>
+                <apex:pageBlockTable value="{!MobileContent}" var="rc">
+                    <apex:column style="text-align:left;" headerValue="Title" >
+                        <apex:outputLink value="/sfc/#version?id={!rc.Id}" target="_blank">{!rc.Title}</apex:outputLink>
+                    </apex:column>  
+                </apex:pageBlockTable>
+                
+        </apex:pageBlock>    
+    </apex:tab>
+    </apex:tabPanel>
+    </apex:form>
+</apex:page>

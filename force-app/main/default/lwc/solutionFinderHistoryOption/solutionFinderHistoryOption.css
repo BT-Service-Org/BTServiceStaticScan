@@ -1,0 +1,29 @@
+.option {
+    background: #ffffff;
+    border-bottom: 1px #c0c0c0 solid;
+    padding: 10px;
+    color: #606060;
+    overflow: hidden;
+}
+
+.option .question {
+    float: left;
+    color: #909090;
+}
+
+.option .answer {
+    float: right;
+    color: #3366cc;
+    font-size: 0.8em;
+}
+
+button {
+    background: #e0e0e0;
+    border-radius: 3px;
+    border-width: 0px;
+    padding-bottom: 3px;
+}
+
+button:hover {
+    background: #c00000;
+}

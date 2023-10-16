@@ -1,0 +1,43 @@
+<template>
+    <div if:true={displayFeatureContent.length}>
+        <h3 class="section-title ITC_font">Featured</h3>
+        <div class="feature_container">
+            <div class={features_class}>
+                <template for:each={displayFeatureContent} for:item="feature"  if:true={displayFeatureContent.length}>
+                    <a key={feature.Id} class="feature" href={feature.Featured_Content_URL__c} target="_blank">
+                        <span class="full_img" if:true={feature.imageUrl__c}>
+                            <img src={feature.imageUrl__c}>
+                        </span>
+                        <span class="full_img" if:false={feature.imageUrl__c}>
+                            <img src={fallbackImage}>
+                        </span>
+                        <h3 class="feature-title ">{feature.Page_Section_Title__c}</h3>
+    
+                        <lightning-formatted-rich-text value={feature.Section_Body__c}
+                            class="feature_desc salesforce_font"></lightning-formatted-rich-text>
+    
+                    </a>
+                </template>
+                <!-- <h3 class="coming-soon" if:false={displayFeatureContent.length}>Featured Content will be available soon</h3> -->
+            </div>
+            <template if:false={hideFooter}>
+                <div class="button ITC_font" if:true={displayFeatureContent.length}>
+                    <span class="slackurl">
+        
+                        <lightning-button-icon icon-name="utility:left" alternative-text="Settings" title="Settings"
+                            onclick={prev} disabled={isPrevDisableButton}></lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:right" alternative-text="Add user"
+                            class="slds-m-left_xx-small" title="Add user" onclick={next} disabled={isNextDisableButton}></lightning-button-icon>
+                    </span>
+                    <a href={detailPageUrl}>
+                        <span>Show All<lightning-icon icon-name="utility:forward" class="arrow" size="x-small"></lightning-icon>
+                        </span>
+                    </a>
+                </div>
+            </template>
+        </div>
+    </div>
+
+
+
+</template>

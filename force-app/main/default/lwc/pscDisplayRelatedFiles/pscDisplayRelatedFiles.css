@@ -1,0 +1,37 @@
+.documents {
+    display: flex;
+    flex-wrap: wrap;
+}
+.documents a {
+    text-decoration: none;
+}
+.document {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    flex: 0 0 30%;
+    margin: 10px;
+}
+.doc-Icon {
+    padding: 0px;
+    margin-right: 5px;
+}
+.document:hover {
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+}
+.heading {
+    color: #032D60;
+    font-size: 21px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+}
+
+@media screen and (max-width:540px) {
+    .documents {
+        flex-direction: column;
+    }
+}

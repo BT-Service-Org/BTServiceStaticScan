@@ -1,0 +1,111 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="StationSPController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Title" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="primaryItems" type="List" default="[]" />
+    <aura:attribute name="secondayItems" type="List" default="[]" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="42px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="intPrimaryItemsFontSize" type="String" />
+    <aura:attribute name="intPrimaryItemsColor" type="String" />
+    <aura:attribute name="intPrimaryItemsAlignment" type="String" />
+    <aura:attribute name="intSecondyItemsIconColor" type="String" />
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="backgroundImageUrl" type="string" default="" />
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="titleImageUrl" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" default="" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="numberOfPrimaryItems" type="String" />
+    <aura:attribute name="primaryItemsFontSize" type="Integer" />
+    <aura:attribute name="primaryItemsAlignment" type="String" />
+    <aura:attribute name="showIcons" type="Boolean" />
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div aura:id="parent">
+        <div class="main-container">
+            <aura:if isTrue="{! v.backgroundImageUrl }">
+                <span>
+                    <img alt="{!v.title}" class="background-image" src="{! v.backgroundImageUrl }" />
+                </span>
+            </aura:if>
+
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{! v.intTitleFontSize + v.intTitleAlignment }">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="column-outer-container">
+                <div class="content-items slds-box">
+                    <!-- PRIMARY ITEMS-->
+                    <div style="{! v.intPrimaryItemsFontSize }">
+                        <ul
+                            class="slds-list--vertical slds-has-dividers--bottom-space slds-has-selection slds-p-left_none slds-p-right_none">
+                            <aura:if isTrue="{! not(empty(v.primaryItems)) }">
+                                <aura:iteration var="item" items="{!v.primaryItems}" indexVar="index">
+                                    <li
+                                        class="slds-media slds-p-around_small primary-content-item">
+                                        <div class="slds-media__body slds-align-content-center slds-text-align_center"
+                                            style="{! v.intPrimaryItemsAlignment }">
+                                            <span class="slds-tile__title"><a style="{! v.intPrimaryItemsColor }"
+                                                    target="_blank" href="{! item.content.Content_URL__c }">{!
+                                                    item.content.Name }</a></span>
+                                        </div>
+                                    </li>
+                                    <div class="primary-item-separator slds-border_bottom"></div>
+                                </aura:iteration>
+                            </aura:if>
+                        </ul>
+                    </div>
+                    <!-- end of PRIMARY ITEMS-->
+
+                    <!-- SECONDAY ITEMS-->
+                    <ul
+                        class="slds-list--vertical slds-has-dividers--bottom-space slds-has-selection slds-p-left_none slds-p-right_none slds-p-vertical_none">
+                        <div class="slds-grid slds-wrap">
+                            <aura:if isTrue="{! not(empty(v.secondayItems)) }">
+                                <aura:if isTrue="{! not(empty(v.primaryItems)) }">
+                                    <div class="secondary-item-separator slds-border_bottom"></div>
+                                </aura:if>
+                                <aura:iteration var="item" items="{!v.secondayItems}" indexVar="index">
+                                    <li
+                                        class="slds-media slds-p-around_small secondary-content-item">
+                                        <aura:if isTrue="{! v.showIcons }">
+                                            <div class="slds-media__figure secondary-item-image">
+                                                <aura:unescapedHtml value="{! item.content.Upload_Image__c }" />
+                                            </div>
+                                        </aura:if>
+                                        <div class="slds-media__body slds-align-content-center">
+                                            <p class="slds-tile__title"><a target="_blank"
+                                                    href="{! item.content.Content_URL__c }" style="{! v.hrefColorStyle }">{! item.content.Name }</a>
+                                            </p>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <button class="slds-button">
+                                                <a target="_blank" href="{! item.content.Content_URL__c }">
+                                                    <lightning:icon iconName="utility:chevronright" class="{! v.intSecondyItemsIconColor }"
+                                                        alternativeText="Go to content" size="xx-small" />
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <div class="secondary-item-separator slds-border_bottom"></div>
+                                </aura:iteration>
+                            </aura:if>
+                        </div>
+                    </ul>
+                    <!-- end of SECONDAY ITEMS-->
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

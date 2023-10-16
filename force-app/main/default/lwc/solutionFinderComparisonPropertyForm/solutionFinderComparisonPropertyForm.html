@@ -1,0 +1,18 @@
+<template>
+    <lightning-input type="Text" label="Property Title" value={title} onkeyup={handleKeyUp}></lightning-input>
+    <lightning-combobox name="dataType"
+        label="Data Type"
+        value={dataType}
+        options={dataTypeOptions}
+        onchange={handleDataTypeSelected}></lightning-combobox>
+    <lightning-combobox name="decimalPlaces"
+        if:true={showDecimalPlaces}
+        label="Decimal Places"
+        value={decimalPlaces}
+        options={decimalPlacesOptions}
+        onchange={handleDecimalPlacesSelected}></lightning-combobox>
+    <div class="slds-m-top_medium slds-p-top_medium slds-border_top slds-text-align_center">
+        <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-horizontal_medium"></lightning-button>
+        <lightning-button label="Save" onclick={handleSave} class="slds-m-horizontal_medium" variant="brand"></lightning-button>
+    </div>
+</template>

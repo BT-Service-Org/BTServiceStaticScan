@@ -1,0 +1,13 @@
+.THIS {
+    /* min-width:600px;
+    max-width:600px;*/
+    width:100%;
+ 
+}
+.THIS .forwardIconStyle svg { /*the border style*/
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 60px;
+    border: 2px solid;
+    padding: 0.3em 0.3em;
+}

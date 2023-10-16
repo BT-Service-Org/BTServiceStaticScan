@@ -1,0 +1,67 @@
+<template>
+	<template if:true={showContent}>
+		<div class="slds-grid slds-gutters page-container" if:true={recId}>
+			<div class="slds-col slds-size_4-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12 table-of-content">
+				<div class="table-header">
+					<p>Table of Contents</p>
+					<div class="table-content">
+						<template for:each={methodContentData} for:item="item">
+							<div key={item} class="content-block">
+								<a href={item.targetId}>{item.nodeName} </a>
+								<div class="child-block">
+									<template for:each={item.nodeChilds} for:item="child">
+										<div key={child}><a href={child.targetId}> {child.nodeName}</a>
+											<div class="child-block">
+												<template for:each={child.nodeChilds} for:item="grandchild">
+													<p key={grandchild}><a href={grandchild.targetId}>
+															{grandchild.nodeName}</a>
+													</p>
+												</template>
+											</div>
+										</div>
+									</template>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+			</div>
+			<div class="slds-col slds-size_8-of-12 slds-medium-size_9-of-12 slds-large-size_9-of-12 method-detail">
+				<div class="method-page">
+					<c-psc-important-note rec-id={recId}></c-psc-important-note>
+					<template for:each={methodContentData} for:item="item">
+						<div key={item} class="method-node">
+							<h1 id={item.id} class="node-title ITC_font"> {item.nodeName} </h1>
+							<c-psc-method-detail-child field-api-name={item.fieldAPIName} record-id={recId}
+								component-type={item.compType}>
+							</c-psc-method-detail-child>
+							<template for:each={item.nodeChilds} for:item="child">
+								<div key={child} class="node-content">
+									<h1 id={child.id} class="child-title ITC_font">{child.nodeName} </h1>
+									<div class="description">
+										<c-psc-method-detail-child field-api-name={child.fieldAPIName} record-id={recId}
+											component-type={child.compType}>
+										</c-psc-method-detail-child>
+									</div>
+									<template for:each={child.nodeChilds} for:item="grandchild">
+										<div key={child}>
+											<h1 id={grandchild.id}>{grandchild.nodeName} </h1>
+	
+											<div class="description">
+												<c-psc-method-detail-child field-api-name={grandchild.fieldAPIName}
+													record-id={recId} component-type={grandchild.compType}>
+												</c-psc-method-detail-child>
+											</div>
+										</div>
+									</template>
+								</div>
+							</template>
+						</div>
+					</template>
+					<c-psc-revision-history show-history={showContent}></c-psc-revision-history>
+				</div>
+			</div>
+		</div>
+	</template>
+	
+</template>

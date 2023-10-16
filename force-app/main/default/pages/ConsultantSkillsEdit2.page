@@ -1,0 +1,215 @@
+<apex:page showHeader="true" standardStylesheets="false" standardController="Contact" extensions="ConsultantSkillsExtension_VG2">
+    <apex:includeScript value="{!URLFOR($Resource.Skills_JQuery_192, '/js/jquery-1.8.3.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.Skils_BootStrap, '/js/bootstrap.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.Skils_BootStrap, '/css/bootstrap.css')}"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Skills App"/>
+
+    
+    <script type="text/javascript">
+    $(document).ready(function() {
+                                  $(".icon-list").click(function(e) {
+                                                                    x = $(this).attr('data-target');
+                                                                    $('#'+x).toggle('fast');
+                                  });
+            
+                                  $(".scheduleLineRow").show('fast');                           
+                                  y=$(".icon-list").attr('data-target');
+                                  $('#'+y).toggle('fast');
+                                  $(".scheduleLineRow").show('fast');                               
+                                 });
+    </script>
+    
+    <c:skillsappstyle_VG />
+    
+    
+    <a id="top"></a>
+    <!-- TABS and CONTENT -->
+    <div style="width=400px;"> </div>
+    
+ <!-- ************************* JS FUNCTION TO COMPUTE CATEGORY AVERAGE **************************** -->   
+     <script type="text/javascript">
+                  function computeCategoryAverage(CatScore) {
+                      return CatScore / 20;
+                   }
+     </script>
+
+ 
+ 
+ 
+ <!-- ************************* JS FUNCTION TO VALIDATE RATING VALUES ****************************** -->
+     <script type="text/javascript">
+                  function validateRating(theSkillName, oldRating, rating, myID) {
+                      if(oldRating != rating) {
+                                          var filter = /[0-5]/;
+                                          var realID = "#" + myID;
+                                          if(filter.test(rating)== false)    
+                                          {
+                                           $("#myErrorModal").show();
+                                           $(realID).focus();
+                                           return true;
+                                          } 
+                                          else {
+                                                 <!--showModal(); Disabling this for the demo-->
+                                                 $("#myModal").focus();
+                                                 saveMyEdits(myID, rating); 
+                                               }
+                       }
+                       return false;
+                   }
+     </script>
+
+
+    <script type="text/javascript">
+                  function showModal(){
+                  $("#myModal").show();
+                  }
+    </script>
+
+    <script type="text/javascript">
+                  function hideModal(){
+                  $("#myModal").hide();
+                  }
+    </script>
+
+     
+
+ <!-- ************************* JS FUNCTION TO SAVE RATING VALUES ****************************** -->
+     <apex:form >
+                             <apex:actionFunction name="saveMyEdits" action="{!updateSelfRating}"  onComplete="hideModal();" rerender="Self_Average" immediate="true">
+                            <apex:param id="theId" name="theID" value=""/>
+                            <apex:param id="theRating" name="theRating" value=""/>
+                        </apex:actionFunction>
+  
+       </apex:form>
+     
+
+ 
+
+     <c:SkillsAppModal_VG2 ></c:SkillsAppModal_VG2>
+     <c:SkillsAppErrorModal_VG ></c:SkillsAppErrorModal_VG>
+   
+     
+    <br/>
+    
+    
+    
+    
+    <div class="container-fluid" style="margin-top:0px;">
+        <div class="row-fluid">
+            <div class="span10" style="border:none;box-shadow:none;">            
+        </div>
+    
+        <!-- **** Page Title and Column Headers **** -->    
+        <div class="span12 nwell" style="margin-left:0px;margin-top:0px;padding:5px;min-height:280px;">
+          <div class="span10" style="min-width=20000px;margin-left:0px;margin-top:10px;padding:0px;min-height:30px;">
+              <div class="nTitle" style="background-image: linear-gradient(rgb(240, 240, 240) 0%, rgb(240, 240, 240) 100%);
+                                         background-color: rgb(108, 108, 108);
+                                         margin-bottom:10px;font-size: 20px 
+                                         !important;
+                                         color:black;">
+                                         {!contact.name}
+              </div>
+          </div>
+          
+          <!-- ************** The Rating Legend ***************************************************-->
+         <div class="span10" style="min-width=20000px;margin-left:0px;margin-top:18px;padding:10px;min-height:30px;">
+             <div class="nTitle" style="margin-bottom:10px;">Skill Ratings</div>
+             <div style="margin-bottom:7px;font-family:verdana;font size:0;"><b>Legend : </b>&nbsp;&nbsp;&nbsp;&nbsp;
+                 0 - No Experience&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 1 - Basic Knowledge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 2 - Novice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 3 - Limited Experience&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 4 - Proficient&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 5 - Expert
+             </div>
+         </div>
+
+        <!-- ************************* THE BUTTONS ****************************** -->
+         <!-- **** Return to Main Page Button **** -->
+         <div class="span1" style="min-width=2000px;margin-left:0px;margin-top:18px;padding:10px;min-height:30px;">
+             <apex:form >
+                 <apex:commandButton action="{!cancel}" style="margin-left:0px;margin-right:auto;" value="    Return to Main Page    " id="theReturnButton"/>
+             </apex:form>
+         </div>
+ 
+       <!-- ************************* RATINGS TABLE ****************************** -->
+        <!-- **** Ratings Table **** -->    
+        <div class="row-fluid" />
+        <apex:repeat value="{!categories}" var="cat">
+            <div class="row-fluid">
+                <div class="span12 sectionFill">
+                    <table class="table table-condensed" width="100%" cellspacing="2" cellpadding="2" style="border-radius:5px;overflow:hidden;">
+                        <thead class="nTHead" style="background-image: linear-gradient(rgb(180,180, 180) 0%, rgb(100, 100, 100) 100%);">
+                            <th style="width:20%">{!cat.Skill_Category__c}</th>
+                            <th style="width:34%">Skill Type</th>
+                            <th style="width:22%">Overall Rating (Self)</th>
+                            <th style="width:22%">Overall Rating (Manager)</th>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!skills.typeMap[cat.Skill_Category__c]}" var="typeName">
+                                <tr>
+                                    <td><icon data-target="{!skills.typeIds[cat.Skill_Category__c][typeName]}" class="icon-list"/></td>
+                                    <td>{!typeName}</td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText id="Self_Average"
+                                         value="{!AverageScores[cat.Skill_Category__c][typeName]}"/></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText value="{!AverageScoresMgr[cat.Skill_Category__c][typeName]}"/></td>
+                                </tr>
+                                <tr id="{!skills.typeIds[cat.Skill_Category__c][typeName]}" class="scheduleLineRow">
+                                    <td colspan="9">
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:50%">Skill</th>
+                                                    <th style="width:20%">Self Rating</th>
+                                                    <th style="width:20%">Manager Rating</th> 
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!skills.hierarchy[cat.Skill_Category__c][typeName]}" var="skillName">
+                                                    <tr style="line-height: 16px;max-height:16px">
+                                                        <td  style="padding-left:8px;padding-top:8px;max-height:12px">{!skillName}</td> 
+                                                        <td  style="padding-top:8px;max-height:12px">
+                                                                <!-- have to use HTML element here as VF component doesnt allow setting dynamic ID values -->
+                                                                &nbsp;&nbsp;&nbsp;<input font-height="10px;" 
+                                                                                         height="12px;" 
+                                                                                         id="{!skills.skillIds[cat.Skill_Category__c][typeName][skillName]}" 
+                                                                                         onblur="validateRating('{!skillName}', '{!skillSelfRating[skills.skillIds[cat.Skill_Category__c][typeName][skillName]]}',value, id)" 
+                                                                                         type="number" 
+                                                                                         max="5" 
+                                                                                         min="0" 
+                                                                                         style="padding-bottom:0px;padding-top:0px;text-align:center;font-size:12px;max-height:18px;width:32px;" 
+                                                                                         required="true" 
+                                                                                         value="{!skillSelfRating[skills.skillIds[cat.Skill_Category__c][typeName][skillName]]}"/>
+                                                        </td>
+                                                        <td  style="padding-top:8px;max-height:12px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!skillManagerRating[skills.skillIds[cat.Skill_Category__c][typeName][skillName]]}</td>                           
+                                                    </tr>
+                                                </apex:repeat>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td colspan="9">
+                                    </td>
+                                </tr>    
+                            </apex:repeat>                
+                        </tbody>
+                    </table>
+                </div>         
+            </div>            
+        </apex:repeat>
+        </div>
+    </div>
+     
+     
+    <!-- ************************* THE BUTTONS ****************************** -->
+    <div class="span7" style="margin-left:0px;margin-top:18px;padding:10px;min-height:30px;"/>     
+             <div class="span1" style="margin-left:0px;margin-right:18px;margin-top:18px;padding:10px;min-height:30px;">
+                 <apex:form >
+                         <apex:commandButton action="{!cancel}" style="margin-left:0px;margin-right:60px;" value=" Return to Main Page " id="theReturnButton2"/>                 
+                 </apex:form>  
+             </div>
+     </div>
+     
+     
+ </apex:page>

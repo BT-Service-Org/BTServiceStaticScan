@@ -1,0 +1,22 @@
+.copy_url {
+    cursor: pointer;
+}
+
+.slds-popover_tooltip {
+    width: max-content;
+    max-width: var(--slds-c-tooltip-sizing-max-width, var(--sds-c-tooltip-sizing-max-width, var(--lwc-sizeMedium,20rem)));
+    background-color: #0070D2;
+    border: 0;
+    position: absolute;
+    top: -56px;
+    right: -26px;
+    margin-top: 10px;
+    visibility: hidden;
+
+}
+.slds-popover__body {
+    padding: 0px 8px;
+}
+.copy_url:hover .slds-popover_tooltip{
+visibility:visible;
+}

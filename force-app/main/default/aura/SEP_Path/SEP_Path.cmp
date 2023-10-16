@@ -1,0 +1,48 @@
+<aura:component >
+
+	<!--Attributes-->
+    <aura:attribute name="data" type="Object[]" access="public"/>
+    <aura:attribute name="batch" type="Object" access="public"/>
+    <aura:attribute name="selectedItemId" type="String" access="public"/>
+    <aura:attribute name="completed" type="Boolean" access="public"/>
+    <aura:attribute name="onSelect" type="Aura.Action" access="public"/>
+
+    <!--Value Change Listeners-->
+    <aura:handler name="change" value="{!v.selectedItemId}" action="{!c.doInit}"/>
+
+    <!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-path slds-p-top_xx-small">
+		<div class="slds-grid slds-path__track slds-has-overflow">
+			<div class="slds-grid slds-path__scroller-container">
+				<div class="slds-path__scroller" role="application">
+					<div class="slds-path__scroller_inner">
+						<ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+							<aura:iteration items="{!v.batch.list}" var="item">
+								<li class="{!'slds-path__item '+if(equals(item.id,v.selectedItemId),'path-current',if(item._inapplicable,'path-inapplicable',if(item._completed,'path-complete',if(item._partial,'path-partial','path-default'))))}" role="presentation">
+									<span aria-selected="true" class="slds-path__link" href="javascript:void(0);" role="option" data-selectedItemId="{!item.id}" onclick="{!v.onSelect}">
+										<span class="slds-path__stage">
+											<lightning:icon iconName="utility:check" size="small"/>
+					                  	</span>
+										<span class="slds-path__title">{!item.name}</span>
+									</span>
+								</li>
+							</aura:iteration>
+						</ul>
+						<div class="slds-path__scroll-controls">
+			              	<button class="slds-button slds-button_icon slds-button_icon-border-filled" disabled="{!!v.batch._previous}" onclick="{!c.previousBatch}">
+			              		<lightning:icon iconName="utility:left" size="small"/>
+			              	</button>
+			              	<button class="slds-button slds-button_icon slds-button_icon-border-filled" disabled="{!!v.batch._next}" onclick="{!c.nextBatch}">
+			                	<lightning:icon iconName="utility:right" size="small"/>
+			              	</button>
+			            </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

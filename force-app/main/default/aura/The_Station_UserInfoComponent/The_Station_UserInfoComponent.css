@@ -1,0 +1,22 @@
+.THIS {
+    background-color: #f8f8f8;
+}
+
+.THIS .img{
+    border-radius: 50%;
+    width : 150px;
+}
+
+
+
+.THIS .BlueColumn{
+    color: #0070D2;
+    font-size: token(textSize);
+    font-weight: token(divFontWeight);
+}
+
+.THIS .GreyColumn{
+    color: token(blueGrey);
+    font-size: token(textSize);
+    font-weight: token(divFontWeight);
+}

@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-box slds-theme_warning slds-theme_alert-texture slds-m-vertical_medium">
+        This feature is not currently functional.  It is on the roadmap and will be completed prior to Solution Finder being generally available.
+    </div>
+    <div class="slds-grid header-row">
+        <div class="slds-col slds-size_1-of-12 slds-p-around_x-small">
+            &nbsp;
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-p-around_x-small">
+            Label
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-p-around_x-small">
+            Data Type
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-p-around_x-small">
+            Default Value
+        </div>
+        <div class="slds-col slds-size_1-of-12 slds-p-around_x-small">
+            &nbsp;
+        </div>
+    </div>
+    <template for:each={updatedProperties} for:item="property">
+        <div key={property.name}>
+            <c-solution-finder-property property={property} default={property.defaultValue}
+                ondelete={handlePropertyDelete} onchange={handlePropertyChange}></c-solution-finder-property>
+        </div>
+    </template>
+    <div class="slds-p-around_small">
+        <lightning-button-icon icon-name="utility:add" onclick={handleAddRowClick}></lightning-button-icon>
+    </div>
+</template>

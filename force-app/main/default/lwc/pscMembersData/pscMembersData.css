@@ -1,0 +1,82 @@
+.spinner-container {
+    margin-top: 16px;
+}
+
+.display-members-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 20px;
+}
+
+.member-card {
+    
+    border-radius: 8px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+    background-color: white;
+    padding: 10px 18px;
+    margin-right: 25px;
+    width: 30%;
+    max-height: 175px;
+    min-height: 160px;
+    justify-content: space-around;
+}
+
+.member-card  > div {
+    margin-top: 15px;
+}
+
+.member-name {
+    color: #032D60;
+}
+
+.community_role {
+    font-weight: 600;
+}
+
+.community_title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.member-details {
+    overflow: overlay;
+}
+
+.img-container {
+    max-width: 80px;
+}
+
+.member-image {
+    width: 70px;
+    border-radius: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+
+
+@media screen and (max-width:900px) {
+   
+    .member-card {
+        width: 45%;
+        max-height: 175px;
+    min-height: 120px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .display-members-section {
+        flex-direction: column;
+    }
+    .member-card {
+        width: 100%;
+        max-height: 175px;
+        min-height: 115px;
+    }
+}

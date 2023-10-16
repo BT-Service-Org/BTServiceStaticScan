@@ -1,0 +1,176 @@
+<aura:component access="global">
+
+    <aura:attribute name="contentpiece" type="StationContentWrapper" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />
+    <aura:attribute name="buttonMenuTheme" type="String" />
+
+
+    <aura:attribute name="showDownload" type="boolean" default="true"/>
+    <aura:attribute name="showViewContent" type="boolean" default="true"/>
+    <aura:attribute name="showOrg62Details" type="boolean" default="true"/>
+    <aura:attribute name="showAdditionalLink" type="boolean" default="true"/>
+    <aura:attribute name="showViewLink" type="boolean" default="true"/>
+
+    <div>
+        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Content Version'}">
+            <aura:if isTrue="{!or(or(or(v.contentpiece.contentPiece.FileType__c == 'PDF', v.contentpiece.contentPiece.FileType__c == 'WORD'), or(v.contentpiece.contentPiece.FileType__c == 'WORD_X', v.contentpiece.contentPiece.FileType__c == 'EXCEL_X')), v.contentpiece.contentPiece.FileType__c == 'POWER_POINT_X')}">
+                <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                    aura:id="enabled-button" 
+                    class="slds-button buttonTheme-light1">
+                    <a href="{!'https://org62.lightning.force.com/'+v.contentpiece.contentPiece.ContentDocumentId__c}" 
+                        target="_blank" 
+                        onclick="{!c.onContentDetailsClick}" 
+                        name="{!v.contentpiece.content.Id}">
+                        View Content
+                    </a>
+                </button>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.contentpiece.contentPiece.ContentUrl__c != null}">
+                        <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                            aura:id="enabled-button" 
+                            class="slds-button buttonTheme-light1">
+                            <a href="{!v.contentpiece.contentPiece.ContentUrl__c}" 
+                                target="_blank" 
+                                onclick="{!c.onContentDetailsClick}" 
+                                name="{!v.contentpiece.content.Id}">View Content
+                            </a>
+                        </button>
+                        <aura:set attribute="else">
+                            <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                                aura:id="enabled-button" 
+                                class="slds-button buttonTheme-light1">
+                                <a href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+v.contentpiece.contentPiece.ExternalId+'&amp;operationContext=S1'}" 
+                                    target="_blank" 
+                                    onclick="{!c.onViewDocument}" 
+                                    name="{!v.contentpiece.content.Id}">View Content
+                                </a>
+                            </button>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+            <!-- Org62 Details -->
+            <aura:if isTrue="{!v.contentpiece.contentPiece.ContentDocumentId__c != null}">
+                <button style="float:left;margin-right:6px;margin-bottom:6px;" 
+                        aura:id="enabled-button" 
+                        class="slds-button buttonTheme-light1">
+                        <a href="{!'https://org62.lightning.force.com/'+v.contentpiece.contentPiece.ContentDocumentId__c}" 
+                        target="_blank" 
+                        onclick="{!c.onContentDetailsClick}" 
+                        name="{!v.contentpiece.content.Id}">Org62 Details
+                    </a>
+                </button>
+                <aura:set attribute="else">
+                    <button style="float:left;margin-right:6px;" 
+                        aura:id="disabled-button" 
+                        class="slds-button buttonTheme-light1-disabled" 
+                        variant="neutral" 
+                        disabled="true">Org62 Details
+                    </button>
+                </aura:set>
+            </aura:if>
+            <div style="clear:both;"></div>
+        </aura:if>
+        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Success Program'}">
+        <!--no buttons-->
+        </aura:if>
+        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Trailhead'}">
+        <!--TBD-->
+        </aura:if>
+        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'URL'}">
+            <aura:if isTrue="{!v.contentpiece.content.Additional_URL_Link__c}">
+                <div>
+                    <!--Additional Link-->
+                    <aura:if isTrue="{!v.contentpiece.content.Additional_URL_Button_Title__c}">
+                        <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                            aura:id="enabled-button" 
+                            class="slds-button buttonTheme-light1">
+                            <a href="{!v.contentpiece.content.Additional_URL_Link__c}" 
+                                target="_blank" 
+                                onclick="{!c.onAdditionalLinkClick}" 
+                                name="{!v.contentpiece.content.Id}">{!v.contentpiece.content.Additional_URL_Button_Title__c}
+                            </a>
+                        </button>
+                        <aura:set attribute="else">
+                            <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                                aura:id="enabled-button" 
+                                class="slds-button buttonTheme-light1">
+                                <a href="{!v.contentpiece.content.Additional_URL_Link__c}" 
+                                    target="_blank" 
+                                    onclick="{!c.onAdditionalLinkClick}" 
+                                    name="{!v.contentpiece.content.Id}">Additional Link
+                                </a>
+                            </button>
+                        </aura:set>
+                    </aura:if>
+                    <!--View Link-->
+                    <aura:if isTrue="{!v.contentpiece.content.Content_URL__c != null}">
+                        <button aura:id="enabled-button" 
+                            class="slds-button buttonTheme-light1">
+                            <a href="{!v.contentpiece.content.Content_URL__c}" 
+                                target="_blank" 
+                                onclick="{!c.onViewDocument}" 
+                                name="{!v.contentpiece.content.Id}">View Link
+                            </a>
+                        </button>
+                        <aura:set attribute="else">
+                            <button aura:id="disabled-button" 
+                                class="slds-button buttonTheme-light1-disabled" 
+                                disabled="true">View Link
+                            </button>
+                        </aura:set>
+                    </aura:if>
+                    <div style="clear:both;"></div>
+                </div>
+                <aura:set attribute="else">
+                    <div>
+                        <aura:if isTrue="{!v.contentpiece.content.Content_URL__c != null}">
+                        <button aura:id="enabled-button" 
+                            class="slds-button buttonTheme-light1" 
+                            style="clear:left;float:left;margin-right:6px;margin-bottom:6px;">
+                            <a href="{!v.contentpiece.content.Content_URL__c}" 
+                                target="_blank" 
+                                onclick="{!c.onViewDocument}" 
+                                name="{!v.contentpiece.content.Id}">View Link
+                            </a>
+                        </button>
+                        <aura:set attribute="else">
+                            <button aura:id="disabled-button" 
+                                class="slds-button buttonTheme-light1-disabled"
+                                style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                                disabled="true">View Link
+                            </button>
+                        </aura:set>
+                    </aura:if>
+                    <div style="clear:both;"></div>
+                    </div>
+                </aura:set>
+                </aura:if>
+        </aura:if>
+        <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'App Exchange'}">
+            <div>
+                <!--View Link-->
+                <aura:if isTrue="{!v.contentpiece.content.Content_URL__c != null}">
+                    <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                        aura:id="enabled-button" 
+                        class="slds-button buttonTheme-light1">
+                        <a href="{!v.contentpiece.content.Content_URL__c}" 
+                            target="_blank" 
+                            onclick="{!c.onViewDocument}" 
+                            name="{!v.contentpiece.content.Id}">View Link
+                        </a>
+                    </button>
+                    <aura:set attribute="else">
+                        <button style="clear:left;float:left;margin-right:6px;margin-bottom:6px;" 
+                            aura:id="disabled-button" 
+                            class="slds-button buttonTheme-light1-disabled" 
+                            disabled="true">View Link
+                        </button>
+                    </aura:set>
+                </aura:if>
+                <div style="clear:both;"></div>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

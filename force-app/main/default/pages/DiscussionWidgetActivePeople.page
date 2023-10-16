@@ -1,0 +1,86 @@
+<apex:page controller="DiscussionWidgetActivePeopleController">
+	<style>
+	
+		div.box_round_blue.no_subtitle .content_image {
+			float: left;
+			margin-right: 3px;
+		}	
+		
+		div.box_round_blue.no_subtitle .content_image img{
+			margin-top: 2px;
+		}
+		
+		div.box_round_blue.no_subtitle .info {
+			float: left;
+			width: 141px;
+		}
+		
+		div.box_round_blue.no_subtitle .info .post {
+			color: #999;
+			font-size: 10px;
+		}
+		
+		div.box_round_blue.no_subtitle .sideBarItemLeft {
+			float: left;
+			width: 180px;
+			margin-bottom: 5px;
+		}
+		
+		div.no_subtitle div.header div div h3 {
+		padding: 5px 5px 0px 13px!important;
+		}	
+		
+		div.no_subtitle div.header div div, div.no_subtitle div.header div, div.no_subtitle div.header {
+			height: 23px!important;
+		}
+	
+	</style>
+	
+	
+	 <div class="box_round_blue no_subtitle">
+		<div class="header"  >
+			<div>
+				<div>
+					<h3>Most Active People</h3>					
+				</div>
+			</div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div id="mostActivePeople" class="box_content">
+			<div class="contentHolder">
+			
+			<!-- Item -->
+			<apex:repeat value="{!ActivePeople}" var="Actives" >
+			<div class="sideBarItemLeft">
+				<apex:outputpanel rendered="{!IF(Actives.Picture == '',true,false)}">
+					<div class="content_image">
+						<div class="photoWrapper_32px">
+							<a href="/apex/PeopleProfileDisplay?id={!Actives.UserId}"><img alt="{!Actives.Name}" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32"></a>
+						</div>
+					</div>
+				</apex:outputpanel>
+				 
+				<apex:outputpanel rendered="{!IF(Actives.Picture == '',false,true)}">
+					<div class="content_image">
+							<div class="photoWrapper_32px">
+								<a href="/apex/PeopleProfileDisplay?id={!Actives.UserId}"><img alt="{!Actives.Name}" src="/servlet/servlet.FileDownload?file={!Actives.Picture}" width="32"></a>
+							</div>
+					</div>
+				</apex:outputpanel>
+				
+				<div class="info" >
+					<a href="/apex/PeopleProfileDisplay?id={!Actives.UserId}">{!Actives.Name}</a><br/>
+					<a class="post" href="/apex/DiscussionDetail?id={!Actives.Id}">{!Actives.Subject}</a>
+				</div>
+			</div>
+			</apex:repeat>
+			<apex:outputpanel rendered="{!IF(ActivePeopleSizeList == 0,true,false)}">
+				<div style="margin: 15px 0px 15px 15px">
+					 There are no active people.
+				</div>
+			</apex:outputpanel>
+			</div>
+		</div>
+		<div class="bottom_borders"><div><div></div></div></div>
+	</div>
+</apex:page>

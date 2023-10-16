@@ -1,0 +1,16 @@
+<!-- DO NOT MODIFY THIS TEMPLATE
+  	 COPY/PASTE INTO YOUR COMPONENT
+-->
+
+<design:component  label="TheStation: PAGE HERO"> <!-- REPLACE WITH DESIGNATED COMPONENT NAME -->
+    <design:attribute name="contentGroupId" label="Content Id" default="" required="true" placeholder="Station Page ID"/>
+     
+    <!-- EXAMPLES
+    <design:attribute name="contentAlignment" label="First Content Alignment" datasource="Left,Right" default="Left" description="Sets image alignment of first item, others alternate"/>
+    <design:attribute name="numColumns" label="Number of Columns" datasource="1, 2, 3" default="2"/>
+	-->
+</design:component>
+
+<!-- DO NOT MODIFY THIS TEMPLATE
+  	 COPY/PASTE INTO YOUR COMPONENT
+-->

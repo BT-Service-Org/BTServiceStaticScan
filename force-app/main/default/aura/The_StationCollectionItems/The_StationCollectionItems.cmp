@@ -1,0 +1,166 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="The_Station_CollectionContentController" access="global">
+    <!-- <aura:attribute name="gridName" type="String" default="My Collection"/>
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'Most Popular', 'value': 'mostPopular'},
+        {'label': 'Last Updated', 'value': 'lastUpdated'},
+    ]"/> -->
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    <aura:attribute name="groupList" type="List" default="[]"/>
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="originUrl" type="String" default="blank" />
+    <aura:attribute name="typeTile" type="Boolean" default="true" />
+    <aura:attribute name="editMode" type="Boolean" default="false" />
+    <aura:attribute name="contentNull" type="Boolean" default="false" />
+    <aura:attribute name="contentOwner" type="String" default="blank" />
+    <aura:attribute name="collectionNumber" type="Integer" default="0" />
+    <aura:attribute name="selectedSort" type="String" default="Last" />
+
+    <!-- Pagination -->
+    <aura:attribute name="limitPerPage" type="Integer" default="12"/>
+    <aura:attribute name="offset" type="Integer" default="0"/>
+    <aura:attribute name="pagesArray" type="List" default="[]"/>
+    <aura:attribute name="curpage" type="String" default="1"/>
+    <aura:attribute name="totalRecords" type="Integer" default="0"/>
+
+    <!-- added by Ryan-->
+    <aura:attribute name="showCollectionFilterTitle" type="boolean" default="true"/>    
+
+    <aura:attribute name="collectionFilterTitle" type="String" default="Collection Content"/>    
+    <aura:attribute name="totalResults" type="Integer" default="0"/>
+    <aura:attribute name="showSort" type="boolean" default="true"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="searchTermValue" type="String" default=""/>
+    <aura:attribute name="selectedValue" type="String" default="Red"/>
+    <aura:attribute name="issearching" type="Boolean" default="false"/>
+    <aura:attribute name="showCollectionSearch" type="boolean" default="true"/>    
+    <!-- end -->
+    <aura:handler event="c:The_Station_CollectionModeEvent" action="{!c.handleModeEvent}"/>
+    <aura:handler name="change" value="{!v.selectedSort}" action="{!c.handleChange}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:The_Station_CollectionDeleteEvent" action="{!c.handleDeleteEvent}"/>
+
+<!-- Code for Search & Sort -->
+<div>
+    <br/>
+</div>
+<div class="collection-grid-container">
+    <div class="slds-grid">            
+        <h3 class="slds-col slds-size_1-of-2">
+            <aura:if isTrue="{!v.showCollectionFilterTitle}">
+                <span class="collection-name">{!v.collectionFilterTitle}</span>
+                <aura:set attribute="else">
+                    <span class="results-total">{!v.searchTermValue} ({! v.totalResults } Results)</span>
+                </aura:set>
+            </aura:if>
+            
+        </h3>
+
+        <div class="slds-col slds-size_1-of-2 actions">
+            <aura:if isTrue="{!v.showSort}">
+                <lightning:combobox 
+                    class="slds-size_1-of-2 sort-action" 
+                    label="Sort" 
+                    aura:id="collectionSort" 
+                    name="collectionSort" 
+                    value="{!v.selectedValue}" 
+                    placeholder="Select filter" 
+                    options="{!v.options}"
+                    onchange="{!c.doSort}" 
+                    variant="label-hidden"/>
+            </aura:if>  
+            <aura:if isTrue="{!v.showCollectionSearch}">                
+                <div class="search-action-container" onkeyup="{! c.handleKeyUp }" onchange="{!c.onchangeSearch}" >
+                    <lightning:input
+                        class="slds-size_1-of-2 search-action" 
+                        aura:id="enter-search"
+                        name="enter-search"
+                        label="Search"
+                        isLoading="{! v.issearching }"
+                        type="search"
+                        placeholder="Search collection" 
+                        variant="label-hidden"
+                    />
+                </div>                    
+            </aura:if>              
+        </div>
+    </div>
+</div> 
+<!-- end -->
+
+
+    <div style="margin-top:10px; width:fit-content; float:left; position:absolute;">
+    <lightning:buttonIcon iconName="utility:apps" variant="{!v.typeTile ? 'brand' : 'border-filled'}" alternativeText="Tile" title="Tile" onclick="{! c.OnchangeView }"/>
+    <lightning:buttonIcon iconName="utility:picklist_type" variant="{!v.typeTile ? 'border-filled' : 'brand'}" alternativeText="List" title="List" onclick="{! c.OnchangeView }"/>
+    </div>
+
+    <aura:if isTrue="{!and(v.pagesArray.length > 1, v.typeTile, or(empty(v.searchTermValue),v.searchTermValue=='All Records'))  }">
+                <div class="slds-grid slds-wrap slds-gutters" style="position:absolute; left:89%;margin-top:10px;">
+                <div aura:id="pagingWrap"
+                class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                <lightning:radioGroup
+                    type="button"
+                    aura:id="pager"
+                    name="pager1"
+                    label=""
+                    options="{! v.pagesArray }"
+                    onchange="{!c.doPaging}"
+                    value="{!v.curpage}"
+                    />        
+                </div>
+                </div>
+            </aura:if>
+
+    <aura:if isTrue="{!and(not(v.editMode),v.contentNull)}">
+    
+        <div class="center">
+            <p> No Content in this Collection. </p>
+            <p> To add content, click on ‘Add Content/Edit’ or click the ‘+’ button on a piece of content.</p>
+        </div>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.typeTile}">
+                <div class="collection-container">
+                    <div class="collection-info">
+                    </div>
+                    <div class="slds-grid slds-gutters slds-wrap collection-items" style="position:relative; top:40px;">
+                        <div class="{!v.editMode?'slds-col slds-size_1-of-3 slds-show':'slds-hide'}">
+                            <article class="add-collection-item slds-align_absolute-center">
+                                <!-- <lightning:buttonIcon iconName="utility:add" variant="bare" size="large" alternativeText="Add" title="Add" onclick="{! c.handleAddContent }"/> -->
+                                <lightning:buttonIcon class="slds-size_large addButton" iconName="utility:add" variant="bare" size="large" alternativeText="Add" title="Add" onclick="{! c.handleAddContent }"/>
+                            </article>
+                        </div>
+                        <aura:iteration var="section" items="{!v.groupList}" indexVar="index">
+
+                            <div class="slds-col slds-size_1-of-3">
+                                <c:The_Station_CollectionItem section="{!section}" runningUser="{!v.runningUser}" originUrl="{!v.originUrl}" recordId="{!v.recordId}" editMode="{!v.editMode}"></c:The_Station_CollectionItem>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </div>
+            <aura:if isTrue="{!and(v.pagesArray.length > 1, or(empty(v.searchTermValue),v.searchTermValue=='All Records'))  }">
+                <div class="slds-grid slds-wrap slds-gutters" style="float:right; margin-top:40px; margin-bottom:10px;">
+                <div aura:id="pagingWrap"
+                class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                <lightning:radioGroup
+                    type="button"
+                    aura:id="pager"
+                    name="pager"
+                    label=""
+                    options="{! v.pagesArray }"
+                    onchange="{!c.doPaging}"
+                    value="{!v.curpage}"
+                    />        
+                </div>
+                </div>
+            </aura:if>
+
+                <aura:set attribute="else">
+                    <div style="margin-top:50px;">
+                    <c:StationSPRecord contentLink1="{!v.recordId}" showTitle="false" />
+                    </div>
+                </aura:set>
+
+            </aura:if>
+        </aura:set>
+</aura:if>
+</aura:component>

@@ -1,0 +1,8 @@
+<template>
+    <div class="progress-ring-container">
+        <lightning-progress-ring value={percentage} size={size} variant="base-autocomplete"></lightning-progress-ring>
+        <template lwc:if={shouldDisplayPercentage}>
+            <div class="progress-ring-percentage">{percentage}%</div>
+        </template>
+    </div>
+</template>

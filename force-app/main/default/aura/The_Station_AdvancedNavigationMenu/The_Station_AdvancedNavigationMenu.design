@@ -1,0 +1,7 @@
+<design:component>
+    <design:attribute name="mainMenu" label="Main menu" description="Developer name of the main navigation menu" />
+    <design:attribute name="childMenus" label="Child menus"
+        description="Developer  names of the childs menus separated by ','" />
+    <design:attribute name="alignment" label="Alignment" datasource="Left,Center,Right"
+        description="Alignment of the main menu elements" />
+</design:component>

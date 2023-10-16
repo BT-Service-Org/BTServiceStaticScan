@@ -1,0 +1,13 @@
+.THIS .slds-button_icon-border-filled {
+    width: var(--buttonHeight);
+    height: var(--buttonHeight);
+    border-width: 2px;
+    /*background-color: transparent;*/
+}
+
+.THIS .slds-button_icon-border {
+    width: var(--buttonHeight);
+    height: var(--buttonHeight);
+    border-width: 2px;
+    /*background-color: transparent;*/
+}

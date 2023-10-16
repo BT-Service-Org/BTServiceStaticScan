@@ -1,0 +1,239 @@
+<apex:component controller="TeamsWidgetWikiDirectoryController" id="TeamsWidgetWikiDirectory" >
+	
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a widget	
+	-->
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+
+	<!-- ### Styles ### -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsWidgetWikiDirectory.css')}" />		
+
+	<!-- ### Javascript ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>	
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetWikiDirectory.js')}"></script>		
+	
+	<!--### Rerender Method ###-->
+	<apex:form >
+		<apex:actionFunction name="reloadWikiList" action="{!refresh}"
+       		rerender="wikiRight,theFeeds" />
+    </apex:form>
+
+	<!-- Swirly Style -->
+	<style>
+	.swirly_wiki
+		{
+			background: #FFFFFF url({!URLFOR($Resource.TeamsResources, 'images/layout/small_loader.gif')}) no-repeat center center;
+			left: 0pt;
+			opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			z-index: 9999;
+		}
+	</style>
+	
+	<!-- Swirly Function -->
+	<script> 
+		
+		function showSwirly(elemClass)
+		{
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+			divLoaders.each(function(elem) {
+				var div = elem.ancestors()[0];
+				elem.style.height = div.getHeight()+'px';
+				Effect.Appear(elem, { duration: 0.1, to: 0.8 });
+			});
+		}
+		
+		function hideSwirly(elemClass){
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+				divLoaders.each(function(elem) {
+				Effect.Fade(elem);
+			});
+		}
+	</script>
+	
+	<!-- ### Wide Widget ### -->
+	<div class="myBigWidget" style="width: 100%;">
+		<div class="swirly_wiki" style="display: none;"></div>
+		<!-- Widget Title -->
+		<div class="teamBlockTitle">
+			<h4>Wiki Directory</h4>
+		</div>
+		
+		<!-- Links -->
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!userpermissions.canCreate}"><a class="topRightLinks" href="javascript:;" onclick="createOverlay('','AddChildForm','305','');">New</a> |</apex:outputpanel> 
+			<a class="topRightLinks" href="/apex/WikiTeamOverview?tid={!teamId}">Go To Team Wiki&#187;</a>
+		</div>
+		
+		<!-- Widget Container -->
+		<div class="threads">
+			<div>
+				<apex:outputPanel layout="block" id="theFeeds" >
+					<apex:outputPanel layout="block" id="wikiNoScroll" rendered="{!IF(WikiPagesCount > 9, 'false', 'true' )}" >
+						<table class="minifeeds padding" cellpadding="0" cellspacing="0" style="{!IF(WikiPagesCount > 0, '', 'display:none;' )}">
+							<apex:repeat value="{!wikis}" var="wiki">
+								<tr>							
+									<td>
+										<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/wiki_page_white.png')}" />
+									</td>
+									<td>
+										<a href="/apex/WikiPage?idWP={!wiki.wikiPage.Id}" class="weight_bold">
+											<apex:outputText escape="false" value="{!wiki.Name}" />
+										</a>
+									</td>
+									<td width="1%">
+									</td>
+									<td>
+										Last updated by 
+										<a href="/apex/PeopleProfileDisplay?id={!wiki.wikiPage.CreatedBy.Id}" class="weight_bold">
+											<apex:outputText escape="false" value=" {!wiki.CreatedByName} " />
+										</a>
+										at
+										<apex:outputText value="{!wiki.wikiPage.LastModifiedDate} "/>
+									</td>
+								</tr>					 
+							</apex:repeat>
+						</table>
+						<div class="center" style="{!IF(WikiPagesCount > 0, 'display:none;', '' )}" >
+							<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/wiki_page_white.png')}" />
+							No Wiki Pages.
+							<br>
+							<apex:outputpanel rendered="{!userpermissions.canCreate}">
+								<a class="weight_bold" href="javascript:;" onclick="createOverlay('','AddChildForm','305','');">Create a new wiki page;</a>
+							</apex:outputpanel>
+						</div>		
+					</apex:outputPanel>
+					<apex:outputPanel layout="block" id="wikiScroll" rendered="{!IF(WikiPagesCount > 9, 'true', 'false' )}" >
+						  <div class="Container2">
+							<div style="position: relative; float: right; width: 50px;">
+								<div style="visibility: visible;" id="Scrollbar-Container2">
+								    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/up_arrow.png')}" class="Scrollbar-Up2">
+								    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/down_arrow.png')}" class="Scrollbar-Down2">
+									<div class="Scrollbar-Track2">
+								    	<img style="top:0px; left:0px; visibility: visible;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/scrollbar_handle.gif')}" class="Scrollbar-Handle2">   
+									</div>
+								</div>
+							</div>  
+					  		<div style="clear: both;"></div>
+					  		<div id="Scroller-2">
+					  			<div style="left: 0px; top: 0px;" class="Scroller-Container2">
+									<table class="minifeeds padding" cellpadding="0" cellspacing="0" style="{!IF(WikiPagesCount > 0, '', 'display:none;' )}">
+										<apex:repeat value="{!Wikis}" var="wiki">
+											<tr>							
+												<td>
+													<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/wiki_page_white.png')}" />
+												</td>
+												<td>
+													<a href="/apex/WikiPage?idWP={!wiki.wikiPage.Id}" class="weight_bold">
+														<apex:outputText escape="false" value="{!wiki.Name}" />
+													</a>
+												</td>
+												<td width="1%">
+												</td>
+												<td>
+													Last updated by 
+													<a href="/apex/PeopleProfileDisplay?id={!wiki.wikiPage.CreatedBy.Id}" class="weight_bold">
+														<apex:outputText escape="false" value=" {!wiki.CreatedByName} " />
+													</a>
+													at
+													<apex:outputText value="{!wiki.wikiPage.LastModifiedDate} "/>
+												</td>
+											</tr>					 
+										</apex:repeat>
+									</table>
+									<div class="center" style="{!IF(WikiPagesCount > 0, 'display:none;', '' )}" >
+										<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/wiki_page_white.png')}" />
+										No Wiki Pages.
+										<br>
+										<apex:outputpanel rendered="{!userpermissions.canCreate}">
+											<a class="weight_bold" href="javascript:;" onclick="createOverlay('','AddChildForm','305','');">Create a new wiki page;</a>
+										</apex:outputpanel>
+									</div>		
+						    	</div>
+						  	</div>
+						</div>
+					</apex:outputPanel>
+				</apex:outputPanel>
+			</div>
+		</div>
+	</div>
+		
+
+	<!--  ### Small Widget ###  -->
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="swirly_wiki" style="display: none;"></div>
+		<!-- Widget Title -->		
+		<div class="header_blue">
+	    	<div><div><h4>Wiki Directory</h4></div></div>
+	   	</div>
+
+		<!-- Widget Container -->   		
+   		<div class="box_content">
+	    	<div class="back_gray">
+	     		<apex:outputpanel rendered="{!userpermissions.canCreate}"><a href="javascript:;" onclick="createOverlay('','AddChildForm','305','');">New</a> |</apex:outputpanel>
+				<a href="/apex/WikiTeamOverview?tid={!teamId}">Go To Team Wiki&#187;</a>
+	    	</div>
+	    	<apex:outputPanel layout="block" id="wikiRight" >  
+		   		<div class="center" style="{!IF(WikiPagesCount > 0, 'display:none', '' )}" >
+					No Wiki Pages Yet
+				</div> 
+				<apex:outputPanel layout="block" id="wikiScrollSmall1" styleClass="Container" rendered="{!IF(WikiPagesCount > 9, 'true', 'false' )}" >
+					<div style="position: relative; float: right; width: 50px;">
+						<div style="visibility: visible;" id="Scrollbar-Container">
+			    			<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/up_arrow.png')}" class="Scrollbar-Up">
+			    			<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/down_arrow.png')}" class="Scrollbar-Down">
+							<div class="Scrollbar-Track">
+				    			<img style="top: 0px; left: 0px; visibility: visible;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/scrollbar_handle.gif')}" class="Scrollbar-Handle">   
+							</div>
+						</div>
+					</div>  
+					<div style="clear: both;"></div>
+			  		<div id="Scroller-1">
+			  			<div style="left: 0px; top: 0px;" class="Scroller-Container">
+				  			<ul class="minifeed_wikis">
+								<apex:repeat value="{!Wikis}" var="wiki" >
+									<li>							
+									<a href="/apex/WikiPage?idWP={!wiki.wikiPage.Id}" class="weight_bold">
+										<apex:outputText escape="false" value="{!wiki.Name}" />
+									</a>
+									</li>						
+								</apex:repeat>
+							</ul>
+						</div>
+			    	</div>
+				</apex:outputPanel>
+				<apex:outputPanel id="theFeeds2" layout="block"  styleClass="" rendered="{!IF(WikiPagesCount > 9, 'false', 'true' )}" >
+					
+						<ul class="minifeed_wikis">
+							<apex:repeat value="{!Wikis}" var="wiki" >
+								<li>
+								
+								<a href="/apex/WikiPage?idWP={!wiki.wikiPage.Id}" class="weight_bold">
+									<apex:outputText escape="false" value="{!wiki.Name}" />
+								</a>
+								</li>						
+							</apex:repeat> 
+						</ul>
+					
+				</apex:outputPanel>
+			</apex:outputPanel>
+		</div>
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>
+	
+</apex:component>

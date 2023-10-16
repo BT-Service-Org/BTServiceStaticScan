@@ -1,0 +1,20 @@
+<apex:page id="BadgeAssessmentRequestConfirmation"  standardcontroller="Learning_Domain__c" extensions="BadgeAssessmentExtension" showHeader="false">
+    <head>
+   </head>
+    <script>
+<style>
+.requiredInput .requiredBlock, .requiredBlock {background-color: white;}
+.custompubblock div {display: inline-block;}
+.custompublabel {width:54px;}
+</style>    
+    </script>  
+<div>
+<apex:outputPanel id="out" > 
+<div class="custompubblock">
+<div class="custompublabel">Request Completed for {!learningDomain.Name}.</div><br/>
+<div>Judge Assigned:&nbsp;{!judge.Name}</div><br/>
+<apex:outputLink value="{!URLFOR($Action.Case.View, createdCase.Id)}">Link to Case {!createdCase.CaseNumber}</apex:outputLink> 
+</div>
+</apex:outputPanel>
+</div>
+</apex:page>

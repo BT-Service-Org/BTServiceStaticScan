@@ -1,0 +1,102 @@
+<aura:component>
+	
+	<!--Attributes-->
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="question" type="Object" access="public"/>
+	<aura:attribute name="position" type="Integer" access="public"/>
+	<aura:attribute name="level" type="String" access="public"/>
+
+	<aura:attribute name="answer" type="Object" access="private"/>
+	<aura:attribute name="globalAnswer" type="Object" access="private"/>
+
+   	<!--Events-->
+   	<aura:registerEvent name="onAnswerChange" type="c:SEP_AnswerChange"/>
+   	<aura:registerEvent name="showNotes" type="c:SEP_ShowNotes"/>
+
+   	<!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+   	<!--Styles-->
+   	<style>
+   		.current-answer{
+			background: green;
+		    color: floralwhite;
+		}
+		.goal-answer{
+			background: orange;
+		    color: darkslategrey;
+		}
+		.na-answer{
+			background: crimson;
+		    color: white;
+		}
+		.no-answer{
+			background: rgb(236, 235, 234);
+			pointer-events: none;
+		}
+   	</style>
+
+	<!--Content-->
+	<td data-label="{!v.level}" class="{!'slds-cell-wrap slds-text-heading_small '+if(!empty(v.answer.id),if(equals(v.question.response.currentAnswerId,v.answer.id),if(equals(v.question.response.currentAnswerId,'NA'),'na-answer','current-answer'),if(equals(v.question.response.goalAnswerId,v.answer.id),'goal-answer','')),'no-answer')}" onclick="{!if(!v.interview.completed,c.selectAnswer,null)}">
+
+		<aura:if isTrue="{!!empty(v.answer)}">
+
+			<div class="slds-grid slds-grid_align-spread">
+				<div class="{!'slds-col ' + if(equals(v.answer.id,'NA'),'slds-size_1-of-1','')}">
+					<aura:if isTrue="{!!equals(v.answer.id,'NA')}">
+						<aura:unescapedHTML value="{!if(v.interview.options.enableDetailMode,v.answer.value,v.globalAnswer.value)}"/>
+						<aura:set attribute="else">
+							<div class="slds-p-vertical_xx-small slds-grid slds-grid_align-center">
+								<aura:if isTrue="{!!equals(v.question.response.currentAnswerId,v.answer.id)}">
+				        	    	<lightning:buttonIcon iconName="utility:error" size="small" title="Not Applicable"/>
+				        	    	<aura:set attribute="else">
+				            			<lightning:buttonIcon class="naBadge" iconName="utility:error" size="small" 
+				            				variant="inverse" title="Not Applicable"/>
+				            		</aura:set>
+				        	    </aura:if>
+				        	</div>
+						</aura:set>
+					</aura:if>
+				</div>
+				<aura:if isTrue="{!and(!equals(v.answer.id,'NA'),equals(v.question.response.currentAnswerId,v.answer.id))}">
+					<div class="slds-col slds-grow-none slds-grid slds-grid_vertical-align-center">
+						<div class="slds-col">
+			        		<lightning:buttonIcon iconName="utility:note" variant="border-inverse" size="small" 
+			        			title="Notes" onclick="{!c.showNotes}"/>
+			            </div>
+					</div>
+				</aura:if>
+			</div>
+
+			<aura:if isTrue="{!equals(v.question.response.goalAnswerId,v.answer.id)}">
+				<div id="goalDate" class="slds-p-top_x-small" style="cursor:normal;">
+					<span class="slds-text-title_caps"> <b> Goal Date: </b> </span>
+					<lightning:select name="goalDate" value="{!v.question.response.goalDate}" disabled="{!v.interview.completed}">
+						<aura:iteration items="{!v.interview.goalDates}" var="goalDate">
+							<option value="{!goalDate.value}">{!goalDate.label}</option>
+						</aura:iteration>
+				    </lightning:select>
+				</div>
+				<div id="priority" class="slds-p-top_xx-small" style="cursor:normal;">
+					<span class="slds-text-title_caps"> <b> Priority: </b> </span>
+					<lightning:select name="priority" value="{!v.question.response.priority}" disabled="{!v.interview.completed}">
+						<aura:iteration items="{!v.interview.priorities}" var="priority">
+							<option value="{!priority.value}">{!priority.label}</option>
+						</aura:iteration>
+				    </lightning:select>
+				</div>
+				<div id="effort" class="slds-p-top_xx-small" style="cursor:normal;">
+					<span class="slds-text-title_caps"> <b> Effort: </b> </span>
+				    <lightning:select name="effort" value="{!v.question.response.effort}" disabled="{!v.interview.completed}">
+						<aura:iteration items="{!v.interview.efforts}" var="effort">
+							<option value="{!effort.value}">{!effort.label}</option>
+						</aura:iteration>
+				    </lightning:select>
+				</div>
+			</aura:if>
+
+		</aura:if>
+
+	</td>
+
+</aura:component>

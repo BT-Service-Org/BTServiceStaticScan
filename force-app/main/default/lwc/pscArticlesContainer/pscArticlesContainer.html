@@ -1,0 +1,49 @@
+<template>
+        <p slot="title" class="ContainerTitle ITC_font" tabindex="0" aria-label={containerTitle} >
+            {containerTitle}
+        </p>
+        <div class="Container" >
+            
+            <template if:false={records}>
+                <div class="slds-align_absolute-center">
+                    <lightning-spinner></lightning-spinner>
+                </div>
+            </template>
+            <template if:true={records}>
+                    <template for:each={recordsToDisplay} for:item="pscArticle">                 
+                            <div key={pscArticle.Id} class="Articles">
+                                    <div class="article">
+                                        <p slot="title" class="ContainerItemTitle ITC_font">
+                                            <a data-id={pscArticle.recId} href={pscArticle.navigationURL} tabindex="0" aria-describedby={pscArticle.body}> {pscArticle.title} </a>
+                                            <template if:true={pscArticle.bookmarkType}>
+                                                <lightning-badge label={pscArticle.bookmarkType} class="badge-value slds-badge">
+                                                </lightning-badge>
+                                            </template>
+                                        </p>
+                                        <c-psc-favorite record-id={pscArticle.recId} title={pscArticle.title} fav-id={pscArticle.favId} fav-data={showFavorite} 
+                                        fav={pscArticle.fav} onrefreshparent={handleRefresh}></c-psc-favorite>
+                                    </div>
+                                    <div class="slds-grid slds-grid_vertical">
+                                        <div class="slds-col ContainerItemSummary salesforce_font">
+                                          <span><lightning-formatted-rich-text
+                                            value={pscArticle.body}
+                                        ></lightning-formatted-rich-text></span>
+                                        </div>
+                                      </div>
+                            </div>          
+                    </template> 
+            </template>
+            <template if:true={dataNotFound}>
+                <div class="ContainerItemSummary salesforce_font">
+                    {noResultLabel}
+                </div>
+            </template>
+            <template if:true={showFooterFromMeta}>
+                <template if:true={showFooter}>
+                    <div class="viewAll ITC_font" slot="footer">
+                       <a onclick={handlViewAllNavigation} onkeydown={handlViewAllNavigation} tabindex="0">View All <span class="arrow" tabindex="-1" aria-hidden="true">&#8594;</span></a>
+                    </div>
+                </template>
+            </template>
+        </div> 
+</template>

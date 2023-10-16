@@ -1,0 +1,102 @@
+<apex:page controller="SolutionFinderExportController" renderAs="pdf">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+            <tr>
+                <td style="padding-bottom: 10px;">
+                    <div style="font-family: sans-serif; font-size: 14px; color: #909090;">
+                        <apex:repeat value="{!history}" var="path">
+                            {!path.title} >
+                        </apex:repeat>
+                    </div>
+                    <div style="font-family: sans-serif; font-size: 32px; font-weight: bold; color: #009EDB;">{!context.label}</div>
+                    <div style="font-family: sans-serif; font-size: 22px; color: #909090;">{!context.description}</div>
+                    <div style="font-family: sans-serif; font-size: 14px;">{!context.question}</div>
+                </td>
+                <td style="padding-bottom: 10px; padding-left: 20px; text-align: center;">
+                    <img src="{!URLFOR($Resource.SolutionFinderResources, 'SolutionFinderLogo_Transparent.png')}" style='width: 200px;' />
+                </td>
+            </tr>
+            <tr>
+                <td width="65%" style="vertical-align: top">
+                    <apex:repeat value="{!tree.items}" var="item0">
+                        <div style="padding: 10px 0 0 0;">
+                            <div style="font-family: sans-serif; font-size: 11px; font-weight: bold; color: #009EDB;">{!item0.label}</div>
+                            <div style="font-family: sans-serif; font-size: 10px; color: #909090;">{!item0.metatext}</div>
+                            <div style="font-family: sans-serif; font-size: 10px;">{!item0.nextQuestion}</div>
+                        </div>
+                        <apex:repeat value="{!item0.items}" var="item1">
+                            <div style="padding: 10px 0 0 30px;">
+                                <div style="font-family: sans-serif; font-size: 11px; font-weight: bold; color: #009EDB;">{!item1.label}</div>
+                                <div style="font-family: sans-serif; font-size: 10px; color: #909090;">{!item1.metatext}</div>
+                                <div style="font-family: sans-serif; font-size: 10px;">{!item1.nextQuestion}</div>
+                            </div>
+                            <apex:repeat value="{!item1.items}" var="item2">
+                                <div style="padding: 10px 0 0 60px;">
+                                    <div style="font-family: sans-serif; font-size: 11px; font-weight: bold; color: #009EDB;">{!item2.label}</div>
+                                    <div style="font-family: sans-serif; font-size: 10px; color: #909090;">{!item2.metatext}</div>
+                                    <div style="font-family: sans-serif; font-size: 10px;">{!item2.nextQuestion}</div>
+                                </div>
+                                <apex:repeat value="{!item2.items}" var="item3">
+                                    <div style="padding: 10px 0 0 90px;">
+                                        <div style="font-family: sans-serif; font-size: 11px; font-weight: bold; color: #009EDB;">{!item3.label}</div>
+                                        <div style="font-family: sans-serif; font-size: 10px; color: #909090;">{!item3.metatext}</div>
+                                        <div style="font-family: sans-serif; font-size: 10px;">{!item3.nextQuestion}</div>
+                                    </div>
+                                    <apex:repeat value="{!item3.items}" var="item4">
+                                        <div style="padding: 10px 0 0 120px;">
+                                            <div style="font-family: sans-serif; font-size: 11px; font-weight: bold; color: #009EDB;">{!item4.label}</div>
+                                            <div style="font-family: sans-serif; font-size: 10px; color: #909090;">{!item4.metatext}</div>
+                                            <div style="font-family: sans-serif; font-size: 10px;">{!item4.nextQuestion}</div>
+                                        </div>
+                                    </apex:repeat>
+                                </apex:repeat>
+                            </apex:repeat>
+                        </apex:repeat>
+                    </apex:repeat>
+                </td>
+                <td width="35%" style="vertical-align: top; padding-left: 20px;">
+                    <div style="border: 1px #009EDB solid;">
+                        <div style="font-family: sans-serif; font-size: 12px; font-weight: bold; color: #ffffff; background: #009EDB; border-bottom: 1px #d0d0d0 solid; padding: 5px; text-align: center;">SOLUTIONS</div>
+                        <div style="padding: 0 5px 10px 5px;">
+                            <apex:repeat value="{!context.recommendations}" var="recommendation">
+                                <div style="font-family: sans-serif; font-size: 12px; font-weight: bold; color: #009EDB; margin-top: 10px;">{!recommendation.solutionLabel}</div>
+                                <div style="font-family: sans-serif; font-size: 10px;">{!recommendation.description}</div>
+                                <ul style="margin: 0 0 0 10px;">
+                                    <li style="font-family: sans-serif; font-size: 10px; color: #909090;">{!recommendation.exportNote}</li>
+                                </ul>
+                            </apex:repeat>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-top: 10px;">
+                    <div style="font-family: sans-serif; font-size: 12px; font-weight: bold; color: #c0c0c0; border-bottom: 1px #d0d0d0 solid">BUZZ WORDS</div>
+                    <apex:repeat value="{!context.buzzWords}" var="buzzWord">
+                        <div style="float: left; width: 300px; margin: 0 10px 0 10px;">
+                            <div style="margin-top: 10px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td style="font-family: sans-serif; font-size: 12px; font-weight: bold; color: #009EDB;">
+                                            {!buzzWord.label}
+                                        </td>
+                                        <td align="right" style="font-family: sans-serif; font-size: 12px; font-weight: normal; font-style: italic; color: #606060;">
+                                            {!buzzWord.probability}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="font-family: sans-serif; font-size: 10px;">{!buzzWord.definition}</div>
+                            <ul style="margin: 0 0 0 10px;">
+                                <apex:repeat value="{!buzzWord.details}" var="detail">
+                                    <li style="font-family: sans-serif; font-size: 10px; color: #606060;">{!detail.label}</li>
+                                </apex:repeat>
+                            </ul>
+                        </div>
+                    </apex:repeat>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</apex:page>

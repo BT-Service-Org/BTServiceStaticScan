@@ -1,0 +1,50 @@
+<apex:component >
+
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="bioContent" type="String" required="true"/>
+  <apex:attribute description=""  name="org62ProfileId" type="String" required="true"/>
+  <apex:attribute description=""  name="bioPicture" type="String" required="true"/>
+  <apex:attribute description=""  name="bioLink" type="String" required="true"/>
+  <apex:attribute description=""  name="bioName" type="String" required="true"/>
+  <apex:attribute description=""  name="bioObject" type="sh_Bio__c" required="true"/>
+    <style>
+   
+        .table-bordered, table, table tr td, .table-bordered>thead>tr>th, table>thead>tr>th, .table-bordered>thead>tr>td, table>thead>tr>td, .table-bordered>tbody>tr>th, table>tbody>tr>th, .table-bordered>tbody>tr>td, table>tbody>tr>td, .table-bordered>tfoot>tr>th, table>tfoot>tr>th, .table-bordered>tfoot>tr>td, table>tfoot>tr>td{
+            border:0;
+        }
+    </style>  
+      <main class="content col-sm-4 col-sm-offset-1" id="main-content-container" role="main" itemprop="mainContentOfPage">
+        <article class="post-405 sf_bio type-sf_bio status-publish has-post-thumbnail entry" itemscope="itemscope" itemtype="http://schema.org/CreativeWork">
+          <header class="entry-header"></header>
+          <div class="entry-content" itemprop="text">
+          <apex:outputPanel layout="none" rendered="{!(bioObject.Vimeo_Video_1__c!=null)}">
+              <iframe src="//player.vimeo.com/video/{!bioObject.Vimeo_Video_1__c}" width="500" height="281" frameborder="0" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe>
+          </apex:outputPanel>
+          <apex:outputField value="{!bioObject.Bio_Main_Content__c}">
+          </apex:outputField>
+            <p>
+                <a href="https://org62.my.salesforce.com/_ui/core/userprofile/UserProfilePage?u={!org62ProfileId}&amp;tab=sfdc.ProfilePlatformOverview" target="_blank">CHATTER PROFILE</a>
+            </p>
+            
+            <apex:outputPanel layout="none" rendered="{!(bioObject.Vimeo_Video_2__c!=null)}">
+              <iframe src="//player.vimeo.com/video/{!bioObject.Vimeo_Video_2__c}" width="500" height="281" frameborder="0" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe>
+          </apex:outputPanel>
+          </div>
+        </article>
+      </main>
+      <aside class="sidebar sidebar-primary widget-area col-sm-2 col-sm-offset-1" 
+             role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+        
+        <apex:outputPanel rendered="{!bioPicture!=null}">
+            <img width="295" height="295" 
+                 src="{!URLFOR($Action.Attachment.Download, bioPicture)}" 
+                 class="attachment-sf-services-square wp-post-image" alt="{!bioName}" /><!--src="{!URLFOR($Action.Attachment.Download, project.thumbnailId)} -->
+            </apex:outputPanel>
+        <apex:outputPanel rendered="{!bioLink!=null}">
+            <a class="btn blue-button btn-sf" target="_blank" href="{!URLFOR($Action.Attachment.Download, bioLink)}" ><!-- //Backup //href="{!URLFOR($Resource.ServicesHubContent, bioLink)}" -->
+              <span>Download Bio</span>
+            </a>
+        </apex:outputPanel>
+      </aside>
+
+</apex:component>

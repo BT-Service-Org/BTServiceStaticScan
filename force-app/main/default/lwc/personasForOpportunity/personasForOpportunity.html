@@ -1,0 +1,25 @@
+<!-- sldsValidatorIgnore -->
+<template>
+
+    <lightning-card>
+        <lightning-tabset>
+            <lightning-tab label={title}>
+                    <ul class="slds-has-dividers_bottom-space">
+                        <template  iterator:it={interviews}>
+                            <li class="slds-item" key={it.value.Id} >
+                                <a target="_blank" href={it.value.link}>{it.value.domainName}</a>
+                            </li>
+                        </template>
+                    </ul>
+            </lightning-tab>
+            <lightning-tab label="Function Points">
+                <ul class="slds-has-dividers_bottom-space">
+                    <li class="slds-item" >
+                        <a target="_blank" href={reportLink}>View Function points</a>
+                    </li>
+                </ul>
+        </lightning-tab>
+        </lightning-tabset>
+    </lightning-card> 
+
+</template>

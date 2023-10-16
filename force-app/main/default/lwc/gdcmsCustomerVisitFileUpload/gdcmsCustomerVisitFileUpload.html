@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_3-of-12">
+            <lightning-combobox
+                name="progress"
+                label="Select Image Type"
+                value={selectedValue}
+                placeholder="Select Image Type"
+                options={options}
+                onchange={handleChange} >
+            </lightning-combobox>
+        </div>    
+        <div class="slds-col slds-size_4-of-12">
+            <lightning-input
+                type="file"
+                accept={acceptedFormats}
+                onchange={handleFilesChange}
+            ></lightning-input>
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-m-top_x-large">
+            <div if:true={fileName}>
+                <p style="color:grey; font-weight:600; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{fileName}</p>
+            </div>
+        </div> 
+        <div class="slds-col slds-size_2-of-12 slds-clearfix">
+            <div class="slds-m-top_large slds-float_right">
+            <lightning-button variant="success" label="Upload" title="Upload" disabled={uploader} onclick={saveFile}></lightning-button>
+        </div>
+        </div>
+    </div>
+</template>

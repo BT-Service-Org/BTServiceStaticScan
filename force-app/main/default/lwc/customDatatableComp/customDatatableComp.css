@@ -1,0 +1,7 @@
+/*:host(.active) {
+    background-color: lightgreen;
+} */
+
+:host(.active) {
+    background-color: lightgreen;
+}

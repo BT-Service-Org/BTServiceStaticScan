@@ -1,0 +1,104 @@
+<template>
+    <div class="card">
+        <article class="slds-card">
+            <div class="slds-grid slds-card__header slds-border_bottom">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate slds-p-bottom_small">
+                    <!-- <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:flow" alternative-text="Reusable Asset"
+                            title="Reusable Asset" size="small"></lightning-icon>
+                    </div> -->
+                    <div class="slds-media__body">
+                        <span class="slds-text-heading_medium cardHeading heading" onclick={handleViewAction}>{assetData.gdc_ms_Title__c}</span>
+                    </div>
+                    <div class="slds-no-flex">
+                        <!--<lightning-button-icon if:false={isGuestUser} icon-name="utility:edit" variant="border-filled"
+                            alternative-text="Edit" class="slds-m-left_xx-small" title="Edit Asset" data-action="edit"
+                            onclick={handleEditAction}>
+                        </lightning-button-icon>-->
+                        <!-- <lightning-button-icon icon-name="utility:preview" variant="border-filled"
+                            alternative-text="View" class="slds-m-left_xx-small" title="View Asset" data-action="view"
+                            onclick={handleViewAction}>
+                        </lightning-button-icon> -->
+                    </div>
+                </header>
+            </div>
+            <template if:true={isReadOnly}>
+                <c-gdcms-modal-popup onclose={closeModal} record-id={assetData.Id} is-read-only={isReadOnly}>
+                </c-gdcms-modal-popup>
+            </template>
+            <template if:false={isEditOnly}>
+                <c-gdcms-modal-popup onclose={closeModal} record-id={assetData.Id} is-read-only={isEditOnly}>
+                </c-gdcms-modal-popup>
+            </template>
+
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-grid slds-wrap">
+                    <div class={leftSectionCSS}>
+                        <span>
+                            <!--<span class="slds-text-body_medium">Proposed By: </span> {assetData.gdc_ms_Proposed_ByName}
+                            <br /> -->
+                            <span class="slds-text-heading_small fadedText">
+                                Proposed By: {assetData.gdc_ms_Proposed_By_User}<br />
+                                Cloud Competency: {assetData.gdc_ms_CloudCompetency__c} <br />
+                            </span>
+                            <span if:false={isDesktopDevice}>
+                                <span>Status: </span>
+                                <span if:true={isParkedOrRejected}
+                                    class="parked-rejected-text">{assetData.gdc_ms_Status__c}</span>
+                                <span if:false={isParkedOrRejected}>
+                                    <span if:false={isDelivered}
+                                        class="in-progress-text">{assetData.gdc_ms_Status__c}</span>
+                                    <span if:true={isDelivered}
+                                        class="delivered-text">{assetData.gdc_ms_Status__c}</span>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class={rightSectionCSS}>
+                        <span>
+                            <div class="slds-form-element">
+                                <span class="slds-text-heading_small">Description</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">
+                                        <p class="slds-text-heading_small fadedText justifiedContent">{assetData.gdc_ms_Description__c}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <template if:true={isDesktopDevice}>
+                <footer if:true={showFooter} class="slds-card__footer">
+                    <template if:true={isParkedOrRejected}>
+                        <div class="readonly-path">
+                            <lightning-progress-indicator current-step={assetData.gdc_ms_Status__c} type="path"
+                                has-error="true" variant="shaded">
+                                <lightning-progress-step label="Ideation" value="Ideation" class="step-hover step-Index">
+                                </lightning-progress-step>
+                                <lightning-progress-step if:true={isRejected} label="Rejected" value="Rejected"
+                                    class="parked-rejected step-Index">
+                                </lightning-progress-step>
+                                <lightning-progress-step if:true={isParked} label="Parked" value="Parked"
+                                    class="parked-rejected step-Index">
+                                </lightning-progress-step>
+                            </lightning-progress-indicator>
+                        </div>
+                    </template>
+                    <template if:false={isParkedOrRejected}>
+                        <div class="readonly-path">
+                            <lightning-progress-indicator current-step={assetData.gdc_ms_Status__c} type="path"
+                                variant="shaded" class="slds-region_medium slds-region_small hover-none">
+                                <template for:each={onGoingStatus} for:item="status">
+                                    <lightning-progress-step label={status.label} value={status.value}
+                                        key={status.stepNum} class="step-Index">
+                                    </lightning-progress-step>
+                                </template>
+                            </lightning-progress-indicator>
+                        </div>
+                    </template>
+                </footer>
+            </template>
+        </article>
+    </div>
+</template>

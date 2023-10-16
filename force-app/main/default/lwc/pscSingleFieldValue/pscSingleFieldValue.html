@@ -1,0 +1,9 @@
+<template>
+    <p if:true={title}>
+        {title}
+    </p>
+    <lightning-record-view-form record-id={recordId} object-api-name={objectApiName} style="font-family:Salesforce Sans">
+        <lightning-output-field field-name={fieldApiName} variant="label-hidden">
+        </lightning-output-field>
+    </lightning-record-view-form>
+</template>

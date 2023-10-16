@@ -1,0 +1,23 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:actionOverride,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable,force:lightningQuickActionWithoutHeader" 
+                controller="CustomMethodEditController"
+                access="global">
+    <aura:attribute name="loader" type="Boolean" default="true" />
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="groupingIds" type="String"/>
+    <aura:attribute name="stageIds" type="String"/>
+    <aura:attribute name="industryIds" type="String"/>
+    <aura:attribute name="serviceProductIds" type="String"/>
+    <aura:attribute name="productIds" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <aura:if isTrue="{!v.loader}">
+    <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-align_absolute-center" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+     </div>
+    </aura:if>
+    <lightning:flow aura:id="flowData"/>   
+</aura:component>

@@ -1,0 +1,25 @@
+.THIS {
+    background-color: #53668A!important;   
+}
+.THIS .forwardIconStyle svg {
+    border-color:white;/*white: the arrow's border Color*/
+    color: white;  /*white: the arrow's border Color*/ 
+}
+
+.THIS .titleColor {
+    color: white; /*Title Color*/
+}
+.THIS .titleLogo {
+    width: 45px; 
+    height: 40px; 
+    margin-top: 0px;
+}
+
+.THIS .scrollable-content::-webkit-scrollbar {
+    width:12px;     
+}
+.THIS .scrollable-content::-webkit-scrollbar-thumb {
+    
+    background: rgba(235  , 235  , 235 , 0.09); /* transparent */
+    border-radius: 30px;
+}

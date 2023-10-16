@@ -1,0 +1,123 @@
+<apex:component controller="TeamsWidgetTemplateController">
+	
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a teams catalog widget
+	-->
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+	<apex:attribute name="permission" description="Permissions" type="UserPermissions" required="false" assignTo="{!permission}" />
+	<!-- 
+		### Styles ###
+		Include your css styles here
+		-- Widget holders styles are provided for context  
+		//widgetTeam.css
+	-->
+	
+	<!-- 
+		### Javascript ### 
+		Include your javascript's here
+		-- TeamsWidgetCommon.js is required
+	-->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>	
+	
+	<!-- 
+		### Modal Overlay ### 
+		-- Modal overlay source is provided for context
+				
+			+ Method Description:
+			
+			createOverlay(	
+				'', 							-> This param should be empty, only need it on modal initialize.
+				String Id Content Wrapper, 		-> DIV Element Id
+				String Modal container height,	-> Overlay height
+				String callback function,		-> This executes 200 milisconds after show overlay
+				String Modal container width	-> Overlay width
+			)
+			
+			+ Tipical implementation:
+			++ Copy this example outside this comment to test it.
+			
+			<a href="Javascript:;" onclick="createOverlay('', 'overlayContent', '200', 'myFunc()', '200')">Show Overlay</a>
+			<div id="overlayContent">
+				Content to show inside the overlay
+			</div>
+			<script>
+				function myFunc(){
+					alert('This is a callback exec');
+				}
+			</script>		
+	-->
+
+	<!-- 
+		### Rerender Method ###
+		
+		+ Apex Code:
+		
+		<apex:form >
+	        <apex:actionFunction name="refreshMethod" 	-> Function Name
+	       		action="{!refreshList}" -> Apex Class Method
+	       		rerender="elementId"  	-> Element to refresh
+	        />
+	    </apex:form> 
+	    
+		To execute a refesh action use the actionFunction as a Javascript Method
+		For example: <a href="Javascript:;" onclick="refreshMethod();">Refresh</a>
+	-->
+
+	<!-- ### Wide Widget ### -->
+	<div class="myBigWidget">
+		<!-- Widget Title -->		
+		<div class="wideHeader">
+			<h4>Title Here</h4>
+		</div>
+		<!-- Widget Links Holder -->
+		<div class="linkAction">
+			<a href="Javascript:;">Link action</a>
+		</div>
+		<!-- Widget Container --> 		
+		<div class="wideBody">
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+			when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+			It has survived not only five centuries, but also the leap into electronic typesetting, 
+			remaining essentially unchanged. It was popularised in the 1960s...	
+		</div>
+	</div>
+	
+	<!--  ### Thin Widget ###  -->
+	<div class="teamWidget mySmallWidget" >
+		<!-- Widget Title -->		
+		<div class="thinHeader">
+			<div><div><h4>Title Here</h4></div></div>
+		</div>
+		<!-- Widget Container -->   		
+		<div class="box_content">
+			<!-- Widget Links Holder -->
+			<div class="thinWidgetLinkAction">
+				<a href="Javascript:;">Link action</a>
+			 </div>
+			<div class="thinBody">
+				{!permission.ObjectType}
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+				Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+				when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+				It has survived not only five centuries, but also the leap into electronic typesetting, 
+				remaining essentially unchanged. It was popularised in the 1960s...	
+			</div>				
+		</div>
+		<!-- Widget Holder Foot -->
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>	
+		
+</apex:component>

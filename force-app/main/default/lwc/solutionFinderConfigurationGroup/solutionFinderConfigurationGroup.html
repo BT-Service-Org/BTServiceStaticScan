@@ -1,0 +1,29 @@
+<template>
+    <lightning-datatable key-field={id}
+        data={data}
+        columns={columns}
+        hide-checkbox-column="true"
+        onrowaction={handleRowAction}></lightning-datatable>
+
+    <section if:true={displayEdit} role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <lightning-button-icon icon-name="utility:close" class="slds-modal__close" variant="bare-inverse"
+                    size="large" onclick={handleCancelEdit}></lightning-button-icon>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal header</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <template for:each={selectedProperties} for:item="property">
+                    <c-solution-finder-configuration key={property.index} index={property.index} configuration-id={property.property.configurationId}
+                        property={property.property.property} default={property.property.value} onchange={handleConfigurationChange}></c-solution-finder-configuration>
+                </template>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={handleCancelEdit}>Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={handleSaveEdit}>Save</button>
+            </footer>
+        </div>
+    </section>
+    <div if:true={displayEdit} class="slds-backdrop slds-backdrop_open"></div>
+
+</template>

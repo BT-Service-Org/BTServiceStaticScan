@@ -1,0 +1,16 @@
+<template>
+    <h3 class="method_title ITC_font" if:true={name}>{name}</h3>
+    <div class="callout-important-note" if:true={notificationBox}>
+        <div class="callout-icon-title ITC_font">
+            <div class="callout-icon-important-note">
+                <img src={lightbulbIcon} alt="Light Bulb"/>
+            </div>
+                <p>{name}</p>
+        </div>
+        <div class="callout-icon-desc salesforce_font">
+            <p>
+                {notificationBox}
+            </p>
+        </div>
+    </div>
+</template>

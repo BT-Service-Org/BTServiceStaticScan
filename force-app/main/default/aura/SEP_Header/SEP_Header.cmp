@@ -1,0 +1,81 @@
+<aura:component>
+	
+	<!--Attributes-->
+	<aura:attribute name="customer" type="Object" access="public"/>
+    <aura:attribute name="contact" type="Object" access="public"/>
+    <aura:attribute name="domain" type="Object" access="public"/>
+    <aura:attribute name="assessment" type="Object" access="public"/>
+    <aura:attribute name="interview" type="Object" access="public"/>
+
+    <aura:attribute name="showOptionsPanel" type="Boolean" access="public"/>
+
+    <!--Events-->
+   	<aura:registerEvent name="showNotes" type="c:SEP_ShowNotes"/>
+
+    <!--Content-->
+    <div class="slds-grid"> 
+		<div class="slds-grid slds-gutters_x-small">
+			<span class="slds-col slds-grow-none">
+				<span class="slds-text-title_caps"> <b> Domain: </b> </span> <br/> {!v.domain.name} 
+			</span>
+			<span class="slds-col slds-grow-none">
+				<span class="slds-text-title_caps"> <b> Customer: </b> </span> <br/>
+				<a href="javascript:void(0);" data-recordId="{!v.customer.Id}" onclick="{!c.showCustomer}">
+                   	<ui:outputText value="{!v.customer.Name}"/>
+                </a>
+			</span>
+			<span class="slds-col slds-grow-none">
+				<span class="slds-text-title_caps"> <b> Contact: </b> </span> <br/> 
+				<a href="javascript:void(0);" data-recordId="{!v.contact.Id}" onclick="{!c.showContact}">
+                   	<ui:outputText value="{!v.contact.Name}"/>
+                </a>
+			</span>
+			<aura:if isTrue="{!!empty(v.assessment)}">
+				<span class="slds-col slds-grow-none">
+					<span class="slds-text-title_caps"> <b> Assessment: </b> </span> <br/> 
+					<a href="javascript:void(0);" data-recordId="{!v.assessment.id}" onclick="{!c.showAssessment}">
+                       	<ui:outputText value="{!v.assessment.name}"/>
+                    </a>
+                    <aura:if isTrue="{!!empty(v.interview)}">
+	                    <span class="slds-p-left_small">
+	                    	<lightning:buttonIcon iconName="utility:note" size="small" title="Notes" onclick="{!c.showAssessmentNotes}"/>
+		                </span>
+		            </aura:if>
+                </span>
+			</aura:if>
+			<aura:if isTrue="{!!empty(v.interview)}">
+				<span class="slds-col slds-grow-none">
+					<span class="slds-text-title_caps"> <b> Interview: </b> </span> <br/> 
+					<a href="javascript:void(0);" data-recordId="{!v.interview.id}" onclick="{!c.showInterview}">
+                       	<ui:outputText value="{!v.interview.name}"/>
+                    </a>
+                    <span class="slds-p-left_small">
+                    	<lightning:buttonIcon iconName="utility:note" size="small" title="Notes" onclick="{!c.showInterviewNotes}"/>
+	                </span>
+                </span>
+			</aura:if>
+			<aura:if isTrue="{!!empty(v.interview)}">
+				<div class="slds-col">
+					<ui:inputDate value="{!v.interview.interviewDate}" displayDatePicker="true" class="slds-input date-picker" label="Interview Date: " labelClass="slds-text-title_caps bold" disabled="{!v.interview.completed}"/>
+				</div>
+			</aura:if>
+		</div>
+		<aura:if isTrue="{!!empty(v.interview)}">
+			<div class="slds-col_bump-left options-panel" style="margin-top:18px;margin-bottom:-10px;">
+				<div class="slds-combobox_container">
+					<div class="{!'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click '+if(v.showOptionsPanel,'slds-is-open','')}" aria-expanded="true" role="combobox">
+						<div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+							<div class="slds-combobox__input options-input" aria-controls="options">
+								<lightning:buttonIcon iconName="utility:settings" variant="bare" size="large" onclick="{!c.showHideOptionsPanel}"/>
+							</div>
+						</div>
+						<div id="options" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid options-dropdown">
+							<c:SEP_Options interview="{!v.interview}" onHide="{!c.hideOptionsPanel}"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</aura:if>
+	</div>
+
+</aura:component>

@@ -1,0 +1,325 @@
+<apex:page sidebar="false"  standardController="Competency__c" extensions="PeopleNewEditCompetencyController" action="{!getCompetency}">
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>		
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/Validator.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/slider.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/autocomplete.js')}" />	
+	<script src="{!URLFOR($Resource.YahooUI, 'build/yahoo-dom-event/yahoo-dom-event.js')}" />
+	<script src="{!URLFOR($Resource.YahooUI, 'build/animation/animation-min.js')}" />
+	<script src="{!URLFOR($Resource.YahooUI, 'build/dragdrop/dragdrop-min.js')}" />
+	<script src="{!URLFOR($Resource.YahooUI, 'build/slider/slider-min.js')}" />	
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/peopleEditions.css')}" />
+	<link rel="stylesheet" href="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}" type="text/css" media="screen" charset="utf-8" />
+	<style type="text/css">
+	
+	    #slider-bg {
+	        position: relative;
+	        background:url({!URLFOR($Resource.YahooUI, 'assets/slider/bg-fader.gif')}) 5px 0 no-repeat;
+	        height:40px;
+	        float:left;
+	        width:228px; 
+	    }
+	
+	    #slider-thumb {
+	        cursor:default;
+	        position: absolute;
+	        top: 4px;
+	    }
+	    
+	    #slider-bg  #skill-rating {
+	    	position:absolute;
+	    	bottom:0;
+	    	left:0;
+	    	height:15px;
+	    	color:#CCCCCC;
+	    	width:228px;    	
+	    }
+	    
+		#slider-bg  #skill-rating ul,
+		#slider-bg  #skill-rating ul li {
+			margin:0;
+			padding:0;
+			list-style:none;			
+		}
+		
+		#slider-bg  #skill-rating ul {
+			margin-left:5px;
+		}
+		
+		#slider-bg  #skill-rating ul li {
+			width:20px;
+			float:left;
+			font-size:10px;
+		}
+		
+		#slider-bg  #skill-rating ul li.selected {
+			color:#000000;
+		}
+		
+		.LowHighSkillLabel {
+			float:left;
+			margin-top:7px;
+			text-align:center;
+			width:25px;
+			padding-top:3px;
+			margin-right:10px !important;
+		}
+	</style>
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1> 
+				<h2 class="arial_black">My Profile</h2>
+			</div>		
+		</div>		
+		<!-- Search Box -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>	
+	<!-- /Header -->
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<apex:include pageName="PeopleSidebarProfile" />	
+	</div>
+	<!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+					<a href="peopleprofiledisplay">< Go back to My Profile</a>
+					<br />
+					<h2>{!IF(IsNewRecord,'New','Edit')} Competency</h2>
+					<br />
+				</div>
+				<div class="main_form">
+					<div id="warning_to_user" class="message_to_user" style="display:none;">
+						<img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+						Some required fields are empty or its format is incorrect. Please enter the data correctly.
+					</div>
+						
+					 <div id="warning_to_user_not_owner" class="message_to_user" style="{!IF((error == ''),'display:none;','')}">
+			   		  	 <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+			     		 {!error}<br />
+			    	</div>	
+			    	
+					<div class="require_reference">
+						<span class="reference">&nbsp;</span>
+						<span> = Required Information</span>
+					</div>
+					<apex:form id="formId" onsubmit="if(validator('{!$Component.formId}', 'warning_to_user')) return false;">
+								
+						<div class="form_fields">
+							<div class="f_left">
+								<div class="field">
+									<label>Competency</label>
+									<div class="require">&nbsp;</div>
+									<div id="ajaxResult" style="display:none;"></div>									
+									<script>
+										function hideSuggest(){
+											Effect.Fade('ac_{!$Component.competency}',{duration: 0.2});
+										}
+									</script>
+									<apex:inputText id="competency" value="{!newCompetency.Name}" styleclass="large RQ_String" onFocus="javascript:
+									var options = {
+											script: function (input) { return ('SuggestDispatcher?input='+input+'&class=Competency'); },
+									        callback: function (obj) {}    
+											};
+											xml = new AutoComplete('{!$Component.competency}',options);return true;" onBlur="hideSuggest();" />								
+								</div>							
+								<div class="field">
+									<label>Skill Level</label>																		
+									<div style="display:none;">
+										<apex:inputText value="{!NewUserCompetency.Rating__c}" styleclass="medium RQ_Rating" id="skillLevel"/>
+									</div>		
+									<!-- Begin Slider  -->
+									<div class="explain LowHighSkillLabel" >Low</div>								
+									<div id="slider-bg" tabindex="-1" title="Slider">
+									    <div id="slider-thumb"><img src="{!URLFOR($Resource.YahooUI, 'assets/slider/thumb-s.gif')}"></div>
+									    <div id="skill-rating">
+									    	<ul id="skillList">
+									    		<li>0</li>
+									    		<li>1</li>
+									    		<li>2</li>
+									    		<li>3</li>
+									    		<li>4</li>
+									    		<li>5</li>
+									    		<li>6</li>
+									    		<li>7</li>
+									    		<li>8</li>
+									    		<li>9</li>
+									    		<li>10</li>
+									    	</ul>
+									    </div>									    
+									</div>
+									<div class="explain LowHighSkillLabel" >High</div>	
+									<script type="text/javascript">
+										(function() {
+										    var Event = YAHOO.util.Event,
+										        Dom   = YAHOO.util.Dom,
+										        lang  = YAHOO.lang,
+										        slider, 
+										        bg="slider-bg", thumb="slider-thumb", 
+										        valuearea="slider-value";
+										        
+										    var textfield='{!$Component.skillLevel}';
+											var topConstraint = 0;
+										    var bottomConstraint = 200;
+										
+										    // Custom scale factor for converting the pixel offset into a real value
+										    var scaleFactor = 0.05;
+										
+										    // The amount the slider moves when the value is changed with the arrow
+										    // keys
+										    var keyIncrement = 20;
+										
+										    var tickSize = 20;
+										
+										    Event.onDOMReady(function() {
+										    
+												// Build the slider
+										        slider = YAHOO.widget.Slider.getHorizSlider(bg, 
+										                         thumb, topConstraint, bottomConstraint, 20);
+												
+												var realScroll = {!returnRating} / 0.05;
+												// Set initial value to 5
+												slider.setValue(realScroll ,true,true,true);
+												
+												var tmpField = Dom.get(textfield);
+												tmpField.value = '{!returnRating}';
+												
+												var initialListCont = Dom.get('skillList');
+										        var InitialLis = Dom.getChildren(initialListCont);
+										        
+										        									            
+									            Dom.addClass(InitialLis[{!returnRating}],'selected');
+									            
+												// Get real value of the slider
+										        slider.getRealValue = function() {
+										            return Math.round(this.getValue() * scaleFactor);
+										        }
+												
+										        slider.subscribe("change", function(offsetFromStart) {
+										
+										            var fld = Dom.get(textfield);
+															
+										            // use the scale factor to convert the pixel offset into a real
+										            // value
+										            var actualValue = slider.getRealValue();
+										
+										            // update the text box with the actual value
+										            fld.value = actualValue;
+										
+										            // Update the title attribute on the background.  This helps assistive
+										            // technology to communicate the state change
+										            Dom.get(bg).title = "slider value = " + actualValue; 										            
+										            
+										            // get the ul and fill the number selected
+										            var numberListContainer = Dom.get('skillList');
+										            var lis = Dom.getChildren(numberListContainer);
+										            
+										            for(var i=0; i <= lis.size(); i ++){
+										            	Dom.removeClass(lis[i],'selected');
+										            }
+										            
+										            Dom.addClass(lis[actualValue],'selected');
+									
+										        });
+										
+										        slider.subscribe("slideStart", function() {
+										               
+										            });
+										
+										        slider.subscribe("slideEnd", function() {
+
+										            });
+										
+										        // Listen for keystrokes on the form field that displays the
+										        // control's value.  While not provided by default, having a
+										        // form field with the slider is a good way to help keep your
+										        // application accessible.
+										        Event.on(textfield, "keydown", function(e) {
+										
+										            // set the value when the 'return' key is detected
+										            if (Event.getCharCode(e) === 13) {
+										                var v = parseFloat(this.value, 10);
+										                v = (lang.isNumber(v)) ? v : 0;
+										
+										                // convert the real value into a pixel offset
+										                slider.setValue(Math.round(v/scaleFactor));
+										            }
+										        });
+										        
+										        // Use setValue to reset the value to white:
+										        Event.on("putval", "click", function(e) {
+										            slider.setValue(100, false); //false here means to animate if possible
+										        });
+										        
+										        // Use the "get" method to get the current offset from the slider's start
+										        // position in pixels.  By applying the scale factor, we can translate this
+										        // into a "real value
+										        Event.on("getval", "click", function(e) {
+										            YAHOO.log("Current value: "   + slider.getValue() + "\n" + 
+										                      "Converted value: " + slider.getRealValue(), "info", "example"); 
+										        });
+										    });
+										})();
+										</script>
+										
+																									
+								</div>
+								
+								<div class="field" style="clear:both;">
+									<apex:inputCheckbox style="margin-left:125px;float:left;" value="{!NewUserCompetency.InterestedInProvidingAssistance__c}" /><label style="width: 350px; float: left; text-align: left; margin-left: 9px;">I am interested in provide asistance</label>
+								</div>
+								<br />	
+								<div class="field">
+									<apex:inputCheckbox style="margin-left:125px;float:left;" value="{!NewUserCompetency.InterestedInLearning__c}" /><label style="width: 350px; float: left; text-align: left; margin-left: 9px;">I am interested in learning</label>
+								</div>			
+							</div>		
+						</div>
+						<div class="title_from_section">&nbsp;</div>
+						<div class="form_action">
+							<div class="buttons" style="{!if(isNewRecord,'','width:425px;')}">
+								<apex:commandButton action="{!saveCompetency}" value="Save"/>
+								<div class="form_optional_action grayButton">
+									<apex:commandLink action="{!saveAndNewCompetency}" value="Save and New" id="saveandnew" />
+								</div>	 
+								<div class="form_optional_action grayButton"  style="{!if(isNewRecord,'display:none;','')}">
+									<apex:commandLink action="{!deleteCompetency}" value="Remove this Competency" id="theCommandLinkDelete" onclick="if(!confirm('Are You Sure ?')) return false;"/>
+								</div>							
+								<div class="cancel grayButton">
+									<a href="Javascript:;" onclick="if(confirm('Are you sure you want to cancel? Any changes will not be saved.')){document.location.href='./peopleprofiledisplay'}; return false;">Cancel</a>															
+								</div>
+							</div>
+						</div>
+					</apex:form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</apex:page>

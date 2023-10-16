@@ -1,0 +1,14 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="StationRestApiTest" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="jsonString" type="String" default="some json here"/>
+    
+    <div>
+        Hello world api test
+    </div>
+    
+    <div style="height:400px;">
+        {!v.jsonString}
+    </div>
+	
+</aura:component>

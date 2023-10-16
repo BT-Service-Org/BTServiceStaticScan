@@ -1,0 +1,68 @@
+<apex:page controller="DiscussionWidgetSubTeamsController">
+<style>
+	
+
+	div.no_subtitle div.header div div h3 {
+		padding: 5px 5px 0px 13px!important;
+	}	
+	
+	div.no_subtitle div.header div div, div.no_subtitle div.header div, div.no_subtitle div.header {
+		height: 23px!important;
+	}
+	
+
+	
+	
+	
+	div.no_subtitle div.box_content div.contentHolder div.team {
+		margin:4px 0pt;
+	}
+	
+	div.no_subtitle div.box_content div.contentHolder div.team div.desc {
+		height:auto;
+	}
+	
+	div.no_subtitle div.box_content div.contentHolder div.team div.desc {
+		width: 170px;
+	}
+	
+</style>
+<!-- Discussion Widget Sub Teams -->
+<div class="box_round_blue no_subtitle">
+					<!-- Header -->
+					<div class="header">
+						<div>
+							<div>
+							
+							<h3>Sub Teams</h3>
+							</div>
+						</div>							
+					</div>
+					<!-- Rounded Box Content -->
+					<div class="box_content">
+						<div class="contentHolder">
+							<apex:outputpanel rendered="{!IF(countSubTeams == 0,false,true)}">
+								<apex:repeat value="{!subTeams}" var="team">
+									<div class="team">
+										<div class="desc">
+											<a href="/apex/discussionTopics?id={!team.id}">
+												{!team.name}
+											</a>
+											<span class="desc"> ({!team.count})</span>									
+										</div>
+									</div>
+								</apex:repeat>
+							</apex:outputpanel>
+							<apex:outputpanel rendered="{!IF(countSubTeams == 0,true,false)}">
+								<div style="margin: 15px 0px 15px 15px">
+									 This team has no subteams.
+								</div>
+							</apex:outputpanel>
+						</div>
+					</div>
+					<div class="bottom_borders"><div><div></div></div></div>
+				</div>	
+				
+				
+<!-- Discussion Widget Sub Teams -->
+</apex:page>

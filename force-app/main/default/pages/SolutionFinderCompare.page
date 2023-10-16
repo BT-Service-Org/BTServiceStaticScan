@@ -1,0 +1,89 @@
+<apex:page controller="SolutionFinderCompareController">
+    <head>
+        <title>Comparison Results</title>
+    </head>
+    <apex:slds />
+    <style>
+        div {
+            padding: 20px;
+        }
+        td.header {
+            border-left: 1px #D0D0D0 solid;
+            color: #3366cc;
+            font-weight: bold;
+            text-align: center;
+        }
+        td.property {
+            border-top: 1px #D0D0D0 solid;
+            background: #F6F6F6;
+        }
+        td.value {
+            border-top: 1px #D0D0D0 solid;
+            border-left: 1px #D0D0D0 solid;
+            text-align: center;
+        }
+        td.thick-bottom-border {
+            border-bottom: 3px #909090 solid;
+        }
+    </style>
+    <apex:outputPanel rendered="{!comparison.properties.size == 0}">
+        No comparison values have been provided.
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!comparison.properties.size > 0}">
+        <div>
+            <table cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <td class="thick-bottom-border">&nbsp;</td>
+                        <apex:repeat value="{!comparison.context.recommendations}" var="recommendation">
+                            <td class="header thick-bottom-border slds-p-around--small">{!recommendation.solutionLabel}</td>
+                        </apex:repeat>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!comparison.properties}" var="property">
+                        <tr>
+                            <td class="property slds-p-around--small">{!property.title}</td>
+                            <apex:repeat value="{!comparison.context.recommendations}" var="recommendation">
+                                <td class="value slds-p-around--small">
+                                    <apex:outputPanel rendered="{!property.dataType == 'Boolean'}">
+                                        <apex:outputPanel rendered="{!comparison.mapOfValues[recommendation.solutionName + '.' + property.name]}">
+                                            <span class="slds-icon_container slds-icon-utility-check" >
+                                                <svg aria-hidden="true" class="slds-icon slds-icon-text-success slds-icon--x-small">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check">
+                                                    </use>
+                                                </svg>
+                                                <span class="slds-assistive-text">X</span>
+                                            </span>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!property.dataType == 'Number'}">
+                                        <apex:outputPanel rendered="{!property.decimalPlaces < 1 || property.decimalPlaces > 2}">
+                                            <apex:outputText value="{0, number, 0}">
+                                                <apex:param value="{!comparison.mapOfValues[recommendation.solutionName + "." + property.name]}" />
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!property.decimalPlaces == 1}">
+                                            <apex:outputText value="{0, number, 0.0}">
+                                                <apex:param value="{!comparison.mapOfValues[recommendation.solutionName + "." + property.name]}" />
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!property.decimalPlaces == 2}">
+                                            <apex:outputText value="{0, number, 0.00}">
+                                                <apex:param value="{!comparison.mapOfValues[recommendation.solutionName + "." + property.name]}" />
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!property.dataType == 'Text'}">
+                                        {!comparison.mapOfValues[recommendation.solutionName + "." + property.name]}
+                                    </apex:outputPanel>
+                                </td>
+                            </apex:repeat>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </div>
+    </apex:outputPanel>
+</apex:page>

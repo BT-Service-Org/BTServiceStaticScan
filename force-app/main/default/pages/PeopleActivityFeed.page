@@ -1,0 +1,186 @@
+<apex:page sidebar="false" controller="PeopleActivityFeedController" tabStyle="PeopleProfile__c">
+
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>	
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	<!-- MiniFeeds CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />
+	<style>
+		div.holder
+		{
+			height:900px;
+		}
+		div.profileBlockTitle h2 {
+			font-size:18pt;
+		}
+		
+		div.noFeedFilter {
+			text-align:center;
+			margin-top:10px;
+			color:#666666;
+		}
+	</style>
+		<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Activity Feed</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container (always Centered) -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<apex:include pageName="PeopleSidebarProfile" />		
+	</div>
+	<!-- Main Content Div -->
+	<div class="main_content">		
+		<div class="centerCol">
+			<div class="holder">
+				<div class="navLinks">
+					<a href="peopleprofiledisplay" class="go_back"> < Back to {!Profile.FirstName}'s profile </a>	
+				</div>
+				
+				<!-- Section Title -->
+				<!-- <div class="profileBlockTitle" style="{!IF(OR(isCurrentUser, showMiniFeeds),'','display:none')};">-->
+				<div class="profileBlockTitle" >
+					<h2>{!Profile.FirstName}'s Activity Feed</h2>
+				</div>
+				<apex:outputPanel layout="block" id="theFeeds" >
+					
+					<table class="minifeeds" cellpadding="0" cellspacing="0">
+						<apex:repeat value="{!miniFeeds}" var="miniFeed" >
+							<tr style="{!IF((miniFeed.FeedDateClass == 'miniFeedDate_empty'),'display:none', '' )}">
+								<td class="date blue weight_bold" colspan="2">{!miniFeed.FeedDateString}</td>
+							</tr>
+							<tr>
+								<td class="feed_type {!miniFeed.TypeOfFeed}"></td><td><a href="/apex/PeopleProfileDisplay?id={!miniFeed.User}" class="weight_bold"><apex:outputText escape="false" value="{!miniFeed.Name}" /></a>&nbsp;<apex:outputText escape="false" value="{!miniFeed.Message}" /></td>						
+							</tr>				 
+						</apex:repeat>
+						<div class="noFeedFilter" style="{!IF(miniFeedCount > 0, 'display:none', '' )}" >
+						There are no feeds according to this filter.
+					</div>
+					</table>
+					
+				</apex:outputPanel>
+			</div>		
+		</div>	
+	</div>					
+	<!-- Cloud Col -->
+	<div class="rightCol">		
+		<!-- Activity Feeds filter BOX -->
+		<div class="box_round">
+			<!-- Header -->
+			<div class="header">
+				<div><div><h4>Filter</h4></div></div>
+			</div>
+			<!-- Rounded Box Content -->
+			<div class="box_content">
+				<div class="minifeeds_container">
+					<apex:form id="filterFeeds" >
+						<table class="minifeeds" cellpadding="0" cellspacing="0">
+							<thead>
+								<tr>
+									<th class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/th_minifeeds_arrow.gif')}" alt="" /></th>
+									<th align="left">&nbsp;
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >View All</apex:commandLink></th>
+								</tr>
+							</thead>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_profile.gif')}" alt="" /></td><td align="left">
+								<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Profile Updates
+										<apex:param name="mfTypeObj" value="PeopleProfile__c"/>
+										<apex:param name="mfTypeStr" value="profile"/>
+								</apex:commandLink>	
+								</td>			
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_status.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Status Updates
+										<apex:param name="mfTypeObj" value="status"/>
+										<apex:param name="mfTypeStr" value="status"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_following.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Following
+										<apex:param name="mfTypeObj" value="Follow__c"/>
+										<apex:param name="mfTypeStr" value="follow"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_education.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Education History
+										<apex:param name="mfTypeObj" value="EducationHistory__c"/>
+										<apex:param name="mfTypeStr" value="education"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_competency.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Competencies
+										<apex:param name="mfTypeObj" value="UserCompetencies__c"/>
+										<apex:param name="mfTypeStr" value="competency"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_teamspace.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Teamspace Member
+										<apex:param name="mfTypeObj" value="TeamspaceMember__c"/>
+										<apex:param name="mfTypeStr" value="teamspace"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_discussion.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Discussion Thread
+										<apex:param name="mfTypeObj" value="DiscussionThread__c"/>
+										<apex:param name="mfTypeStr" value="discussion"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_announcement.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Announcements
+										<apex:param name="mfTypeObj" value="Announcement__c"/>
+										<apex:param name="mfTypeStr" value="announcement"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+							<tr>
+								<td class="feed_type"><img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/minifeed_project_task.gif')}" alt="" /></td><td align="left">
+									<apex:commandLink rerender="theFeeds" styleClass="weight_bold" >Project Task
+										<apex:param name="mfTypeObj" value="Announcement__c"/>
+										<apex:param name="mfTypeStr" value="announcement"/>
+									</apex:commandLink>
+								</td>
+							</tr>
+						</table>	
+					</apex:form>					
+				</div>
+			</div>
+			<div class="bottom_borders"><div><div></div></div></div>
+		</div>	
+	</div>
+</apex:page>

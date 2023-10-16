@@ -1,0 +1,133 @@
+<template>
+    <div class="slds-page-header slds-page-header_record-home slds-m-bottom_small ">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <lightning-icon icon-name="action:new_note" alternative-text="SEP Estimator" title="SEP Estimator"></lightning-icon>
+                <h1 class="slds-text-heading_large slds-text-align_left inline-header"> Discovery Questionnaire</h1>
+            </div>
+            <p></p>
+        </div>
+        <div class="slds-page-header__row">
+            <h1 class="slds-text-heading_medium slds-text-align_right">Domain: {domainName}</h1>
+        </div>
+        <div class="slds-page-header__row slds-page-header__row_gutters">
+            <div class="slds-page-header__col-details">
+                <ul class="slds-page-header__detail-row">
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Estimate Name">Parent Estimate</div>
+                        <div class="slds-truncate" title="Estimate Link">
+                            <a href={estimateURL}>{estimateName}</a>
+                        </div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Function Points">Sum of Function Points</div>
+                        <div class="slds-truncate" title="Sum of Function Points">{functionPoints}</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                      <div class="slds-text-title slds-truncate" title="Domain Progress">Domain Progress</div>
+                      <div class="slds-align_absolute-center" title="Domains Progress Indicator">
+                        <c-sep-assessment-completion-progress totalq={totalQ} answeredq={answeredQ} is-assessment="false"></c-sep-assessment-completion-progress>
+                      </div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Domains">Current Domain # / Total Domains</div>
+                        <div class="slds-truncate" title="Domains cur max">{curDomainPos} / {maxDomainPos}</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <lightning-button variant="brand" label="Previous Domain" disabled={bDisablePrevDomainBtn} onclick={previousDomain}></lightning-button>
+                        
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <lightning-button variant="brand" label="Next Domain" disabled={bDisableNextDomainBtn} onclick={nextDomain} class="slds-m-left_x-small"></lightning-button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slds-box slds-theme_default">
+        <lightning-card >
+            <div class="slds-grid slds-m-bottom_small">
+                <div class="slds-col slds-size_2-of-12 slds-p-left_small">
+                    <div slot="title" class="slds-text-heading_medium">
+                        <strong>Scoping Questions</strong>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_7-of-12 slds-text-align_center">
+                    <div slot="actions">
+                        <lightning-button variant="brand" label="Back" disabled={bDisableBackBtn} onclick={goBack}></lightning-button>
+                        <lightning-button variant="brand" label="Skip" disabled={bDisableNextBtn} onclick={goSkip} class="slds-m-left_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Next" disabled={bDisableNextBtn} onclick={goNext} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_3-of-12 slds-text-align_right slds-p-right_small">
+                    <div slot="actions">      
+                        Last saved: <lightning-formatted-date-time value={lastSaved} hour="2-digit" minute="2-digit" second="2-digit" hour12={ampm}
+                        time-zone={timeZone} time-zone-name="short"></lightning-formatted-date-time>
+                        <lightning-button-stateful variant="brand" 
+                            label-when-off="Save"
+                            label-when-on="Saving..."
+                            selected={isSaving}
+                            title="Save current assessment" 
+                            icon-name-when-off="utility:save"
+                            icon-name-when-on="utility:lock"
+                            icon-name="utility:save" 
+                            class="slds-m-left_x-small" 
+                            onclick={handleSaveButtonClick}>
+                        </lightning-button-stateful>
+                    </div>
+                </div>
+            </div>
+            <lightning-tabset active-tab-value={activeTab}>
+                <template for:each={tabs} for:item="tab">
+                    <lightning-tab label={tab.name} key={tab.key} value={tab.value} onactive={handleActive}>
+                          <template lwc:if={shouldDisplayFunctionPointsPerCapability}>
+                              <lightning-card>
+                                <div slot="title" class="slds-text-heading_medium">
+                                    Function Points per Capability
+                                </div>
+                                <!--
+                                <lightning-datatable
+                                    key-field="id"
+                                    data={fp4CapaTable}
+                                    columns={fp4capaCol}
+                                    hide-checkbox-column=false
+                                    onrowaction={handleSummaryTableCapabilityClick}
+                                    >
+                                </lightning-datatable>
+                                -->
+                                
+                                <c-sep-domain-summary-table
+                                    key-field="id"
+                                    data={summaryData}
+                                    hide-checkbox-column
+                                    columns={summaryCols}
+                                    onrowaction={handleSummaryTableCapabilityClick}
+                                >
+                                </c-sep-domain-summary-table>
+                              </lightning-card>
+                          </template>
+                          <template lwc:else>
+                              <c-sep-clickable-table2
+                                          key-field="Id"
+                                          data={tabdata}
+                                          hide-checkbox-column
+                                          onrowselection={handleRowSelected}
+                                          onrowaction={handleRowAction}
+                                          columns={columns}
+                                          onheaderaction={handleHeaderAction}
+                                          oncellchange={handleCellChange}
+                                          oncellclicked={handleCellClicked}>
+                              </c-sep-clickable-table2>
+                          </template>
+                    </lightning-tab>
+                </template>
+            </lightning-tabset>
+            <!--Navigation Button on card footer-->
+            <div slot="footer">      
+                <lightning-button variant="brand" label="Back" disabled={bDisableBackBtn} onclick={goBack}></lightning-button>
+                <lightning-button variant="brand" label="Skip" disabled={bDisableNextBtn} onclick={goSkip} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Next" disabled={bDisableNextBtn} onclick={goNext} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </lightning-card>
+    </div>
+</template>

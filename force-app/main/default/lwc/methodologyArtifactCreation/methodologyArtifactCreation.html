@@ -1,0 +1,37 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name={templateObject}
+        onsubmit={handleSuccess}>
+        <div class="c-container">
+            <lightning-layout pull-to-boundary="medium">
+                <lightning-layout-item flexibility="auto" padding="horizontal-medium">
+                    <div class="custom-box">
+                        <lightning-input-field field-name={Link} required="true" onchange={linkChangedHandler}> </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="horizontal-medium">
+                    <div class="custom-box">
+                        <lightning-input-field field-name={MethodVersion} required="true" onchange={versionChangedHandler}> </lightning-input-field> 
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="horizontal-medium">
+                    <div class="custom-box">
+                        <lightning-input-field field-name={Type} required="true" onchange={typeChangedHandler} id="typefield"> </lightning-input-field>                    
+                    </div>
+                </lightning-layout-item>
+        </lightning-layout>
+        </div>
+    <div style="text-align: right;"><lightning-button variant="neutral" label="Add Another" onclick={handleAdd}></lightning-button></div>
+    &nbsp;
+    &nbsp;
+    </lightning-record-edit-form>
+    &nbsp;
+    <template if:true={showMessage}>
+        <span><h2>You have added the below Artefacts for this method:</h2></span>
+        &nbsp;
+        &nbsp;
+        <template for:each={addedartefacts} for:item="artifacts">
+            <p key={artifacts.id}>{artifacts.id}. Link: {artifacts.link}      Description: {artifacts.description}      Type: {artifacts.typeValue}</p>
+        </template>   
+    </template>
+</template>

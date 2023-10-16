@@ -1,0 +1,15 @@
+.THIS .date-picker{
+    height: 23px;
+    width: 130px;
+    line-height: 1.7rem;
+    min-height: auto;
+}
+.THIS .options-panel{
+	min-width: 320px;
+}
+.THIS .options-dropdown{
+	min-height: 335px;
+}
+.THIS .options-input{
+	float: right;
+}

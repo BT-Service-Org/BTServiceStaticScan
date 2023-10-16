@@ -1,0 +1,48 @@
+.THIS {
+    background-color: #f8f8f8;
+}
+
+.THIS .profilePhoto{
+    max-width:210px!important;
+}
+
+.THIS .img{
+    border-radius: 50%;
+}
+
+.THIS .BlueColumn{
+    color: token(Earthblue);
+    font-size: token(textSize);
+    font-weight: token(divFontWeight);
+}
+
+.THIS .GreyColumn{
+    color: token(blueGrey);
+    font-size: token(textSize);
+    font-weight: token(divFontWeight);
+}
+.THIS {
+    background-color: rgb(248,248,248);
+}
+
+.THIS .slds-button{
+    border-radius: 22.5px;
+    
+}
+
+
+.THIS .buttonContainer {
+    text-align: right!important;
+}
+
+.THIS .communityBuilderButton{
+    min-width: 150px;
+    border-width: 0.5px;
+    border-color: #DDDBDA;
+    color: grey;
+}
+
+.THIS .photoMenuButton{
+    position:relative;
+    right:45px;
+}

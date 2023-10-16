@@ -1,0 +1,44 @@
+<template>
+    <template if:true={showHistory}>
+        <div class="revision-card" if:true={revisionHistoryData.length}>
+            <p class="title-revision ITC_font">
+                Revision History
+            </p>
+            <div class="card-revision-history">
+                <div class="revision-item-title">
+                    <h3>{title}</h3>
+                    <div if:true={showIcon}>
+                        <lightning-icon icon-name="utility:chevrondown" alternative-text="expand" title="Expand"
+                            size="small" onclick={expandHistory} if:false={expand}></lightning-icon>
+                        <lightning-icon icon-name="utility:chevronup" alternative-text="collapse" title="Collapse"
+                            size="small" onclick={collapseHistory} if:true={expand}></lightning-icon>
+                    </div>
+    
+                </div>
+                <template for:each={initialDataLoad} for:item="data">
+                    <div key={data.LastModifiedDate} class="revision-item-details ITC_font">
+    
+                        <div class="revision_info">
+                            <p>Version</p>
+                            <p>{data.Major_Release_Number__c}</p>
+                        </div>
+    
+                        <div class="revision_info">
+                            <p>
+                                <lightning-formatted-date-time value={data.LastModifiedDate} year="numeric" month="short"
+                                    day="2-digit"></lightning-formatted-date-time>
+                            </p>
+                        </div>
+    
+                        <div class="revision_info">
+                            <p>Author:</p>
+                            <p>{data.LastModifiedBy.FirstName} {data.LastModifiedBy.LastName}</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+    
+
+</template>

@@ -1,0 +1,42 @@
+<template>
+
+    <div if:true={showChartSpinner} class="slds-align_absolute-center" style="height:5rem">
+        <lightning-spinner variant="brand" alternative-text="Loading" size="large">
+        </lightning-spinner>
+    </div>
+    <div class="chart-container" lwc:dom="manual">
+    </div>
+
+    <div class="icons-position slds-p-top_x-small" if:false={showChartSpinner}>
+        <span onclick={handleZoomIn} class="zoomin-icon">
+            <lightning-button-icon icon-name="utility:zoomin" size="large" variant="border" alternative-text="Zoom in"
+                class="slds-m-left_xx-small" title="Zoom in"></lightning-button-icon>
+        </span>
+
+        <span onclick={handleZoomOut} class="zoomount-icon">
+            <lightning-button-icon icon-name="utility:zoomout" size="large" variant="border" alternative-text="Zoom out"
+                class="slds-m-left_xx-small" title="Zoom out"></lightning-button-icon>
+        </span>
+        <span onclick={handleReset} class="refresh-icon">
+            <lightning-button-icon icon-name="utility:refresh" size="large" variant="border" alternative-text="Reset"
+                class="slds-m-left_xx-small" title="Reset"></lightning-button-icon>
+        </span>
+        <span onclick={handleSnackbarToggle}>
+            <lightning-button-icon-stateful icon-name="utility:layers" size="large" selected={showSnackbarWindow}
+                variant="border" alternative-text="Enabled/Disable Pop-up" class="slds-m-left_xx-small"
+                title="Enable/Disable Pop-Up"></lightning-button-icon-stateful>
+        </span>
+    </div>
+    <div if:true={selectedMember}>
+        <c-gdcms-team-member-quick-details-modal onclosed={handleClose}>
+            <div if:true={selectedMember.id} slot="content">
+                <c-gdcms-team-member-quick-details bio-data={varUndefined} team-member-id={selectedMember.id}
+                    show-spinner={isTrue}></c-gdcms-team-member-quick-details>
+                    
+            </div>
+        </c-gdcms-team-member-quick-details-modal>
+    </div>
+
+
+
+</template>

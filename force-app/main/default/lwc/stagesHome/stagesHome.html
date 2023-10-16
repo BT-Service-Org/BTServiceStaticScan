@@ -1,0 +1,121 @@
+<template>
+
+<div class="slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+    <lightning-layout multiple-rows>
+        <lightning-layout-item   padding="around-small">
+    <div class="flip-card">
+        <div  class="flip-card-inner" data-id="Discover" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+            <div class="flip-card-front">
+    
+<img src={lampPng} alt="lampIcon" class="customIcon"  style="width: 200px; height: 200px;"  onclick={handleNavigate}>
+</div>
+<div class="flip-card-back">
+    <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">1. Discover</p>
+    
+</div>
+
+</div>
+</div>
+</lightning-layout-item>
+<lightning-layout-item   padding="around-small">
+<div class="flip-card">
+    <div  class="flip-card-inner" data-id="Define" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+        <div class="flip-card-front">
+
+            <img src={defineImage} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+        </div>
+            <div class="flip-card-back">
+
+                <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">2. Define</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+</lightning-layout>
+<lightning-layout multiple-rows>
+<lightning-layout-item   padding="around-small">
+<div class="flip-card">
+    <div  class="flip-card-inner" data-id="Design" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+        <div class="flip-card-front">
+
+            <img src={designImage} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+        </div>
+            <div class="flip-card-back">
+
+                <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">3. Design</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+<lightning-layout-item   padding="around-small">
+<div class="flip-card">
+    <div  class="flip-card-inner" data-id="Deliver" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+        <div class="flip-card-front">
+
+            <img src={deliverImage} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+        </div>
+            <div class="flip-card-back">
+
+                <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">4. Deliver</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+</lightning-layout>
+
+<!---->
+<lightning-layout multiple-rows>
+<lightning-layout-item   padding="around-small">
+    <div class="flip-card">
+        <div  class="flip-card-inner" data-id="Deploy" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+            <div class="flip-card-front">
+    
+                <img src={deployImage} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+            </div>
+                <div class="flip-card-back">
+    
+                    <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">5. Deploy</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+<lightning-layout-item   padding="around-small">
+    <div class="flip-card">
+        <div  class="flip-card-inner" data-id="Scale" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+            <div class="flip-card-front">
+    
+                <img src={scaleImage} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+            </div>
+                <div class="flip-card-back">
+    
+                    <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">6. Scale</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+</lightning-layout>
+<!---->
+<lightning-layout multiple-rows>
+<lightning-layout-item   padding="around-small">
+    <div class="flip-card">
+        <div  class="flip-card-inner" data-id="Monitor &amp; Control" onmouseover={addClass} onmouseout={removeClass} onclick={handleNavigate}>
+            <div class="flip-card-front">
+    
+                <img src={monitorControl} alt="lampIcon" class="customIcon" style="width: 200px; height: 200px;" onclick={handleNavigate}>
+            </div>
+                <div class="flip-card-back">
+    
+                    <p style="text-align: center; color:white;font-size: 15px; padding-top:35px">9. Monitor &amp; Control</p>
+
+</div>
+</div>
+</div>
+</lightning-layout-item>
+</lightning-layout>
+    </div>
+</template>

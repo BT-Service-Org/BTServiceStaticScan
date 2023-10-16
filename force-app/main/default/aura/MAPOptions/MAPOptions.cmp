@@ -1,0 +1,55 @@
+<aura:component>
+	
+	<!--Attributes-->
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="onHide" type="Aura.Action" access="public"/>
+
+	<!--Events-->
+   	<aura:registerEvent name="onOptionChange" type="c:MAPOptionChange"/>
+
+	<!--Content-->
+	<div class="slds-grid slds-grid_vertical-align-end slds-wrap slds-p-horizontal_medium slds-p-vertical_xx-small">
+		<div class="slds-text-heading_medium">Options</div>
+		<span class="heading"></span>
+		<div class="slds-col slds-size_1-of-1" style="height:85%;">
+			<div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-p-vertical_small">
+				<div class="slds-col slds-grid slds-grid_align-end slds-p-bottom_x-small">
+					<div class="slds-col slds-p-top_xx-small">
+						<c:MAPToogle label="Current" value="{!v.interview.options.enableGoalMode}" onChange="{!c.onModeChange}">
+							<span class="slds-form-element__label slds-m-left_x-small">Goal</span>
+						</c:MAPToogle>
+					</div>
+					<div class="slds-col"> 
+						<lightning:select name="defaultGoalDate" class="goalDate" value="{!v.interview.options.defaultGoalDate}" disabled="{!!v.interview.options.enableGoalMode}">
+							<aura:iteration items="{!v.interview.goalDates}" var="goalDate">
+								<option value="{!goalDate.value}">{!goalDate.label}</option>
+							</aura:iteration>
+					    </lightning:select>
+					</div>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Focus" value="{!v.interview.options.enableFocusMode}" onChange="{!c.onChange}"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Tooltips" value="{!v.interview.options.showTooltips}" onChange="{!c.onChange}"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Auto Save" value="{!v.interview.options.enableAutoSave}" onChange="{!c.onChange}"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Progress Bar" value="{!v.interview.options.showProgressBar}" onChange="{!c.onChange}"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Detail Mode" value="{!v.interview.options.enableDetailMode}" onChange="{!c.onChange}"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-end slds-p-vertical_xx-small">
+					<c:MAPToogle label="Examples?" value="{!v.interview.options.showExamples}" onChange="{!c.onChange}"/>
+				</div>
+			</div>
+		</div>
+		<div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-center">
+			<lightning:button class="slds-button_outline-brand" label="Close" onclick="{!v.onHide}"/>
+		</div>
+	</div>
+
+</aura:component>

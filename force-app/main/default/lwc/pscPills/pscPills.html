@@ -1,0 +1,53 @@
+<template>
+    <div class="custom_pills" if:true={tabs.length}>
+        <span class="header">{label}</span>
+        <template for:each={tabs} for:item="data">
+            <div if:true={data.itemName} key={data.itemName} class="badges">
+                <lightning-badge label={data.itemName} class="badge-value slds-badge"></lightning-badge>
+                <lightning-icon icon-name="utility:clear" alternative-text="Delete" data-id={data.Id} size="x-small" title="delete" class="badge-icon" onclick={deleteItem} if:false={hideDelete}></lightning-icon>
+            </div>
+            <!-- Add Button -->
+            <div if:true={data.add} key={data.add} class="badges">
+                <lightning-badge label={data.categoryName} class="badge-value slds-badge addBadge icon"
+                    icon-name="utility:add" onclick={handleButtonClick}></lightning-badge>
+                <c-psc-modal onclosedialog={closeModal} modal-type = "add_tags">
+                    <h2 slot="header" id={data.recId} class="slds-text-heading_medium slds-hyphenate header ITC_font">
+                        {data.title}</h2>
+                    <p slot="tagline" class="tagline"></p>
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading......" size="medium"></lightning-spinner>
+                    </template>
+                    <lightning-record-edit-form record-type-id={data.recTypeId} object-api-name={data.apiName}
+                        onload={handleLoad} onsubmit={handleSubmit} onsuccess={handleSuccess} onerror={handleError}>
+                        <div if:true={data.typeProduct}>
+                            <lightning-input-field field-name="Product__c"> </lightning-input-field>
+                        </div>
+                        <div if:true={data.typeIndustry}>
+                            <lightning-input-field field-name="Industry__c"> </lightning-input-field>
+                        </div>
+                        <div if:true={data.typeRole}>
+                            <p style="font-size: 12px;
+                            color: #696969;
+                            margin-bottom: 10px;
+                            letter-spacing: 0.02em;">Use this search field to find applicable roles for your Target Audience. Your options are <strong>Account Management, Design, Engagement Delivery, Solution Consulting, Strategy, Technical Consulting, or Human-Centered Change.</strong></p>
+                            <lightning-input-field field-name="Role_Family__c"> </lightning-input-field>
+                        </div>
+                        <div if:true={data.typeTag}>
+                            <div if:true={errorFound} class="salesforce_font errormsg">
+                                {errorMsg}
+                            </div>
+                            <lightning-input-field field-name="Tag__c" class="tag"> </lightning-input-field>
+                            <lightning-input type="text" label="Enter New Tag Name" placeholder="Type here..." 
+                            variant="label-inline" value={newTag} onchange={handleTagChange}></lightning-input>
+                        </div>
+                        <div class="slds-m-top_medium">
+                            <lightning-button class="slds-p-vertical_small slds-float_right" type="submit"
+                                label="Submit" variant="brand"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </c-psc-modal>
+            </div>
+        </template>
+    </div>
+
+</template>

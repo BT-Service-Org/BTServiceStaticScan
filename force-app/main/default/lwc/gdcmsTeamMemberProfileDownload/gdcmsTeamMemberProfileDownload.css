@@ -1,0 +1,8 @@
+.iconCss {
+    cursor: pointer;
+    --lwc-colorTextIconDefault: #032D60;
+}
+
+.print-btn {
+    --slds-c-button-text-color: #032D60;
+}

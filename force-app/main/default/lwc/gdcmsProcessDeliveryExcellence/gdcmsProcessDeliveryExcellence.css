@@ -1,0 +1,10 @@
+.headerSection {
+    color: #205ca0;
+    font-family: 'Salesforce Sans';
+    font-weight: normal;
+    vertical-align: baseline;
+    font-size: 15.0pt;
+    border-bottom:1px solid rgba(255,255,255,0.4);
+    text-align: justify;
+    word-wrap: break-word;
+}

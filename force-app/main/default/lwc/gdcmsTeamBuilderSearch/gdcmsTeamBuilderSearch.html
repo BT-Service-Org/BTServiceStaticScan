@@ -1,0 +1,41 @@
+<template>
+    <lightning-input label="Search" value={inputSearch} onchange={handleChange}></lightning-input>
+
+    <template if:true={isDesktopDevice}>
+    <template if:true={showSuggestions}>
+        <template for:each={suggestions} for:item="record">
+          
+            <div key={record} class="slds-grid slds-wrap 
+                slds-dropdown_length-with-icon-7 
+                slds-dropdown_fluid
+                slds-p-left_small
+                li-container-margin"
+         >
+        <!-- <div class="slds-col" style="padding-bottom:.75rem"> -->
+            <div class="slds-col"> 
+            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                <li role="presentation" data-id={record.id} class="slds-listbox__item" >
+                    <div style="height:3rem" class="slds-media slds-listbox__option 
+                                                slds-listbox__option_entity 
+                                                slds-listbox__option_has-meta" 
+                                                role="option"
+                                                data-id={record.id} onclick={handleSelectedMember}>
+                        <span class="slds-media__figure slds-listbox__option-icon slds-p-top_xx-small">
+                            <lightning-icon icon-name="standard:people" size="small"></lightning-icon>
+                        </span>
+                        <span class="slds-media__body" 
+                            style="padding-top: 9px;font-weight: 600;">
+                            <span class="span-margin slds-listbox__option-text 
+                                                         slds-listbox__option-text_entity" >
+                                {record.name}
+                            </span>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+</div>
+        </template>
+    </template>
+</template>
+</template>

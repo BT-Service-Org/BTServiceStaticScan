@@ -1,0 +1,12 @@
+<aura:component implements="lightning:homeTemplate"
+                description="One Region Home Page." >
+    <aura:attribute name="oneRegion" type="Aura.Component[]" />
+    <div>
+        <lightning:layout horizontalAlign="spread" pullToBoundary="small">
+            <lightning:layoutItem size="12" flexibility="grow"
+                                  padding="around-small">
+                {!v.oneRegion}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

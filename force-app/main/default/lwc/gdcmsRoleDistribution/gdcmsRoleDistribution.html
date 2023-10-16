@@ -1,0 +1,36 @@
+<template>
+  <div class="home-sub-heading"> GDC Overview & Role Distribution </div>
+  
+  <lightning-layout vertical-align="stretch" multiple-rows class="slds-p-horizontal_xx-large">
+    <lightning-layout-item size="12" large-device-size="4" medium-device-size="4" small-device-size="12" padding="around-large" flexibility="auto">
+      <div class="card slds-align_absolute-center slds-m-horizontal--medium">
+        <lightning-layout  class="slds-p-around_large" multiple-rows>
+          <lightning-layout-item size="4" style="padding: 1rem;margin: 0 auto;">
+            <img class="slds-float--right" height="45" width="45" src={team}>
+          </lightning-layout-item>
+          <lightning-layout-item size="8" class="slds-align_absolute-center" style="padding: .55rem;margin: 0 auto;">         
+            <div class="slds-wrap slds-grid">
+              <div class="slds-size--1-of-1 font-weight-600 ">Total Headcount </div>
+              <div class="slds-size--1-of-1 font-weight-300 "> {totalHeadCount.data} & growing  </div>
+            </div>
+              
+          </lightning-layout-item>
+          <lightning-layout-item size="12">
+            <c-gdcms-static-content-block external-content-id={GDCOverviewContentId} style="width:100%"></c-gdcms-static-content-block>
+          </lightning-layout-item>
+        </lightning-layout>
+      </div>
+    </lightning-layout-item>  
+
+    <lightning-layout-item size="12" large-device-size="4" medium-device-size="4" small-device-size="12" padding="around-large" flexibility="auto">
+      <div class="card slds-m-horizontal--medium">
+        <c-gdcms-static-content-block external-content-id={GDCRolesContentId}></c-gdcms-static-content-block>
+      </div>
+    </lightning-layout-item>  
+    <lightning-layout-item size="12" large-device-size="4" medium-device-size="4" small-device-size="12" padding="around-large" flexibility="auto">
+      <div class="card slds-m-horizontal--medium">
+        <c-gdcms-static-content-block external-content-id={PracticeAreaContentId}></c-gdcms-static-content-block>
+      </div>
+    </lightning-layout-item>  
+  </lightning-layout>
+</template>

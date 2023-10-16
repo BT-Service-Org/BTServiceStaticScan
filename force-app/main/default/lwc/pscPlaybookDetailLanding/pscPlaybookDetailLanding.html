@@ -1,0 +1,55 @@
+<template>
+    <div class="stage_landing_page" if:true={playbookData.playbookData}>
+
+        <!-- Mandatory stages  -->
+        <h3>{playbookData.playbookData.Name}</h3>
+        <div class="stage_head" if:true={mandatoryStages.length} >
+            <p>Mandatory Stages</p>
+            <p class="stage_point">{playbookData.playbookData.Description__c}</p>
+        </div>
+
+        <div class="stage_cards" if:true={mandatoryStages.length}>
+            <template for:each={mandatoryStages} for:item="stage">
+                <div key={stage.Id} class="stage_card stage_card_mandatory">
+
+                    <div class="card_head">
+                        <p class="stage_order">{stage.number}</p>
+                        <div class="stage_title">
+                            <a href={stage.url}><p class="stage stageDesc ITC_font">{stage.Name}</p></a>
+                            <p class="duration ITC_font" if:true={stage.StageDuration__c}>({stage.StageDuration__c})</p>
+                        </div>
+                    </div>
+                    <div class="item-description">
+                        <lightning-formatted-rich-text value={stage.Description__c} class="stage_desc salesforce_font">
+                        </lightning-formatted-rich-text>
+                    </div>
+                    <p class="stage_link"><a href={stage.url}  class="stage_detail_link salesforce_font">More Details</a></p>
+
+                </div>
+            </template>
+        </div>
+        <!-- Optional Stages -->
+        <div class="stage_head" if:true={optionalStages.length}>
+            <p>Optional Stages</p>
+            <p class="stage_point">{playbookData.playbookData.Description__c}</p>
+        </div>
+        <div class="stage_cards" if:true={optionalStages.length}>
+            <template for:each={optionalStages} for:item="stage">
+                <div key={stage.Id} class="stage_card stage_card_optional">
+                    <div class="card_head">
+                        <p class="optional_stage_order ITC_font">{stage.number}</p>
+                        <div class="stage_title">
+                            <a href={stage.url}><p class="optional_stage_name ITC_font">{stage.Name}</p></a>
+                            <p class="optional_stage_duration ITC_font" if:true={stage.StageDuration__c}>({stage.StageDuration__c})</p>
+                        </div>
+                    </div>
+                    <div class="optional_item-description">
+                        <lightning-formatted-rich-text value={stage.Description__c} class="stage_desc salesforce_font">
+                        </lightning-formatted-rich-text>
+                    </div>
+                    <p class="stage_link"><a href={stage.url} class="stage_detail_link salesforce_font">More Details</a></p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

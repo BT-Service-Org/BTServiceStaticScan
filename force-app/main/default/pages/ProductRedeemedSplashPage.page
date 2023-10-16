@@ -1,0 +1,31 @@
+<apex:page standardController="Product__c" recordSetVar="prods" tabStyle="Product__c" extensions="PointsRedeemedExtension" >
+
+
+    <apex:sectionHeader title="Redeem Points" subtitle="Step 1 of 2"/>
+    <apex:form >
+    <apex:pageMessages /> 
+        <apex:pageBlock >
+        <apex:outputPanel id="thePanel" layout="block">You have <h4>{!pointsAvailable}</h4> points to redeem. </apex:outputPanel>
+        <apex:pageBlockButtons location="top">      
+        <apex:commandButton value="Continue" action="{!step2}"  styleClass="btn"/>
+        <apex:commandButton value="Cancel" immediate="true" action="{!cancel}"/>
+    </apex:pageBlockButtons> 
+     
+        <apex:outputPanel id="thePanel1" layout="block">        
+        Click Continue to go to the next step and confirm your selection or  
+        Click Cancel to change your selection.  
+         </apex:outputPanel>
+        <br></br>
+        
+        <h4>Exciting Prizes you can buy for the points you earn.</h4>
+        <apex:panelGrid columns="4">
+
+        <a href="http://www.salesforce.com"><img src="https://c.na1.content.force.com/servlet/servlet.FileDownload?file=015300000027gR6" title="iPod Shuffle 2G" /></a>
+        <a href="http://www.salesforce.com"><img src="https://c.na1.content.force.com/servlet/servlet.FileDownload?file=015300000027gQy" title="Bose SoundDock Series II Digital Music System" /></a>
+        <a href="http://www.salesforce.com"><img src="https://c.na1.content.force.com/servlet/servlet.FileDownload?file=015300000027gR7" title="iPod Touch 8G" /></a>       
+        <a href="http://www.salesforce.com"><img src="https://c.na1.content.force.com/servlet/servlet.FileDownload?file=015300000027gR3" title="Xbox 360 Kinect Bundle 4G" /></a>
+        </apex:panelGrid>
+    </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

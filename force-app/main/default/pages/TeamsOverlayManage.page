@@ -1,0 +1,105 @@
+<apex:page sidebar="false">
+    <head>
+    <!-- Javascript -->
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />	
+	<!-- Common Js for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />	
+   
+    </head>
+     <body>
+ 	 <!-- Initialize the overlay box for modal.js -->
+		<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+		<div id="modal_container"></div>
+		<script>createOverlay('initializeModal')</script>
+		
+		  <!-- Content  -->
+		  <div class="modalContent">
+		<div id="TeamMemberPermision" style="display:none;">
+		  <!-- Title of Dialog -->
+		  <div class="modalTitle">
+			  <div class="title">  Manage Teams</div>
+			  <div class="closeEvent">
+				  <a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			  </div>
+		  </div>
+		  <div>
+            <table cellspacing="0" cellpadding="0" class="pageList">
+               <thead>
+                   <tr>
+                       <td colspan="2" class="manage_title_description" width="300px">
+                           Action
+                       </td>
+                       <td class="manage_title_description" width="30px">
+                           Name
+                       </td>
+                       <td width="90px">
+                           <span class="imgArrow">&nbsp;</span>
+                       </td>
+                       <td class="manage_title_description" width="250px">
+                           Your Team Profile
+                       </td>
+                   </tr>
+               </thead>
+               <!-- Description  -->
+               <tbody>
+                   <tr>
+                       <td>
+                           <span class="manage_detail_description_underline">Leave </span>
+                       </td>
+                       <td style="padding-left:15px;padding-right:5px;">
+                           <img src="{!URLFOR($Resource.TeamsResources, 'images/temp/team.gif')}" alt="" border="1" style="border-color:#cccccc"/>
+                       </td>
+                       <td colspan="2" class="manage_detail_description_underline">
+                           {Team Name}
+                       </td>
+                       <td class="manage_detail_description">
+                           Member
+                       </td>
+                   </tr>
+                   <!-- Repeat2  -->
+                   <tr>
+                       <td>
+                           <span class="manage_detail_description_underline">Edit </span>
+                           <span class="separator">|</span>
+                           <span class="manage_detail_description_underline">Del </span>
+                       </td>
+                       <td style="padding-left:15px;padding-right:5px;">
+                           <img src="{!URLFOR($Resource.TeamsResources, 'images/temp/team.gif')}" alt="" border="1" style="border-color:#cccccc"/>
+                       </td>
+                       <td colspan="2" class="manage_detail_description_underline">
+                           {Team Name}
+                       </td>
+                       <td class="manage_detail_description">
+                           Team Admin
+                       </td>
+                   </tr>
+                   <!--Repeat2 -->
+                   <tr>
+                       <td>
+                           <span class="manage_detail_description_underline">Leave </span>
+                       </td>
+                       <td style="padding-left:15px;padding-right:5px;">
+                           <img src="{!URLFOR($Resource.TeamsResources, 'images/temp/team.gif')}" alt="" border="1" style="border-color:#cccccc"/>
+                       </td>
+                       <td colspan="2" class="manage_detail_description_underline">
+                           {Team Name}
+                       </td>
+                       <td class="manage_detail_description">
+                           Member
+                       </td>
+                   </tr>
+               </tbody>
+           </table>
+           </div></div>
+        </div>
+    </body>
+<a href="javascript:;" onclick="createOverlay('','TeamMemberPermision','450');">Team Member Permision</a>
+</apex:page>

@@ -1,0 +1,26 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="label" type="String" access="public"/>
+	<aura:attribute name="value" type="Object" access="public"/>
+
+	<aura:attribute name="onChange" type="Aura.Action" access="public"/>
+
+	<!--Handlers-->
+	<aura:handler name="change" value="{!v.value}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-form-element">
+		<label class="slds-checkbox_toggle slds-grid">
+			<aura:if isTrue="{!!empty(v.label)}">
+				<span class="slds-form-element__label slds-m-bottom_none">{!v.label}</span>
+			</aura:if>
+			<input aura:id="toogle" name="checkbox-toggle" type="checkbox" aria-describedby="checkbox-toggle" value="checkbox-toggle" onchange="{!c.onChange}"/>
+			<span id="checkbox-toggle" class="slds-checkbox_faux_container" aria-live="assertive">
+				<span class="slds-checkbox_faux"></span>
+			</span>
+			{!v.body}
+		</label>
+	</div>
+
+</aura:component>

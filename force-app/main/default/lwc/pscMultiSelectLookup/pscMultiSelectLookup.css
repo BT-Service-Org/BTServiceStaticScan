@@ -1,0 +1,17 @@
+.bubble {
+    --sds-c-pill-color-background: #EEF4FF;
+    --slds-c-pill-radius-border: 16px;
+    display: block;
+    margin-top: 5px;
+}
+.bubble span {
+    padding: 5px !important;
+}
+.records {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.lookup_label {
+    display: flex;
+}

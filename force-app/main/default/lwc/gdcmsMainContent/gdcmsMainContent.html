@@ -1,0 +1,275 @@
+<template>
+  <!-- <div class="container">
+    <div class="image-holder">
+      <div class="back-screen">
+        <div class="headline">
+          We believe that the business of business is to improve the state of
+          the world.
+        </div>
+      </div>
+    </div>
+    <div class="slds-grid slds-gutters">
+      <template for:each={content} for:item="item">
+        <div key={item} class="card slds-col"></div>
+      </template>
+    </div>
+  </div> -->
+
+  <div class="about-us">
+  <h2 class="about-us-heading"> About US </h2>
+  <div class="about-us-content">
+    <p class="about-us-para"> The Global Delivery Centre (GDC) are the delivery arm of Professional Service, that is in the midst of hyper-growth. Starting from 400 consultants at the beginning of FY22, are on track to achieve 1200 headcount at the close of FY23, with projections for 2000+ consultants by FY24.</p>
+    <p class="about-us-para"> GDC is committed to providing our clients support on their end-to-end delivery for Core & Industry clouds. Keeping in mind our end-to-end focus, we continue to scale up in areas like HCC, MuleSoft & Migration as well.</p>
+    <p class="about-us-para"> GDC was created to allow sustainable growth, flexibility, and agility for Salesforce Global Professional Services business, by offering full teams of resources that can be deployed immediately to support customer engagements. We're using a team-based approach, offering cross-cloud, cross-functional "pods" which will be comprised of fully-resourced teams that will support end-to-end delivery for our customers.</p>
+    <p class="about-us-para"> We're hiring top talent, and using best in class on-boarding, enrichment and enablement tools & processes for this team to ensure the right skills are available for our customers.</p>
+  </div>
+ 
+  <!--anu <div class="image-overlay">
+                  <img loading="lazy" src="https://wp.salesforce.com/en-us/wp-content/uploads/sites/4/2021/04/hp-newsletter-right.png?w=544" class="accentImg" alt="">
+             </div>-->
+ 
+</div>
+
+
+
+ <!--<div class="slds-grid slds-gutters slds-m-bottom_large">
+    <template for:each={cardContent} for:item="item">
+      <div key ={item} class="slds-col">
+  <c-gdcms-flip-card  flip-card-height="200px">
+    <h2 slot="Front">{item}</h2>
+    <p slot="Back">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. </p>
+  </c-gdcms-flip-card>
+</div>
+</template>
+</div>-->
+<div style="display: flex;justify-content: center;">
+    <img class="gdc-embedded-image" src={journeyimg} style="height: 550px;width: 80%;Padding-bottom :30px" alt="journey">
+</div>
+<div class="home-container gdc-overview">
+  <div class="home-sub-heading"> GDC Overview & Role Distribution </div>
+  <div class="row">
+      <div class="col-one-third">
+          <div class="home-container container-shadow d-flex">
+              <div class="gdc-overview-detail text-center">
+                  <div class="gdc-overview-icon pr-2"> <img class="gdc-embedded-image" width="90" src={location}> </div>
+                  <div class="gdc-overview-text text-center w-100">
+                    <span class="font-weight-600 d-block">Location </span>  
+                    <span class="font-weight-300">Hyderabad, India</span>
+                      
+                  </div>
+              </div>
+              <div class="gdc-overview-detail text-center">
+                  <div class="gdc-overview-icon pr-2"> <img class="gdc-embedded-image" width="90" src={team}> </div>
+                  <div class="gdc-overview-text text-center w-100">
+                      <span class="font-weight-600">Total Headcount </span>
+                      <span class="d-block font-weight-300"> {teamMemberCount} & growing </span>
+                  </div>
+              </div>
+              <div class="gdc-overview-detail text-center">
+                  <div class="gdc-overview-icon pr-2"> <img class="gdc-embedded-image" width="90" src={region}> </div>
+                  <div class="gdc-overview-text text-center w-100">
+                      <span class="font-weight-600">Regions Served </span>
+                      <span class="d-block font-weight-300">Global</span>
+                  </div>
+              </div>
+              <div class="gdc-overview-detail text-center">
+                  <div class="gdc-overview-icon pr-2"> <img class="gdc-embedded-image" width="90" src={project}> </div>
+                  <div class="gdc-overview-text text-center w-100">
+                      <span class="font-weight-600 d-block">Projects completed </span>
+                      <span class = "font-weight-300">65+</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <div class="col-one-third">
+          <div class="container-shadow">
+              <div class="home-sub-heading2"> <strong> GDC Roles </strong> </div>
+              <ul class="list-style-square font-weight-300">
+                  <li> Solution Consultants </li>
+                  <li> Technical Architects </li>
+                  <li> Technical Consultants </li>
+                  <li> Quality Assurance Consultants </li>
+                  <li> Test Automation Consultants </li>
+                  <li> Delivery Managers* </li>
+                  <li> Scrum Masters/Project Managers* </li>
+              </ul>
+          </div>
+      </div>
+
+      <div class="col-one-third">
+        <div class="container-shadow">
+            <div class="home-sub-heading2"><strong> Practice Areas </strong> </div>
+            <ul class="list-style-square font-weight-300">
+                <li>Sales Cloud</li>
+                <li>Service Cloud</li>
+                <li>Marketing Cloud</li>
+                <li>Experience Cloud</li>
+                <li>Commerce Cloud
+                    <ul class="list-style-round list-style-square  font-weight-300">
+                        <li>B2B</li>
+                        <li>B2C</li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div style="display: flex;justify-content: center;">
+    <img class="gdc-embedded-image" src={client_serviced} alt="client_serviced" style="height: 600px; padding-bottom: 30px;width: 90%;">
+</div>
+
+<div class="home-container">
+  <div class="row">
+      <div class="d-flex text-center justify-content-center">
+<div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>GDC Team</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={gdcteam}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow" 
+                    <p>GDC Team</p> 
+               </a> -->
+                <a data-id="/gdc-team" onclick={navigate}>
+                GDC Team 
+                  
+              </a>
+              <p class="font-weight-300">Our team is key to our success. Get the details about the GDC team and check team members skills and experience.</p>
+   
+            
+         
+           </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Employee Engagement</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={engage}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow">
+              <p>Employee Engagement</p>
+          </a> -->
+          <a data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/home" onclick={navigateExternal}>
+            Employee Engagement
+        </a>
+        <p class="font-weight-300">We firmly believe that more engaged our practitioners are more effective they would be in their delivery</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Employee Enablement</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={enab}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow">
+              <p>Employee Enablement</p>
+          </a> -->
+          <a data-id="/employee-enablement" onclick={navigate}>
+            Employee Enablement
+        </a>
+        <p class="font-weight-300">We believe right enablement is critical for long term success of all our practitioners hence we take our enablement seriously</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Asset & Accelerators</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={asset}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow">
+              <p>Asset & Accelerators</p>
+          </a> -->
+          <a data-id="/assets-accelerators" onclick={navigate}>
+            Asset & Accelerators
+        </a>
+        <p class="font-weight-300">Continuous innovations is inherent in our ways of working. Click here to know details of our Assets & Accelerators</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Process & Delivery</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={process}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow">
+              <p>Process & Delivery</p>
+          </a> -->
+          <a data-id="/process-delivery-excellence" onclick={navigate}>
+            Process & Delivery
+        </a>
+        <p class="font-weight-300">Our delivery is based on strong foundation of Processes supported by effective metrices</p>
+      </div>
+  </div>
+  
+</div>
+          <div class="flip-container flipper-id-gdc">
+  <div class="flip">
+      <div class="front-tile">
+          <p><strong>Success Stories</strong></p>
+          <hr>
+          <span class="gdc-file-wrapper">
+              <img class="gdc-embedded-image" width="90" src={story}>
+          </span>
+          <p></p>
+      </div>
+      <div class="back-tile">
+          <!-- <a href="#" rel="nofollow">
+              <p>Success Stories</p>
+          </a> -->
+          <a data-id="/success-stories" onclick={navigate}>
+            Success Stories
+        </a>
+        <p class="font-weight-300">We take pride in what we deliver, and these stories are testament of our delivery</p>
+      </div>
+  </div>
+  
+</div>
+          
+          
+          
+      </div>
+  </div>
+</div>
+
+
+
+</template>

@@ -1,0 +1,163 @@
+<apex:component controller="TeamsWidgetActiveDiscussionsController" >
+	
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a widget	
+	-->	
+	<apex:attribute name="team" description="The team ID" type="String" required="false" assignTo="{!teamId}" />
+	
+	<!-- ### Styles ### -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsWidgetActiveDiscussions.css')}" />			
+	
+	<!-- ### Javascript ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>	
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetActiveDiscussions.js')}"></script>		
+	
+	<!-- ### Component Include ### -->
+	<c:TeamsOverlayNewDiscussion />
+	
+	<!-- ### Script Swirly ### -->
+	<script> 
+		
+		function showSwirly(elemClass)
+		{
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+			divLoaders.each(function(elem) {
+				var div = elem.ancestors()[0];
+				elem.style.height = div.getHeight()+'px';
+				Effect.Appear(elem, { duration: 0.1, to: 0.8 });
+			});
+		}
+		
+		function hideSwirly(elemClass){
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+				divLoaders.each(function(elem) {
+				Effect.Fade(elem);
+			});
+		}
+	</script>
+	
+	<style>
+
+		.swirly_discussion
+		{
+			background: #FFFFFF url({!URLFOR($Resource.TeamsResources, 'images/layout/small_loader.gif')}) no-repeat center center;
+			left: 0pt;
+			opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			z-index: 9999;
+		}
+	
+	</style>
+	
+	<!--### Rerender Method ###--> 
+	<apex:form >
+		<apex:actionFunction name="reloadDiscussionList" action="{!refresh}" onComplete="hideSwirly('swirly_discussion')" rerender="TaskWidgetLeft,TaskWidgetFull" />
+    </apex:form>  
+	
+	<!-- ### Wide Widget ### -->	
+	<div class="myBigWidget">
+		<div class="teamBlockTitle"> 
+			<h4>Recent Discussions</h4>
+		</div>
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!UserPermissions.canCreate}">
+					<a class="topRightLinks" href="javascript:;" onclick="createOverlay('','NewTopicForm','362','setNewFocus()','');relocateOverlay('50');" >New</a> 
+			</apex:outputpanel>
+			<a href="/apex/DiscussionTopics?id={!teamId}" class="topRightLinks" >See More&#187;</a>
+		</div>
+		<div style="overflow: hidden; position: relative"> 
+			<div class="swirly_discussion" style="display: none;"></div>
+			<apex:outputpanel id="TaskWidgetLeft">
+				<div class="threads">
+					<div style="{!IF(activeDiscussionsSize > 0, 'display:none', '')}; padding:10px; text-align:center;">
+						<span>No discussion topics have been created yet.</span> 
+					</div>
+					<div style="{!IF(activeDiscussionsSize > 0, '', 'display:none')};" >		
+						<apex:dataTable value="{!discussions}" var="discu" id="ActiveDiscussionTable" styleClass="discussion" style="margin-top: 5px;" >
+							<apex:column >
+								<apex:facet name="header"> &nbsp;</apex:facet>
+								<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/icons/minifeeds/minifeed_discussion.gif')}"/>
+							</apex:column>
+							
+							<apex:column >
+								<apex:facet name="header">Topics</apex:facet>
+								<apex:outputLink value="/apex/discussiondetail?id={!discu.discussion.Id}" >{!discu.discussion.Subject__c}</apex:outputLink>
+							</apex:column>
+							
+							<apex:column width="37px">
+								<apex:facet name="header">Views</apex:facet>
+								<div class="number" style="text-align:center;"><apex:outputText value="{!discu.Views}"/></div>
+							</apex:column>
+							
+							<apex:column width="37px" >
+								<apex:facet name="header"><div style="text-align:center;">Replies</div></apex:facet>
+								<div class="number" style="text-align:center;"><apex:outputText value="{!discu.Replies}"/></div>
+							</apex:column>
+							
+							<apex:column >
+								<apex:facet name="header">Last Reply</apex:facet>
+								<apex:outputText value="{!discu.LastPostDate}" ></apex:outputText>
+								<apex:outputText value=" by " rendered="{!IF((discu.LastReplyAuthorId != ''), true, false)}" />
+								<apex:outputText value="No Replies " rendered="{!IF((discu.LastReplyAuthorId != ''), false, true)}" />
+								<apex:outputLink value="PeopleProfileDisplay?id={!discu.LastReplyAuthorId}" >{!discu.LastReplyAuthor}</apex:outputLink>
+							</apex:column>
+						</apex:dataTable>
+					</div>	
+				</div>
+			</apex:outputpanel>  
+		</div>
+	</div>
+	
+	<!-- ### Thin Widget ### -->
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Recent Discussion</h4></div></div>
+   		</div>
+   		<div class="box_content">
+    		<div class="back_gray">
+    			<apex:outputpanel rendered="{!UserPermissions.canCreate}">
+					<a href="javascript:;" onclick="createOverlay('','NewTopicForm','362','setNewFocus()',''); relocateOverlay('50');" >New</a> |
+				</apex:outputpanel>     			
+				<a href="javascript:;">See More&#187;</a>				
+    		</div>
+    		<div style="overflow: hidden; position: relative"> 
+				<div class="swirly_discussion" style="display: none;"></div>
+	    		<apex:outputPanel id="TaskWidgetFull" layout="block" >   
+		    		<div style="{!IF(activeDiscussionsSize > 0, 'display:none', '')}; padding:10px; text-align:center;">
+						<span>No discussion topics have been created yet.</span> 
+					</div>
+					<div style="{!IF(activeDiscussionsSize > 0, '', 'display:none')};" >
+						<apex:outputPanel id="noTopicList" layout="block" >
+							<ul class="minifeed_discussion">		
+								<apex:repeat value="{!discussions}" var="discu" rows="5">
+									<li>
+										<apex:outputLink value="/apex/DiscussionDetail?id={!discu.discussion.Id}" >{!discu.discussion.Subject__c}</apex:outputLink>
+									</li>
+								</apex:repeat>
+							</ul>
+						</apex:outputPanel>  
+					</div>  
+				</apex:outputPanel>  
+			</div>
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+		</div>
+	</div>
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>
+</apex:component>

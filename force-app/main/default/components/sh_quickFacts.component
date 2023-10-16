@@ -1,0 +1,43 @@
+<apex:component >
+<!-- ToDo:
+  Component with controller to take practice name as input and provide following outputs 
+  1. 4 quick fact image links
+  2. 1 fact sheet doc link
+-->
+
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="quickFact1" type="String" required="true"/>
+  <apex:attribute description=""  name="quickFact2" type="String" required="true"/>
+  <apex:attribute description=""  name="quickFact3" type="String" required="true"/>
+  <apex:attribute description=""  name="quickFact4" type="String" required="true"/>
+  <apex:attribute description=""  name="factSheet" type="String" required="true"/>
+  <apex:outputPanel layout="none" rendered="{!(quickFact1 !=null)}">
+
+   <div id="quick-facts-wrapper" class="quick-facts-wrapper">                
+     <div id="quick-fact-wrapper" class="quick-fact-wrapper">
+       <div class="quick-fact-container clearfix">
+
+         <div class="quick-fact-bar"><span class="quick-fact-bar-text">Quick Facts</span></div>
+         <div class="single-quick-fact col-sm-2">
+           <img width="294" height="294" src="{!URLFOR($Action.Attachment.Download, quickFact1)}" class="attachment-sf-quick-fact-square" alt="quickFact1" />                            
+         </div>
+         <div class="single-quick-fact col-sm-2">
+           <img width="294" height="294" src="{!URLFOR($Action.Attachment.Download, quickFact2)}" class="attachment-sf-quick-fact-square" alt="quickFact12" />                            
+         </div>
+         <div class="single-quick-fact col-sm-2">
+           <img width="294" height="294" src="{!URLFOR($Action.Attachment.Download, quickFact3)}" class="attachment-sf-quick-fact-square" alt="quickFact3" />                            
+         </div>
+         <div class="single-quick-fact col-sm-2">
+           <img width="294" height="294" src="{!URLFOR($Action.Attachment.Download, quickFact4)}" class="attachment-sf-quick-fact-square" alt="quickFact4" />                            
+         </div>
+           
+         <div class="fact-sheet-container">
+           <a class="fact-sheet-download" href="{!URLFOR($Action.Attachment.Download, factSheet)}">Download Data Sheets</a>
+         </div>
+
+       </div>
+     </div>
+   </div>
+   </apex:outputPanel>
+
+</apex:component>

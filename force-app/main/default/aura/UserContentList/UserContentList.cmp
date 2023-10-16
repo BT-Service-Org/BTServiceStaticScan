@@ -1,0 +1,48 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="StationSPController" access="global">
+    <aura:attribute name="backgroundColor" type="string" default="Light 1"/>
+    <aura:attribute name="titleFontSize" type="String" default="28px" />
+    <aura:attribute name="titleAlignment" type="String" default="Left" />
+    <aura:attribute name="displayAsAccordion" type="boolean" default="true" />
+    <aura:attribute name="ContentList" type="List" default="[]"/>
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="NextReviewDate" type="Date"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.getContent}" />
+    <div class="slds-scrollable_y" style="height: 500px;">
+        <div class="list-table" style="background:none;">
+            <div class="Table-Heading">
+                <div class="cellType-1 width-15 cell-bottom">
+                    <p>Title</p>
+                </div>
+                <div class="cellType-1 width-9 cell-bottom">
+                    <p>Visibility</p>
+                </div>
+                <div class="cellType-1 width-15 cell-bottom">
+                    <p>Content Group</p><p>(Product:Group)</p>
+                </div>
+                <!-- <div class="cellType-1 width-9 cell-bottom">
+                    <p>Owner</p>
+                </div>
+                <div class="cellType-1 width-9 cell-bottom">
+                    <p>Primary Contact</p>
+                </div> -->
+                <div class="cellType-1 width-9 cell-bottom">
+                    <p>Last Modified Date</p>
+                </div>
+                <!-- <div class="cellType-1 width-9 cell-bottom">
+                    <p>Next Review Date</p>
+                </div> -->
+                <div class="cellType-1 width-9 cell-bottom" >
+                    <p>Status</p>
+                </div>
+                <!-- style="border-right: 1px solid black;" -->
+                <div class="cellType-1 width-16 cell-bottom">
+                    <p>Actions</p>
+                </div>
+            </div>
+                <aura:iteration var="sp" items="{!v.ContentList}" indexVar="index">
+                    <c:ContentRecordDetails contentpiece="{!sp}" contentOwner="{!v.contentOwner}" contentContact="{!v.contentContact}"/>
+                </aura:iteration>
+        </div>
+        </div>
+</aura:component>

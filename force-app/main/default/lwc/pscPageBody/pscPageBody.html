@@ -1,0 +1,143 @@
+<template>
+
+    <!-- Author name and last publish date -->
+    <div class="section-container" if:true={pageSections.length}>
+        <div class="page_section_header" if:false={isPageTypeCommunity}>
+            <div class="author ITC_font" if:true={authorName}>
+                <lightning-icon icon-name="utility:user" size="x-small" class="my-icon">
+                </lightning-icon>
+                Author: {authorName}
+            </div>
+            <div class="publish_date ITC_font" if:true={lastModifiedDate}>
+                <lightning-icon icon-name="utility:clock" size="x-small" name="Published date" class="my-icon">
+                </lightning-icon>
+                <lightning-formatted-date-time value={lastModifiedDate} year="numeric" day="2-digit" month="long">
+                </lightning-formatted-date-time>
+                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help13">
+                    <div class="slds-popover__body">Last Publication Date</div>
+                </div>
+            </div>
+        </div>
+
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size={section.size} padding="around-small" for:each={pageSections} for:item="section"
+                key={section.Id}>
+                <!-- Text Editor -->
+                <template if:true={section.isTextEditor}>
+
+                    <h3 class="section-title sectiondefault" if:true={section.Page_Section_Title__c}>{section.Page_Section_Title__c}</h3>
+                    <lightning-formatted-rich-text value={section.Section_Body__c}></lightning-formatted-rich-text>
+                </template>
+                <!-- Text Editor with Image -->
+                <template if:true={section.isTextEditorWithImage}>
+
+                    <!-- Image width present -->
+                    <div if:true={section.isImageWidth}>
+
+                        <!-- Image alignment not provided -->
+                        <div if:true={section.alignDefault}>
+                            <h3 class="section-title" if:true={section.Page_Section_Title__c}><span
+                                    class={section.contentFont}>{section.Page_Section_Title__c}</span></h3>
+                            <div class="section-card" if:true={section.imageUrl__c} style="flex-direction: column;">
+
+                                <span class={section.imagewidth} if:true={section.alignDefault} style="margin:auto">
+                                    <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                                </span>
+                                <div>
+                                    <span class="section-content" if:true={section.Section_Body__c}>
+                                        <lightning-formatted-rich-text
+                                            value={section.Section_Body__c}></lightning-formatted-rich-text>
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Image alignment provided -->
+
+                        <div if:false={section.alignDefault}>
+                            <h3 class="section-title" if:true={section.Page_Section_Title__c}><span
+                                    class={section.contentFont}>{section.Page_Section_Title__c}</span></h3>
+                            <div class="section-card" if:true={section.imageUrl__c}>
+                                <span if:true={section.alignLeft} class={section.imagewidth}>
+                                    <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                                </span>
+                                <div class={section.contentwidth}>
+                                    <span class="section-content" if:true={section.Section_Body__c}>
+                                        <lightning-formatted-rich-text
+                                            value={section.Section_Body__c}></lightning-formatted-rich-text>
+                                    </span>
+
+                                </div>
+                                <span if:true={section.alignRight} class={section.imagewidth}>
+                                    <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Image width not provided so set to full width -->
+                    <div if:false={section.isImageWidth}>
+
+                        <h3 class="section-title sectiondefault" if:true={section.Page_Section_Title__c}>{section.Page_Section_Title__c}</h3>
+                        <div class="section-card" style="flex-direction: column;">
+                            <span class="full_img" style="margin:10px auto">
+                                <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                            </span>
+                            <lightning-formatted-rich-text value={section.Section_Body__c}></lightning-formatted-rich-text>
+                        </div>
+                        
+                    </div>
+
+                </template>
+                <!-- Image card list -->
+                <template if:true={section.isImageCard}>
+                    <div class="section-card" if:true={section.imageUrl__c}>
+                        <span if:true={section.alignLeft} class={section.imagewidth}>
+                            <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                        </span>
+                        <span if:true={section.alignDefault} class={section.imagewidth}>
+                            <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                        </span>
+                        <div class={section.contentwidth}>
+                            <span class="section-content">
+                                <h3 class="section-title" if:true={section.Page_Section_Title__c}><span
+                                        class={section.contentFont}>{section.Page_Section_Title__c}</span></h3>
+                                <span if:true={section.alignDefault} class={section.imagewidth}>
+                                    <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                                </span>
+                                <lightning-formatted-rich-text
+                                    value={section.Section_Body__c} if:true={section.Section_Body__c}></lightning-formatted-rich-text>
+                            </span>
+
+                        </div>
+                        <span if:true={section.alignRight} class={section.imagewidth}>
+                            <img src={section.imageUrl__c} if:true={section.imageUrl__c}>
+                        </span>
+                    </div>
+
+                </template>
+                <!-- Video URL Section -->
+                <template if:true={section.isVideoSection}>
+
+                    <h3 class="section-title sectiondefault" if:true={section.Page_Section_Title__c}>{section.Page_Section_Title__c}</h3>
+
+                    <div class="media" if:true={section.videoUrl}>
+                        <iframe width="100%" height="550" src={section.videoUrl}
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <lightning-formatted-rich-text value={section.Section_Body__c} if:true={section.Section_Body__c}></lightning-formatted-rich-text>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div if:false={isPageTypeCommunity}>
+            <c-psc-reusable-voting record-id={pageId} parent-type="PSC_Page__c">
+            </c-psc-reusable-voting>
+        </div>
+    </div>
+</template>

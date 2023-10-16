@@ -1,0 +1,137 @@
+<template>
+    <div onclick={toggleCardMenu}>
+        <lightning-card>
+            <div slot="title" class="slds-text-heading_large pageHeading heading">
+                Published Asset
+            </div>
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+            <div class="myTable">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                        <span onkeypress={initiateSearchOnEnter}>
+                            <lightning-input type="search" onchange={handleSearch} class="slds-var-m-left_x-small"
+                                label="Search Assets" value={searchText} name="enter-search" is-loading={isLoading}>
+                            </lightning-input>
+                        </span>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                        <lightning-combobox class="slds-var-m-left_x-small" name="Status" label="Intended Domain/Industries"
+                            value={assetIndustrySelectedValue} placeholder="Select Intended Domain/Industries"
+                            options={assetIndustryOptions} onchange={handleIndustryChange} onfocus={toggleCardMenu}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="3" medium-device-size="5" small-device-size="12">
+                        <lightning-combobox class="slds-var-m-left_x-small" name="Status" label="Cloud Competency"
+                            value={assetCloudSelectedValue} placeholder="Select Cloud Competency"
+                            options={assetCloudOptions} onchange={handleCloudChange} onfocus={toggleCardMenu}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="2"
+                        medium-device-size="2" small-device-size="12" class="slds-var-m-top_large horizontal-center"
+                        style="justify-content: left;">
+                        <span class="slds-var-m-top_large slds-var-p-horizontal_xx-small">
+                            <lightning-button if:true={isSmallDevice} variant="neutral" label="Reset Filters" title="Reset"
+                                onclick={resetSearchedResultFilters}>
+                            </lightning-button>
+                            <lightning-button-icon if:false={isSmallDevice} variant="container" title="Reset Filters"
+                                icon-name="utility:refresh" onclick={resetSearchedResultFilters}>
+                            </lightning-button-icon>
+                        </span>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <br />
+                <div class="assets-list">
+                    <template if:true={resultsFound}>
+                        <lightning-layout vertical-align="stretch" multiple-rows>
+                        <!--div class="slds-grid slds-wrap"-->
+                            <template for:each={filteredData} for:item="asset">
+                                <lightning-layout-item key={asset.Id} size="12" large-device-size="4" medium-device-size="6" small-device-size="12" padding="around-large" flexibility="auto">
+                                <div class="mock-card slds-var-p-around_medium">
+                                    <article class="slds-tile slds-media slds-var-p-vertical_xx-small">
+                                        <div class="slds-media__figure">
+                                            <span class="icon">
+                                                <lightning-icon icon-name="action:approval" alternative-text="Approved" title="Approved" size="xx-small"></lightning-icon>
+                                            </span>
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <div class="slds-truncate">
+                                                <span class="slds-text-heading_medium cardHeading heading" data-key={asset.Id} onclick={handleViewAction} title={asset.gdc_ms_Title__c}>
+                                                    {asset.gdc_ms_Title__c}
+                                                </span>
+                                            </div>
+                                        
+                                            <div class="slds-tile__detail slds-var-m-vertical_small cardText">
+                                                <dl>
+                                                    <dt if:true={asset.gdc_ms_Proposed_By_User__c} class="slds-item_label slds-truncate slds-text-heading_small" title={asset.gdc_ms_Proposed_By_User__r.Name}>
+                                                        Proposed By: {asset.gdc_ms_Proposed_By_User__r.Name}
+                                                    </dt>
+                                                </dl>
+                                                <dl>
+                                                    <dt class="slds-item_label slds-truncate slds-text-heading_small" title={asset.gdc_ms_CloudCompetency__c}>
+                                                        Cloud Competency: {asset.gdc_ms_CloudCompetency__c}
+                                                    </dt>
+                                                </dl>
+                                                <dl class="slds-var-m-top_small">
+                                                    <dt>
+                                                        <c-gdcms-five-star-rating value={asset.gdc_ms_Asset_Rating__c}
+                                                            data-id={asset.Id} read-only="true"
+                                                            total-feedback-count={asset.gdc_ms_Feedback_Count__c}
+                                                            onratingchange={handleRatingChanged}>
+                                                        </c-gdcms-five-star-rating>
+                                                    </dt>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <div data-assetid={asset.Id} class="slds-dropdown-trigger slds-dropdown-trigger_click" onclick={toggleCardMenu}>
+                                                <lightning-button-icon variant="container" label="Menu" title="Menu" icon-name="utility:threedots_vertical"></lightning-button-icon>
+                                                <div class="slds-dropdown slds-dropdown_right buttonMenu">
+                                                <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                                                    <li if:true={asset.gdc_ms_DesignLink__c} class="slds-dropdown__item" role="presentation" onclick={handleDesignClick} data-designlink={asset.gdc_ms_DesignLink__c}>
+                                                    <a class="menuItem" href="#" role="menuitem" tabindex="0" value="designDocument">
+                                                        <span class="slds-truncate" title="Design Document">Design Document</span>
+                                                    </a>
+                                                    </li>
+                                                    <li if:true={asset.gdc_ms_DemoLink__c} class="slds-dropdown__item" role="presentation" onclick={handleDemoClick} data-demolink={asset.gdc_ms_DemoLink__c}>
+                                                    <a class="menuItem" href="#" role="menuitem" tabindex="-1">
+                                                        <span class="slds-truncate" title="Asset Demo">Asset Demo</span>
+                                                    </a>
+                                                    </li>
+                                                    <li if:true={asset.gdc_ms_RepositoryLink__c} class="slds-dropdown__item" role="presentation" onclick={handleRepositoryClick} data-reposlink={asset.gdc_ms_RepositoryLink__c} data-assetcount={asset.gdc_ms_Download_Count__c} data-assetid={asset.Id}>
+                                                        <a class="menuItem" href="#" role="menuitem" tabindex="-1">
+                                                        <span class="slds-truncate" title="Repository Link">Repository Link</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="slds-dropdown__item" role="presentation" onclick={handleOpenAsset} data-assetid={asset.Id}>
+                                                    <a class="menuItem" role="menuitem" tabindex="-1">
+                                                        <span class="slds-truncate" title="Open Detail" >Open Detail</span>
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </lightning-layout-item>
+                            </template>
+                            <template if:true={isReadOnly}>
+                                <c-gdcms-modal-popup onclose={closeModal} record-id={loopAssetId} is-read-only={isReadOnly}>
+                                </c-gdcms-modal-popup>
+                            </template>
+                        </lightning-layout>
+                    </template>
+                    <template if:false={resultsFound}>
+                        <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-align_absolute-center noResult">
+                            <p>Sorry, there are no assets found. <br />
+                                Please help us in collaborating your ideas.
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </lightning-card>
+    </div>
+</template>

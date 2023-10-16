@@ -1,0 +1,26 @@
+<template>
+    <div>
+        <lightning-layout  multiple-rows="true">
+            <template for:each={listOfCerts} for:item="certy" for:index="index">
+                <lightning-layout-item key={certy.index} class = "slds-p-around_xx-small" flexibility="auto" size="11" large-device-size="3" medium-device-size="4" small-device-size="11" >
+                    <div class = "container">
+                        <lightning-layout>
+                            <lightning-layout-item size="4" > 
+                                <div class="img-badge" >
+                                    <c-gdcms-certification-badge-image cert-name= {certy}></c-gdcms-certification-badge-image>
+                                </div>  
+                            </lightning-layout-item>
+                            <lightning-layout-item size="8" >
+                                <div>
+                                    <div class="slds-media__body certi-name" >{certy}</div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        
+                        
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </div>
+</template>

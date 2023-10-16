@@ -1,0 +1,103 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+    controller="StationSPController" access="global">
+
+    <aura:attribute name="backgroundColor" type="string" default="Light 1" />
+    <aura:attribute name="showTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="String" default="28px" />
+    <aura:attribute name="titleAlignment" type="String" default="Left" />
+    <aura:attribute name="displayAsAccordion" type="boolean" default="true" />
+    <aura:attribute name="successProgram" type="string" />
+    <aura:attribute name="title" type="String" default="Station Content" />
+    <aura:attribute name="contentLink1" type="string" />
+    <aura:attribute name="originUrl" type="String" default="blank" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="openSections" type="List" default="[]" />
+    <aura:attribute name="activeSections" type="List" default="[]" />
+    <aura:attribute name="runningUser" type="User" />
+
+    <aura:handler name="urlEvent" event="c.StationContentEvent" action="{!c.handleUrlEvent}" />
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    <aura:attribute name="showFeedbackDialog" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.getContent}" />
+    <aura:attribute name="feedbackOptions" type="List" default="[
+    {'label': 'Poorly Written', 'value': 'poorly_written'},
+    {'label': 'Outdated', 'value': 'outdated'},
+    {'label': 'Other', 'value': 'other'},
+    ]" />
+    <aura:attribute name="feedbackReason" type="string" />
+    <aura:attribute name="feedbackObjId" type="string" />
+    <aura:attribute name="feedbackType" type="string" />
+    <aura:attribute name="feedbackDescription" type="string" default="" />
+    <aura:attribute name="feedbackCase" type="Case"
+        default="{'sobjectType':'Case','Subject':'','Description':'','Origin':'Web','Status':'In Process'}" />
+
+    <aura:attribute name="splitMode" type="boolean" default="false" />
+
+    <aura:attribute name="isLoading" type="boolean" default="true" />
+
+
+
+    <div aura:id="parent">
+        <aura:if isTrue="{!v.isLoading}">
+            <!-- Loading Spinner -->
+            <div class="exampleHolder" style="">
+                <lightning:spinner variant="brand" alternativeText="Loading" size="medium" />
+            </div>
+            <!-- Loading Spinner -->
+        </aura:if>
+        <div class="main-container">
+            <div class="column-outer-container">
+                <aura:if isTrue="{!v.showFeedbackDialog}">
+                    <c:StationFeedbackComponent />
+                </aura:if>
+                <aura:if isTrue="{!v.showTitle}">
+                    <aura:if isTrue="{!v.title}">
+                        <h3 class="{!if(v.centerHeadlines,'center-text','')}"
+                            style="{!'font-size: ' + v.titleFontSize + '; text-align: ' + v.titleAlignment+ ';margin-bottom : 10px'}">
+                            <div class="slds-p-top_large"></div>
+                            {!v.title}
+                        </h3>
+                    </aura:if>
+                </aura:if>
+                <div class="slds-card" style="background:none;">
+                    <aura:iteration var="sp" items="{!v.groupList}" indexVar="index">
+                        <c:StationContentPiece splitMode="{!v.splitMode}" contentpiece="{!sp}"
+                            runningUser="{!v.runningUser}" originUrl="{!v.originUrl}"
+                            backgroundTheme="{!v.backgroundColor}" asAccordion="{!v.displayAsAccordion}"
+                            stationContentGroup="{!v.contentLink1}" />
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL -->
+    <div class="slds">
+        <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--prompt slds-fade-in-hide"
+            aura:id="modaldialog">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Tell Us How This Could Be
+                        More Helpful</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:combobox name="progress" label="Why was this not helpful" value="inProgress"
+                        placeholder="Select an Option" options="{! v.feedbackOptions }"
+                        onchange="{! c.handleFeedbackReasonChange }" />
+                    <br />
+                    <div class="slds-form-element">
+                        <ui:inputTextArea aura:id="feedback_textarea" value="{!v.feedbackDescription}"
+                            label="Tell us how to better help you" class="slds-textarea" placeholder="" />
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.hideFeedbackModal}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.submitFeedbackModal}">Save</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop slds-backdrop--hide" aura:id="backdrop">
+    </div>
+</aura:component>

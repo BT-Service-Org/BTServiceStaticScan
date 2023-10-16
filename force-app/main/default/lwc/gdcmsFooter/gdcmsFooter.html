@@ -1,0 +1,45 @@
+<template>
+   <template if:true={displayView}>
+      <div style={bgImage}>
+         <div class="slds-align_absolute-center slds-p-horizontal_xx-large">
+            <lightning-layout multiple-rows vertical-align="stretch" class="slds-p-horizontal_large">
+               <lightning-layout-item if:true={isDesktop} size="12" large-device-size="3" flexibility="auto"
+                  class="slds-p-vertical_small">
+               </lightning-layout-item>
+               <lightning-layout-item size="12" large-device-size="6" medium-device-size="6" small-device-size="12"
+                  flexibility="auto" class="slds-p-vertical_small">
+                  <c-gdcms-static-content-block external-content-id={ContentId}></c-gdcms-static-content-block>
+               </lightning-layout-item>
+               <lightning-layout-item size="12" large-device-size="3" medium-device-size="6" small-device-size="12"
+                  flexibility="auto" class="slds-p-vertical_small">
+                  <div class="footer-bottom slds-align_absolute-center">
+                     <a href="#" onclick={handleContactUs}>
+                        <span>Contact Us
+                           <lightning-icon icon-name="utility:call" size="small"
+                              class="black slds-p-around_small slds-p-right_none">
+                           </lightning-icon>
+                        </span>
+                     </a>
+                  </div>
+                  <template if:true={showContactUsUtilityDocker}>
+                     <c-gdcms-contact-us onclosepanel={closePanel} show-form={showForm}>
+                     </c-gdcms-contact-us>
+                  </template>
+               </lightning-layout-item>
+
+               <lightning-layout-item size="12" padding="around-large" flexibility="auto"
+                  class="slds-align_absolute-center">
+                  <lightning-layout class="slds-align_absolute-center">
+                     <lightning-layout-item size="12" large-device-size="8"
+                        class="slds-align_absolute-center footer-text" style="text-align:center;">
+                        <lightning-formatted-rich-text value={footerText}></lightning-formatted-rich-text>
+                     </lightning-layout-item>
+                  </lightning-layout>
+
+               </lightning-layout-item>
+            </lightning-layout>
+
+         </div>
+      </div>
+   </template>
+</template>

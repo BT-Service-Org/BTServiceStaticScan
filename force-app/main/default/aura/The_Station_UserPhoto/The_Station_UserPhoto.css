@@ -1,0 +1,12 @@
+.THIS .circular--portrait {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .THIS .circular--portrait img {
+    max-width: unset!important;
+    max-height: unset!important;
+  }

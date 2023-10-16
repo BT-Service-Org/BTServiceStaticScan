@@ -1,0 +1,82 @@
+.rasic-data {
+    border-bottom: 1px solid #F2F3F6;
+}
+.rasic-data td {
+    padding: 1rem 0;
+    text-align: center;
+}
+.rasic-data td div {
+    display: flex;
+    justify-content: center;
+}
+.rasic-icon {
+    display: flex;
+    color: #fff;
+    border-radius: 200px;
+    width: 40px;
+    height: 40px;
+    margin: 1rem 0.25rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+.rasic-icon-r {
+	background: #0070D2;
+}
+.rasic-icon-a {
+	background: #157C52;
+}
+.rasic-icon-s {
+	background: #FB893F;
+}
+.rasic-icon-i {
+	background: #E0161E;
+}
+.rasic-icon-c {
+	background: #A14FE6;
+}
+table {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    font-weight: 700;
+    margin: 1rem 0;
+    table-layout: fixed;
+}
+table th {
+    background: #F2F3F6;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.rasic-header {
+    width:100%;
+    border-bottom: 1px solid #F2F3F6;
+}
+.activity{
+    background-color: #fff !important;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.role_icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+@media screen and (max-width:540px) {
+    table th{
+        font-size: 8px;
+        padding: 3px;
+    }
+    .rasic-icon {
+        font-size: 5px;
+        width: 14px;
+        height: 14px;
+        margin: 2px;
+    }
+}

@@ -1,0 +1,880 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamsOverviewController"  action="{!profileExist}">
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />
+	
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	
+	<!-- Overview CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />	
+
+	<style>
+		div.main_content {
+			clear:both;
+		} 
+		
+		div.rightWidget div.rightWidgetContent a.DiscussionNewTopic
+		{
+			background: url( {!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')} ) no-repeat;
+			padding-left: 20px;	
+			text-decoration:none;
+		}	
+		
+		div.center {
+			text-align: center;
+		} 
+		/* Tabs */
+		div.tabContainer {	
+			height: 23px;
+			margin-bottom:0px;
+			clear:both;
+			position:relative;	
+			margin-top:20px;
+			margin-left:15px;
+			z-index:1500;
+			overflow:hidden;
+		}
+		
+		div.tabBorderBlue{
+			border-top:5px solid #0C1A2C;
+			height:5px;
+			clear:both;	
+			margin-left:15px;
+		}
+		
+		ul.tabsgray, ul.tabsgray li {
+			margin:0;
+			padding:0;
+			list-style:none;	
+		}
+		
+		ul.tabsgray, ul.tabsgray li a{
+			text-decoration: none;
+			font-weight:bold;
+			color: #656566;
+			font-size: 14px;
+		}
+		
+		ul.tabsgray li {
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/gray.png')}) repeat-x bottom;
+			float:left;
+			height:24px;	
+			text-align:center;
+			margin:0 3px 0 2px;
+			z-index:60000;	
+			overflow: hidden;
+			position: relative;
+		}
+		ul.tabsgray li b {
+			height: 23px;
+			widht: 5px;
+			float: left;
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/right_gray.png')}) no-repeat right;
+		}
+		ul.tabsgray li a{
+			display: block;
+			float: left;
+			padding: 3px 7px 5px;
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/left_gray.png')}) no-repeat left;
+		}
+		
+		ul.tabsgray li a:hover{
+			color: #000;
+		}
+		
+		ul.tabsgray li.selected a:hover{
+			color: #fff;	
+		}
+		
+		ul.tabsgray li.selected {
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/blue.png')}) repeat-x bottom;
+		}
+		
+		ul.tabsgray li.selected b{
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/right_blue.png')}) no-repeat right;
+		}
+		
+		ul.tabsgray li.selected a{
+			background: url({!URLFOR($Resource.TeamsResources, 'images/tabs/left_blue.png')}) no-repeat left;
+			color: #fff;
+		}
+		
+		.detailTeams {
+			float: left;
+			margin-left: 10px;
+		}
+		
+		.detailTeams div {
+			font-size: 11px;
+			color: #CCCCCC;
+		}
+		
+		.detailTeams div a{
+			color: #666;
+			text-decoration: none;
+		}
+		
+		.detailTeams div span {
+			color: #ED2123;
+			font-weight: bold;
+		}
+					
+		.detailTeams h4 a {
+			color: #0F6CB0;
+			font-size: 17px;
+			text-decoration: none;
+			font-family: arial;
+		}
+					
+		.imageTeams {
+			float: left;
+		}
+		
+		.content_teams .item {
+			margin-bottom: 10px;
+		}
+		
+		.content_teams {
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.m_bot {
+			margin-bottom: 103px;
+		}
+		
+		#holderNew {
+			position: relative;
+			overflow: hidden;
+			margin-left:15px;
+			margin-top:15px;
+		}
+		
+		#holderNew div.loader{
+			background: #fff;
+			position: absolute;
+			overflow: hidden;
+			z-index: 4000;
+			left: 0pt;
+			top: 0pt;
+			height: 100%;
+			width: 100%;
+			opacity: 0.6;  
+			-moz-opacity: 0.6;  
+			filter: alpha(opacity=60); 
+			background: #fff url({!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}) no-repeat center 200px;
+		}
+		
+		.header_blue_top {
+			height: 138px;
+			background: #fff url({!URLFOR($Resource.TeamsResources, 'images/layout/back_header.png')}) repeat-x left top;
+		}
+		
+		.cont_image {
+			margin-right:237px;
+			text-align: center;
+		}
+		
+		.cont_button {
+			position:absolute;
+			right:15px;
+			top:93px;
+			width:210px;
+		}
+		
+		div.box_round div.header_blue div div h4, div.box_round_blue div.header.auto div div h3, div.brt div.contblue   {
+			font-family:'Verdana','Geneva',sans-serif;
+			font-size: 10px;
+		}
+		
+		div.buttonSave {
+			background:#287B9B none repeat scroll 0% 50%;
+			border:medium none;
+			color:#FFFFFF;
+			float:left;
+			font-size: 11px;
+			font-weight:bold;
+			padding:5px 12px 6px;
+		}
+		
+		div.buttonSave a{
+			color: #FFFFFF;
+			font-weight: normal;
+		}
+		
+		div.div_content_buttons {
+			overflow:hidden;
+		}
+		
+		.content_teams .navigatorContainer{
+			border-bottom: solid 1px;
+			margin-top: 8px;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.content_teams .navigation  {
+			width: 170px;
+			text-align: center;
+			margin: 0 auto;
+			height: 24px;
+			z-index: 20000;
+			position: relative;
+		}
+		
+		.content_teams .navigation  ul,
+		.content_teams .navigation  ul  li{
+			margin:0;
+			padding:0;
+			list-style:none;
+		}
+			
+		.content_teams .navigation  ul li  {
+			float:left;
+		}
+		
+		.content_teams .navigation  ul li img { 
+			border:none; 
+			margin:0px 9px;
+			cursor: pointer;
+		}
+		
+		.content_teams .navigation  ul li img.disabled { 
+			border:none; 
+			margin:0px 9px;
+			cursor: default;
+		}
+		
+		.content_teams .navigation .prevPage {
+			background:url(../../images/searchresults/search_result_prev.gif) no-repeat left center;
+			padding-right: 5px;
+			cursor: pointer;
+		}
+		
+		.content_teams .navigation .nextPage {
+			background:url(../../images/searchresults/search_result_next.gif) no-repeat right center;
+			padding-left: 5px;
+			cursor: pointer;
+		}
+		
+		.content_teams .navigation .prevPageDisabled {
+			background:url(../../images/searchresults/search_result_prev_disabled.gif) no-repeat left center;
+			padding-right: 5px;
+			cursor: default;
+			text-decoration: none;
+			color: #999999;
+		}
+		
+		.content_teams .navigation .nextPageDisabled {
+			background:url(../../images/searchresults/search_result_next_disabled.gif) no-repeat right center;
+			padding-left: 5px;
+			cursor: default;
+			text-decoration: none;
+			color: #999999;
+		}
+		
+		.content_teams .pagecount {
+			width:400px;
+			text-align:right;
+			position:absolute;
+			right:5px;
+			top:5px;
+			height:30px;
+			z-index:200;
+		}
+		
+		.searchResultItem {
+			clear:both;
+			padding:10px 0px;
+			position:relative;
+			border-bottom:1px solid #CBCBCB;	
+			}
+			
+		.searchResultItem  p {
+			margin:0px;
+			padding:0px;
+			}
+		
+		.searchResultItem a.title {
+		
+			font-weight:bold;
+			color:black;
+			font-size: 13px;
+			}
+			
+		.searchResultItem a.linktoMessage {
+			color:#777777;
+			font-size: 11px;
+			}
+			
+		.searchResultItem div.matches {
+			padding: 10px;
+			}
+		
+		
+		.normalWeight {
+			font-weight: normal;
+		}
+			
+		.noResult {
+			font-weight: bold;
+			text-align: center;
+			padding: 50px 0px; 
+		}
+		
+		.highlight {
+			background-color: #93BDC6;
+			font-weight: bold;
+		
+			padding: 1px 3px;
+		}	
+	
+		.grayColor {
+			color: #00233A;
+			font-size: 11px;
+			margin-top: 14px;
+		}
+
+		.noitems {
+			text-align: center;
+			padding: 5px;
+			font-weight: bold;
+		}
+	
+	/* //////////////////// LETTER FILTER ////////////////// */
+	
+		.letterFilter {
+			list-style-image:none;
+			list-style-position:outside;
+			list-style-type:none;
+			margin-right:23px;
+			margin-left:23px;
+	
+			clear:both;
+			position:relative;
+			overflow:hidden;
+			padding: 1px 2px 1px 2px;			
+		}	
+		.filter {
+			align :center;
+			overflow:hidden;
+			display:block;
+			position:relative;
+			clear:both;
+	
+	
+		}
+		
+		.filterHR {
+			border: 0px solid ; 
+			background-color: #333434; 
+			height: 1px;
+		}
+		
+		.letterFilter li {
+			float:left;
+			height:15px;
+			text-align:center;
+			width:auto;
+			font-weight:bold;
+			padding:0px;
+			font-size:11px;
+			color:#B0B6C6;
+			margin:2px;
+			vertical-align:middle;
+		}
+		
+		.letterFilter li a {
+			text-decoration:none;
+			color:#989999;
+		}
+		
+		div.letterFilterTitle{
+			font-size:11px;
+			color:#B0B6C6;
+			font-weight:bold;
+			position: absolute;
+			width: 70px;
+			height: 20px;
+			top: 0px;
+			left: 0px;				
+		}
+		
+		div.letterFilterContainer{
+			width: 430px;
+			height: 20px;
+			margin: 0 auto;
+		}
+		
+		div.letterFilterWrapper{
+			position: relative;
+			height: 20px;
+		}
+		
+		.letterFilter li .contains {
+			text-decoration: none;
+			color: #656566;	
+			padding: 1px 2px 1px 2px;		
+		}
+	
+	/* //////////////////// TEAM BLOCK  ////////////////// */
+	
+		.teamBlockTitle {
+			border-bottom:4px solid #CBCBCB;
+			color:#566A22;
+	
+	
+			font-size:15px;
+			height:20px;
+			margin-top:10px;
+			position:relative;
+		}
+		.teamBlockTitle h4 {
+			clear:both;
+			color:#566A22;
+			float:left;
+			font-size:17px;
+		}
+		
+		
+		.twistImg {
+			cursor:pointer;
+		}
+		
+		
+		.linkAction {
+			font-size:10px;
+			margin-right:2px;
+			text-align:right;
+		}
+		
+		.SidebarTitle {
+			font-size: 18px;
+			padding-left: 20px;
+			font-weight: bold;
+	
+	
+			padding-bottom: 5px;
+			padding-top: 10px;
+			margin-left: 10px;
+			margin-top: -1px;
+		}
+		
+		.AllBtn {
+			background:#556A2F none repeat scroll 0%;
+			color:#FFFFFF;
+			cursor:pointer;
+			text-align:center;
+	
+	
+			padding: 1px 2px 1px 2px;
+		}	
+		
+		.AllBtnSet {
+			background:#989999 none repeat scroll 0%;
+			color: #FFFFFF !important;
+			cursor:pointer;
+			text-align:center;
+			padding: 1px 2px 1px 2px;
+		}
+		
+		.SectionTitle {
+	
+	
+			font-size: 16px;
+			padding-left: 5px;
+			font-weight: bold;
+			padding-bottom: 0px;
+			padding-top: 10px;
+			margin-left: 10px;
+			margin-top: -1px;
+		}					
+	</style>
+
+	<script>
+		 
+		var inputSearch;
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+					
+		// Begin the search box with the text:
+		// "Enter keyword, name, company or title" at top search box
+		////////////////////////////////////////////
+		function resetSearchInput(){
+			var inputs = $$('.search_box_input input');
+			inputSearch = inputs[0];		
+			inputSearch.style.color = '#999999';
+			inputSearch.value = 'Enter keyword or name';
+		}
+		
+		// Once a user begins to type at top search box, change the font color to   #333333. 
+		function ActionSearchInput(){
+			inputSearch.style.color = '#333333';
+			inputSearch.value = '';
+		}
+		
+		/**
+		* Switch tabs
+		*@param String id element
+		*/
+		function switchTab (element){
+			var currentTab = $(element);
+			if(currentTab.className != 'selected' && currentTab.id == 'myTeamTab'){
+				currentTab.className = 'selected';
+				$('allTeamTab').className = '';
+			}else if (currentTab.className != 'selected' && currentTab.id == 'allTeamTab'){
+				currentTab.className = 'selected';
+				$('myTeamTab').className = '';			
+			}
+		}
+		
+		/**
+		* Switch tabs
+		*@param String id element
+		*/
+		function newSwitchTab (element){
+			showLoaderForTabs();
+			var currentTab = $(element);
+			var allTabs = $$('ul.tabsgray li');
+			allTabs.each(function(s, indice){
+				s.className = '';
+				if(s.id == element){
+					s.className = 'selected';
+				}
+		     });
+		}
+		
+		function showLoaderForTabs (){
+			var dimensions = $('holderNew').getDimensions();
+			$$('#holderNew .loader')[0].style.width = dimensions.width + 'px';
+			$$('#holderNew .loader')[0].style.height = dimensions.height + 'px';
+			$$('#holderNew .loader')[0].style.display = 'block';			
+		}
+		
+		function finish(callFooterBug){
+		
+			new Effect.Fade('load_',{ afterFinish:function(){setTimeout('footerBug();', 1000);}});
+
+			
+		}
+		
+		var currentLetterFileter = '';
+		function setFilterLetter(element){
+			currentLetterFileter = element.innerHTML;
+		}
+		
+		function markSelectedLetter(){
+			var letters = $$('.contains');
+			var all = $$('.AllBtnSet');
+			all[0].className = '';
+			letters.push(all[0]);
+			for(var it = 0; it < letters.length; it++){
+				letters[it].className = 'contains';
+				if(letters[it].innerHTML == currentLetterFileter){
+					letters[it].className += ' AllBtnSet';
+				}
+			}
+			finish(false);
+		}
+		
+		/*
+		function redim(){
+			var n =$('holder');		
+			var hdim = n.getDimensions();
+			var centercol = $$('.centerCol');
+			var centerHeightProof = hdim.height + 90;
+			centercol[0].style.height = centerHeightProof + 'px';
+		}		
+		*/
+		
+	</script>
+		
+		 <!-- Initialize the overlay box for modal.js -->
+		<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+		<div id="modal_container"></div>
+		<script>createOverlay('initializeModal')</script>
+		
+		
+		<!-- Header -->
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Team</h1>
+					<h2 class="arial_black">Overview</h2>
+				</div>		
+			</div>		
+			
+			<!-- Search Box Container (always Centered) -->
+	        <div class="searchBox">
+	            <div>
+	                <div>
+	                    <!-- Search Form -->
+	                    <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                        <div class="search_box_input f_left">
+	                            <div class="legend" style="left: -53px;">
+	                                Find Teams 
+	                            </div>
+	                            <input type="text" value="Enter keyword or name" name="key"  onfocus="setValue('');" onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                        </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                    </form><!-- Advanced Search Link -->
+	                    <!-- <div class="advanced_search_cont">
+	                        <a href="javascript:;">Advanced Search</a>
+	                    </div> -->
+	                </div>
+	            </div>
+	        </div>			
+			
+			
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>
+
+		
+		<!-- Sidebar -->
+		<div class="sidebar">
+			
+			<!-- MyTeams Widget -->
+			<c:TeamsSidebarProfile />
+			
+			<c:TeamsSidebarMeetPeople />
+			
+			<!-- Quick links & Admin widget -->
+			<c:TeamAdminQuickLinks /> 
+
+		</div>
+
+		<!-- Main Content Div -->
+		<div class="main_content" >		
+			<div class="header_blue_top">
+				<div class="cont_image">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/people_header.png')}" alt="" />
+				</div>
+				<div class="cont_button">
+					<a href="/apex/TeamsCreateNewTeam">
+						<img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/create_team.png')}" />
+					</a>
+				</div>
+			</div>
+			<div class="centerCol CenterOverview">
+				<!-- Tabs -->
+				<div class="tabContainer">
+					<apex:form >
+						<ul class="tabsgray">
+							<li class="selected" id="myTeams">
+								<apex:commandLink value="My Teams" 
+													onclick="newSwitchTab('myTeams');"
+													rerender="content_teams, filter" 
+													action="{!teamsForTabs}"
+													onComplete="finish(true);"
+													>								
+									<apex:param name="filter" value="myTeams" />
+								</apex:commandLink>
+								<b>&nbsp;</b>
+							</li>
+							<li id="newTeams">
+								<apex:commandLink value="New Teams" onclick="newSwitchTab('newTeams');" rerender="content_teams, filter" action="{!teamsForTabs}" onComplete="finish(true);" >
+									<apex:param name="filter" value="newTeams" />
+								</apex:commandLink>
+								<b>&nbsp;</b>
+							</li>
+							<li id="recommendedTeams">
+								<apex:commandLink value="Recommended Teams" onclick="newSwitchTab('recommendedTeams');" rerender="content_teams, filter" action="{!teamsForTabs}" onComplete="finish(true);" >
+									<apex:param name="filter" value="recommendedTeams" />
+								</apex:commandLink>
+								<b>&nbsp;</b>
+							</li>
+							<li id="allTeams">
+								<apex:commandLink value="All Teams" onclick="newSwitchTab('allTeams');" rerender="content_teams, filter" action="{!teamsForTabs}" onComplete="finish(true); ">
+									<apex:param name="filter" value="allTeams" />
+								</apex:commandLink>
+								<b>&nbsp;</b>
+							</li>
+						</ul>
+					</apex:form>
+				</div>
+				<div class="tabBorderBlue">&nbsp;</div>
+				
+				<!-- Content Teams -->
+				<div id="holderNew">
+					<div class="loader" style="display:none;" id="load_"></div>
+					<apex:outputPanel id="content_teams" layout="block" styleClass="content_teams">
+						
+						<!-- FILTER -->
+						<apex:outputPanel layout="block" id="filter" rendered="{!isAllTeams}">
+							<div class="filter" id="filterDiv"  style="">
+								<div class="letterFilterWrapper">
+									<apex:form id="filterForm">
+										<div class="letterFilterTitle">
+											Filter
+										</div>
+										<div class="letterFilterContainer">
+											<ul class="letterFilter">
+												<li>
+													<apex:commandLink id="ALL" 
+																	  action="{!filterTeams}" 
+																	  value="ALL" 
+																	  onclick="showLoaderForTabs(); setFilterLetter(this);"
+																	  oncomplete="markSelectedLetter();"
+																	  rerender="content_teams" 
+																	  styleClass="AllBtnSet"> 												
+														<apex:param name="ltr" value="ALL" />
+													</apex:commandLink>
+												</li>
+												<apex:repeat id="letterFilterRepeat" value="{!letterFilter}" var="item">
+													<li>
+														<apex:outputpanel rendered="{!item.containSites}">
+															<apex:commandLink styleclass="contains"
+																onclick="showLoaderForTabs(); setFilterLetter(this);"
+																oncomplete="markSelectedLetter();"
+																action="{!filterTeams}"
+																value="{!item.letter}"
+																rerender="content_teams">
+																<apex:param name="ltr" value="{!item.letter}" />
+															</apex:commandLink>
+														</apex:outputpanel>
+														<apex:outputpanel rendered="{!NOT(item.containSites)}">
+															{!item.letter}
+														</apex:outputpanel>
+													</li>
+												</apex:repeat>
+											</ul>
+										</div>
+										<br style="clear:both; font-size:3px;" />
+									</apex:form>
+								</div>
+							</div>
+							<hr class="filterHR">
+						</apex:outputPanel>
+						
+						<!-- PAGINATION -->
+						<apex:outputPanel layout="block" id="pagination" rendered="{!isAllTeams}" styleClass="navigatorContainer">
+							<div class="navigation">
+								<apex:form >
+									<ul>
+										<li>
+											<apex:commandLink action="{!paginator.firstPage}" rerender="content_teams" rendered="{!paginator.prevPageLinkShow}" onclick="showLoaderForTabs();" oncomplete="finish(false);" >
+												<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/navigator_left.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.prevPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.TeamsResources, 'images/layout/navigator_left_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+										<li>
+											<apex:commandLink styleclass="prevPage" action="{!paginator.prevPage}" value="Previous" rerender="content_teams" rendered="{!paginator.prevPageLinkShow}" onclick="showLoaderForTabs();" oncomplete="finish(false);" />	
+											<apex:outputpanel rendered="{!paginator.prevPageShow}">
+												<a href="javascript:;" class="prevPageDisabled">Previous</a>
+											</apex:outputpanel>
+										</li>
+										<li> ({!paginator.currentPagination} - {!paginator.cntPagination}) </li>
+										<li>
+											<apex:commandLink styleclass="nextPage" action="{!paginator.nextPage}" value="Next" rerender="content_teams" rendered="{!paginator.nextPageLinkShow}" onclick="showLoaderForTabs();" oncomplete="finish(false);" />	
+											<apex:outputPanel rendered="{!paginator.nextPageShow}">
+												<a href="javascript:;" class="nextPageDisabled">Next</a>
+											</apex:outputPanel>
+										</li>
+										<li>
+											<apex:commandLink action="{!paginator.lastPage}" rerender="content_teams" rendered="{!paginator.nextPageLinkShow}" onclick="showLoaderForTabs();" oncomplete="finish(false);" >
+												<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/navigator_right.gif')}" alt="" />
+											</apex:commandLink>
+											<apex:outputpanel rendered="{!NOT(paginator.nextPageLinkShow)}">
+												<img class="disabled" src="{!URLFOR($Resource.TeamsResources, 'images/layout/navigator_right_disabled.gif')}" alt="" />
+											</apex:outputpanel>
+										</li>
+									</ul>	
+								</apex:form>						
+							</div>
+						</apex:outputPanel>								
+						
+						<!-- TEAMS LIST -->
+						<div class="content_teams">
+
+							<div style="{!IF(teamsForTabsSize > 0, 'display:none', '')}; ">
+								<div class="grayColor noitems" >No Teams Yet</div>
+							</div>
+							<div style="{!IF(teamsForTabsSize > 0, '', 'display:none')}; ">
+								<apex:repeat value="{!TeamsForTabs}" var="t" first="{!paginator.firstItem}" rows="{!paginator.numberOfItemsToShow}">	
+									<!-- item -->		
+									<div class="item">
+										<div class="imageTeams">
+											<a href="/apex/TeamsRedirect?id={!t.Id}">
+												<img alt="" width="54" height="54" src="{!IF(t.image == 'null',(URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')) ,t.image)}"  />
+											</a>
+										</div>
+										<div class="detailTeams">
+											<h4><a href="/apex/TeamsRedirect?id={!t.Id}">{!t.Name}</a></h4>
+											<div>
+												<span>{!t.members}</span>
+												<a href="/apex/TeamsMembersList?id={!t.Id}">Members</a> | 
+												<span>{!t.tasks}</span> 
+												<a href="/apex/ProjectTaskList?id={!t.Id}">Tasks</a> | 
+												<span>{!t.discussions}</span> 
+												<a href="/apex/DiscussionTopics?id={!t.Id}">Discussions</a>
+												<br/>
+												{!t.createDate}
+											</div>
+										</div>
+										<div class="clear"></div>
+									</div>
+								</apex:repeat>
+							</div> 
+						</div>
+					</apex:outputPanel> 
+					
+					
+				</div>
+				 
+		<!-- Widget Col -->
+		<div class="rightCol RightOverview" style="top:224px;">
+			
+			<!-- My Upcoming Tasks & Milestones -->	
+			<c:TeamsWidgetMyTasksAndMilestones />  
+			
+			<!-- Popular Discussions -->
+			<c:TeamsWidgetPopularDiscussions />  
+			
+			<!-- Activity Feed -->	
+			<c:TeamsWidgetActivityFeed />  
+			
+			
+			<!-- Recently Created Teams 
+			<c:TeamsRecentlyCreated />  
+			 
+			<!-- 
+			<c:RecentTeamsMemberJoined /> 	-->					
+		</div>		
+
+	</div>
+
+	<script>
+		window.onload = footerBug; 
+		
+		function footerBug(){
+			$$('.CenterOverview')[0].style.height = '';
+			var rCol = $$('.rightCol')[0].getHeight();
+			var cCol = $$('.CenterOverview')[0].getHeight();
+			if(rCol >= cCol){
+			    $$('.CenterOverview')[0].style.height = (rCol+60)+'px';
+			}
+			else {
+				$$('.CenterOverview')[0].style.height = '';
+			}
+		}
+		
+		
+	</script>
+</apex:page>

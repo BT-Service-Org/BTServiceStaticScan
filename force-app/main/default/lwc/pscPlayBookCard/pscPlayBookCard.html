@@ -1,0 +1,24 @@
+<template>
+    
+    <div class="item_container"> 
+
+            <template for:each={playBooks} for:item="playBookItem">
+                <div key={playBookItem.Id} class="playbook-card ">
+                    <a href={playBookItem.playbookUrl}>
+                        <div class="playbook-image">
+                                <img src={playBookItem.bgUrl} alt="Playbook" class="background-img"/>
+                            <template if:true={playBookItem.tileUrl}>
+                                <img src={playBookItem.tileUrl} alt="Playbook" class="foreground-img"/>
+                            </template>
+                        </div>
+                        <div class="content" tabindex="0" aria-label={playBookItem.Name}>
+                            <p class="playbook_name">{playBookItem.Name}</p>
+                            <lightning-formatted-rich-text value={playBookItem.Description__c} class="playbook_desc salesforce_font"></lightning-formatted-rich-text>
+                        </div>
+                    </a>
+                </div>
+            </template>
+     
+ 
+    </div>
+</template>

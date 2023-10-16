@@ -1,0 +1,22 @@
+<template>
+    <template if:true={productData}>
+        <div class="productheader productheader--big">
+            <img src={productData.bannerURL} />
+            <div class="product product--lit">
+                <p>
+                    <a href={productData.backNvgnURL} class="backNav ITC_font">
+                        <span class="back-icon">&#8592;</span>
+                        <span>{productData.backNvgnLabel}</span>
+                    </a>
+                </p>
+                <h1 class="productheader__text ITC_font">
+                    {productData.pageName}
+                </h1>
+                <p class="productheader__title">
+                    {productData.description}
+                </p>
+            </div>
+        </div>
+        <c-psc-product-resources resources={productData.resourceTypes}></c-psc-product-resources>
+    </template>
+</template>

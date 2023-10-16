@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>GDCMS_AccessToPanel</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Access to panel</label>
+        <sharedTo>
+            <group>GDCMS_RewardsRecognitionPanel</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>GDCMS_AwardCategory__c</field>
+            <operation>equals</operation>
+            <value>Trailblazer Award,Customer Success Team Award,Achievers Award</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

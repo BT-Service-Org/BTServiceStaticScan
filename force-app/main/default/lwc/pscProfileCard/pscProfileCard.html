@@ -1,0 +1,83 @@
+<template>
+    <div class="container" tabindex="0" aria-label="User Profile Info">
+        <div class="profile_card">
+
+            <img src={icons.user} alt="user-img" class="profile_img" />
+            <div class="profile_info">
+                <p class="user_name ITC_font" tabindex="0" aria-label={userName}>{userName}</p>
+                <p class="user_designation salesforce_font">{userTitle}</p>
+            </div>
+            <div class="user_contribution" if:true={userPoints.length}>
+                <template for:each={userPoints} for:item="category">
+                    <div key={category.label} class="contribution" tabindex="0" aria-label={category.value}>
+                        <p class="contribution_count ITC_font">{category.value}</p>
+                        <p class="contribution_desc salesforce_font">{category.label}</p>
+
+                    </div>
+                </template>
+            </div>
+            <div if:true={userRank.length} tabindex="0" aria-label="My Level">
+                <template for:each={userRank} for:item="rank">
+                    <div key={rank.label} class="user_Acheivements">
+                        <p class="ITC_font badge_head">{rank.label}</p>
+                        <div class="level_badges slds-grid slds-wrap" tabindex="0" aria-label={rank.value}
+                            if:true={rank.nextLevelName}>
+                            <div class="levelbadge slds-col slds-size_3-of-12">
+                                <img src={rank.badgeImgUrl} alt={rank.value} if:true={rank.badgeImgUrl}>
+                            </div>
+                            <lightning-progress-bar value={rank.nextLevelPercent} size="large" variant="circular"
+                                class="slds-col slds-size_6-of-12"></lightning-progress-bar>
+                            <div class="levelbadge slds-col slds-size_3-of-12">
+                                <img src={rank.nextBadgeUrl} alt={rank.nextLevelName} if:true={rank.nextBadgeUrl}
+                                    style="filter:grayscale(100%)">
+
+                            </div>
+                        </div>
+                        <div class="level_badges" tabindex="0" aria-label={rank.value} if:false={rank.nextLevelName}>
+                            <div class="levelbadge">
+                                <img src={rank.badgeImgUrl} alt={rank.value} if:true={rank.badgeImgUrl}>
+                            </div>
+                        </div>
+                        <div class="score_info">
+                            <p class="salesforce_font totalpoints" if:true={rank.userPoints}>You have {rank.userPoints}
+                                points</p>
+                            <p class="level_reached" if:false={rank.nextLevelName}>
+                                Congrats,&nbsp;You have reached top level.
+                            </p>
+                            <p class="salesforce_font badgesinfo" if:true={rank.nextLevelName}>Earn <span
+                                    if:true={rank.nextLevelBadgesRequired}>{rank.nextLevelBadgesRequired} more
+                                    {badgeLabel} <span if:true={rank.nextLevelPointsRequired}>and </span></span><span
+                                    if:true={rank.nextLevelPointsRequired}>{rank.nextLevelPointsRequired} more
+                                    points</span> to reach <span class="next_level"
+                                    if:true={rank.nextLevelName}>{rank.nextLevelName}</span> level.</p>
+
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+
+            <div class="user_Acheivements" if:true={userBadges.length}>
+                <p class="ITC_font badge_head" tabindex="0" aria-label="Most Recent Badges">Most Recent Badges</p>
+                <div class="user_badges">
+                    <template for:each={userBadges} for:item="badge">
+                        <div key={badge.label} class="badges" tabindex="0" aria-label={badge.label}>
+                            <img src={badge.badgeImgUrl} alt={badge.label}>
+                            <p class="salesforce_font badge_label">{badge.label}</p>
+                        </div>
+                    </template>
+                </div>
+
+
+            </div>
+
+            <div class="all-Badges ITC_font" if:true={userBadges.length} onclick={showModal} onkeydown={showModal}
+                tabindex="0" aria-label="View All Badges">View All <span class="arrow" tabindex="-1">&#8594;</span>
+            </div>
+            <c-psc-badges-list></c-psc-badges-list>
+
+        </div>
+        <div class="btn ITC_font"><a href="/ServicesCentral/s/contribute">Let's Contribute <span
+                    tabindex="-1">&#8594;</span></a></div>
+    </div>
+</template>

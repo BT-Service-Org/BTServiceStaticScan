@@ -1,0 +1,20 @@
+<template>
+    <lightning-file-upload
+        label="Attach Files"
+        name="fileUploader"
+        accept={acceptedFormats}
+        onuploadfinished={handleUploadFinished}
+        multiple
+    >
+    </lightning-file-upload>
+
+    <template if:true={hasUploaded}>
+        <p>Uploaded Files:</p>
+        <template for:each={allFiles} for:item="file">
+            <p key={file.documentId} style="display:inline">
+                <lightning-badge label={file.name}></lightning-badge>
+            </p>
+        </template>
+    </template>
+    
+</template>

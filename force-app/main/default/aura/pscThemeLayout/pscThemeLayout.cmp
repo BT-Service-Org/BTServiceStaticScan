@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:themeLayout" access="global">
+    <aura:attribute name="footer" type="Aura.Component[]" />
+    <aura:attribute name="showSearch" type="Boolean" default="true" />
+    <aura:attribute name="searchHub" type="String" />
+    <aura:attribute name="searchPageName" type="String" />
+    <aura:attribute name="enableQuerySuggestAddon" type="Boolean" default="true" access="global" />
+    <aura:attribute name="name" type="String" default="communityCoveo" access="global" />
+    <aura:attribute name="placeholder" type="String" default="Search Knowledge" access="global" />
+    <ltng:require styles="{!$Resource.pscAssets + '/css/main.css'}" />
+
+    <div class="wrapper">
+        <c:pscThemeHeader showSearch="{!v.showSearch}" searchHub="{!v.searchHub}" searchPageName="{!v.searchPageName}"
+                          name="{!v.name}" enableQuerySuggestAddon="{!v.enableQuerySuggestAddon}" placeholder="{!v.placeholder}"/>
+        <div class="main">
+            {!v.body}
+        </div>
+       <c:pscThemeFooter />
+        
+    </div>
+
+</aura:component>

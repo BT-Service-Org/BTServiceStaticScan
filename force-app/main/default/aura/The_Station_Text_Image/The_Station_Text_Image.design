@@ -1,0 +1,18 @@
+<design:component label="TheStation: Text/Image Block">
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2"
+        default="Light 1" description="Change component theme" />
+    <design:attribute name="contentGroupId" label="Content Group Id" default="" required="true"
+        placeholder="Station Page ID" />
+    <design:attribute name="showGroupTitle" label="Show Content Group Title" default="true" />
+    <design:attribute name="hideFeedbackButtons" label="Hide Feedback Button" default="false" />
+    <design:attribute name="hideTitleURLs" label="Disable Title URLs" default="false" />
+    <design:attribute name="titleFontSize" label="Title Font Size" default="42" min="16" max="60" required="true"
+        description="In pixels" />
+    <design:attribute name="titleAlignment" label="Title Alignment" datasource="Left,Center,Right" default="Center" />
+    <design:attribute name="contentAlignment" label="First Content Alignment" datasource="Left,Right" default="Left"
+        description="Sets image alignment of first item, others alternate" />
+    <design:attribute name="numColumns" label="Number of Columns" datasource="Highlight, Small Highlight, 2, 3, 4"
+        default="Highlight" />
+    <design:attribute name="splitMode" label="Split mode" default="false" />
+
+</design:component>

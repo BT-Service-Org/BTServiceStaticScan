@@ -1,0 +1,16 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="The_Station_CollectionContentController" access="global">
+    <aura:attribute name="selectedSort" type="String" default="Last" />
+    <aura:registerEvent name="sortEvent" type="c:The_Station_CollectionSortEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div>
+        <div style="width: 20%;">
+            <lightning:select aura:id="sort" name="sort" label="Sort By:" onchange="{! c.onChange }">
+                <option value="Last">Last Updated</option>
+                <option value="Create">Created Date</option>
+                <option value="Alphabetical">Alphabetical</option>
+            </lightning:select>
+        </div>
+    </div>  
+
+</aura:component>

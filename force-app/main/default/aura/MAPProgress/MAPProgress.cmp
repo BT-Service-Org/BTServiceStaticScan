@@ -1,0 +1,47 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="domain" type="Object" access="public"/>
+	<aura:attribute name="capability" type="Object" access="public"/>
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="questions" type="Object[]" access="public"/>
+	<aura:attribute name="counter" type="Object" access="public"/>
+	<aura:attribute name="showQuestion" type="Aura.Action" access="public"/>
+
+	<!--Methods-->
+	<aura:method name="update" action="{!c.doInit}"/>
+
+	<!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-p-vertical_medium">
+		<aura:iteration items="{!v.questions}" var="question" indexVar="ind">
+			<a data-dimensionId="{!question.dimensionId}" data-capabilityId="{!question.capabilityId}" class="{!'circle '+if(question.response.skip,'skipped',if(!empty(question.response.currentAnswerId),if(!empty(question.response.goalAnswerId),'answeredWithGoal','answered'),'default'))}" onclick="{!v.showQuestion}"> 
+				<span class="label">{!question.number}</span>
+			</a> 
+		    <aura:if isTrue="{!lessthan(ind,v.questions.length-1)}">
+		  		<span class="bar" style="{!'width:'+(500/(v.questions.length*2))+'px'}"></span>
+		  	</aura:if>
+		</aura:iteration>
+		<div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center">
+			<div class="slds-col slds-grid"> 
+				<div class="box box-answered"></div>
+				<span class="slds-p-horizontal_x-small">Answered ({!v.counter.answered})</span>
+			</div>
+			<div class="slds-col slds-grid">
+				<div class="box box-answeredWithGoal"></div>
+				<span class="slds-p-horizontal_x-small">Answered With Goal ({!v.counter.answeredWithGoal})</span>
+			</div>
+			<div class="slds-col slds-grid">
+				<div class="box box-skipped"></div>
+				<span class="slds-p-horizontal_x-small">Not Applicable ({!v.counter.skipped})</span>
+			</div>
+			<div class="slds-col slds-grid">
+				<div class="box box-default"></div>
+				<span class="slds-p-horizontal_x-small">Not Answered ({!v.counter.notAnswered})</span>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

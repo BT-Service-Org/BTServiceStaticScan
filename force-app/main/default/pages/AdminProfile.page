@@ -1,0 +1,857 @@
+<apex:page id="AdminProfile" sidebar="false" tabStyle="Team__c" controller="AdminProfileController">
+	
+	<!-- Javascript -->
+	<script>
+		// Common Resource Url 
+		var globalCommonResourcesPath = '{!URLFOR($Resource.commonResources)}';
+	</script>
+	
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- Common Js for All Sections -->
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/admin.js')}" />
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/sorttable.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/growls/proto-growl/growl.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/Validator.js')}" />
+	
+	<!-- Common css for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />	
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/profileEdition.css')}" />
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/DeleteTeamProfile.css')}"/>
+	
+	<!-- ### Ajax Toolkit Include ### -->
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+	
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}	
+	</script> 
+
+	<style>
+		.permisionSectionContainer,
+		.permisionSectionContainerRight {
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.infoIcon {
+			cursor:pointer;			
+		}
+		
+		div.header div.page_section h2.small {
+			font-size: 13px;
+		}
+		
+		.noTopMargin {
+			margin-top:0px !important;
+		}
+		
+		div.toplinks {
+			background:#E0E0E0;
+			height:22px;
+			border-bottom:3px solid #297B9C;
+			overflow:hidden;
+			clear:both;
+			position:relative;
+			text-align:center;
+		}
+		
+		div.toplinks a {
+			background: #297B9C;
+			padding:2px;
+			color:#ffffff;
+			text-decoration:none;
+		}
+		
+		.tooltip {
+			background-color:#F9F8CD;
+			border:1px solid #221E1F;
+			display:none;
+			font-family:"Lucida Grande",Verdana;
+			font-size:12px;
+			overflow:auto;
+			padding:5px;
+			position:absolute;
+			text-align:left;
+			width:240px;
+			z-index:100;
+		}
+		.imgCheckbox{
+			float:left;
+			text-align:right;
+			margin:0px;
+		}
+		.inputButton{
+			background:transparent url({!URLFOR($Resource.TeamsResources, 'images/layout/buttons/button_right_bkg.gif')}) no-repeat scroll right bottom;
+			color:#FFFFFF !important;
+			cursor:pointer;
+			display: block;
+			float:left;
+			font-family:Verdana,Arial;
+			font-size:10px;
+			font-weight:bold;
+			border:none ;
+			height:21px;
+			line-height:10px;
+			padding:2px 10px 8px 5px;
+			text-decoration:none;
+			white-space:nowrap;
+		}
+		
+		.message_to_user{
+	
+			background:#FFFFC0 none repeat scroll 0% 50%;
+			border:1px solid #2264B1;
+			color:#050707;
+			font-size:12px;
+			margin-left:10px;
+			margin-right:10px;
+			padding:10px 10px 19px;
+			position:relative;
+		}
+		
+		.message_to_user img {
+			margin-right:3px;
+			float:left;
+			border:0pt none;
+		}
+		
+		.crudButtons{
+			overflow:hidden;
+			position:relative;	
+			align:center;
+			margin:  10px auto 0pt;
+			position: absolute;
+			left: 50%
+		}
+	
+		div.permisionSectionContainer{
+			float: left;
+			width: 50%;
+		}
+		
+		div.permisionSectionContainerRight{
+			float: left;
+			width: 48%;
+			margin-left: 10px;
+		}
+	</style>	
+	<script>
+
+	
+	window.onload = function() {
+		var edit = getURLParam('id');
+		var clone = getURLParam('clone');
+		var view = getURLParam('view');
+		if(edit){
+			show('edit');
+		}else if(clone){
+			show('clone');
+		}else if (view){
+			show('detail');
+		}else{
+			show('create');
+		}
+	}
+	
+	
+	function disableCheckbox(){
+		
+		var stringUnchecked = 'checkbox_unchecked.gif';
+		var stringChecked = 'checkbox_checked.gif';
+		var checkboxes = $$('input');
+		for(var i =0; i < checkboxes.length; i++){
+		    if(checkboxes[i].type == 'checkbox'){	        
+		        if(checkboxes[i].checked == true){        	
+		        	var td = checkboxes[i].parentNode;
+		        	for(var x = 0; x < td.childNodes.length;x++){
+		        		var node = td.childNodes[x];
+		        		
+		        		if( node.tagName == 'IMG' || node.tagName == 'img'){
+		        			if(node.src.indexOf(stringUnchecked) > -1 ){
+			        			checkboxes[i].style.display = 'none';
+			        			
+			        			node.src = "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_checked.gif')}";
+			        			node.style.display = '';
+			        		}
+		        		}
+		        	}
+				}
+				else{	
+					var td = checkboxes[i].parentNode;
+		        	for(var x = 0; x < td.childNodes.length;x++){
+		        		var node = td.childNodes[x];
+		        		
+		        		if( node.tagName == 'IMG' || node.tagName == 'img'){
+		        			if(node.src.indexOf(stringUnchecked) > -1 ){
+			        			checkboxes[i].style.display = 'none';
+			        		
+			        			node.src = "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}";
+			        			node.style.display = '';
+			        		}
+		        		}
+		        	}
+				}	
+		    }   
+		}			
+	}
+	
+	
+	function enableCheckBox(){
+		
+		var stringUnchecked = 'checkbox_unchecked.gif';
+		var stringChecked = 'checkbox_checked.gif';
+		var checkboxes = $$('input');
+		for(var i =0; i < checkboxes.length; i++){
+		    if(checkboxes[i].type == 'checkbox'){	        
+		        if(checkboxes[i].checked == true){        	
+		        	var td = checkboxes[i].parentNode;
+		        	for(var x = 0; x < td.childNodes.length;x++){
+		        		var node = td.childNodes[x];
+		        		if( (node.tagName == 'IMG' || node.tagName == 'img') && node.src.indexOf(stringChecked) > -1 ){
+		        			checkboxes[i].style.display = '';
+		        			node.src = "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}";
+		        			node.style.display = 'none';
+		        		}
+		        	}
+				}
+				else{	
+					var td = checkboxes[i].parentNode;
+		        	for(var x = 0; x < td.childNodes.length;x++){
+		        		var node = td.childNodes[x];
+		        		if(( node.tagName == 'IMG' || node.tagName == 'img') && node.src.indexOf(stringUnchecked) > -1 ){
+		        			checkboxes[i].style.display = '';
+		        			node.src = "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}";
+		        			node.style.display = 'none';
+		        		}
+		        	}
+				}	
+		    }   
+		}			
+	}
+	
+
+	function show(section){
+		init();
+		
+		var validator = $('warning_to_user'); 
+		
+		var divEdit = document.getElementById('edit');	
+		var divView = document.getElementById('view');	
+		var title = document.getElementById('titleSection');		
+		var inputFieldName = document.getElementById('AdminProfile:form_content:input_profileName');
+		
+		var editTop = document.getElementById('AdminProfile:form_content:edit_top');
+		var cloneTop = document.getElementById('AdminProfile:form_content:clone_top');
+		var deleteTop = document.getElementById('delete_top');
+		var editBottom = document.getElementById('AdminProfile:form_content:edit_bottom');
+		var cloneBottom = document.getElementById('AdminProfile:form_content:clone_bottom');
+		var deleteBottom = document.getElementById('delete_bottom');
+		
+		var saveTop = document.getElementById('AdminProfile:form_content:save_top');
+		var saveBottom = document.getElementById('AdminProfile:form_content:save_bottom');
+		var cancelTop = document.getElementById('cancel_top');
+		var cancelBottom = document.getElementById('cancel_bottom');
+		
+		if(section == 'edit'){
+					
+			title.innerHTML = 'Team Profile Edit - ' + '{!teamProfile.Name}';
+			
+			divEdit.style.display = 'block';
+			divView.style.display = 'none';
+			enableCheckBox();
+			
+			saveTop.style.display = 'block';
+			saveBottom.style.display = 'block';
+			cancelTop.style.display = 'block';
+			cancelBottom.style.display = 'block';
+			
+			editTop.style.display = 'none';
+			cloneTop.style.display = 'none'; 
+			deleteTop.style.display = 'none';
+			editBottom.style.display = 'none';
+			cloneBottom.style.display = 'none';
+			deleteBottom.style.display = 'none'; 
+			
+		}
+		
+		if(section == 'create'){
+					
+			title.innerHTML = 'Team Profile Create';
+			
+			divEdit.style.display = 'block';
+			divView.style.display = 'none';
+			enableCheckBox();
+			
+			saveTop.style.display = 'block';
+			saveBottom.style.display = 'block';
+			cancelTop.style.display = 'block';
+			cancelBottom.style.display = 'block';
+			
+			editTop.style.display = 'none';
+			cloneTop.style.display = 'none'; 
+			deleteTop.style.display = 'none';
+			editBottom.style.display = 'none';
+			cloneBottom.style.display = 'none';
+			deleteBottom.style.display = 'none'; 
+		}		
+		
+		if(section == 'detail'){
+			
+			inputFieldName.value = '{!teamProfile.Name}';
+				
+			if(validator != null){
+				validator.hide();
+			}
+			disableCheckbox();
+			var title = document.getElementById('titleSection');
+			title.innerHTML = 'Team Profile Details - ' + '{!teamProfile.Name}';
+			
+			divView.style.display = 'block';
+			editTop.style.display = 'block';
+			cloneTop.style.display = 'block'; 
+			deleteTop.style.display = 'block';
+			editBottom.style.display = 'block';
+			cloneBottom.style.display = 'block';
+			deleteBottom.style.display = 'block'; 
+			
+			saveTop.style.display = 'none';
+			saveBottom.style.display = 'none';
+			cancelTop.style.display = 'none';
+			cancelBottom.style.display = 'none';
+			
+			divEdit.style.display = 'none';
+			
+		}
+		if(section == 'clone'){
+			
+			if(validator != null){
+				validator.hide();
+			}
+			
+			var title = document.getElementById('titleSection');
+			title.innerHTML = 'Team Profile Clone - ' + '{!teamProfile.Name}';
+			
+			saveTop.style.display = 'block';
+			saveBottom.style.display = 'block';
+			cancelTop.style.display = 'block';
+			cancelBottom.style.display = 'block';
+			divEdit.style.display = 'block';
+			divView.style.display = 'none';
+			
+			editTop.style.display = 'none';
+			cloneTop.style.display = 'none'; 
+			deleteTop.style.display = 'none';
+			editBottom.style.display = 'none';
+			cloneBottom.style.display = 'none';
+			deleteBottom.style.display = 'none'; 
+			
+			var inputFieldName = document.getElementById('AdminProfile:form_content:input_profileName');
+			
+			countClone = 1;
+			var inputFieldText = 'clon_{!teamProfile.Name}';
+			inputFieldName.value = inputFieldText;
+			result = sforce.connection.query("select Name from TeamProfile__c where Name ='" + inputFieldText + "'");    		
+			records = result.getArray("records");
+			count = records.length;
+			
+			while (count != 0)  {
+				
+				
+				inputFieldText = 'clon_{!teamProfile.Name}_' + countClone;			
+				
+				result = sforce.connection.query("select Name from TeamProfile__c where Name ='" + inputFieldText + "'");
+					
+				records = result.getArray("records");										
+				count = records.length;
+				countClone++;		
+					
+			} 	
+			inputFieldName.value = inputFieldText;
+			enableCheckBox();	
+		}
+		var actionHolders = $$('.crudButtons');
+		var widthTopHolder = actionHolders[0].getWidth();
+		var widthBottomHolder = actionHolders[1].getWidth();
+		actionHolders[0].style.marginLeft = '-' + widthTopHolder / 2 + 'px';	
+		actionHolders[1].style.marginLeft = '-' + widthBottomHolder / 2 + 'px';		
+	}
+		
+	var showingBubble = false;		
+	function clickTable(){
+		if(showingBubble){
+			tooltipoff();
+		}
+	}
+	var time = '';
+	
+	$('bodyTable').onclick = 'tooltipoff()';
+	
+	function getBrowserWidth() {
+		var myWidth = 0;
+		if( typeof( window.innerWidth ) == 'number' ) {
+		  //Non-IE
+		  myWidth = window.innerWidth;
+		} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+		  //IE 6+ in 'standards compliant mode'
+		  myWidth = document.documentElement.clientWidth;
+		} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+		  //IE 4 compatible
+		  myWidth = document.body.clientWidth;
+		}
+		return myWidth;
+	}
+		
+	//TOOLTIP
+	function tooltip(obj, text){
+		
+		// Div position
+		showingBubble = true;
+		var position = getXY(obj);
+		var leftPosition = 0;
+		
+		// Tooltip
+		var tooltip = $('divToolTip');
+		var tooltipMessage = $('messageTooltip');
+		// set position
+		var topPosition = position.y2 - 110;
+		if (getBrowserWidth() <= 1024) {
+			// if (typeof document.body.style.maxHeight != "undefined") {
+				leftPosition = (position.x2 > 600) ? position.x2 - 290 : position.x2 + 5;
+			// } else {
+			// 	leftPosition = (position.x2 > 800) ? position.x2 - 505 : position.x2 - 215;
+			// } 
+		} else {
+			// leftPosition = (typeof document.body.style.maxHeight != "undefined") ? position.x2 + 5 : position.x2 - 215;
+			leftPosition = position.x2 + 5;
+		}
+		
+		//tooltip.innerHTML = text;
+		tooltipMessage.innerHTML = text;
+		tooltip.style.top = topPosition + 'px'; 
+		tooltip.style.left = leftPosition + 'px';
+		
+		tooltip.style.display = 'block';
+		showingBubble = true;
+		clearTimeout(time);
+		time = setTimeout("Effect.Fade('divToolTip')",3000);
+			
+	}
+
+	function tooltipoff(){
+		// Tooltip
+		showingBubble = false;
+		clearTimeout(time);
+		var tooltip = $('divToolTip');
+		tooltip.style.display = 'none';
+	}
+		
+	function getXY(obj){    
+		var pos = $(obj).cumulativeOffset()
+		var y = pos[1];
+		var x = pos[0];
+		var x2 = x + parseInt(obj.offsetWidth);
+		var y2 = y + parseInt(obj.offsetHeight);
+		
+	    return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
+	}
+	
+	function getInputValue(){
+		var input = document.getElementById('AdminProfile:form_content:input_profileName');
+		var textValidator = document.getElementById('text_validator');
+		if (input.value == "") {
+			textValidator.innerHTML = 'Please enter a name.';
+		} else {
+			textValidator.innerHTML = input.value + ' is already used. Please enter an unique name.'; 
+		}
+	}
+	
+	var isCloneAction = false;
+	function isClone(){
+		if(!isCloneAction){ isCloneAction = true; } else { isCloneAction = false; }	
+	}
+	
+	function firefoxFix() {
+		if (!Prototype.Browser.IE) {
+			$('relative').setStyle({
+				position: 'relative'
+			});
+		}
+	}
+
+	Event.observe(window, 'load', firefoxFix);
+	</script>
+	
+	
+	
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<!-- info tooltip -->
+	<div id="divToolTip" class="tooltip">
+		<div id="messageTooltip"></div>
+	</div>
+	
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black small">Admin-Team Profile</h2>
+			</div>
+		</div>
+		<!-- Search Box Container -->
+		<div class="searchBox">
+			<div>
+				<div>
+					<!-- Search Form -->
+					<form action="/apex/TeamSearchResult" method="get">
+						<div class="search_box_input f_left">
+							<div class="legend">
+								Find Teams
+							</div>
+							<input type="text" value="Enter keyword or name" name="key"  onfocus="setValue('');" onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+						</div><input type="submit" value="Search" class="search_btn f_left"/>
+					</form>
+					<!-- Advanced Search Link -->
+					<!-- <div class="advanced_search_cont">
+						<a href="javascript:;">Advanced Search</a>
+					</div>  -->
+				</div>
+			</div>
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}"  alt=""/>
+			</div>
+		</div>
+	</div><!-- Header End -->
+	
+	<!-- Validator -->
+	<div style="background-color: #E0E0E0">
+		<div id="warning_to_user" class="message_to_user" style="display:none;">
+			<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoBig.gif')}" />
+			<div style="margin-top:10px;" id="text_validator">
+				
+			</div>
+		</div>	
+	</div>	
+	<!-- BreadCrumbs -->
+	<apex:form id="form_content" onsubmit="getInputValue(); if(!isCloneAction){if(validator('{!$Component.form_content}', 'warning_to_user'))return false;};">
+		<div class="breadcrumbs">
+			<div style="{!IF(IsTeamAdminMember, 'display:block', 'display:none')};" class="crudButtons">							
+				<apex:commandButton id="save_top" style="display:none;" styleClass="inputButton" action="{!saveTeamProfile}" value="Save" />
+				<a id="cancel_top" href="javascript:createOverlay('','cancelOverlay','200');" class="blackbutton" style="display:none;" >
+					<span>Cancel</span>
+				</a>
+				<apex:outputpanel rendered="{!hasMember}">
+					<a id="delete_top"  class="blackbutton" onclick="getCountMembersForTeamProfile('{!TeamProfile.Id}', '{!TeamProfile.Name}');">
+						<span>Delete</span>
+					</a>
+				</apex:outputpanel>
+				<apex:outputpanel rendered="{!NOT(hasMember)}">
+					<apex:commandLink action="{!removeTeamProfileNoMembers}" styleclass="blackbutton">
+						<span>Delete</span>
+                    	<apex:param name="idRmvTP" value="{!TeamProfile.Id}" />
+                    </apex:commandLink>
+				</apex:outputpanel>
+				<apex:commandLink id="clone_top" oncomplete="show('clone');isClone();" action="{!asignSection}" styleClass="blackbutton" rerender="form_content" onclick="isClone();" >
+					<apex:param name="section" value="clone"/>
+					<span>Clone</span>
+				</apex:commandLink>
+				<apex:commandLink id="edit_top" oncomplete="show('edit'); isClone();" action="{!asignSection}" styleClass="blackbutton" rerender="form_content" onclick="isClone();">
+					<apex:param name="section" value="edit"/>
+					<span>Edit</span>
+				</apex:commandLink>									
+			</div>
+		</div> 
+		
+		
+		<!-- ### Overlay's Includes ### -->
+    	<apex:include pageName="AdminOverlayNewTeamType" />
+		<apex:include pageName="AdminOverlayNewProfile" />
+		
+		<apex:include pageName="TeamsOverlayCancel"/>
+		
+		<!-- Quick links sidebar -->
+		<div class="sidebar">
+			<c:TeamAdminQuickLinks />	 
+		</div>		
+		
+		<!-- Main Content Div -->
+		<div class="main_content">		
+			<div class="holder">
+			<!-- Start Main Content -->
+				<!-- Section Title -->
+				<div class="teamsTitleBlue" id="titleSection">
+					New Team Profile - {!TeamProfile.Name}
+				</div>
+				<!-- Form Begin -->
+				
+					<div class="formContainer">
+						<!-- Profile Edition -->
+						<div id="prueba"></div>
+						<div id="edit" style="display:none;">						
+							<!-- <form action="">-->
+									<div class="requiredLegend">
+										<div> = Required Input</div>						
+									</div>
+									<!-- Team Profile name and description -->
+									<div class="field">
+										<label>Team Profile</label>
+										<div class="required">&nbsp;</div>
+										<apex:inputField id="input_profileName" styleClass="medium RQ_uniqueProfile" value="{!teamProfile.Name}" />
+									</div>
+									<div class="field">
+										<label>Description</label>
+										<div class="required" style="border-left-color: #FFFFFF;">&nbsp;</div>
+										<apex:inputtextarea styleClass="large" value="{!teamProfile.Description__c}" rows="5"></apex:inputtextarea>						
+									</div>
+							<!-- </form>-->
+						</div>
+						<!-- Profile View -->
+						
+						<div id="view" style="display:none;">						
+							<table class="profileInfo" >
+								<tr>
+									<td width="25%" align="right"><strong>Team Profile Name:</strong></td>
+									<td width="25%" align="left" class="padding">{!teamProfile.Name}</td>
+									<td width="25%" align="right"><strong>Created By:</strong></td>
+									<td width="25%" align="left" class="padding"><a href="/apex/PeopleProfileDisplay?id={!teamProfile.CreatedById}">{!teamProfile.CreatedBy.Name}</a>, {!teamProfile.CreatedDate}</td>
+								</tr>
+								<tr>
+									<td width="25%" align="right"><strong>Description:</strong></td>
+									<td width="25%" align="left" class="padding">{!teamProfile.Description__c}</td>
+									<td width="25%" align="right"><strong>Modified By:</strong></td>
+									<td width="25%" align="left" class="padding"><a href="/apex/PeopleProfileDisplay?id={!teamProfile.CreatedById}">{!teamProfile.LastModifiedBy.Name}</a>, {!teamProfile.LastModifiedDate}</td>
+								</tr>
+							</table>
+						</div>
+						<!-- Team Checkboxes Section -->
+						<div class="fieldSection">
+							Team
+						</div>
+						<table cellpadding="0" cellspacing="0" class="checkboxEdition">
+							<tr>
+								<td width="190px"><label>Manage Team</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.ManageTeams__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage team allow user to...</b><br> - Edit team <br> - Delete team <br> - Edit members team profile <br> - Remove member from team');" onmouseout="tooltipoff();" />
+								</td>
+							</tr>
+						</table>
+
+						<!-- blogs Checkboxes Section 
+						<div class="permisionSectionContainer">
+							<div class="fieldSection">
+								Blogs
+							</div>
+							<table cellpadding="0" cellspacing="0"  class="checkboxEdition">
+								<tr>
+									<td width="190px"><label>Post blog comments</label></td>
+									<td>	
+										<apex:inputCheckbox value="{!teamProfile.PostBlogComments__c}"/>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									</td>
+								</tr>
+								<tr>
+									<td><label>Create blogs</label></td>
+									<td>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+										<apex:inputCheckbox value="{!teamProfile.CreateBlogs__c}"/>
+										<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Create blog allow user to...</b><br> - if you can create blog entry you can add comments');" onmouseout="tooltipoff();" />
+									</td>
+								</tr>
+								<tr>
+									<td><label>Manage blogs</label></td>
+									<td>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+										<apex:inputCheckbox value="{!teamProfile.ManageBlogs__c}"/>
+										<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage blog allow user to...</b><br> - Edit blog posts<br> - Delete blog posts<br> - Edit comments <br> - Delete comments <br> - Create comments');" onmouseout="tooltipoff();" />
+									</td>
+								</tr>
+							</table>
+						</div> -->
+
+						<!-- discussion Checkboxes Section -->
+						<div class="fieldSection">
+							Discussions
+						</div>
+						<table cellpadding="0" cellspacing="0"  class="checkboxEdition">
+							<tr>
+								<td width="190px"><label>Post topic replies</label></td>
+								<td><apex:inputCheckbox value="{!teamProfile.PostDiscussionTopicReplies__c}"/>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+								</td>
+							</tr>
+							<tr>
+								<td><label>Create discussion topics</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.CreateDiscussionTopics__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Create discussion topics allow user to...</b><br> - if you can create discussion topic you can reply');" onmouseout="tooltipoff();" />
+								</td>
+							</tr>
+							<tr>
+								<td><label>Manage discussion forums</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.ManageDiscussionForums__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage discussion forums allow user to...</b><br> - Edit topics<br> - Delete topics<br> - Edit reply <br> - Delete reply <br> - Create comments');" onmouseout="tooltipoff();" />
+								</td>
+							</tr>
+						</table>
+
+						<!-- blogs Checkboxes Section
+						<div class="permisionSectionContainer">
+							<div class="fieldSection">
+								Bookmarks
+							</div>
+							<table cellpadding="0" cellspacing="0"  class="checkboxEdition">
+								<tr>
+									<td width="190px"><label>Post bookmark comments</label></td>
+									<td><apex:inputCheckbox value="{!teamProfile.PostBookmarkComments__c}"/>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									</td>
+								</tr>
+								<tr>
+									<td><label>Create bookmarks</label></td>
+									<td>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+										<apex:inputCheckbox value="{!teamProfile.CreateBookmarks__c}"/>
+										<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Create bookmark allow user to...</b><br> - if you can create bookmark entry you can add comments');" onmouseout="tooltipoff();" />
+									</td>
+								</tr>
+								<tr>
+									<td><label>Manage bookamrks</label></td>
+									<td>
+										<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+										<apex:inputCheckbox value="{!teamProfile.ManageBookmarks__c}"/>
+										<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage bookmarks allow user to...</b><br> - Edit bookmarks<br> - Delete bookmarks<br> - Edit comments <br> - Delete comments <br> - Create comments');" onmouseout="tooltipoff();"/>
+									</td>
+								</tr>
+							</table>
+						</div> -->
+
+						<!-- Wiki Checkboxes Section -->						
+						<div class="fieldSection">
+							Wiki
+						</div>
+						<table cellpadding="0" cellspacing="0"  class="checkboxEdition">
+							<tr>
+								<td width="190px"><label>Post wiki comments</label></td>
+								<td><apex:inputCheckbox value="{!teamProfile.PostWikiComments__c}"/>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>	
+								</td>
+							</tr>
+							<tr>
+								<td><label>Create wiki pages</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.CreateWikiPages__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Create wiki pages allow user to...</b><br> - Edit a page<br> - Create comments');" onmouseout="tooltipoff();"/>
+								</td>
+							</tr>
+							<tr>
+								<td><label>Manage wiki</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.ManageWikis__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage wiki pages allow user to...</b><br> - Edit any page<br> - Delete any page<br> - Edit any comment <br> - Delete any comment <br> - Edit attachments <br> - Delete attachments <br> - Edit page info <br> - Delete page info');" onmouseout="tooltipoff();"/>
+								</td>
+							</tr>
+						</table>
+
+						<!-- Project Checkboxes Section -->
+						<div class="fieldSection clear">
+							Projects
+						</div>
+						<table cellpadding="0" cellspacing="0"  class="checkboxEdition">
+							<tr>
+								<td width="190"><label>Create project tasks</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.CreateProjectTasks__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Create project tasks allow user to...</b><br> - if you own the task is assigned to you can edit');" onmouseout="tooltipoff();" />
+								</td>
+							</tr>
+							<tr>
+								<td><label>Manage project tasks</label></td>
+								<td>
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/checkbox_unchecked.gif')}" class='imgCheckbox' style="display:none;"/>
+									<apex:inputCheckbox value="{!teamProfile.ManageProjectTasks__c}"/>
+									<img class="infoIcon" style="float:left;" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/info_icon.png')}" onmouseover="tooltip(this, '<b>Manage project tasks allow user to...</b><br> - Edit any task<br> - Delete any task');" onmouseout="tooltipoff();"/>
+								</td>
+							</tr>
+						</table>
+					</div><!-- End Form container -->
+			</div><!-- End Main Content -->
+		</div>
+	<!-- BreadCrumbs -->
+
+		<div class="breadcrumbs">
+			<div style="{!IF(IsTeamAdminMember, 'display:block', 'display:none')};" class="crudButtons">							
+				<apex:commandButton id="save_bottom" style="display:none;" styleClass="inputButton" action="{!saveTeamProfile}" value="Save" />
+				<a id="cancel_bottom" href="javascript:createOverlay('','cancelOverlay','200');" class="blackbutton" style="display:none;" >
+					<span>Cancel</span>
+				</a>	
+				<apex:outputpanel rendered="{!hasMember}">
+					<a id="delete_bottom"  class="blackbutton" onclick="getCountMembersForTeamProfile('{!TeamProfile.Id}', '{!TeamProfile.Name}');">
+						<span>Delete</span>
+					</a>
+				</apex:outputpanel>
+				<apex:outputpanel rendered="{!NOT(hasMember)}">
+					<apex:commandLink action="{!removeTeamProfileNoMembers}" styleclass="blackbutton">
+						<span>Delete</span>
+                    	<apex:param name="idRmvTP" value="{!TeamProfile.Id}" />
+                    </apex:commandLink>
+				</apex:outputpanel>
+				<apex:commandLink id="clone_bottom" oncomplete="show('clone');" action="{!asignSection}" styleClass="blackbutton" rerender="form_content" >
+					<apex:param name="section" value="clone"/>
+					<span>Clone</span>
+				</apex:commandLink>
+				<apex:commandLink id="edit_bottom" oncomplete="show('edit'); " action="{!asignSection}" styleClass="blackbutton" rerender="form_content">
+					<apex:param name="section" value="edit"/>
+					<span>Edit</span>
+				</apex:commandLink>							
+			</div>
+		</div>
+	</apex:form>
+	<script>
+		var profileListMode = 'false';
+	</script>
+	<apex:include pageName="AdminOverlayRemoveTeamProfile" /> 
+</apex:page>

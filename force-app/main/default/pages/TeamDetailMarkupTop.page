@@ -1,0 +1,247 @@
+<apex:page controller="TeamsDetailController" tabstyle="Team__c">
+
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}"></script>	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamDetail.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamAmbassador.css')}" />
+	
+	<!-- Scriptaculous / Prototype -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- Common Js for All Sections -->   
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>   
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/modal.css')}" />		
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />
+	<!-- FCK Editor -->   
+	<script type="text/javascript" src="{!URLFOR($Resource.FCKeditor, 'fckeditor/fckeditor.js')}"></script>  
+	<!-- Common Js for FCK -->   
+	<script>    
+		
+		FCK_BASEPATH = '{!URLFOR($Resource.FCKeditor,'fckeditor/')}';
+		var API_SESSION = '{!$Api.Session_ID}'; 
+		
+		/**
+		* Show message to user div
+		*@void
+		*@param string message
+		*@param string type
+		*/
+		function showMessageToUser(message, type){
+			var messageDiv = $('infoToUser');
+			var imageInfo = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoBig.gif')}';
+			var imageSuccess = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/checkNew.gif')}';
+			var currentSource = (type == 'success') ? imageSuccess : imageInfo;
+			markup = '<img src="'+currentSource+'" />';
+			markup += '<div>' + message + '</div>';
+			messageDiv.innerHTML = markup;
+			
+			var rightCol = document.getElementsByClassName('rightCol'); 
+			
+			rightCol[0].style.top = '130px';
+			
+			Effect.Appear('infoToUser');
+			
+		}
+		
+
+		
+	   </script> 
+	<style> 
+		iframe { border: none !important; }
+		
+		div.rightCol {
+			top:121px !important;
+			
+		}
+		
+		div.sidebar {
+			z-index:999;
+		}
+	
+		/* BreadCrumbs */
+		
+		div.header {
+			height:100px;
+		}
+		
+		div.breadcrumbs {
+			background:#E0E0E0 none repeat scroll 0% 0%;
+			clear:both;
+			height:30px;
+			overflow:hidden;
+			width:100%;
+		}
+		
+		div.breadcrumbs div.buttons {
+			height:35px;
+			margin:0pt auto;
+			position:relative;
+			text-align:center;
+			float:none;
+			width:95px;
+		}
+		
+		a.blackbutton {
+			background:transparent url({!URLFOR($Resource.TeamsResources, 'images/layout/buttons/button_left_bkg.gif')}) no-repeat scroll left top;
+			color:#FFFFFF;
+			cursor:pointer;
+			display:block;
+			float:left;
+			height:24px;
+			margin:0pt 0pt 0pt 5px;
+			padding:0pt;
+			text-decoration:none;
+		}
+		
+		a.blackbutton span {
+			background:transparent url({!URLFOR($Resource.TeamsResources, 'images/layout/buttons/button_right_bkg.gif')}) no-repeat scroll right top;
+			color:#FFFFFF !important;
+			display:block;
+			float:left;
+			font-family:Verdana,Arial;
+			font-size:10px;
+			font-weight:bold;
+			line-height:10px;
+			padding:5px 10px 8px 5px;
+			white-space:nowrap;
+		}
+		
+		div.informationPanel {
+			background-color:#FFFFBF;
+			border:1px solid #ADD1E7;
+			font-size:12px;
+			font-weight:bold;
+			margin:15px 245px 0px 215px;
+			overflow:hidden;
+			padding:5px;
+			position:relative;
+		}
+		
+		div.informationPanel img {
+			float:left;
+		}
+		
+		div.informationPanel div {
+			width:250px;
+			float:left;
+			margin-left:9px;
+			margin-top:9px;
+		}
+		
+		.smallLinkColor {
+			color:#3B8EC4;
+			font-size:10px;
+			font-weight:bold;
+		}
+		
+		/* ### For Thin Widgets link action wrapper */
+		
+		div.thinWidgetLinkAction{
+			background:#F0F0F2 none repeat scroll 0%;
+			color:#999999;
+			margin:0pt 3px;
+			padding:3px 0pt;
+			text-align:right;
+		}
+		
+		div.thinWidgetLinkAction a{
+			color:#999999;
+			font-size:10px;
+			font-weight:bold;
+		}
+	</style>	
+	
+	
+	<c:TeamsOverlayNewTask />
+	
+	<c:TeamsOverlayNewMilestone />
+	
+	<!-- ### End Initialize fixed Overlay  ### -->
+	
+	<!-- ### Initialize the overlay box for modal.js ### -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container" ></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<div id="all" style="overflow:hidden;">
+	
+	<!-- Header -->
+	<div class="header" style="height:58px;" >
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key" onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form>
+	                <!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>		
+	</div>
+	<apex:form >
+		<apex:outputPanel id="thisForm">
+			<apex:outputPanel layout="block" styleClass="breadcrumbs" rendered="{!teamIsOpen}">			
+				<apex:outputPanel styleClass="buttons" layout="block" >	
+						<apex:commandLink styleClass="blackbutton" action="{!joinTeam}" value="" oncomplete="location.href=''" rerender="thisForm, okMessageContainer" onclick="disableAndShowProgress(this);">
+							<span>Join Team</span>
+						</apex:commandLink>				
+				</apex:outputPanel>					
+			</apex:outputPanel>
+		</apex:outputPanel>
+	</apex:form>	
+	
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<script>
+			var teamIsOpen = {!teamIsOpen};
+		</script>
+		<!-- Team Details Widget -->		 
+		<c:TeamDetailsWidget teamId="{!teamIdParam}" />
+		<!-- Team members -->
+		<c:TeamMembersWidget teamId="{!teamIdParam}" />	
+		<!-- Team members -->
+		<div class="clear"></div>				
+	</div>
+	<!-- Join Team Message -->		
+	<apex:outputPanel id="okMessageContainer" layout="block" style="overflow:hidden;position:relative;">	
+		<!-- Task Created Information Panel -->
+		<div class="informationPanel clear" id="infoToUser" style="display:none;"></div>
+		<apex:form >
+			<apex:outputPanel layout="block" rendered="{!showJoinTeamMessage}" style="border:#2868B3 2px solid;background-color:#FFFEB9;width:525px;height:40px;margin-left:225px;margin-top:5px;color:black;" layout="block">
+				<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/checkNew.gif')}" alt="ok" />	You are a member of this team <apex:commandLink action="{!leaveTeam}" value="Undo" rerender="thisForm, okMessageContainer" onclick="disableAndShowProgress(this);" />
+			</apex:outputPanel>	
+		</apex:form>
+	</apex:outputPanel>
+</apex:page>

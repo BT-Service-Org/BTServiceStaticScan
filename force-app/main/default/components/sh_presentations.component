@@ -1,0 +1,119 @@
+<apex:component controller="sh_PresentationController">
+ <!-- ToDo:
+  Component with controller to take practice name as input and provide following outputs 
+  1. Presentation name
+  2. Presentation excerpt
+  3. Link to Presentation document
+-->
+
+<!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectId" type="String" required="false" assignTo="{!projectId1}"/>
+  <apex:attribute description="" name="practiceId" type="String" required="false" assignTo="{!practiceId1}" />
+  <apex:attribute description="" name="offeringId" type="String" required="false" assignTo="{!offeringId}" />
+  <apex:attribute description="title" name="title" type="String" required="false" assignTo="{!title}" />
+  <apex:attribute description="Location" name="showLocation" type="String" required="true" assignTo="{!showLocation}" />
+ 
+  <apex:outputPanel layout="none" rendered="{!showTop}">
+
+   <div id="quick-facts-wrapper" class="quick-facts-wrapper">                
+     <div id="quick-fact-wrapper" class="quick-fact-wrapper">
+       <div class="quick-fact-container clearfix">
+         <div class="quick-fact-bar"><span class="quick-fact-bar-text">Key Assets & Offerings</span></div>
+         
+         <apex:repeat value="{!presentationDto}" var="presentation">
+         <!-- style added on 18-Jul-2016 for key presentations shown at the top of the page -->
+         <div class="col-sm-2 single-presentation-cell" style="outline:none !important; margin-top:1px !important;">
+           <div class="cell-container">
+             <div class="cell-inner">
+               <div class="cell-background"></div>
+               <div class="cell-under-corner-background"></div>
+               <div class="corner-container">
+                     <div class="top-corner"></div>
+                     <div class="bottom-corner"></div>
+               </div>
+               <div class="presentation-container">
+                 <div class="presentation-info">
+                   <span class="presentation-title">{!presentation.presentationName}</span>
+                   <div class="presentation-info-hover-container">
+                     <span class="presentation-excerpt">{!presentation.description}</span>
+                     <div class="view-presentation-button">
+                       <apex:outputPanel layout="none" rendered="{!(presentation.attachmentId != null)}">
+                         <span><a class="presentation-overlay-link" href="{!URLFOR($Action.Attachment.Download, presentation.attachmentId)}" target="_blank"></a>View Presentation</span>
+                       </apex:outputPanel>
+                        
+                       <apex:outputPanel layout="none" rendered="{!presentation.isOrg62Link}">
+                        <span><a href="{!presentation.org62Link}" class="presentation-overlay-link" target="_blank"></a>View Presentation</span>
+                       </apex:outputPanel>
+                        
+                       <apex:outputPanel layout="none" rendered="{!presentation.isOffering}">
+                        <span><a href="{!domainVariable}/sh_Offering?name={!presentation.presentationUniqueName}" class="presentation-overlay-link"></a>View Offering</span>
+                       </apex:outputPanel>
+                     </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div> 
+     
+     </apex:repeat>
+         
+       </div>
+     </div>
+   </div>
+   </apex:outputPanel>
+   
+   <!-- For Projects & Offerings, show key presentations as before -->
+   <apex:outputPanel layout="none" rendered="{!NOT(showTop)}">
+    <div id="presentations-wrapper" class="presentations-wrapper">
+      <div class="row">
+        <div class="col-sm-2 single-presentaion single-label-cell">
+           <div class="cell-container">
+             <div class="cell-inner">
+               <div class="single-label">
+                 <apex:outputPanel styleClass="presentation-label" rendered="{!NOT(ISBLANK(title))}">{!title}</apex:outputPanel>
+                 <apex:outputPanel styleClass="presentation-label" rendered="{!ISBLANK(title)}">Key Assets</apex:outputPanel>
+               </div>
+             </div>
+           </div> 
+        </div>                    
+     
+        <apex:repeat value="{!presentationDto}" var="presentation">
+          <div class="col-sm-2 single-presentation-cell">
+            <div class="cell-container">
+               <div class="cell-inner">
+                 <div class="cell-background"></div>
+                   <div class="cell-under-corner-background"></div>
+                   <div class="corner-container">
+                     <div class="top-corner">
+                   </div>
+                   <div class="bottom-corner"></div>
+                 </div>
+                 <div class="presentation-container">
+                   <div class="presentation-info">
+                     <span class="presentation-title">{!presentation.presentationName}</span>
+                     <div class="presentation-info-hover-container">
+                       <span class="presentation-excerpt">{!presentation.description}</span>
+                       <div class="view-presentation-button">
+                         <apex:outputPanel layout="none" rendered="{!(presentation.attachmentId != null)}">
+                           <span><a class="presentation-overlay-link" href="{!URLFOR($Action.Attachment.Download, presentation.attachmentId)}" target="_blank"></a>View Presentation</span>
+                         </apex:outputPanel>
+                         <apex:outputPanel layout="none" rendered="{!presentation.isOrg62Link}">
+                           <span><a href="{!presentation.org62Link}" class="presentation-overlay-link" target="_blank"></a>View Presentation</span>
+                         </apex:outputPanel>
+                         <apex:outputPanel layout="none" rendered="{!presentation.isOffering}">
+                           <span><a href="{!domainVariable}/sh_Offering?name={!presentation.presentationUniqueName}" class="presentation-overlay-link"></a>View Offering</span>
+                         </apex:outputPanel>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+            </div>
+          </div> 
+        </apex:repeat>
+      </div> <!-- End row div -->
+    </div> <!-- End presentations-wrapper -->
+   </apex:outputPanel>
+    
+</apex:component>

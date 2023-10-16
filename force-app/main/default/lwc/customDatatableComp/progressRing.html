@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-grid"> 
+        <div class="slds-col" >
+            <div class="slds-progress-bar slds-progress-bar_large" aria-valuemin="0" aria-valuemax="100" aria-valuenow={value} role="progressbar" title={typeAttributes.title}>
+                <span class="slds-progress-bar__value" style={typeAttributes.style}>
+                <span class="slds-assistive-text">Progress</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
+<!-- GRAVEYARD 
+            <div class="slds-col" style="text-align: center;">
+                <lightning-formatted-number
+                        value={value}
+                        format-style="percent-fixed">
+                </lightning-formatted-number>
+                </div>
+   
+    <div class="slds-grid">
+        <div class="slds-col" >
+        <lightning-progress-bar value={value} size="large"></lightning-progress-bar>
+        </div>
+        <div class="slds-col" style="text-align: center;">
+        <lightning-formatted-number
+                value={value}
+                format-style="percent-fixed">
+        </lightning-formatted-number>
+        </div>
+    </div>-->

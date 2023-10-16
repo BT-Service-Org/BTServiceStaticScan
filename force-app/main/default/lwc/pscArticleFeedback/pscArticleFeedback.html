@@ -1,0 +1,18 @@
+<template>
+    <div class="feedback-container">
+      <lightning-spinner alternative-text="Loading" size="small" if:true={showSpinner}></lightning-spinner>
+
+            <lightning-textarea name="feedback"
+            label={feedbackLabel} value={feedback}
+            onchange={handleFeedbackChange} class="feedback-text salesforce_font" required message-when-value-missing={validationMessage}></lightning-textarea>
+
+            <div class="feedback-btn">
+                <div class="cancel-button" onclick={handleSubmitWithoutFeedback} if:false={isRequired}>
+                    Close
+                </div>
+            <div class="submit-button" onclick={handleSubmit}>
+                Submit
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,189 @@
+<apex:page docType="html-5.0" sidebar="false" 
+	applyHtmlTag="false" applyBodyTag="false" 
+	showheader="false" 
+	standardController="Interview_Candidate__c" 
+	extensions="PanelCandidateOverviewExtn" readOnly="true">
+	<apex:stylesheet value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.css')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery-1.9.1.min.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.js')}"/>
+ 	<apex:includeScript id="a" value="https://www.google.com/jsapi" />
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Interview Summary</title>
+        <style>
+        /* allow wrapping */
+		.ui-page .ui-content .ui-listview .ui-li-desc {
+		    white-space : normal;
+		}
+        </style>
+        <script>
+        $j = jQuery.noConflict();
+        
+        // Load the Visualization API and the package.
+        google.load('visualization', '1.0', {'packages':['corechart']});
+       
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(initCharts);
+   
+        function initCharts() {    
+			Visualforce.remoting.Manager.invokeAction(
+				'{!$RemoteAction.PanelCandidateOverviewExtn.getAllInterviewsForId}',
+				'{!Id}',
+	          	function(result, event){  
+	          		if( !event.status ) return;
+	          		
+	          		var data = [['Interview Type', 'Score', { role: 'style' }]];
+	          		
+	          		for(var i = 0; i < result.length; i++) {
+	          			//get interview score
+	          			var r = result[i];
+	          			var score = r.interview.Overall_Interview_Score__c;
+	          			var color = 'green';
+						if( score < 3.0 ) {
+							color = 'red';
+						}
+						if( score >= 3.0 && score < 3.5 ) {
+							color = 'yellow';
+						}		
+	          			data.push([r.interviewType, r.interview.Overall_Interview_Score__c, color]);
+	          		}
+	          		
+	          		if( result.length > 0 ){
+			        	var viz_data = google.visualization.arrayToDataTable(data);
+			        	
+			        	var formatter = new google.visualization.NumberFormat({pattern: '#.##'});
+		        		formatter.format(viz_data, 1);
+			        	
+			        	var view = new google.visualization.DataView(viz_data);
+		      			view.setColumns([0, 1, 2,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }
+		                         ]);
+		
+				        var options = {
+				        	//title: 'Interview Performance',
+				        	height: 150,
+				        	chartArea: {left: 100, top: 20, width: '95%'},
+				        	//chartArea: {top: 20, width: '95%'},
+				        	animation: {easing: 'in'},
+				        	bar: {groupWidth: "15%"},
+							legend: { position: "none" },
+				        	//vAxis: {textPosition: 'in', titleTextStyle: {color: 'red'}},
+				        	hAxis: {viewWindow: {max: 6.0, min: 0.0}}
+				        };
+		
+				        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+		        		chart.draw(view, options);
+	          		}	
+	        	},
+				{escape:true}
+			);     
+        } 
+        
+        </script>
+	</head>
+	<body>
+	
+	<div data-role="page" id="summarypage">
+		<!-- <div data-role="header" data-position="fixed">
+		</div> -->
+		<div data-role="main" class="ui-content">
+			<!-- div data-role="collapsible" data-inset="false" data-collapsed="false" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+				<h4>Interview Summary</h4>
+				<div id="chart_div" style="height: 150px;">No Interviews Conducted Yet.</div>
+			</div -->
+			<ul data-role="listview" data-inset="false">
+   				<li>
+		   			<h2><apex:outputText value="Interview Summary" /></h2>
+					<div id="chart_div" style="height: 150px;">No Interviews Conducted Yet.</div>
+	            	<br/>
+   				</li>
+   			</ul>
+			<div data-role="collapsible" data-inset="false" data-collapsed="false" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+				<h4>Basic Info</h4>
+				<ul data-role="listview">
+					<!-- <li data-role="list-divider">Basic Info</li> -->
+					<li>
+						<a href="#" onclick="sforce.one.navigateToSObject('{!Interview_Candidate__c.Id}')">
+						<h4>{!Interview_Candidate__c.Name}</h4>
+						<p><apex:outputText value="Years of Experience" />:&nbsp;<strong><apex:outputText value="{0, Number, 0}"><apex:param value="{!Interview_Candidate__c.Years_of_Experience__c}" /></apex:outputText></strong></p>
+						<p><apex:outputText value="Region" />:&nbsp;<strong><apex:outputField value="{!Interview_Candidate__c.Region__c}" /></strong></p>
+						<p><apex:outputText value="Zone" />:&nbsp;<strong><apex:outputField value="{!Interview_Candidate__c.Zone__c}" /></strong></p>
+						<p><apex:outputText value="City, State" />:&nbsp;<strong><apex:outputText value="{0}, {1}"><apex:param value="{!Interview_Candidate__c.City__c}"/><apex:param value="{!Interview_Candidate__c.State__c}"/></apex:outputText></strong></p>
+						<p><apex:outputText value="Recruiter Comments" />:&nbsp;<strong><apex:outputField value="{!Interview_Candidate__c.Recruiter_Intro__c}" /></strong></p>
+		            	<br/>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<apex:outputPanel rendered="{!hasInterviews}" layout="block" html-data-role="collapsible" html-data-collapsed="false" html-data-inset="false" html-data-collapsed-icon="arrow-d" html-data-expanded-icon="arrow-u">
+				<h4>Interviews</h4>
+				<ul data-role="listview" data-split-icon="info" data-split-theme="d">
+					<!-- <li data-role="list-divider">All Interviews</li> -->
+			    	<apex:repeat value="{!allInterviews}" var="aInterview">
+			   		<li id="li{!aInterview.Interview.Id}">
+			    		<a href="#detailpage{!aInterview.Interview.Id}" id="{!aInterview.Interview.Id}" data-transition="flip">
+			    		<h4><apex:outputText value="{!aInterview.interviewType}" /></h4>
+			    		<p><apex:outputText value="Date" />:&nbsp;<strong><apex:outputText value="{0, Date, MM/dd/yyyy}"><apex:param value="{!aInterview.Interview.Actual_Interview_Date__c}" /></apex:outputText></strong></p>
+			    		<p><apex:outputText value="Interviewer" />:&nbsp;<strong><apex:outputField value="{!aInterview.Interview.Interviewer__r.Name}" /></strong></p>
+			    		<p><apex:outputText value="Score" />:&nbsp;<strong><apex:outputText value="{0, Number, 0.00}"><apex:param value="{!aInterview.Interview.Overall_Interview_Score__c}" /></apex:outputText></strong></p>
+			    		<p><apex:outputText value="Recommend" />:&nbsp;<strong><apex:outputField value="{!aInterview.Interview.Recommendation__c}" /></strong></p>
+			    		<p><apex:outputText value="Comments" />:&nbsp;<strong><apex:outputField value="{!aInterview.Interview.Comments__c}" /></strong></p>
+			    		</a>
+			    		<!--Uncomment to enable link to record. <a href="#" onclick="sforce.one.navigateToSObject('{!aInterview.Interview.Id}')">View Interview</a> -->		    		
+					</li>    
+					</apex:repeat>
+				</ul>
+			</apex:outputPanel>
+		</div>
+		<!-- <div data-role="footer" data-position="fixed">
+		</div> -->
+	</div>
+	
+	<apex:repeat value="{!allInterviews}" var="aInterview">
+	<div data-role="page" id="detailpage{!aInterview.Interview.Id}">
+		<!-- div data-role="header" data-theme="c">
+			<a href='#summarypage' class='ui-btn-left' data-icon='arrow-l' data-direction="reverse" data-transition="flip">Back</a>
+			<h4>Details</h4>
+		</div-->
+   		<div data-role="main" class="ui-content">
+   			<ul data-role="listview" data-inset="false">
+   				<li>
+		   			<h2><apex:outputText value="{!aInterview.interviewType}" /></h2>
+		    		<p><apex:outputText value="Date" />:&nbsp;<strong><apex:outputText value="{0, Date, MM/dd/yyyy}"><apex:param value="{!aInterview.Interview.Actual_Interview_Date__c}" /></apex:outputText></strong></p>
+		    		<p><apex:outputText value="Interviewer" />:&nbsp;<strong><apex:outputField value="{!aInterview.Interview.Interviewer__r.Name}" /></strong></p>
+		    		<p><apex:outputText value="Score" />:&nbsp;<strong><apex:outputText value="{0, Number, 0.00}"><apex:param value="{!aInterview.Interview.Overall_Interview_Score__c}" /></apex:outputText></strong></p>
+		    		<p><apex:outputText value="Recommend" />:&nbsp;<strong><apex:outputField value="{!aInterview.Interview.Recommendation__c}" /></strong></p>
+	            	<br/>
+   				</li>
+   			</ul>
+   			<apex:outputText value="No Questions were entered for candidate." rendered="{!(aInterview.InterviewEvaluations.size == 0)}"/>
+            <apex:repeat value="{!aInterview.InterviewEvaluations}" var="iEval">
+   			<div data-role="collapsible" data-content-theme="d" data-inset="false" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" data-collapsed="false">
+   				<h4><apex:outputText value="Question #{!iEval.Interview_Question__r.Sort_Order__c} -- "/><strong><apex:outputText value="Score:"/>&nbsp;<apex:outputField value="{!iEval.Score__c}"/></strong></h4>
+	           	<ul data-role="listview">
+		            <li>
+		            	<a href="#" onclick="sforce.one.navigateToSObject('{!iEval.Id}')">
+		            	<h2>Question</h2>
+		            	<p><b>(<apex:outputField value="{!iEval.Interview_Question__r.Domain__c}"/>) </b><apex:outputField value="{!iEval.Interview_Question__r.Question__c}"/></p>
+		            	<h2>Comments</h2>
+		            	<p><apex:outputField value="{!iEval.Comments__c}"/></p>
+                        <h2>Rating</h2>
+                        <p><apex:outputText value="{!IF(iEval.Skipped__c, "SKIPPED", iEval.Rating__c)}" /></p>
+		            	</a>
+					</li>
+	           	</ul>
+   			</div>
+			</apex:repeat>
+		</div>
+		<!-- div data-role="footer" data-position="fixed">
+			<h4><a href="#" onclick="sforce.one.navigateToSObject('{!Interview_Candidate__c.Id}')">{!Interview_Candidate__c.Name}</a></h4>
+		</div -->		
+	</div>
+	</apex:repeat>
+	
+	</body>
+</apex:page>

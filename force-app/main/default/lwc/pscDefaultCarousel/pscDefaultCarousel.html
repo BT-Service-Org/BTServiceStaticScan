@@ -1,0 +1,19 @@
+<template>
+    <template if:true={carouselData}>
+        <div class="carousel-container">
+            <div class="carousel-image">
+                <img src={bannerImageURL} alt={bannerTitle}>
+                <div class="carousel-content">
+                    <div class="carousel-title ITC_font">{bannerTitle}</div>
+                    <p class="carousel-description salesforce_font">{bannerDescription}</p>
+                    <a class="carousel-button ITC_font" href={buttonUrl} target="_blank">{buttonLabel}</a>
+                </div>
+
+            </div>
+                <p class="prev" onclick={prevBannerHandler}>❮</p>
+            <p class="next" onclick={nextBannerHandler}>❯</p>
+        </div>
+
+    </template>
+
+</template>

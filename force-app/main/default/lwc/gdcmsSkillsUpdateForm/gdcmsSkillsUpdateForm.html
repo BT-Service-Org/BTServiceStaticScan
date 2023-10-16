@@ -1,0 +1,57 @@
+<template>
+    <lightning-card>
+        <template if:false={loaded}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <div if:false={teamMemberName}>
+            <div class="slds-col slds-p-left_medium">
+                <lightning-formatted-rich-text value={message}></lightning-formatted-rich-text>
+            </div>
+        </div>
+        <div if:true={teamMemberName}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_2-of-3 slds-text-heading_large slds-p-left_medium">
+                    {message}
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-p-right_medium">
+                    <c-gdcms-update-display-profile-pic record-id={recordId}></c-gdcms-update-display-profile-pic>
+                </div>
+            </div>
+            <div class="slds-m-top_x-large">
+                <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId}
+                    onsuccess={handleSuccess}>
+                    <div class="slds-grid slds-wrap slds-m-left_medium slds-m-right_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field class="summary" field-name={summ}>
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-p-left_medium slds-col slds-size_1-of-2">
+                            <lightning-input-field class="verticalExpertise" field-name={vE} label="Vertical Expertise">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="slds-m-top_medium slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name={sC}></lightning-input-field>
+                        </div>
+                        <div style="padding-top: 0.5rem;"
+                            class="slds-m-top_x-large slds-p-left_medium slds-col slds-size_1-of-2">
+                            <lightning-input-field class="skillHighlights" field-name={sH} label="Skills Highlight">
+                            </lightning-input-field>
+                        </div>
+                        <div style="padding-top: 0.5rem;"
+                            class="slds-m-top_x-large slds-p-left_medium slds-col slds-size_1-of-2">
+                            <lightning-input-field class="customerCredentials" field-name={cC} label="Customer Credentials">
+                            </lightning-input-field>
+                        </div>
+                    </div>
+                    <div class=" slds-align_absolute-center">
+                        <div class="slds-var-m-top_medium">
+                            <lightning-button variant="brand" type="submit" label="Submit" onclick={handleSubmit}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </lightning-card>
+</template>

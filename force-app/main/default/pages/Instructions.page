@@ -1,0 +1,11 @@
+<apex:page >    
+	<h1>Instructions</h1>    
+	<br />    
+	<ol>        
+		<li>Create the SOW Header with the information contained within the signed SOW.</li>        
+		<li>Create the Resources that will be participating on the SOW(s).</li>        
+		<li>Create the Roles that will be played on the SOW(s).</li>        
+		<li>Create the Resource Assignment records that will tie together the SOW, Resources, &amp; Roles.</li>        
+		<li>Create the Resource Schedule Weeks that represent the number of hours per week that a given resource will participate on the SOW(s).</li>    
+	</ol>
+</apex:page>

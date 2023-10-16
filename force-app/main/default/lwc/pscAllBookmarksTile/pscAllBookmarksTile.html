@@ -1,0 +1,41 @@
+<template>
+    <div class="Article" if:true={pscArticle}>
+        <div class="article">
+            <h3 slot="title" class="ContainerItemTitle ITC_font">
+                <a data-id={pscArticle.recId} tabindex="0" href={pscArticle.navigationURL}
+                    aria-describedby={pscArticle.body}> {pscArticle.title} </a>
+                    <template if:true={pscArticle.bookmarkType}>
+                        <lightning-badge label={pscArticle.bookmarkType} class="badge-value slds-badge">
+                        </lightning-badge>
+                    </template>
+            </h3>
+           
+            <c-psc-favorite record-id={pscArticle.recId} title={pscArticle.title} fav-id={pscArticle.favId}
+                fav-data={showFavorite} fav={pscArticle.fav} onrefreshparent={handleRefresh} if:true={showFavorite}></c-psc-favorite>
+        </div>
+        <div class="slds-grid slds-grid_vertical">
+            <div class="ContainerItemSummary salesforce_font">
+                <span><lightning-formatted-rich-text
+                    value={pscArticle.body}
+                ></lightning-formatted-rich-text></span>
+            </div>
+            <div class="article_detail">
+                <template if:true={pscArticle.resourceType}>
+                    <p class="ITC_font">{pscArticle.resourceType}</p>
+                </template>
+
+                <p if:true={pscArticle.author}>Author: <template if:true={pscArticle.author}>{pscArticle.author}</template></p>
+
+                <p if:true={pscArticle.recordLastUpdateDate}>Date : <lightning-formatted-date-time value={pscArticle.recordLastUpdateDate} year="2-digit"
+                        month="2-digit" day="2-digit">
+                    </lightning-formatted-date-time>
+                </p>
+                <template if:true={voteData}>
+                    <p if:true={pscArticle.author}>Up Votes: {voteData.upVoteCount}</p>
+                    <p if:true={pscArticle.author}>Down Votes: {voteData.downVoteCount}</p>
+                </template>
+               
+            </div>
+        </div>
+    </div>
+</template>

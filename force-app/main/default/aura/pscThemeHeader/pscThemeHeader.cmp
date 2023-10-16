@@ -1,0 +1,84 @@
+<aura:component
+  extends="forceCommunity:navigationMenuBase"
+  access="global"
+  controller="PSCThemeHeaderCtrl"
+                implements="forceCommunity:searchInterface"
+>
+  <aura:attribute name="menuId" type="string" />
+  <aura:attribute name="showSearch" type="Boolean" default="true" />
+  <aura:attribute name="searchHub" type="String" />
+  <aura:attribute name="levelPercent" type="String" />
+  <aura:attribute name="diameter" type="String" />
+  <aura:attribute name="userBadgesData" type="UserCompetencies__c[]" />
+	<aura:attribute name="endpointHandler" type="Aura.Component[]" access="global">
+          <c:pscCoveoSearchTokenGenerator></c:pscCoveoSearchTokenGenerator>
+      </aura:attribute>
+  <aura:attribute name="searchPageName" type="String" />
+  <aura:attribute
+    name="enableQuerySuggestAddon"
+    type="Boolean"
+    default="true"
+    access="global"
+  />
+  <aura:attribute
+    name="name"
+    type="String"
+    default="communityCoveo"
+    access="global"
+  />
+  <aura:attribute
+    name="placeholder"
+    type="String"
+    default="Search Knowledge"
+    access="global"
+  />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <header class="header">
+    <div class="head-flex-container">
+      <div class="page_logo">
+        <div class="slds-float_left slds-p-top_medium header__logo ">
+          <a class="header__logo-img" href="{!$SfdcSite.pathPrefix + '/s/'}">
+            <img src="{!$Resource.pscImages + '/Logo/servicescentral.png'}" alt="Services Central Logo"/>
+          </a>
+        </div>
+      </div>
+
+      <aura:if isTrue="{!v.showSearch}">
+         <div class="search_box">
+          <p class="search_icon"><lightning:icon iconName="utility:search" alternativeText="search!" size="x-small"/></p>
+            <CoveoV2:CommunitySearchBox
+              enableQuerySuggestAddon="{!v.enableQuerySuggestAddon}"
+              name="{!v.searchHub}"
+              placeholder="{!v.placeholder}"
+              enableQuerySyntax="true"
+              searchHub="{!v.searchHub}"
+              searchPageName="{!v.searchPageName}"
+                                        endpointHandler="{!v.endpointHandler}"
+            ></CoveoV2:CommunitySearchBox>
+          <!--<c:pscSearch name="{!v.name}" placeholder="{!v.placeholder}"/>-->
+        </div> 
+        
+      </aura:if>
+      <div class="user_profile"> <c:pscHeaderButtons /> <c:pscUserMenu diameter="{!v.diameter}" levelPercent="{!v.levelPercent}" userData="{!v.userBadgesData}"/> </div>
+    </div>
+    <br />
+    <div class="slds-grid slds-wrap">
+      <div class="slds-col slds-size_1-of-12"> <span> </span> </div>
+      <div class="slds-col slds-size_10-of-12">
+        <span>
+          <ccnavmenus:navMenu
+            menuId="{!v.menuId}"
+            menuAlignment="center"
+            brandNavigationColorText="#032D60"
+            brandNavigationBackgroundColor="rgba(255,255,255,1)"
+            brandNavigationBarBackgroundColor="rgba(255,255,255,1)"
+          />
+        </span>
+      </div>
+      <aura:if isTrue="{!!$Browser.isPhone}">
+        <div class="slds-col slds-large-size_1-of-12"> <span> </span> </div>
+      </aura:if>
+    </div>
+  </header>
+  <div style="background-color:#0070D2;min-height:5px; "></div>
+</aura:component>

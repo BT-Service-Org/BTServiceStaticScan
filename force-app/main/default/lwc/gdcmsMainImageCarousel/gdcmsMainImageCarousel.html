@@ -1,0 +1,17 @@
+<template>
+    <div if:true={hasdata}>
+        <h2 class="heading slds-p-top--medium"> Customers serviced from GDC</h2>
+        <div> 
+            <lightning-carousel>
+                <template for:each={allContent} for:item="SuccessContent">   
+                    <lightning-carousel-image
+                                key={SuccessContent.Id}
+                                src = {SuccessContent.gdc_ms_Carousel_Image_Link__c}
+                                alternative-text = "First card accessible description."
+                                href = "/gdcIndia/s/success-stories">
+                    </lightning-carousel-image>
+                </template>
+            </lightning-carousel>
+        </div>
+    </div>
+</template>

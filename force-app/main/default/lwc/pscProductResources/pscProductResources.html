@@ -1,0 +1,17 @@
+<template>
+<div class="item_container slds-grid slds-wrap">
+    <template for:each={resources} for:item="resourceType">
+    <div key={resourceType.name} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12">
+        <a href={resourceType.url}>
+        <div class="item">
+            <img src={resourceType.tileUrl} alt={resourceType.name}/>
+            <p tabindex="-1">{resourceType.name}</p> 
+        </div>
+    </a>
+        
+    </div>
+</template>
+    
+  </div>
+
+</template>

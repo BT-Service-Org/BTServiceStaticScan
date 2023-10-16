@@ -1,0 +1,5 @@
+<apex:page controller="DiscussionCreatedDataController">
+	<apex:form >
+		<apex:commandButton value="Update Created Data" action="{!updateData}" />
+	</apex:form>
+</apex:page>

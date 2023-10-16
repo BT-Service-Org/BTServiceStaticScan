@@ -1,0 +1,131 @@
+<template>
+    <div class="home-container flipperMainDiv">
+    <lightning-layout multiple-rows class="slds-align_absolute-center">
+        <lightning-layout-item class="text-center slds-align--absolute-center" size="12" large-device-size="3" medium-device-size="6">
+            <div class="flip-container flipper-id-gdc">
+                <div class="flip-container-Main-Heading">
+                  <a data-id="/gdc-team" onclick={navigate} style="color: #032D60;">GDC Team </a>
+                </div>
+                <div class="flip">
+                  <div class="front-tile">
+                    <img class="gdc-embedded-image" width="90" src={gdcteam}>
+                  </div>
+                  <div class="back-tile">
+                    <p class="font-weight-300">Our team is key to our success. Get the details about the GDC team and check
+                      team members skills and experience.</p>
+                  </div>
+                </div>
+              </div>
+        </lightning-layout-item>
+
+        <lightning-layout-item class="text-center slds-align--absolute-center" size="12" large-device-size="3" medium-device-size="6"
+           >
+           <div class="flip-container flipper-id-gdc">
+            <div class="flip-container-Main-Heading">
+              <a data-id="https://sites.google.com/salesforce.com/gdc-employee-engagement/home" onclick={navigateExternal}
+                style="color: #032D60;">Employee Engagement </a>
+            </div>
+            <div class="flip">
+              <div class="front-tile">
+                <!-- <p><strong>Employee Engagement</strong></p><hr><span class="gdc-file-wrapper"> -->
+                <img class="gdc-embedded-image" width="90" src={engage}>
+                <!-- </span><p></p> -->
+              </div>
+              <div class="back-tile">
+                <!-- <a href="#" rel="nofollow"><p>Employee Engagement</p></a> -->
+                <p class="font-weight-300">We firmly believe that more engaged our practitioners are more effective they
+                  would be in their delivery</p>
+              </div>
+            </div>
+          </div>
+          
+        </lightning-layout-item>
+
+        <lightning-layout-item class="text-center slds-align--absolute-center" size="12" large-device-size="3" medium-device-size="6"
+           >
+           <div class="flip-container flipper-id-gdc">
+            <div class="flip-container-Main-Heading">
+              <a data-id="/employee-enablement" onclick={navigate} style="color: #032D60;">Employee Enablement </a>
+            </div>
+            <div class="flip">
+              <div class="front-tile">
+                <!-- <p><strong>Employee Enablement</strong></p><hr><span class="gdc-file-wrapper"> -->
+                <img class="gdc-embedded-image" width="90" src={enab}>
+                <!-- </span><p></p> -->
+              </div>
+              <div class="back-tile">
+                <!-- <a href="#" rel="nofollow"><p>Employee Enablement</p></a> -->
+                <p class="font-weight-300">We believe right enablement is critical for long term success of all our
+                  practitioners hence we take our enablement seriously</p>
+              </div>
+            </div>
+          </div>
+        </lightning-layout-item>
+
+        <lightning-layout-item class="text-center slds-align--absolute-center" size="12" large-device-size="3" medium-device-size="6"
+           >
+           <div class="flip-container flipper-id-gdc">
+            <div class="flip-container-Main-Heading">
+              <a data-id="/assets-accelerators" onclick={navigate} style="color: #032D60;">Assets & Accelerators </a>
+            </div>
+            <div class="flip">
+              <div class="front-tile">
+                <!-- <p><strong>Asset & Accelerators</strong></p><hr><span class="gdc-file-wrapper"> -->
+                <img class="gdc-embedded-image" width="90" src={asset}>
+                <!-- </span><p></p> -->
+              </div>
+              <div class="back-tile">
+                <!-- <a href="#" rel="nofollow"><p>Asset & Accelerators</p></a> -->
+                <p class="font-weight-300">Continuous innovations is inherent in our ways of working. Click here to know
+                  details of our Assets & Accelerators</p>
+              </div>
+            </div>
+          </div>   
+        </lightning-layout-item>
+
+        <lightning-layout-item class="text-center" size="12" large-device-size="3" medium-device-size="6"
+           >
+           <div class="flip-container flipper-id-gdc">
+            <div class="flip-container-Main-Heading">
+              <a data-id="/process-delivery-excellence" onclick={navigate} style="color: #032D60;">Process & Delivery </a>
+            </div>
+            <div class="flip">
+              <div class="front-tile">
+                <!-- <p><strong>Process & Delivery</strong></p><hr><span class="gdc-file-wrapper"> -->
+                <img class="gdc-embedded-image" width="90" src={process}>
+                <!-- </span><p></p> -->
+              </div>
+              <div class="back-tile">
+                <!-- <a href="#" rel="nofollow"><p>Process & Delivery</p></a> -->
+                <p class="font-weight-300">Our delivery is based on strong foundation of Processes supported by effective
+                  metrices</p>
+              </div>
+            </div>
+          </div>
+        </lightning-layout-item>
+
+        <lightning-layout-item class="text-center" size="12" large-device-size="3" medium-device-size="6"
+           >
+           <div class="flip-container flipper-id-gdc">
+            <div class="flip-container-Main-Heading">
+              <a data-id="/success-stories" onclick={navigate} style="color: #032D60;">Success Stories </a>
+            </div>
+            <div class="flip">
+              <div class="front-tile">
+                <!-- <p><strong>Success Stories</strong></p><hr><span class="gdc-file-wrapper"> -->
+                <img class="gdc-embedded-image" width="20" style="margin-right: 12px;" src={story2}>
+                <img class="gdc-embedded-image" width="50" src={story1}>
+                <!-- </span><p></p> -->
+              </div>
+              <div class="back-tile">
+                <!-- <a href="#" rel="nofollow"><p>Success Stories</p></a> -->
+                <p class="font-weight-300">We take pride in what we deliver, and these stories are testament of our
+                  delivery</p>
+              </div>
+            </div>
+          </div>
+        </lightning-layout-item>
+        
+     </lightning-layout> 
+    </div>
+</template>

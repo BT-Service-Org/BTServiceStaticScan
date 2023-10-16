@@ -1,0 +1,38 @@
+<apex:component controller="TeamsRecentlyCreated">
+    <script>
+		function trunkText(text, len){
+			if(text.length > len){
+				text = text.substring(0, len) + '...';
+			}
+			document.write(text);
+		}    
+    </script>
+    <style>
+    	ul.recentTeams li{
+    		width: 192px;
+    	}
+    </style>
+    <div class="box_round forwidget mySmallWidget" style="width: 216px;">
+        <div class="header_blue">
+            <div><div><h4>Recently Created Teams</h4></div></div>
+        </div>
+        <div class="box_content">
+            <div>
+                <ul class="recentTeams">        
+                <apex:repeat value="{!recentTeams}" var="t">                 
+                    <li>
+                        <img width="29" src="{!IF(t.picture == null, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_small.gif'), t.picture)}" />
+                        <div>
+	                        <a href="/apex/TeamsRedirect?id={!t.team.Id}"><script>trunkText("{!t.team.Name}", 24)</script></a><br />
+	                        <span>Created by <a href="/apex/PeopleProfileDisplay?id={!t.createdBy.Id}"><script>trunkText("{!t.createdBy.Name}", 15)</script></a></span>
+	                    </div>
+                    </li>
+                </apex:repeat>
+                </ul>
+            </div>   
+        </div>
+        <div class="bottom_borders">
+            <div><div></div></div>
+        </div>
+    </div>
+</apex:component>

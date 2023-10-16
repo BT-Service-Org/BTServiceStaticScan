@@ -1,0 +1,73 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="The_Station_AdvancedNavMenu_Controller"
+    access="global">
+
+    <!-- Design Atributes -->
+    <aura:attribute name="mainMenu" type="String" access="public"/>
+    <aura:attribute name="childMenus" type="String" access="public"/>
+    <aura:attribute name="alignment" type="String" default="Left" access="public"/>
+
+    <!-- Event Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Atributes -->
+    <aura:attribute name="cbaseURL" type="String" access="private"/>
+    <aura:attribute name="menuData" type="List" access="private"/>
+    <aura:attribute name="alignmentClass" type="String" access="private"/>
+
+    <div class="slds-context-bar nav-links slds-m-top_x-small">
+        <nav class="slds-context-bar__secondary">
+
+            <!-- Main menu -->
+            <ul class="{! 'slds-grid slds-size_1-of-1 ' + v.alignmentClass }">
+                <aura:iteration items="{! v.menuData }" var="item">
+                    <li id="{! item.id }" class="navbar">
+                        <div class="dropdown">
+                            <div class="dropbtn">
+                                <aura:if isTrue="{! not(empty(item.target)) }">
+                                    <a onclick="{! c.onTargetClick }" data-target="{! item.target }"
+                                        href="{! item.target }">{! item.title }</a>
+                                    <aura:set attribute="else">
+                                        {! item.title }
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                            <!-- Child menu -->
+                            <aura:if isTrue="{! not(empty(item.childs)) }">
+                                <div id="{! 'dropdown-' + item.id }" class="dropdown-content slds-p-vertical_large">
+                                    <!-- Child menu - 1st level -->
+                                    <aura:iteration items="{! item.childs }" var="firstChild">
+                                        <div class="grouping slds-p-horizontal_large slds-p-vertical_medium">
+                                            <div class="parent text-bold slds-p-bottom_xx-small">
+                                                <aura:if isTrue="{! not(empty(firstChild.target)) }">
+                                                    <a onclick="{! c.onTargetClick }"
+                                                        data-target="{! firstChild.target }"
+                                                        href="{! firstChild.target }">{! firstChild.title }</a>
+                                                    <aura:set attribute="else">
+                                                        {! firstChild.title }
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                            <!-- Child menu - 2nd level -->
+                                            <aura:iteration items="{! firstChild.childs }" var="secondChild">
+                                                <div class="child slds-p-bottom_xx-small">
+                                                    <aura:if isTrue="{! not(empty(secondChild.target)) }">
+                                                        <a onclick="{! c.onTargetClick }"
+                                                            data-target="{! secondChild.target }"
+                                                            href="{! secondChild.target }">{! secondChild.title }</a>
+                                                        <aura:set attribute="else">
+                                                            {! secondChild.title }
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                            </aura:iteration>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </li>
+                </aura:iteration>
+            </ul>
+        </nav>
+    </div>
+</aura:component>

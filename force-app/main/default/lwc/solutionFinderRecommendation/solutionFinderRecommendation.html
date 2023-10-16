@@ -1,0 +1,64 @@
+<template>
+    <lightning-tabset if:false={notConfigured}>
+        <lightning-tab if:true={descriptionExists} label="Description">
+            {recommendation.description}
+        </lightning-tab>
+        <lightning-tab if:true={considerationsExist} label="Considerations">
+            <template for:each={recommendation.considerations} for:item="detail">
+                <div key={detail.url} class="slds-border_bottom slds-p-top_x-small slds-p-bottom_x-small">
+                    <a if:true={detail.url} href={detail.url} target="_blank" class="slds-float_right slds-m-left_x-small">
+                        <lightning-icon icon-name="utility:new_window" size="x-small" style='opacity: 0.35;'></lightning-icon>
+                    </a>
+                    <div if:true={detail.label}>
+                        {detail.label}
+                    </div>
+                </div>
+            </template>
+        </lightning-tab>
+        <lightning-tab if:true={limitationsExist} label="Limitations">
+            <template for:each={recommendation.limitations} for:item="detail">
+                <div key={detail.url} class="slds-border_bottom slds-p-top_x-small slds-p-bottom_x-small">
+                    <a if:true={detail.url} href={detail.url} target="_blank" class="slds-float_right slds-m-left_x-small">
+                        <lightning-icon icon-name="utility:new_window" size="x-small" style='opacity: 0.35;'></lightning-icon>
+                    </a>
+                    <div if:true={detail.label}>
+                        {detail.label}
+                    </div>
+                </div>
+            </template>
+        </lightning-tab>
+        <lightning-tab if:true={storiesExist} label="Stories">
+            <template for:each={recommendation.stories} for:item="detail">
+                <div key={detail.url} class="slds-border_bottom slds-p-top_x-small slds-p-bottom_x-small">
+                    <a if:true={detail.url} href={detail.url} target="_blank" class="slds-float_right slds-m-left_x-small">
+                        <lightning-icon icon-name="utility:new_window" size="x-small" style='opacity: 0.35;'></lightning-icon>
+                    </a>
+                    <div if:true={detail.label}>
+                        {detail.label}
+                    </div>
+                </div>
+            </template>
+        </lightning-tab>
+        <lightning-tab if:true={propertiesExist} label="Configure">
+            <div if:false={project}>
+                <i class="slds-text-color_error">You must select or create a project prior to configuring a solution.</i>
+            </div>
+            <template if:true={project} for:each={configurations} for:item="configuration">
+                <div key={configuration.index} class="slds-box slds-shade slds-m-top_x-small">
+                    <template for:each={recommendation.properties} for:item="property">
+                        <c-solution-finder-configuration key={property.name} index={configuration.index} property={property} onchange={handleChange}></c-solution-finder-configuration>
+                    </template>
+                </div>
+            </template>
+            <div if:true={project} class="slds-p-top_x-small">
+                <lightning-button label="+" onclick={addConfigurationClick}></lightning-button>
+                <div class="slds-float_right">
+                    <lightning-button label="Save" variant="success" onclick={handleSave}></lightning-button>
+                </div>
+            </div>
+        </lightning-tab>
+    </lightning-tabset>
+    <div if:true={notConfigured}>
+        <i class="slds-text-color_inverse-weak">No additional details are available for this solution.</i>
+    </div>
+</template>

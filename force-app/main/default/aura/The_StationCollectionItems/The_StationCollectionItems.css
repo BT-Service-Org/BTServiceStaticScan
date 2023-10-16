@@ -1,0 +1,59 @@
+.THIS .collection-name {
+    font-size: 1rem;
+    color: #484848;
+}
+
+.THIS .results-total {
+    color: #19365F;
+    font-size: 1.75rem;
+    font-family: StationWOFFFontsLight;
+}
+
+.THIS .filter-selector {
+    float: right;
+    width: 15rem;
+    padding: 5px;
+}
+
+.THIS .filter-selectorRyan {
+    float: right;
+    padding: 5px;
+}
+
+.THIS .collection-items {
+    padding: .5rem 0;
+}
+
+.THIS .add-collection-item {
+    border: 1px solid #BBBBBB;
+    border-radius: 8px;
+    margin: .5rem 0;
+    height: 31.5rem;
+    background: #ffffff;
+}
+
+.THIS.center {
+    padding: 70px 0;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.THIS .addButton svg {
+    width: 6rem;
+    height: 6rem;
+}
+
+.THIS .sort-action {
+    display: inline-block;
+    padding-left: .75rem;
+    padding-right: .4rem;
+}
+
+.THIS .search-action {
+    display: inline-block;
+    padding-left: 1.1rem
+}
+
+.THIS .search-action-container {
+    display: inline;
+}

@@ -1,0 +1,41 @@
+.card{
+    box-shadow: 0px 0px 6px 0px;
+    max-height: 20rem;
+    scroll-behavior: smooth;
+    overflow: auto;
+    margin: 0.5rem;
+    padding: 0.3rem;
+    width: 48%;
+}
+.deleteicn-clr{
+    --lwc-colorTextIconDefault: red;
+}
+.editicn-clr{
+    --lwc-colorTextIconDefault: rgb(1, 68, 134);
+}
+.fieldclr{
+    color: #505050;
+}
+.inactiveclr{
+    color: red;
+}
+.modalheight{
+    height: 25rem;
+}
+.questionCls{
+    word-break: break-word;
+}
+.headercls{
+    position: sticky;
+    top: 0;
+    z-index: 4;
+}
+.padstyl{
+    padding-left: 16px;
+}
+.preview-modal-height{
+    height: 670px;
+}
+/*.slds-grid {
+    justify-content: center;
+}*/

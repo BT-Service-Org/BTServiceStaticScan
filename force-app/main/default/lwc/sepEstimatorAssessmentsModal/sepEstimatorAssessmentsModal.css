@@ -1,0 +1,5 @@
+.alert-icon {--slds-c-icon-color-foreground-default: #ffffff;}
+.alert-icon:hover {--lwc-colorTextIconDefault: #f3f3f3}
+.alert-text {font-size: 1.1em;}
+.alert-text-align {justify-content: left;}
+.slds-alert_success {--slds-c-alert-color-background: #2e844a}

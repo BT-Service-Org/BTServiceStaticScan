@@ -1,0 +1,63 @@
+<template>
+    <div class="slds-panel slds-size_full slds-panel_docked slds-panel_docked-right slds-is-open" aria-hidden="false">
+
+        <div class="slds-panel__header">
+            <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="Panel Header">Please select the Stream Assessment to init</h2>
+        </div>
+
+        <div class="slds-panel__body slds-m-bottom_small">
+
+            <lightning-combobox
+                    name="assessment"
+                    label="Status"
+                    value={value}
+                    placeholder="Select assessment"
+                    options={options}
+                    onchange={handleChange} >
+            </lightning-combobox>
+
+            <br></br>
+
+            <lightning-button 
+                            variant="brand" 
+                            label="Init Assesment" 
+                            title="Init action" 
+                            onclick={handleClick} 
+                            class="slds-m-left_x-small">
+            </lightning-button>
+
+            <br></br>
+
+            <template if:true={renderFlow}>
+                    <lightning-flow
+                            flow-api-name='SEP_Create_Stream_Assessment'
+                            flow-input-variables={inputVariables}
+                            onstatuschange={handleStatusChange}
+                    >
+                    </lightning-flow>
+            </template>
+
+        </div>
+
+        <div class="slds-panel__header">
+            <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="Panel Header">Stream Assessments </h2>
+        </div>
+
+        <div class="slds-panel__body">
+            
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-tree-grid
+                        class="sep-estimate-treegrid"
+                        columns={gridColumns}
+                        data={gridData}
+                        key-field="assessment"
+                        expanded-rows={gridExpandedRows}
+                        hide-checkbox-column=false
+                    ></lightning-tree-grid>
+                </div>
+            
+        </div>
+
+</div>
+
+</template>

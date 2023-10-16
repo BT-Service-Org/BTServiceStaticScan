@@ -1,0 +1,15 @@
+<template>
+    <div class="help-box" tabindex="0" aria-label="Submit your feedback here">
+        <div class="help-icon">
+            <img src={slack_logo} alt="Slack-Logo">
+        </div>
+        <div class="help-phrase">
+                <div class="help-text">
+                    <p class="Question ITC_font">{header}</p>
+                    <p class="phrase salesforce_font">{helpText}</p>
+                </div>
+                <div class="slack-button ITC_font" onclick={NavigateToSlack} onkeyup={NavigateToSlack} tabindex="0" aria-label={buttonName}>{buttonName}
+                </div>
+        </div>
+    </div>
+</template>

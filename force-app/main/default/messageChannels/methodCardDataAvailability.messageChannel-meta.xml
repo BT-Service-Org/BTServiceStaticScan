@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This is a channel for components to communicate</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>value To Send</description>
+        <fieldName>showComponent</fieldName>
+    </lightningMessageFields>
+    <masterLabel>Method Card Data Availability</masterLabel>
+</LightningMessageChannel>

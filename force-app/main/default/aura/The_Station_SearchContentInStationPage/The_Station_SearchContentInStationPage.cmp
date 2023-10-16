@@ -1,0 +1,105 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="The_Station_SearchContentPageController" access="global">
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="stationCommunityTeam" type="String"/>
+    <aura:attribute name="stationCloudProduct" type="String"/>
+    <aura:attribute name="stationPageName" type="String"/>
+    <aura:attribute name="showSort" type="boolean" default="true"/>
+    <aura:attribute name="showSearch" type="boolean" default="true"/>    
+    <!-- DESIGN ATTRIBUTES-->
+    
+    <aura:attribute name="splitMode" type="boolean" default="false" />
+    <aura:attribute name="backgroundColor" type="string" default="Light 1"/>
+    <aura:attribute name="displayAsAccordion" type="boolean" default="true" />
+    <aura:attribute name="contentLink1" type="string" />
+    <aura:attribute name="groupList" type="List" default="[]"/>
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="originUrl" type="String" default="blank" />
+
+    <aura:attribute name="totalResults" type="Integer" default="0"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="searchTermValue" type="String" default=""/>
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:attribute name="issearching" type="Boolean" default="false"/>
+    <aura:attribute name="showSearchResults" type="boolean" default="false"/>    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    
+    <aura:if isTrue="{!v.showSearch}">                
+        <div class="collection-grid-container">
+            <div class="slds-grid">            
+                <h3 class="slds-col slds-size_1-of-2">
+                    <aura:if isTrue="{!v.showSearchResults}">
+                        <span class="results-total">{!v.searchTermValue} ({! v.totalResults } Results)</span>                        
+                    </aura:if>                
+                </h3>
+
+                <div class="slds-col slds-size_1-of-2 actions">
+                    <aura:if isTrue="{!v.showSort}">
+                        <lightning:combobox 
+                            class="slds-size_1-of-2 sort-action" 
+                            label="Sort" 
+                            aura:id="collectionSort" 
+                            name="collectionSort" 
+                            value="{!v.selectedValue}" 
+                            placeholder="Select filter" 
+                            options="{!v.options}"
+                            onchange="{!c.doSort}" 
+                            variant="label-hidden"/>
+                    </aura:if>  
+                    <div class="search-action-container" onkeyup="{! c.handleKeyUp }" onchange="{!c.onchangeSearch}" >
+                        <lightning:input
+                            class="slds-size_1-of-2 search-action" 
+                            aura:id="enter-search"
+                            name="enter-search"
+                            label="Search"
+                            isLoading="{! v.issearching }"
+                            type="search"
+                            placeholder="Search collection" 
+                            variant="label-hidden"
+                        />
+                    </div>                    
+                </div>
+            </div>    
+<!--
+            <div class="collection-container">            
+                <div class="collection-info">
+                </div>
+                <div class="slds-grid slds-gutters slds-wrap collection-items">
+                    <aura:iteration var="sp" items="{!v.groupList}" indexVar="index">
+                        <c:StationContentPiece splitMode = "{!v.splitMode}" contentpiece="{!sp}" runningUser="{!v.runningUser}" originUrl="{!v.originUrl}" backgroundTheme="{!v.backgroundColor}" asAccordion="{!v.displayAsAccordion}" stationContentGroup="{!v.contentLink1}"/>
+                        <br/>
+                    </aura:iteration>
+                </div>
+-->                
+            <aura:if isTrue="{!v.showSearchResults}">
+                <div id="searchResults" class="slds-card" style="background:none;">
+                    <aura:iteration var="sp" items="{!v.groupList}" indexVar="index">
+                        <c:StationContentPiece splitMode = "{!v.splitMode}" contentpiece="{!sp}" runningUser="{!v.runningUser}" originUrl="{!v.originUrl}" backgroundTheme="{!v.backgroundColor}" asAccordion="{!v.displayAsAccordion}" stationContentGroup="{!v.contentLink1}"/>
+                    </aura:iteration>
+                </div>
+                <br/>                         
+            </aura:if>
+<!--                   
+                <lightning:accordion allowMultipleSectionsOpen="true">
+                <aura:iteration var="sp" items="{!v.groupList}" indexVar="index">                                    
+                    <lightning:accordionSection name="{!sp.content.Id}" label="{!sp.content.Name}">
+                        <aura:set attribute="body">
+                            <p>Name: <a href="{!sp.content.Content_URL__c}" >{!sp.content.Name}</a></p>
+                            <p>Content Type: {!sp.content.Content_Type__c}</p>
+                            <p>Description: {!sp.content.Description__c}</p>
+                            <p>Created Date: <lightning:formattedDateTime value="{!sp.content.CreatedDate}" year="numeric" month="short" day="2-digit" weekday="long"/></p>
+                            <p>Last Modified Date: <lightning:formattedDateTime value="{!sp.content.LastModifiedDate}" year="numeric" month="short" day="2-digit" weekday="long"/></p>
+                            <p>Subtitle: {!sp.content.Subtitle__c}</p>
+                            <p>Next Review Date: <lightning:formattedDateTime value="{!sp.content.Next_Review_Date__c}" year="numeric" month="short" day="2-digit" weekday="long"/></p>
+                            <p><img src="{!sp.content.Display_Image_URL__c}"/></p>
+                        </aura:set>
+                    </lightning:accordionSection>
+                </aura:iteration>
+                </lightning:accordion>                
+            -->                
+        </div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,99 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="connectedUser" type="User"/>
+    <aura:attribute name="viewingPublic" type="boolean" default="true"/> <!-- change this to true for production -->
+    <aura:attribute name="viewToDisplay" type="String" default="dashboard"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="switchViewEvent" event="c:The_Station_SwitchProfileView" action="{!c.handleSwitchProfileView}"/>
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_2-of-12 buttonColumn">
+            <c:The_Station_Profile_Buttons>
+                <aura:set attribute="connectedUser" value="{!v.connectedUser}" />
+                <aura:set attribute="viewingPublic" value="{!v.viewingPublic}" />
+            </c:The_Station_Profile_Buttons>
+        </div>
+        <div aura:id="dashboard" class="slds-col slds-size_10-of-12">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="overview-tab slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <c:The_Station_View_Concierge_Info>
+
+                    </c:The_Station_View_Concierge_Info>
+                </div>
+                <div class="overview-tab slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <c:The_Station_View_Volunteer>
+
+                    </c:The_Station_View_Volunteer>
+                </div>
+            </div>
+            <div class="slds-grid slds-gutters slds-wrap slds-m-top_medium">
+                <div class="overview-tab slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <c:The_Station_View_Trailhead_Info>
+
+                    </c:The_Station_View_Trailhead_Info>
+                </div>
+                <div class="overview-tab slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <c:The_Station_View_ACT>
+
+                    </c:The_Station_View_ACT>
+                </div>
+            </div>
+        </div>
+        
+        <div aura:id="favorites" class="slds-col slds-size_10-of-12 slds-hide">
+            <c:The_Station_UserProfileFavorites>
+   	
+            </c:The_Station_UserProfileFavorites>
+        </div>
+        <div aura:id="cases" class="slds-col slds-size_10-of-12 slds-hide">
+        	<div class="slds-m-top_large">
+                <div class="title-case">
+               		Content Feedback Cases
+                </div>
+                <c:The_Station_RecTypeCaseList>
+                    <aura:set attribute="recType" value="The Station SP Record Feedback"/>
+                </c:The_Station_RecTypeCaseList>
+            </div>
+            <div class="slds-m-top_large">
+                 <div class="title-case">
+               		General Feedback Cases
+                </div>
+                <c:The_Station_RecTypeCaseList>
+                    <aura:set attribute="recType" value="The Station Feedback"/>
+                </c:The_Station_RecTypeCaseList>
+            </div>
+        </div>
+        <div aura:id="requestsAndSubmissions" class="slds-col slds-size_10-of-12 slds-hide">
+           <c:The_Station_RecTypeCaseList>
+                    <aura:set attribute="recType" value="SI Case and Content Request"/>
+            </c:The_Station_RecTypeCaseList>
+        </div>    
+        <div aura:id="activityFeed" class="slds-col slds-size_10-of-12 slds-hide">
+            Coming Soon...
+        </div>       
+        <div aura:id="collections" class="slds-col slds-size_10-of-12 slds-hide">
+            <c:The_Station_CollectionUserProfileGrid>
+            </c:The_Station_CollectionUserProfileGrid>
+            <div class="slds-m-top_large">
+                <c:The_Station_CollectionUserProfileGrid>
+                    <aura:set attribute="collectionFilterTitle" value="Followed Collections"/>
+                    <aura:set attribute="collectionFilter" value="Followed Collections"/>
+                </c:The_Station_CollectionUserProfileGrid>
+            </div>
+            <div class="slds-m-top_large">
+                <c:The_Station_CollectionUserProfileGrid>
+                    <aura:set attribute="collectionFilterTitle" value="Shared with Me"/>
+                    <aura:set attribute="collectionFilter" value="Shared with me"/>
+                </c:The_Station_CollectionUserProfileGrid>
+            </div>
+        </div>     
+        <div aura:id="content" class="slds-col slds-size_10-of-12 slds-hide">
+            <c:UserContentList>
+   
+            </c:UserContentList>
+        </div>   
+        <div aura:id="skills" class="slds-col slds-size_10-of-12 slds-hide">
+            Coming Soon...
+        </div>
+    </div>
+</aura:component>

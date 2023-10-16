@@ -1,0 +1,281 @@
+<apex:page standardController="CTA_Review_Session__c" extensions="CTARatingExtnController" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-ui.min.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-2.1.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-ui.min.js')}" />
+    <head>
+        <style type="text/css">
+            .fullHeight
+            {
+                height: 100%;
+            }
+            .fullWidth
+            {
+                width: 100%;
+            }
+            .nearFullWidth
+            { 
+                width: 90%;
+            }
+            .hidden
+            {
+                display: none;
+            }
+            .defLinks
+            {
+                display: inline-block;
+                text-align: center;
+                width: 23%;
+            }
+            a.defLink
+            {
+                color: blue;
+                text-decoration: underline;
+            }
+            a.defLink:hover
+            {
+                cursor: pointer;
+            }
+            .defLinks > a.selected
+            {
+                color: black !important;
+                text-decoration: none !important;
+            }
+        </style>
+        <script type="text/javascript">
+            var timer;
+            var delay = 500;
+            var $jq = jQuery.noConflict();
+            var $rdDivs = null;
+            var $divAs = null;
+            var $ratingsDialog = null
+            var $commentsDialog = null;
+            var $commentsText = null;
+            var $objectiveCommentsField = null;
+            var $failDefinition = null;
+            var $partialpassDefinition = null;
+            var $passDefinition = null;
+            var $rockstarDefinition = null;
+            var generalRating1Definition = "<b>{!ratingScores.Rating1_Score_Label__c}</b><br/>{!ratingScores.Rating1_Definition__c}<br/><br/>"
+            var generalRating2Definition = "<b>{!ratingScores.Rating2_Score_Label__c}</b><br/>{!ratingScores.Rating2_Definition__c}<br/><br/>";
+            var generalRating3Definition = "<b>{!ratingScores.Rating3_Score_Label__c}</b><br/>{!ratingScores.Rating3_Definition__c}<br/><br/>";
+            var generalRating4Definition = "<b>{!ratingScores.Rating4_Score_Label__c}</b><br/>{!ratingScores.Rating4_Definition__c}<br/><br/>";
+
+            $jq(function()
+            {
+                $rdDivs = $jq("div.ratingsDefinitions");
+                $divAs = $jq("div.defLinks > a");
+                $commentsText = $jq("#commentsText");
+                $ratingsDialog = $jq("#ratingsDialog");
+                $commentsDialog = $jq("#commentsDialog");
+                $rating1Definition = $jq("#rating1Definition");
+                $rating2Definition = $jq("#rating2Definition");
+                $rating3Definition = $jq("#rating3Definition");
+                $rating4Definition = $jq("#rating4Definition");
+
+                $ratingsDialog.dialog(
+                {
+                    autoOpen: false,
+                    height: 600,
+                    width: 600,
+                    show: 
+                    {
+                        effect: "slide",
+                        options:
+                        {
+                            direction: "bottom"
+                        },
+                        duration: 500
+                    },
+                    hide: 
+                    {
+                        effect: "slide",
+                        options:
+                        {
+                            direction: "top"
+                        },
+                        duration: 500
+                    }
+                });
+
+                $commentsDialog.dialog(
+                {
+                    autoOpen: false,
+                    height: 600,
+                    width: 600,
+                    buttons:
+                    [
+                        {
+                            text: "Save",
+                            click: function()
+                            {
+                                $objectiveCommentsField.val($commentsText.val());
+                                $jq(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            click: function()
+                            {
+                                $jq(this).dialog("close");
+                            }
+                        }
+                    ],
+                    show: 
+                    {
+                        effect: "blind",
+                        duration: 100
+                    },
+                    hide: 
+                    {
+                        effect: "explode",
+                        duration: 100
+                    }
+                });
+
+                $divAs.on("click", function(e)
+                {
+                    e.preventDefault();
+                    if($jq(this).hasClass("selected"))
+                    {
+                        $jq(this).removeClass("selected");
+                        $rdDivs.show();
+                    }
+                    else
+                    {
+                        $rdDivs.hide();
+                        $divAs.removeClass("selected");
+                        $jq(this).addClass("selected");
+                        if($jq(this).hasClass("rating1"))
+                        {
+                            $rating1Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating2"))
+                        {
+                            $rating2Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating3"))
+                        {
+                            $rating3Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating4"))
+                        {
+                            $rating4Definition.show();
+                        }
+                    }
+                });
+            });
+
+            function showRatingsDialog(objective, rating1, rating2, rating3, rating4)
+            {
+                $rdDivs.show();
+                $divAs.removeClass("selected");
+                $rating1Definition.html(rating1);
+                $rating2Definition.html(rating2);
+                $rating3Definition.html(rating3);
+                $rating4Definition.html(rating4);
+                $ratingsDialog.dialog("option", "title", objective + " Ratings Definition");
+                $ratingsDialog.dialog("open");
+            }
+
+            function showComments(linkId, objective)
+            {
+                $objectiveCommentsField = $jq('[id="' + linkId + '"]');
+                $commentsText.val($objectiveCommentsField.val());
+                $ratingsDialog.dialog("option", "title", "Edit " + objective + " Comments");
+                $commentsDialog.dialog("open");
+                return false;
+            }
+        </script>
+    </head>
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages />
+
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveScores}"/>
+                <apex:commandButton value="Finalize & Send Results" action="{!sendResults}" onclick="return confirm('Do you want to send the results to the candidate')"/>
+                <apex:commandButton value="Go Back" action="{!cancel}" immediate="true"/> 
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="2" title="CTA Review Session Details" collapsible="false">
+                <apex:outputField value="{!CTA_Review_Session__c.Name}" id="Name"/>
+                <apex:outputField value="{!CTA_Review_Session__c.CTA_Board_Candidate__c}" id="BoardCandidate"/>
+                <apex:outputField value="{!ReviewScores.Total_Score_Related_List__c}"/>
+                <apex:outputField value="{!ReviewScores.Grade_Icon__c}"/>
+                <apex:inputField value="{!CTA_Review_Session__c.CTA_Board_Candidate__r.Candidate__c}" id="Candidate"/>
+                <apex:inputField value="{!CTA_Review_Session__c.PA_Onboarding__c}" id="PAOnboarding"/>
+                <apex:outputField value="{!CTA_Review_Session__c.RecordType.Name}" id="RecordType"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Evaluator__c}" id="Evaluator"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Scenario__c}" id="Scenario"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Evaluation_Date__c}" id="EvalDate"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Review_Description__c}" id="ReviewDesc"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Status__c}" id="Status"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Attempt_Time__c}" id="AttemptTime"/>
+                <apex:inputField value="{!CTA_Review_Session__c.Send_Scenario_Now__c}" id="SendScenario"/>
+                     <apex:inputField value="{!CTA_Review_Session__c.Present_QA_Time__c}" id="QATime"/>
+            </apex:pageBlockSection>          
+            <apex:pageBlockSection columns="1" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Overall Comments" for="Comments"/>
+                    <apex:inputTextArea cols="125" rows="6" value="{!CTA_Review_Session__c.Overall_Comments__c}" id="Comments"/>
+                </apex:pageBlockSectionItem>                    
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Areas for Improvement" for="Improvements"/>
+                    <apex:inputTextArea cols="125" rows="6" value="{!CTA_Review_Session__c.Areas_for_Improvement__c}" id="Improvements"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="2" title="Category Ratings" collapsible="true">
+                <apex:outputField value="{!ReviewScores.Architecture_Total__c}"/>
+                <apex:outputField value="{!ReviewScores.Architecture_Grade_Icon__c}"/>
+                <apex:outputField value="{!ReviewScores.Security_Total__c}"/>
+                <apex:outputField value="{!ReviewScores.Security_Grade_Icon__c}"/>
+                <apex:outputField value="{!ReviewScores.Integration_Total__c}"/>
+                <apex:outputField value="{!ReviewScores.Integration_Grade_Icon__c}"/>
+                <apex:outputField value="{!ReviewScores.Solution_Total__c}"/>
+                <apex:outputField value="{!ReviewScores.Solution_Grade_Icon__c}"/>
+                <apex:outputField value="{!ReviewScores.Communication_Total__c}"/>
+                <apex:outputField value="{!ReviewScores.Communication_Grade_Icon__c}"/>
+                <apex:outputField value="{!ReviewScores.Dev_Lifecycle_Total__c}" rendered="{!CTA_Review_Session__c.RecordType.DeveloperName == 'Hypothetical_Scenario_with_Governance'}"/>
+                <apex:outputField value="{!ReviewScores.Dev_Lifecycle_Grade_Icon__c}" rendered="{!CTA_Review_Session__c.RecordType.DeveloperName == 'Hypothetical_Scenario_with_Governance'}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" title="Detailed Ratings" collapsible="false">
+                <apex:pageBlockTable value="{!dRating}" var="dr" styleClass="fullWidth">
+                    <apex:column headerValue="Category" value="{!dr.ratings.CTA_Ratings_Criteria__r.Category__c}" style="width: 200px;" />
+                    <apex:column headerValue="Criteria" value="{!dr.ratings.CTA_Ratings_Criteria__r.Criteria__c}" style="width: 250px;" />
+                    <apex:column style="width: 250px;">
+                        <apex:facet name="header">
+                            Rating
+                            <img src="/img/alohaSkin/help_grey.png" onmouseover="timer = setTimeout(function() {showRatingsDialog('General',generalRating1Definition, generalRating2Definition, generalRating3Definition, generalRating4Definition) }, delay)" onmouseout="clearTimeout(timer)" />
+                        </apex:facet>
+                        <apex:selectList multiselect="false" required="{!CTA_Review_Session__c.Candidate__r.Coach__c != null}" size="1" value="{!dr.scoreString}">
+                            <apex:selectOptions value="{!ratings}" />
+                        </apex:selectList>
+                        <img src="/img/alohaSkin/help_grey.png" onmouseover="timer = setTimeout(function() { showRatingsDialog('{!dr.ratings.CTA_Ratings_Criteria__r.Category__c}','<b>{!ratingScores.Rating1_Score_Label__c}</b><br/>{!substitute(jsinhtmlencode(dr.ratings.CTA_Ratings_Criteria__r.Rating1_Definition__c),'\n\n','<br/>')}<br/><br/>','<b>{!ratingScores.Rating2_Score_Label__c}</b><br/>{!substitute(jsinhtmlencode(dr.ratings.CTA_Ratings_Criteria__r.Rating2_Definition__c),'\n\n','<br/>')}<br/><br/>','<b>{!ratingScores.Rating3_Score_Label__c}</b><br/>{!substitute(jsinhtmlencode(dr.ratings.CTA_Ratings_Criteria__r.Rating3_Definition__c),'\n\n','<br/>')}<br/><br/>','<b>{!ratingScores.Rating4_Score_Label__c}</b><br/>{!substitute(jsinhtmlencode(dr.ratings.CTA_Ratings_Criteria__r.Rating4_Definition__c),'\n\n','<br/>')}<br/><br/>') }, delay)" onmouseout="clearTimeout(timer)" />
+                    </apex:column>
+                    <apex:column headerValue="Comments">
+                        <apex:inputField id="questionComments" required="{!CTA_Review_Session__c.Candidate__r.Coach__c != null}" value="{!dr.ratings.Comments__c}" styleClass="nearFullWidth"/>
+                        <apex:outputLink id="questionCommentsIcon" onclick="return showComments('{!$Component.questionComments}', '{!dr.ratings.CTA_Ratings_Criteria__r.Category__c}')" value="">
+                            <img src="/img/func_icons/util/pencil12.gif"/>
+                        </apex:outputLink>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+   </apex:form>
+   <div id="ratingsDialog">
+        <div class="fullWidth">
+            <div class="defLinks"><a href="" class="rating1 defLink">{!ratingScores.Rating1_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating2 defLink">{!ratingScores.Rating2_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating3 defLink">{!ratingScores.Rating3_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating4 defLink">{!ratingScores.Rating4_Score_Label__c}</a></div>
+        </div>
+        <br/><br/>
+        <div id="rating1Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating2Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating3Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating4Definition" class="ratingsDefinitions fullWidth"></div>
+    </div>
+    <div id="commentsDialog" title="Edit Comments">
+        <textarea id="commentsText" class="fullWidth fullHeight"></textarea>
+    </div>
+</apex:page>

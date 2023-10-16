@@ -1,0 +1,24 @@
+<apex:page id="AdminRemoveWidget" sidebar="false" showHeader="false" >
+	<div id="removeWidget" style="display:none;">
+		<div class="modalTitle">
+			<div class="title">Remove widget</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>
+		<div class="modalContent">
+			<!-- Dialog Body  -->
+			<div class="modalMessage padding_30px bottom_border_gray">
+				Are you sure you want to remove this widget? <br />
+			</div>
+			<!--Actions  -->
+			<div class="actions">
+				<span id="deleteButton">
+					<input class="button" value="Continue and remove" />
+				</span>
+			  	<a  onclick="modal.close();" class="button gray">Cancel</a>
+			</div>
+			
+		</div>
+	</div>
+</apex:page>

@@ -1,0 +1,70 @@
+<apex:component controller="TeamsWidgetRecentActivitiesController" >
+	
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a widget	
+	-->	
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />
+	
+	<!-- ### Styles ### -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/miniFeeds.css')}" />
+		
+	<!-- ### Javascript ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>	
+	
+	<!-- ### Wide Widget ### -->	
+	<div class="myBigWidget">	
+		<div class="teamBlockTitle">
+			<h4>Recent Activity</h4> 
+		</div>
+		<div class="linkAction">
+			<a href="TeamsActivityFeed" class="topRightLinks">See More&#187;</a>
+		</div>
+		<table class="minifeeds" cellpadding="0" cellspacing="0">
+			<apex:repeat value="{!miniFeeds}" var="miniFeed"> 
+				<tr style="{!IF((miniFeed.FeedDateClass == 'miniFeedDate_empty'),'display:none', '' )}">
+					<td class="date blue weight_bold" colspan="2">{!miniFeed.FeedDateString}</td>
+				</tr>
+				<tr>
+					<td class="feed_type {!miniFeed.TypeOfFeed}"></td><td><a href="/apex/PeopleProfileDisplay?id={!miniFeed.User}" class="weight_bold"><apex:outputText escape="false" value="{!miniFeed.Name}" /> </a> <apex:outputText escape="false" value="{!miniFeed.Message}" /></td>						
+				</tr>				 
+			</apex:repeat>
+		</table>	
+	</div>
+	
+	<!--  ### Thin Widget ###  -->	
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Recent Activities </h4></div></div>
+   		</div>
+   		<div class="box_content">
+    		<div class="back_gray">
+     			<a href="TeamsActivityFeed">See More&#187;</a>
+    		</div>  
+    		 
+			<div>
+				<table class="minifeeds" cellpadding="0" cellspacing="0" >
+				<apex:repeat value="{!miniFeeds}" var="miniFeed" rows="5"> 
+
+					<tr>
+						<td class="feed_type  {!miniFeed.TypeOfFeed}" style="border: none;"></td><td style="border: none;"><a href="/apex/PeopleProfileDisplay?id={!miniFeed.User}" class="weight_bold"><apex:outputText escape="false" value="{!miniFeed.Name}" /> </a> <apex:outputText escape="false" value="{!miniFeed.Message}" /></td>						
+					</tr>				 
+				</apex:repeat>
+				
+				</table>
+			</div>   
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+		</div>
+	</div>
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+	</script>		
+		
+</apex:component>

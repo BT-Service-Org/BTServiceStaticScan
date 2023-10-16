@@ -1,0 +1,34 @@
+<template>
+    <div class="TextContainer">
+        <template if:false={displayAccordion} for:each={allContent} for:item="SiteContent">
+                <h2 if:true={SiteContent.gdc_ms_Header_Content__c}  key={SiteContent.Id} class="heading slds-p-top--x-large">
+                    {SiteContent.gdc_ms_Header_Content__c} </h2>
+                <div if:false={SiteContent.gdc_ms_Contains_iframe__c} key={SiteContent.Id} class="bodyContainer">
+                    <lightning-formatted-rich-text value={SiteContent.gdc_ms_Body_Content__c}>
+                    </lightning-formatted-rich-text>
+                </div>
+                <div if:true={SiteContent.gdc_ms_Contains_iframe__c}
+                    class="bodyContainer slds-align--absolute-center" key={SiteContent.Id}>
+                    <iframe
+                        sandbox="allow-scripts allow-popups allow-forms allow-same-origin allow-popups-to-escape-sandbox allow-downloads allow-modals"
+                        frameborder="0" aria-label="Presentation, Mentorship -GetReady" allowfullscreen="" width="1200px"
+                        height="600px" src={SiteContent.gdc_ms_iframe_Link__c}>
+                    </iframe>
+                </div>
+        </template>
+        <template if:true={displayAccordion}>
+            <h2 if:true={accordionHeading} style="text-align: left;" class="heading slds-p-top--x-large">
+                {accordionHeading} </h2>
+            <lightning-accordion class="accordion-faqs"
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px;--sds-c-accordion-heading-font-size:16pt;"
+					allow-multiple-sections-open>
+            <template for:each={allContent} for:item="SiteContent">
+                <lightning-accordion-section key={SiteContent.Id} name="A" label={SiteContent.gdc_ms_Header_Content__c}>
+                    <lightning-formatted-rich-text value={SiteContent.gdc_ms_Body_Content__c}>
+                    </lightning-formatted-rich-text>
+                </lightning-accordion-section>
+            </template>
+            </lightning-accordion>
+        </template>
+    </div>
+</template>

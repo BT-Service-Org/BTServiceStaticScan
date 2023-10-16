@@ -1,0 +1,143 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="StationSPController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="42px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />
+    <aura:attribute name="buttonMenuTheme" type="String" />
+    <aura:attribute name="originUrl" type="String" default="blank" />
+    <aura:attribute name="runningUser" type="User"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="columns" type="String" default="1" />
+    <aura:attribute name="accordionIconColor" type="String" default="#6b6d70" />
+    <aura:attribute name="accordionTitleColor" type="String" default="#0070d2" />
+
+    <aura:attribute name="sharedUrl" type="String" />
+    <aura:attribute name="buttonBorder" type="String" default="2px solid #FFFFFF;"/>
+    <aura:attribute name="buttonBackground" type="String" default="#018EDA !important;"/>	
+    <aura:attribute name="buttonHeight" type="String" default="34px;"/>
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:html tag="style">
+        :root {
+        --columns: {!v.columns};
+        --accordionIconColor: {!v.accordionIconColor};
+        --accordionTitleColor: {!v.accordionTitleColor};
+        }
+    </aura:html>
+
+    <div aura:id="parent" style="{! '--buttonBorder:' + v.buttonBorder + ';' + '--buttonBackground:' + v.buttonBackground + ';' + '--buttonHeight:' + v.buttonHeight}">
+        <div class="main-container">
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="column-outer-container">
+                <div class="slds-grid slds-wrap" style="height:100%;">
+                    <lightning:accordion aura:id="accordion" class="slds-size_1-of-1" activeSectionName="content-0">
+                        <aura:iteration var="section" items="{!v.groupList}" indexVar="index">
+                            <lightning:accordionSection class="slds-p-around_x-small" name="{! 'content-' + index}"
+                                label="{! section.content.Name }">
+                                <div class="item-container">
+                                    <div class="item-copy">
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                            <div class="item-description">
+                                                {!section.contentPiece.Description__c}
+                                            </div>                                            
+                                            <div class="button-container" style="height: 34px;">
+                                                <c:StationUserActionButtons>
+                                                    <aura:set attribute="contentpiece" value="{!section}" />
+                                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                                    <aura:set attribute="stationContentGroup" value="{!v.contentGroupId}" />
+                                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                    <aura:set attribute="showDownload" value="false" />
+                                                </c:StationUserActionButtons>                                           
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                            <div class="item-description">
+                                                {!section.contentPiece.Description_c__c}
+                                            </div>
+                                            <div class="button-container" style="height: 34px;">                            
+                                                <c:StationUserActionButtons>
+                                                    <aura:set attribute="contentpiece" value="{!section}" />
+                                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                                    <aura:set attribute="stationContentGroup" value="{!v.contentGroupId}" />
+                                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                    <aura:set attribute="showDownload" value="false" />
+                                                </c:StationUserActionButtons>                                                                                             
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                            <div class="item-description">
+                                                {!section.contentPiece.Trailhead_Description__c}
+                                            </div>
+                                            <div class="button-container" style="height: 34px;">
+                                                <!-- no feedback button -->
+                                                <c:StationUserActionButtons>
+                                                    <aura:set attribute="contentpiece" value="{!section}" />
+                                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                                    <aura:set attribute="stationContentGroup" value="{!v.contentGroupId}" />
+                                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                    <aura:set attribute="showDownload" value="false" />
+                                                </c:StationUserActionButtons>                                        
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                            <div class="item-description">
+                                                {!section.content.Description__c}
+                                            </div>
+                                            <div class="button-container" style="height: 34px;">                              
+                                                <c:StationUserActionButtons>
+                                                    <aura:set attribute="contentpiece" value="{!section}" />
+                                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                                    <aura:set attribute="stationContentGroup" value="{!v.contentGroupId}" />
+                                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                    <aura:set attribute="showDownload" value="false" />
+                                                </c:StationUserActionButtons>               
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                            <div class="item-description">
+                                                {!section.content.Description__c}
+                                            </div>
+                                            <div class="button-container" style="height: 34px;">                    
+                                                <c:StationUserActionButtons>
+                                                    <aura:set attribute="contentpiece" value="{!section}" />
+                                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                                    <aura:set attribute="stationContentGroup" value="{!v.contentGroupId}" />
+                                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                    <aura:set attribute="showDownload" value="false" />
+                                                </c:StationUserActionButtons>                                           
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </lightning:accordionSection>
+
+                        </aura:iteration>
+                    </lightning:accordion>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

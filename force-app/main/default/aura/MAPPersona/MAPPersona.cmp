@@ -1,0 +1,51 @@
+<aura:component>
+
+	<!--Attributes-->
+    <aura:attribute name="assessments" type="Object[]" access="public"/>
+    <aura:attribute name="onViewAssessment" type="Aura.Action" access="public"/>
+    <aura:attribute name="onCreateAssessment" type="Aura.Action" access="public"/>
+	
+	<!--Content-->
+	<div class="slds-text-heading_large slds-text-title_caps slds-p-vertical_small"> 
+		<b>Assessments</b> 
+	</div>
+	<aura:if isTrue="{!!empty(v.assessments)}">
+		<table class="slds-table slds-no-row-hover" style="display:inline-block;">
+	        <tbody>
+	        	<tr class="slds-box slds-text-title_caps">
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Name</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Created By</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Created At</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Interviews</b> </td>
+	            	<td class="td-padding slds-text-align_center slds-text-color_weak"> <b>Summary</b> </td>
+	            </tr>
+	        	<aura:iteration items="{!v.assessments}" var="assessment"> 
+		            <tr class="slds-box">
+		            	<td class="td-padding slds-text-align_center">
+		            		<a href="javascript:void(0);" data-assessmentId="{!assessment.id}" onclick="{!v.onViewAssessment}">
+		                       <ui:outputText value="{!assessment.name}"/>
+		                    </a>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputText value="{!assessment.createdBy}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		                    <ui:outputDateTime value="{!assessment.createdAt}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputText value="{!assessment.completedCount + ' of ' + assessment.interviews.length + ' Completed'}"/>
+		            	</td>
+		            	<td class="td-padding slds-text-align_center">
+		            		<ui:outputTextArea value="{!assessment.summary}"/>
+		            	</td>
+		            </tr>
+		        </aura:iteration>
+	        </tbody>
+	    </table>
+	    <aura:set attribute="else"> No records to display </aura:set>
+	</aura:if>
+    <div class="slds-p-vertical_large">
+    	<lightning:button class="slds-button_brand" label="New Assessment" onclick="{!v.onCreateAssessment}"/>
+    </div>
+
+</aura:component>

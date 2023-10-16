@@ -1,0 +1,16 @@
+.THIS {
+	height: 100%;
+}
+.THIS .goalDate .slds-form-element__label{
+	display: none;
+}
+.THIS .slds-form-element__label{
+	font-size: 0.9rem !important;
+	padding: 0 !important;
+	padding-top: 2px !important;
+}
+.THIS .heading{
+	height: 1px;
+    border: thin solid gray;
+    width: 100%;
+}

@@ -1,0 +1,21 @@
+.slds-modal__container {
+    max-width: none !important;
+    width: 80% !important;
+    margin:auto
+}
+
+.addtag_modal {
+    width: 48% !important;
+}
+
+@media screen and (max-width:820px) {
+    .addtag_modal {
+        width: 95% !important;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .addtag_modal {
+        width: 90% !important;
+    }
+}

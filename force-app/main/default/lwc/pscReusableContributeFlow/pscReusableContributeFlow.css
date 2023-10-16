@@ -1,0 +1,138 @@
+.action_button {
+    display: flex;
+    justify-content: space-between;
+    margin: 36px 0px 20px;
+}
+
+.text_color {
+    display: flex;
+    color: #696969;
+    font-size: 0.75rem;
+}
+
+.help_text {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.help_text_icon {
+    font-size: 23px;
+}
+
+.review_label {
+    font-size: 14px;
+    color: #032D60;
+}
+
+.sub-section {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 6px;
+}
+
+.sub-heading {
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #444444;
+}
+
+.additional_info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.additional_info>* {
+    width: 33%;
+}
+
+.additional_data {
+    display: flex;
+    flex-direction: column;
+}
+
+.additional_data p {
+    margin-top: 4px;
+}
+
+.modal_buttons {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 45%;
+    margin-bottom: 15px;
+}
+
+.records {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+.attachment_label {
+    color: #767171;
+    margin-top: 10px;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.bubble {
+    --sds-c-pill-color-background: #EEF4FF;
+    --slds-c-pill-radius-border: 16px;
+    display: block;
+    margin-top: 5px;
+}
+
+.bubble span {
+    padding: 5px !important;
+}
+
+.errormsg {
+    color: red;
+    margin-top: 10px;
+}
+
+
+@media screen and (max-width:1024px) {
+    .modal_buttons {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .review_label {
+        font-size: 14px;
+        color: #032D60;
+        margin: 0px 10px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .additional_info {
+        flex-direction: column;
+    }
+
+    .additional_info>* {
+        width: 100%;
+    }
+
+    .modal_buttons {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .review_label {
+        font-size: 12px;
+        color: #032D60;
+        margin: 0px 10px;
+    }
+}

@@ -1,0 +1,328 @@
+<apex:component controller="TeamsWidgetRecentBlogsController" >
+
+	<!-- 
+		### Attribute Definitions ###
+		This attribute is required if the component is a widget	
+	-->	
+	<apex:attribute name="teamId" description="The team ID" type="String" required="true" assignTo="{!teamIdBlog}" />
+	
+	<!-- ### Styles ### -->
+		
+	<style>
+		.center {
+			text-align: center;
+		}
+		
+		.minifeed_blog {
+			list-style-image:none;  
+			list-style-position:outside;
+			list-style-type:none;
+			margin:5px 0pt;
+			padding:0pt;
+			}
+			 
+		.minifeed_blog li {
+			background: transparent url({!URLFOR($Resource.discussionResourceFiles, 'images/common/icons/minifeed_announcement.gif')}) no-repeat scroll 1px 4px;
+			margin-bottom:5px;
+			overflow:hidden;
+			padding:3px 0px 3px 25px;
+			position:relative;
+			}
+	
+	
+			#modal_container {
+			background:white none repeat scroll 0%;
+			color:black;
+			height:500px;
+			overflow:hidden;
+			padding:3px;
+			width:516px;
+			}
+			#modal_overlay {
+			background:#000000 none repeat scroll 0%;
+			}
+			#modal_container img {
+			border:medium none;
+			}
+			#modal_container #blog div.modalTitle {
+			background:#C56004 none repeat scroll 0%;
+			color:white;
+			font-size:14px;
+			font-weight:bold;
+			height:20px;
+			padding:7px;
+			}
+			#modal_container #blog div.modalTitle div.title {
+			float:left;
+			}
+			#modal_container #blog div.modalTitle div.closeEvent {
+			color:#FFFFFF;
+			float:right;
+			height:13px;
+			width:14px;
+			}
+			#modal_container #blog div.modalContent div.modalMessage {
+			clear:both;
+			font-size:13px;
+			font-weight:bold;
+			margin-bottom:5px;
+			overflow:hidden;
+			padding:3px;
+			position:relative;
+			}
+			#modal_container #blog div.modalContent div.requireLegend {
+			border-left:3px solid #C0272C;
+			clear:both;
+			float:right;
+			font-size:10px;
+			height:15px;
+			margin-top:7px;
+			padding-left:5px;
+			padding-right:7px;
+			}
+			#modal_container #blog div.modalContent a.button {
+			background:#A84001 none repeat scroll 0% 50%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			float:left;
+			font-size:12px;
+			font-weight:bold;
+			margin-left:10px;
+			margin-top:0px;
+			padding:11px;
+			text-align:center;
+			text-decoration:none;
+			}
+			#modal_container #blog div.modalContent a.gray {
+			background:#999999 none repeat scroll 0% !important;
+			}
+			#modal_container #blog div.modalContent a.dark_gray {
+			background:#626367 none repeat scroll 0% !important;
+			}
+			#modal_container #blog div.actions {
+			margin:0pt auto;
+			width:280px;
+			}
+			#modal_container #blog div.modalContent div.status {
+			clear:both;
+			overflow:hidden;
+			position:relative;
+			text-align:center;
+			}
+			#modal_container #blog div.modalContent div.status p {
+			color:#999999;
+			font-size:11px;
+			font-style:italic;
+			padding:16px 0pt;
+			}
+			#modal_container #blog  div.modalContent div.optionalFormActions {
+			border-bottom:1px solid #CCCCCC;
+			border-top:1px solid #CCCCCC;
+			clear:both;
+			overflow:hidden;
+			padding:5px 0pt;
+			position:relative;
+			}
+			#modal_container #blog div.modalContent div.optionalFormActions div.titleHandler {
+			clear:both;
+			color:#9D4D04;
+			height:20px;
+			overflow:hidden;
+			padding-left:25px;
+			position:relative;
+			}
+			#modal_container #blog div.modalContent div.optionalFormActions div.titleExpanded {
+			background:transparent url(../../images/common/icons/collapse_icon.gif) no-repeat scroll 8px 4px;
+			}
+			#modal_container #blog div.modalContent div.optionalFormActions div.titleCollapsed {
+			background:transparent url(../../images/common/icons/expand_icon.gif) no-repeat scroll 8px 4px;
+			}
+			#blog  div.field {
+			clear:both;
+			margin-top:4px;
+			overflow:hidden;
+			position:relative;
+			}
+			#blog div.field a {
+			color:#CCCCCC;
+			}
+			#blog div.field img {
+			border:medium none;
+			}
+			#blog div.field li {
+			margin:3px 0pt;
+			}
+			#blog .margin-left {
+			margin-left:9px;
+			}
+			#blog div.field a.deleteFile {
+			margin:0pt 3px;
+			}
+			#blog div.field div.required {
+			border-left:3px solid #C0272C;
+			float:left;
+			margin-left:4px;
+			overflow:hidden;
+			padding-left:3px;
+			position:relative;
+			}
+			#blog div.field label, div.field div.label {
+			float:left;
+			text-align:right;
+			width:110px;
+			}
+			#blog div.field label.max {
+			text-align:left;
+			width:250px;
+			}
+			#blog div.field div.inputContainer {
+			float:left;
+			width:365px;
+			}
+			#blog div.field div.inputContainer a {
+			color:#ABABAB;
+			font-size:11px;
+			}
+			#blog div.field input {
+			float:left;
+			}
+			#blog div.field input.checkbox {
+			margin:0pt 4px;
+			}
+			#blog div.field input.max {
+			width:365px;
+			}
+			#blog div.field input.med {
+			width:200px;
+			}
+			#blog div.field input.min {
+			width:100px;
+			}
+			#blog .padding_50px {
+			padding-bottom:50px;
+			padding-top:50px;
+			}
+			#blog .padding_30px {
+			padding:30px !important;
+			}
+			#blog .bottom_border_gray {
+			border-bottom:1px solid #E5E5E5;
+			}
+			
+			.minifeeds.full_ .number {
+				background:#7BA5B5 none repeat scroll 0%;
+				color:#FFFFFF;
+				font-size:14px;
+				font-weight:bold;
+				padding:7px;
+				width: 40px;
+			}
+			.center {
+				text-align: center;
+			}
+			
+			.minifeeds.full_ tr.head td{
+				padding: 4px;
+				font-weight: bold;
+			}
+			
+			.minifeeds.full_ {
+				margin-top: 5px;
+			}
+	</style>
+	
+	<!-- ### Javascript ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>	
+	
+	<!-- ### Wide Widget ### -->
+	<div class="myBigWidget">
+		<div class="teamBlockTitle">
+			<h4>Recent Blogs</h4>
+		</div>
+		<!-- New and See more-->
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+				<a href="javascript:;" style=""  onclick="createOverlay('','NewBlogOverlay','','createFCKEditor(\'NewBlog\')');" class="topRightLinks" >New</a> |
+				<a href="/apex/BlogsTeamOverview?id={!teamIdBlog}" class="topRightLinks" >See More&#187;</a>
+			</apex:outputpanel>
+			<apex:outputpanel rendered="{!IF(newPrivileges ,false,true)}">
+					<a href="/apex/BlogsTeamOverview?id={!teamIdBlog}" class="topRightLinks" >See More&#187;</a>
+			</apex:outputpanel>
+		</div>
+		<!-- Content-->
+		<div class="threads">
+			<div>		
+				<apex:outputPanel layout="block" id="theFeeds" >
+					<table class="minifeeds full_" cellpadding="0" cellspacing="0">
+						<tr class="head" style="{!IF(blogCount > 0, '', 'display:none;')}">
+							<td></td>
+							<td>Title</td>
+							<td class="center">Comments</td>
+							<td >Published By</td>
+							<td>Published Date</td>
+						</tr>
+						<apex:repeat value="{!Blogs}" var="blog" >	
+							<tr>
+								<td><img alt="" src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/icons/minifeed_announcement.gif')}" /></td>
+								<td><a href="/apex/Blogdetails?id={!blog.Id}" class="weight_bold"><apex:outputText escape="false" value="{!blog.Title__c}" /></a></td>
+								<td><div class="number" style="text-align:center;"><apex:outputText value="{!blog.CommentCount__c}"/></div></td>
+								<td><a href="/apex/PeopleProfileDisplay?id={!blog.PostedBy__r.Id}" class="weight_bold"><apex:outputText escape="false" value="{!blog.PostedBy__r.Name}" /></a>
+								</td>
+								<td><apex:outputText value="{!blog.PublishedDate__c}"/></td>	 					
+							</tr>				 
+						</apex:repeat>
+					</table>
+					<!-- NO RESULT DIV-->
+						<div class="center" style="{!IF(blogCount > 0, 'display:none;', '' )}" >
+							No Blogs Yet 
+							<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+								<a href="javascript:;" onclick="createOverlay('','NewBlogOverlay','','createFCKEditor(\'NewBlog\')');">[Create One]</a>
+							</apex:outputpanel>
+						</div>
+				</apex:outputPanel>
+			</div>
+		</div>
+	</div>
+	
+	<!--  ### Thin Widget ###  -->	
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+	   		<div><div><h4>Recent Blogs</h4></div></div>
+	  	</div>
+	  	<div class="box_content">
+	  		<!-- lINKS -->
+	   		<div class="back_gray">
+	   			<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+					<a href="javascript:;" onclick="createOverlay('','NewBlogOverlay','','createFCKEditor(\'NewBlog\')');">New</a> 
+					| 
+					<a href="BlogsOverview">See More&#187;</a>
+				</apex:outputpanel>
+				<apex:outputpanel rendered="{!IF(newPrivileges ,false,true)}">
+					<a href="BlogsOverview">See More&#187;</a>
+				</apex:outputpanel>	
+	   		</div> 
+	   		<!-- No results --> 
+	   		<div class="center" style="{!IF(blogCount > 0, 'display:none', '' )}" >
+				No Blogs Yet
+			</div>
+			<div>
+				<ul class="minifeed_blog">	
+					<apex:repeat value="{!Blogs}" var="blog" rows="5" >
+						<li><a href="/apex/Blogdetails?id={!blog.Id}" class="weight_bold"><apex:outputText escape="false" value="{!blog.Title__c}" /></a></li>						
+					</apex:repeat>
+				</ul>
+			</div>   
+	  	</div>
+	  <div class="bottom_borders"><div><div/></div></div>
+	</div>	
+		<!--  
+			### Widget Intelligence ###  
+			This method execution is required
+		-->
+		<script>
+			//This method determinie if widget live in main o rigth holder
+			widgetPosition();
+		</script>
+			
+</apex:component>

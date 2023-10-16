@@ -1,0 +1,9 @@
+<aura:component>    
+    <aura:attribute name="contentRecordId" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <lightning:flow aura:id="flowComponentCreateCollection" onstatuschange="{!c.handleStatusChange}"/>    
+</aura:component>

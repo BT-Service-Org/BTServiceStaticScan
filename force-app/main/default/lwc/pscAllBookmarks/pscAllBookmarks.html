@@ -1,0 +1,60 @@
+<template>
+    <div class="Container">
+        <h3 class="ITC_font">{pageTitle}</h3>
+        <template if:false={records}>
+            <div class="slds-align_absolute-center">
+                <lightning-spinner></lightning-spinner>
+            </div>
+        </template>
+        <template if:true={records}>
+            <div class="slds-var-p-horizontal_small">
+                <template for:each={recordsToDisplay} for:item="pscArticle">
+                    <div key={pscArticle.favId}>
+                        <template if:true={pscArticle.knowledgeArticleId}>
+                            <c-psc-all-bookmarks-tile psc-article={pscArticle} show-favorite={showFavorite}
+                            knowledge-article-id={pscArticle.knowledgeArticleId} onfavclick={handleRefresh}>
+                            </c-psc-all-bookmarks-tile>
+                        </template>
+                        <template if:false={pscArticle.knowledgeArticleId}>
+                            <c-psc-all-bookmarks-tile psc-article={pscArticle} show-favorite={showFavorite}
+                            knowledge-article-id={pscArticle.recId} onfavclick={handleRefresh}>
+                            </c-psc-all-bookmarks-tile>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template if:true={dataNotFound}>
+            <div class="slds-align_absolute-center ContainerItemSummary">
+                {noResultLabel}
+            </div>
+        </template>
+        <!-- Pagination -->
+        <template if:true={showPagination}>
+            <div class="pagination">
+                <div if:true={showPreviousButton}>
+                    <lightning-icon icon-name="utility:chevronleft" class="page-button" size="x-small"
+                        alternative-text="Previous" title="Previous" onclick={previousHandler}>
+                    </lightning-icon>
+                </div>
+
+                <ul>
+                    <template for:each={pageNumberToDisplay} for:item="PageNo">
+                        <li key={PageNo} class="list-item">
+                            <div class="Page-item" data-page={PageNo} onclick={handlePageTileClick}>
+                                {PageNo}
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                <div if:true={showNextButton}>
+                    <lightning-icon icon-name="utility:chevronright" size="x-small"
+                        alternative-text="Next" title="Next" onclick={nextHandler} class="page-button"></lightning-icon>
+                </div>
+            </div>
+
+        </template>
+
+    </div>
+
+</template>

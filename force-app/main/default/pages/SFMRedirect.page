@@ -1,0 +1,41 @@
+<apex:page showHeader="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false">
+    <html>
+        <head>
+            <apex:includeScript value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-2.1.1.min.js')}" />
+            <script type="text/javascript">
+                var $jq = jQuery.noConflict();
+                function gqp(key)
+                {
+                    var vars = [], hash;
+                    var q = document.URL.split('?')[1];
+                    if(q != undefined)
+                    {
+                        q = q.split('&');
+                        for(var i = 0; i < q.length; i++)
+                        {
+                            hash = q[i].split('=');
+                            vars.push(hash[1]);
+                            vars[hash[0]] = hash[1];
+                        }
+                    }
+                }
+                
+                function goOn()
+                {
+                    window.location.href = gqp('url');
+                }
+                
+                var wLoc = window.location;
+                var pWin = window.open('https://auth-sfm.ops.sfdc.net/', '_blank');
+                $jq(pWin.document).ready(function()
+                {
+                    goOn();
+                    //pWin.close();
+                });
+            </script>
+        </head>
+        <body>
+            <apex:image url="{!$Resource.SalesforceLogo}" />
+        </body>
+    </html>
+</apex:page>

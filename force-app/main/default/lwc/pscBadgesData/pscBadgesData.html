@@ -1,0 +1,45 @@
+<template>
+   <div class="mybadges" if:true={badges.length}>
+      <template for:each={badges} for:item="data">
+         <div key={data.activityName} class="badge_category">
+            <p class="ITC_font badge_activity" if:true={data.activityName}>{data.activityName}</p>
+            <div class="badgelist" if:true={data.badgeList.length}>
+               <template for:each={data.badgeList} for:item="badge">
+                  <div key={badge.badgeName} class="badges">
+                     <div if:true={badge.tileUrl}>
+                        <img src={badge.tileUrl} class="badgeImg">
+                     </div>
+                     
+                     <div class="badge_icon ITC_font">
+                        <lightning-icon icon-name="action:approval" alternative-text="Approved" title="Approved" size="xx-small" class='green-utility-icon' if:true={badge.badgeAchieved}></lightning-icon>
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help14">
+                            <div class="slds-popover__body">Badge Awarded</div>
+                        </div>
+                    </div>
+                    <div class="badge_icon ITC_font">
+                     <lightning-icon icon-name="utility:close" alternative-text="Approved" title="Approved" size="xx-small" class='grey-utility-icon' if:false={badge.badgeAchieved}></lightning-icon>
+                     <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help11">
+                         <div class="slds-popover__body">Badge Outstanding</div>
+                     </div>
+                 </div>
+                    
+                     <div class="badgetitle">
+                        <div class="badge_detail">
+                           <p class="ITC_font">{badge.badgeName}</p>
+                           <lightning-helptext content={badge.badgeDescription}></lightning-helptext>
+                        </div>
+                       
+                        <div if:true={badge.points}><span class="saleforce_font badge_points">Points </span><span class="saleforce_font highlight">{badge.points}</span></div>
+                        <div if:true={badge.showPoints}><span class="saleforce_font badge_points">Points </span><span class="saleforce_font highlight">{badge.minLevelPoints}</span></div>
+                     </div>
+                  </div>
+               </template>
+            </div>
+         </div>
+      </template>
+   </div>
+   <p if:false={badges.length} class="ITC_font" style="text-align:center"> No Records Found</p>
+   <div class="exampleHolder" if:true={showSpinner}>
+      <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+   </div>
+</template>

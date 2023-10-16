@@ -1,0 +1,36 @@
+.THIS .list-table{
+    width: 100%;
+    display: table;
+    empty-cells: show;
+}
+.THIS .Table-Heading{
+    background-color: #f8f8f8;
+    font-size: 13px;
+    color: black;
+    display: table-row;
+}
+.THIS .cellType-1{
+    display: table-cell;
+    text-align: center;
+    border-bottom: 1px solid black;
+    padding: 10px;
+}
+.THIS .Table-row{
+    background-color: none;
+    font-size: 13px;
+    font-weight: normal;
+    display: table-row;
+}
+.THIS .width-15{
+    width: 15%;
+}
+.THIS .width-9{
+    width: 9%;
+}
+.THIS .width-16{
+    width: 16%;
+}
+
+.THIS .cell-bottom{
+    vertical-align: bottom;
+}

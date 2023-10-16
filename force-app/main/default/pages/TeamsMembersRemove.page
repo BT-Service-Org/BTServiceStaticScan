@@ -1,0 +1,94 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="TeamMembersListController">
+	<style>
+		.ContinueBtn {
+			background:#287B9B none repeat scroll 0%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:74% !important;
+			height:26px;
+			margin:0px 3px 0px 3px;
+			text-align:center;
+			width:62px;
+			font-weight:bold;
+		}
+		
+		.inputInfoDark {
+			color:#333333;
+			font-weight:bold;
+			margin-left:20px;
+			text-align:left;
+		}
+		
+		.inputInfo {
+			color:#666666;
+			font-weight:bold;
+			margin-left:20px;
+			text-align:left;
+		
+		}	
+		
+		.removeBtn {
+			background:#287B9B none repeat scroll 0% 50%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:13px;
+			font-weight:bold;
+			height:26px;
+			margin:3px;
+			text-align:center;
+			width:110px;
+		}	
+	</style>
+	
+	<!-- Content  -->
+	<div class="modalContent">
+		<div id="removeMemberOverlay" style="display:none;">
+			<!-- Title of Dialog -->
+			<div class="modalTitle">
+				<div class="title">
+					Confirmation
+				</div>
+				<div class="closeEvent">
+					<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+				</div>
+			</div>
+			 
+			<div>
+				<apex:form id="newMemberForm">
+					<div align="right">
+						<table border="0" style="margin:5px 0px 5px 0px;">
+							<tr>
+								<td style="width:4px;">
+									<span style="display:block;width:4px; height:12px; background-color: #C0272D;"></span>
+								</td>
+								<td>
+									<span class="infoText" style="font-size:9px;font-family:Arial,Helvetica,sans-serif;">= &nbsp;&nbsp; Required Information </span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="div_Body">
+						<table style="width:95%;"> 
+							<tr>
+								<td ><span class="inputInfoDark">Are you sure you want to remove {!delName} from {!teamName}?</span></td>
+							</tr>
+							<tr>
+								<td ><span class="inputInfo">Once a member is removed there is no way to undo this action.</span></td>
+							</tr>			
+						</table>
+					
+						<div class="title_line_btn"></div> 
+						<div align="center">
+							<apex:commandButton styleclass="removeBtn" action="{!removeMember}" oncomplete="modal.close();" value="Continue" rerender="auxPanel"/> 
+							<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
+							<!-- <input class="InviteBtn" type="button" value="Send"/> <input class="InviteAndAddBtn" type="button" value="Send & add more members"/><input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();"/> -->
+						</div>
+					</div>
+				</apex:form>
+			</div>
+		</div>
+	</div>
+</apex:page>

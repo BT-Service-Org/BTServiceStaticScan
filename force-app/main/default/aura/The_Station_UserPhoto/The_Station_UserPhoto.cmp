@@ -1,0 +1,24 @@
+<aura:component controller="StationUserPhotoController">
+    
+    <!-- DECLARATIONS -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="oUser" type="user" default="{'sobjectType' : 'User'}" />
+    <aura:attribute name="isLoading" type="boolean" default="false"/>
+    <aura:method name="refreshPhoto" action="{!c.doInit}" />
+    <!-- DECLARATIONS -->
+
+    <div>
+        
+        <div class="circular--portrait">
+            <img aura:id="ProfilePhoto" src="{!v.oUser.FullPhotoUrl}" alt="{!v.oUser.Name}"/> 
+        </div>
+        
+        <aura:if isTrue="{!v.isLoading}">
+            <!-- Loading -->
+                <div class="exampleHolder" style="">
+                    <lightning:spinner variant="brand" alternativeText="Loading" size="medium" />
+                </div>
+            <!-- Loading -->
+        </aura:if> 
+    </div>
+</aura:component>

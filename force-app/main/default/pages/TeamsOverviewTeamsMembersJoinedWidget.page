@@ -1,0 +1,13 @@
+<apex:page >
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Recently Created Teams</h4></div></div>
+   		</div>
+   		<div class="box_content">
+			<div>
+				Teams
+			</div>   
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+	</div>
+</apex:page>

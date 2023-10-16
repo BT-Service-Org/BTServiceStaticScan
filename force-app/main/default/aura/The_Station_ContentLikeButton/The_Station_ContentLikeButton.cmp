@@ -1,0 +1,35 @@
+<aura:component controller="The_Station_ContentLikeController">
+
+    <aura:attribute name="divStyle" type="String" default="float:left;margin-right:6px;margin-bottom:6px;" />
+    <aura:attribute name="showButton" type="boolean" default="true" />
+    <aura:attribute name="iconName" type="String" default="utility:like" />
+    <aura:attribute name="contentName" type="String" />
+    <aura:attribute name="contentRecordId" type="String" />
+    <aura:attribute name="contentLikeState" type="boolean" default="false" />
+    <aura:attribute name="buttonAltText" type="String" default="Like" />
+    <aura:attribute name="runningUserInput" type="String" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />
+    <aura:attribute name="buttonStyle" type="String" />
+    <aura:attribute name="numberLikes" type="Integer" />
+
+    <aura:registerEvent name="appEvent" type="c:The_Station_ContentLikeEvent" />
+    <aura:handler event="c:The_Station_ContentLikeEvent" action="{!c.handleApplicationEvent}" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div style="{!v.divStyle}">
+        <aura:if isTrue="{!v.showButton}">
+            <lightning:buttonIconStateful style="{!v.buttonStyle}" class="{!v.buttonTheme}" iconName="{!v.iconName}"
+                name="{!v.contentRecordId}" value="{!v.contentRecordId}" selected="{!v.contentLikeState}"
+                onclick="{!c.handleLikeButtonClick}" alternativeText="{!v.buttonAltText}" />
+            <div class="button-description" style="display:inline-block;padding-left:5px;font-weight:bold;">
+                {!v.numberLikes}</div>
+            <aura:set attribute="else">
+                <lightning:buttonIconStateful style="{!v.buttonStyle}" class="{!v.buttonThemeDisabled}"
+                    iconName="{!v.iconName}" alternativeText="{!v.buttonAltText}" disabled="true" />
+                <div style="display:inline-block">{!v.numberLikes}</div>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

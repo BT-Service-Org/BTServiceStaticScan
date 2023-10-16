@@ -1,0 +1,1207 @@
+<apex:page tabStyle="Team__c" sidebar="false" controller="TeamsCreateNewTaskController"  id="createTask">
+
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"></script>
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+
+	<style>
+		.my_form label {
+				color:#676667;
+				font-weight:bold;
+				width: 150px;
+				margin-rigth: 5px;
+				float: left;
+				text-align:right;
+				font-size:13px;
+			}
+			
+			.my_form span.desc,  .my_form  span.dateFormat {
+				color:#676667;
+				font-weight:bold;
+				width: auto;
+				margin-left: 5px;
+				float: left;
+			}
+			
+			.my_form select {
+				float: left;
+				margin-bottom: 16px;
+			}
+			.my_form input, .my_form textarea {
+				width: 370px;
+				float: left;
+				margin-bottom: 16px;
+				
+			}
+			
+			.my_form input.auto {
+				width: auto;
+			}
+			
+			.my_form .buttons input.SaveBtn.auto {
+				width: auto!important;
+				padding: 0pt 5px;
+			}
+			
+			.my_form input.medium {
+				width: 180px;
+			}
+			
+			.my_form input.small {
+				width: 4em;
+			}
+			
+			.my_form span.no_requeried {
+				display:block;
+				width:4px; 
+				height:21px; 
+				float:left;
+				margin: 0pt 5px;
+			}
+			
+			.my_form span.requeried {
+				display:block;
+				width:4px; 
+				height:21px; 
+				background-color: #C0272D;
+				float:left;
+				margin: 0pt 5px;
+			}
+			
+			.my_form br {
+				clear: left;
+			}
+			
+			.my_form 
+			{
+				padding: 5px;
+				position: relative;
+			}
+			
+			.my_form  a.advanced {
+				color: #004F6D;
+				font-weight: bold;
+				background:url({!URLFOR($Resource.commonResources, 'images/arrows/arrow_up_blue.gif')}) no-repeat left center;
+				padding-left: 12px;
+			}
+			
+			.my_form  a.advanced.open {
+	
+				background:url({!URLFOR($Resource.commonResources, 'images/arrows/arrow_down_blue.gif')}) no-repeat left center;
+			}
+			
+			.my_form .buttons {
+				margin:  0pt;
+				left: 50%;
+				margin-left: -100px;
+				position: absolute;
+			}
+			
+			
+			.my_form .buttons input.SaveBtn {
+				background:#004F6D none repeat scroll 0% 50%;
+				border:0px solid;
+				color:#FFFFFF;
+				cursor:pointer;
+				font-size:112% !important;
+				font-weight:bold;
+				height:28px;
+				margin:3px 2px;
+				text-align:center;
+				width:63px;
+				
+			}
+			
+			.my_form .buttons input.cancelBtn {
+				background:#999999 none repeat scroll 0% 50%;
+				border:0px solid;
+				color:#FFFFFF;
+				cursor:pointer;
+				font-size:112% !important;
+				font-weight:bold;
+				height:28px;
+				margin:3px 2px;
+				text-align:center;
+				width:63px;
+			}
+			
+			.my_form .calendar {
+				float: left;
+				margin-left: 5px;
+				
+			}
+				
+			div.datepicker {
+			 position: absolute;
+			 text-align: center;
+			 border: 1px #C4D5E3 solid;
+			 font-family: arial;
+			 background: #FFFFFF;
+			 font-size: 10px;
+			 padding: 0px;
+			}
+			
+			div.datepicker table {
+			 font-size: 10px;
+			 margin: 0px;
+			 padding: 0px;
+			 text-align: center;
+			 width: 180px;
+			}
+			
+			div.datepicker table thead tr th {
+			 font-size: 12px;
+			 font-weight: bold;
+			 background: #e9eff4;
+			 border-bottom:1px solid #c4d5e3;
+			 padding: 0px;
+			 margin: 0px;
+			}
+			
+			div.datepicker table tbody tr {
+			 border: 1px white solid;
+			 margin: 0px;
+			 padding: 0px;
+			}
+			
+			div.datepicker table tbody tr td {
+			 border: 1px #eaeaea solid;
+			 margin: 0px;
+			 padding: 0px;
+			 text-align: center;
+			}
+			
+			div.datepicker table tbody tr td:hover,
+			div.datepicker table tbody tr td.outbound:hover,
+			div.datepicker table tbody tr td.today:hover {
+			 border: 1px #c4d5e3 solid;
+			 background: #e9eff4;
+			 cursor: pointer;
+			}
+			
+			div.datepicker table tbody tr td.wday {
+			 border: 1px #ffffff solid;
+			 background: #ffffff;
+			 cursor: text;
+			}
+			
+			div.datepicker table tbody tr td.outbound {
+			 background: #e8e4e4;
+			}
+			div.datepicker table tbody tr td.today {
+			 border: 1px #16518e solid;
+			 background: #c4d5e3;
+			}
+			
+			div.datepicker table tbody tr td.nclick,
+			div.datepicker table tbody tr td.nclick_outbound {
+			 cursor:default; color:#aaa;
+			}
+			
+			div.datepicker table tbody tr td.nclick_outbound {
+			 background:#E8E4E4;
+			}
+			
+			div.datepicker table tbody tr td.nclick:hover,
+			div.datepicker table tbody tr td.nclick_outbound:hover {
+			 border: 1px #eaeaea solid;
+			 background: #FFF;
+			}
+			
+			div.datepicker table tbody tr td.nclick_outbound:hover {
+			 background:#E8E4E4;
+			}
+			
+			div.datepicker table tfoot {
+			 font-size: 10px;
+			 background: #e9eff4;
+			 border-top:1px solid #c4d5e3;
+			 cursor: pointer;
+			 text-align: center;
+			 padding: 0px;
+			}	
+			
+			span.errorText {
+				color:#C0272D;
+				padding-left:7px;
+			}			
+			
+			span.requiredLegend {
+				display: block; 
+				width: 1px; 
+				height: 20px; 
+				background-color: #C0272D;
+			}
+		
+			div.body_center{
+				height: 820px !important;
+			}
+			
+			div.DivBtn div.title_line_btn{
+				margin:15px 15px 15px 38px;
+			}
+			
+			div.imageRightsHolder{
+				float:left;
+				width: 22px;
+			}
+			
+			div.messageRigthHolder{
+				float:left;
+				width: 300px;		
+			}
+			
+			div.messageRigthHolder span.errorText{
+				padding: 0px !important;
+			}
+			
+			div#warning_to_user div.f_left img{
+				margin-right: 8px !important;
+			}
+			
+			table.newTeamForm td span.errorText{
+				color:#C0272D;
+				padding-left: 7px;
+			}
+			
+			.bubble {
+				z-index:999999;
+				position:absolute;
+				width:221px;
+				overflow:visible;
+				display:none;
+				top:10px;
+				left:10px;				
+			}
+			
+			.bubble .content {
+				width:221px;
+				clear:both;
+				position:relative;
+				background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bg.png')}) repeat-y;
+				background-position: top right;
+			}
+	
+			* html .bubble .content {background:none;}
+			* html .bubble .content {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bg.png')}", sizingMethod="scale")}
+			
+			.bubble .bottom_border {
+				width:221px;
+				height: 24px;			
+				overflow:hidden;
+				position:relative;
+				background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bottom.png')}) no-repeat;
+				background-position:  bottom right;
+			}
+	
+			* html .bubble .bottom_border {background:none;}
+			* html .bubble .bottom_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bottom.png')}", sizingMethod="scale")}			
+			
+			.bubble .top_border {
+				width:221px;
+				height: 25px;
+				overflow:hidden;
+				position:relative;
+				background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_top.png')}) no-repeat;
+				background-position:  bottom right;
+			}
+			
+			* html .bubble .top_border {background:none;}
+			* html .bubble .top_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_top.png')}", sizingMethod="scale")}			
+	
+			
+			.bubble .content .innerContBubble {
+				position:relative;
+				margin:0px 20px 0px 20px;
+			}
+			
+			.bubble .arrowBubble {
+				position:absolute;
+				top:20px;
+				left:0px;					
+			}
+			
+			.assigned {
+				background: url({!URLFOR($Resource.commonResources, '/images/icons/add_gray.gif')}) no-repeat left center;
+				padding-left: 20px;
+			}
+			
+			.notassigned {
+				background: url({!URLFOR($Resource.PeopleResourceFiles, '/images/layout/icons/delete.png')}) no-repeat left center;
+				padding-left: 20px;
+			}
+			
+			
+			select.margin {
+				margin-left: 6px;
+				margin-right: 6px;
+			}
+			
+			.my_form textarea.no_float {
+				float: none;
+			}
+			
+			
+			a.pdfType, a.imageType, a.txtType, a.docType, a.zipType, a.unknowType{
+				padding-left: 20px;
+			}
+			
+			a.pdfType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'pdf.gif')}') left center no-repeat;
+			}
+			
+			a.imageType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'images.gif')}') left center no-repeat;
+			}
+			
+			a.txtType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'txt.gif')}') left center no-repeat;
+			}
+			
+			a.docType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'doc.gif')}') left center no-repeat;
+			}
+			a.zipType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'zip.gif')}') left center no-repeat;
+			}
+			a.unknowType{
+				background: url('{!URLFOR($Resource.FileTypeIcons, 'generic.gif')}') left center no-repeat;
+			}
+			
+			.my_form  .inputFileControl {
+				width: auto;
+				margin-right: 6px;
+			}
+	</style>
+	
+	<script>
+		/**
+		* DHTML date validation script. Courtesy of SmartWebby.com (http://www.smartwebby.com/dhtml/)
+ 		*/
+		// Declaring valid date character, minimum year and maximum year
+		var dtCh= "/";
+		var minYear=1900;
+		var maxYear=2100;
+
+		function isInteger(s){
+			var i;
+		    for (i = 0; i < s.length; i++){   
+		        // Check that current character is number.
+		        var c = s.charAt(i);
+		        if (((c < "0") || (c > "9"))) return false;
+		    }
+		    // All characters are numbers.
+		    return true;
+		}
+
+		function stripCharsInBag(s, bag){
+			var i;
+		    var returnString = "";
+		    // Search through string's characters one by one.
+		    // If character is not in bag, append to returnString.
+		    for (i = 0; i < s.length; i++){   
+		        var c = s.charAt(i);
+		        if (bag.indexOf(c) == -1) returnString += c;
+		    }
+		    return returnString;
+		}
+
+		function daysInFebruary (year){
+			// February has 29 days in any year evenly divisible by four,
+		    // EXCEPT for centurial years which are not also divisible by 400.
+		    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+		}
+		
+		function DaysArray(n) {
+			for (var i = 1; i <= n; i++) {
+				this[i] = 31
+				if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+				if (i==2) {this[i] = 29}
+		   } 
+		   return this
+		}
+
+		function isDate(dtStr){
+			var daysInMonth = DaysArray(12)
+			var pos1=dtStr.indexOf(dtCh)
+			
+			var pos2=dtStr.indexOf(dtCh,pos1+1)
+			
+			var strMonth=dtStr.substring(0,pos1)
+			var strDay=dtStr.substring(pos1+1,pos2)
+			var strYear2 = dtStr.substring(pos2+1)
+			var strYear = strYear2.substring(0)
+		
+			strYr=strYear
+			if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+			if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+			for (var i = 1; i <= 3; i++) {
+				if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+			}
+			month=parseInt(strMonth)
+			day=parseInt(strDay)
+			year=parseInt(strYr)
+		
+			if (pos1==-1 || pos2==-1){
+				
+				return false
+			}
+			if (month<1 || month>12){
+		
+				return false
+			}
+			if (day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+				
+				return false
+			}
+			if ( year==0 || year<minYear || year>maxYear){
+				
+				return false
+			}
+			
+		return true
+		}	
+	</script>
+	
+	<!-- ##### -->
+	
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+	
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		/**
+		* Validate form
+		*@return Bool error
+		*/
+		function validateFormInfo(){
+			var error = false;
+			//Name Validate
+			if($F('createTask:createNewTaskForm:taskName')== ''){
+				$('createTask:createNewTaskForm:taskName').style.border = 'solid #C0272D 2px';
+				Effect.Appear('TaskNameErrorMessage');
+				error = true;
+			}else{
+				$('createTask:createNewTaskForm:taskName').style.border = '';
+				Effect.Fade('TaskNameErrorMessage');
+			}
+			
+			if($F('createTask:createNewTaskForm:taskAssign')== 'Choose a team Member'){
+				$('createTask:createNewTaskForm:taskAssign').style.border = 'solid #C0272D 2px';
+				Effect.Appear('TaskMemberErrorMessage');
+				error = true;
+			}else{
+				
+				$('createTask:createNewTaskForm:taskAssign').style.border = '';
+				Effect.Fade('TaskMemberErrorMessage');
+			}
+
+			if (isDate($F('createTask:createNewTaskForm:taskEndDate'))== false && $('createTask:createNewTaskForm:taskMilestone').checked == true){
+				$('createTask:createNewTaskForm:taskEndDate').style.border = 'solid #C0272D 2px';
+				Effect.Appear('TaskEndErrorMessage');
+				error = true;
+			}
+			else {
+				$('createTask:createNewTaskForm:taskEndDate').style.border = '';
+				Effect.Fade('TaskEndErrorMessage');
+				
+			}
+			
+			if ($('createTask:createNewTaskForm:taskEstimate').value == '' && isInteger($('createTask:createNewTaskForm:taskEstimate').value) && $('createTask:createNewTaskForm:taskMilestone').checked == false){
+				$('createTask:createNewTaskForm:taskEstimate').style.border = 'solid #C0272D 2px';
+				Effect.Appear('TaskEstimateErrorMessage');
+				error = true;
+			}
+			else {
+				$('createTask:createNewTaskForm:taskEstimate').style.border = '';
+				Effect.Fade('TaskEstimateErrorMessage');
+				
+			}
+			
+			
+			
+			if($('createTask:createNewTaskForm:parentTask').value == '') {
+				$('createTask:createNewTaskForm:parentTask_lkid').value = null;
+			}
+			
+			
+				if (isDate($F('createTask:createNewTaskForm:taskStartDate'))==false && $('createTask:createNewTaskForm:taskMilestone').checked == false){
+					$('createTask:createNewTaskForm:taskStartDate').style.border = 'solid #C0272D 2px';
+					Effect.Appear('TaskEndErrorMessage2');
+					error = true;
+				}
+				else {
+					$('createTask:createNewTaskForm:taskStartDate').style.border = '';
+					Effect.Fade('TaskEndErrorMessage2');
+					
+				}
+			
+			
+			if(error){
+				Effect.Appear('warning_to_user');
+				var inputAction = $('createTask:createNewTaskForm:saveButton');
+				inputAction = inputAction.value = 'Save';
+				Effect.ScrollTo('anchorForError');
+			}
+			else {
+				Effect.Fade('warning_to_user');
+			}
+			return error;		
+		}		
+		
+		/**
+		* Get URL param
+		*@return string param
+		*@param string param
+		*/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}		
+		
+		var isMilestone = getURLParam('t');
+		var isTaskEdition = getURLParam('ed');
+		var currentTeam = getURLParam('id');
+		var currentTask = getURLParam('task');
+		var currentProject = '';
+		var currentAction = '';
+		
+		/**
+		* Save task message
+		*@void
+		*/
+		function saveTaskMessage(){
+			var inputAction = $('createTask:createNewTaskForm:saveButton');
+			
+			//Assign EndDate__c value to StartDate__c value if is Milestone
+			if($('createTask:createNewTaskForm:taskMilestone').checked == true){
+				var endDateValue = $('createTask:createNewTaskForm:taskEndDate').value;
+				$('createTask:createNewTaskForm:taskStartDate').value = endDateValue;
+			}
+			
+			//Set current action message
+			if('{!TypeOfAction}'== 'Add New'){
+				inputAction.value = 'Creating new Task...';
+				currentAction = 'create';
+			}
+			else if('{!TypeOfAction}'== 'Edit'){
+				inputAction.value = 'Updating Task...';
+				currentAction = 'update';
+			}
+		}
+		
+		var Task = null;
+		var Assign = null;		
+		/**
+		* Init project creator
+		*@void
+		*/
+		function initializeProject(){
+			init();
+			res0 = sforce.connection.query("Select Id from Project2__c where Team__c = '" + currentTeam + "'");
+			records = res0.getArray("records");
+			if (records.length > 0) {
+				currentProject = records[0].Id;
+				if(isMilestone)	{
+					$('createTask:createNewTaskForm:taskMilestone').checked= "checked";
+					checkMilestone();
+					if(isTaskEdition){
+						$('createTask:createNewTaskForm:taskName').value = (getURLParam('qmname')).replace(/\+/g,' ');
+						$('createTask:createNewTaskForm:taskEndDate').value = (getURLParam('qmdd')).replace(/\+/g,' ');
+						$('createTask:createNewTaskForm:taskAssign').value = getURLParam('qmaid');
+						isTaskEdition = false;
+					}				
+				}
+				
+				if(isTaskEdition){
+					$('createTask:createNewTaskForm:taskName').value = (getURLParam('qtname')).replace(/\+/g,' ');
+					$('createTask:createNewTaskForm:taskEstimate').value = getURLParam('qte');
+					$('createTask:createNewTaskForm:taskStartDate').value = (getURLParam('qtsd')).replace(/\+/g,' ');
+					$('createTask:createNewTaskForm:taskEndDate').value = (getURLParam('qtdd')).replace(/\+/g,' ');
+					$('createTask:createNewTaskForm:taskAssign').value = getURLParam('qtaid');
+				}
+				
+				Assign = new sforce.SObject("ProjectAssignee__c");
+				if(!currentTask){
+					Task = new sforce.SObject("ProjectTask__c");
+				}else{
+					res1 = sforce.connection.query("Select Id from ProjectTask__c where Id = '" + currentTask + "'");
+					records = res1.getArray("records");
+					Task = records[0];
+				}
+			}
+		}
+		
+		/**
+		* Check is Milestone
+		*@void
+		*/
+		function checkMilestone(){
+			if($('createTask:createNewTaskForm:taskMilestone').checked == true){
+				$('startDateCont').hide();
+				$('contEstimate').hide();
+				$$('.teamTitle .type')[0].update('Milestone');
+				$('startRequeried').removeClassName('no_requeried');
+				$('startRequeried').addClassName('requeried');
+				$('endRequeried').removeClassName('no_requeried');
+				$('endRequeried').addClassName('requeried');
+				
+			}
+			else{
+				$('startDateCont').show();
+				$('contEstimate').show();
+				$$('.teamTitle .type')[0].update('Task');
+				$('startRequeried').removeClassName('no_requeried');
+				$('startRequeried').addClassName('requeried');
+				$('endRequeried').removeClassName('requeried');
+				$('endRequeried').addClassName('no_requeried');
+			}
+		}
+		
+		/**
+		* Change Datapicker date format to SFDC date format
+		*@param String sfdc unformated date
+		*@return String formated date
+		*/
+		function getSfdcDate(strDate){
+			var aux = strDate.split(' ');
+			var date = aux[0].split('/');
+			var time = aux[1].split(':');
+			var sfdcDate = '';
+			sfdcDate = date[2] + '-';
+			sfdcDate += (date[0].length > 1) ? date[0] + '-' : '0' + date[0] + '-';
+			sfdcDate += (date[1].length > 1) ? date[1] + 'T' : '0' + date[1] + 'T';  
+			sfdcDate += (time[0].length > 1) ? time[0] + ':' : '0' + time[0] + ':';
+			sfdcDate += (time[1].length > 1) ? time[1] + ':' : '0' + time[1] + ':';
+			sfdcDate += '00.000Z';
+			return sfdcDate;
+		}
+
+		/**
+		* Hide or Show Advance information
+		*@void
+		*/
+		function hideAdvanced(){
+			if($('advanced').style.display == 'none'){
+				$('advanced').style.display = 'block';
+				$('advancedLinks').addClassName('open');
+			}
+			else if($('advanced').style.display == 'block'){
+				$('advanced').style.display = 'none';
+				$('advancedLinks').removeClassName('open');
+			}
+		}
+		
+		var divId = 1;
+		/**
+		* Add Assignee
+		*@param String idUser
+		*@param String percent
+		*@void
+		*/
+		function addAssigne(idUser, percent){
+			if($('firstDedicated').style.display == 'none'){
+				$('firstDedicated').show();
+			}
+			var select = $('createTask:createNewTaskForm:taskAssign');
+			var optionPercent = '';
+			for(var i=0; i<101; i=i+5){
+				optionPercent += '<option value=\''+i+'\'>'+i+' %</option>';
+			}
+			var resultSelect = '<div class=\'assigneCont\' id=\''+divId+'\'><label>&nbsp;</label><span class=\'no_requeried\'></span><select class=\'child\'>'+select.innerHTML+'</select><label>Percent Dedicated</label><select class=\'percentChild margin\'>'+optionPercent+'</select><a class=\'notassigned\' href=\'javascript:;\' onclick=\'removeAssigne(\"'+divId+'\")\'>Remove Assigne</a><br/></div>';
+			divId++;			
+			$('result').insert(resultSelect);
+			var selects = $$('.child');
+			var selectsPer = $$('.percentChild');
+			if(idUser != null){
+				selects.each(function(s, indice){
+				if(selects.length == indice+1){
+		        	s.value = idUser;
+		        }
+		      });
+		      
+		      selectsPer.each(function(e, indice){
+				if(selectsPer.length == indice+1){
+		        	e.value = percent;
+		        }
+		      });
+			}
+			else {
+				selects.each(function(s, indice){
+				if(selects.length == indice+1){
+		        	s.options[0].selected ='selected';
+		        }
+		      });
+			}			
+		} 
+		
+		/**
+		* Remove Assignee
+		*@param String id
+		*/
+		function removeAssigne(id){
+			var tid = '' + id;
+			var div = $(tid);
+			div.remove();
+			if($$('.assigneCont').length == 0){
+				$('firstDedicated').hide();
+			}
+		}
+		
+		/**
+		* Remove DOM Element
+		*@param String
+		*/
+		function removeElement(id){
+			$(id).remove();
+		}
+		
+		var inputId = 1;
+		/**
+		* Add Attach control
+		*@void
+		*/
+		function addAttach(){
+			currentTask =  $('createTask:createNewTaskForm:currentTaskId').innerHTML;
+			var contenedor = $('frame_container');
+			var formContainer = $('formUploadContainer');
+			var response = '';
+			var formMarkup = '';
+			
+			response = '<div id=\'divc_'+inputId+'\'>';
+			response += '<label>&nbsp;</label><span class=\'no_requeried\'></span>';
+			response +=	'<div id=\'inputTeamFileContainer_'+inputId+'\'>';
+			response +=	'<input id=\'tempfile_'+inputId+'\'  name=\'file\' size=\'20\' title=\'Type the path of the file or click the Browse button to find the file.\' type=\'file\' class=\'inputFileControl\' />';
+			response +=	'<a class=\'notassigned\' href=\'javascript:;\' onclick=\'removeElement(\"divc_'+inputId+'\"); removeElement(\"uploadImageForm_'+inputId+'\"); removeElement(\"iframeUpload'+inputId+'\");\'>Delete this Attachment</a><br /></div>';
+			response += '</div>';
+			
+			formMarkup = '<form action=\'/p/attach/NoteAttach\' enctype=\'multipart/form-data\' id=\'uploadImageForm_'+inputId+'\' target=\'iframeUpload'+inputId+'\' method=\'post\'>';
+			formMarkup +=	'<span id=\'inputFileContainer\' style=\'display:none;\'></span>';
+			formMarkup +=	'<input type=\'hidden\' name=\'pid\' class=\'hiddenClass\'value=\''+currentTask+'\' />';
+			formMarkup += '</form>';	
+			formMarkup += '<iframe id=\'iframeUpload' + inputId + '\' name=\'iframeUpload'+inputId+'\' style=\'display:none;\' ></iframe>';
+			formContainer.insert(formMarkup);
+			contenedor.insert(response);
+			inputId ++;
+		}
+	
+		/**
+		* Member Assignee
+		*@void
+		*/
+		function memberAssigne(){
+			var contChild = $$('.assigneCont');	
+			var assigneeHidden = $('createTask:createNewTaskForm:assigneesCustomFormat');
+			if(contChild.length > 0){
+				for(var it=0; it < contChild.length; it++ ){
+					var Userid = $F(contChild[it].getElementsByClassName('child')[0]);
+					var percernt = $F(contChild[it].getElementsByClassName('percentChild')[0]);
+					if(Userid != 'Choose a team Member') {
+						assigneeToSave(Userid, percernt);
+					}				
+				}
+				assigneeHidden.value = assigneeHidden.value.substring(0, (assigneeHidden.value.length - 1));
+			}
+		}
+		
+		/**
+		* Assignees to save
+		*/
+		function assigneeToSave(user, percent){
+			var assigneeHidden = $('createTask:createNewTaskForm:assigneesCustomFormat');
+			if(user != 'undefined' && percent != ''){
+				assigneeHidden.value += user + ':' + percent + ';';	
+			}
+		}
+		
+	
+		/**
+		* Set input Hidden value
+		*/
+		function setInputHidden(){	
+			currentTask =  $('createTask:createNewTaskForm:currentTaskId').innerHTML;
+			var inputsH = $$('.hiddenClass');	
+			inputsH.each(
+				function(s){
+					s.value = currentTask;
+	     	 	}
+	     	 );
+		}
+		
+		/**
+		* Process all uploads
+		*@void
+		*/
+		var uploadControls = 0;
+		function processUploads(){
+			var inputs = $$('.inputFileControl');
+			uploadControls = inputs.length;
+			if(inputs[0].value != ''){
+				setInputHidden();
+				inputs.each(
+					function(element, idx){
+						var aux = element.id.split('_');
+						var form = $('uploadImageForm_' + aux[1]);
+						form.insert(element);
+						form.submit();
+						UPF__success__(aux[1]);
+						if((idx + 1) == inputs.length){
+							$('frame_container').innerHTML = '<div>Uploading files, please wait...';		
+						}
+					}
+				)
+			}else{
+				location.href = '/apex/ProjectTaskList?id=' + currentTeam + '&success=' + currentAction;
+			}
+		}
+		
+		/**
+		* Delete Attachments
+		*/
+		function removeAttachment(id){
+			init();
+			dels = sforce.connection.deleteIds([id]);
+			$('attach' + id).remove();
+		}
+		
+		/* ### Upload File ### */
+		
+		/**
+		* Recursive function for check upload finish or errors
+		*@void
+		*/
+		function UPF__success__(id){
+			var iframe = 'iframeUpload' + id;
+			var iframes = document.getElementsByTagName('iframe');
+			for (var it = 0; it < iframes.length; it++){
+				if(iframes[it].name == iframe){
+					iframe = iframes[it];
+					break;
+				}
+			}
+			if(iframe.contentWindow.document.getElementById('ep')){
+				var ifrDiv = iframe.contentWindow.document.getElementById('ep');
+				var pNode = ifrDiv.parentNode;
+				pNode.removeChild(ifrDiv);
+				if((uploadControls - 1) == id)
+					location.href = '/apex/ProjectTaskList?id=' + currentTeam + '&success=' + currentAction;
+					
+			}else{ 
+				setTimeout('UPF__success__(\''+id+'\'); UPF__CheckError__(\'iframeUpload'+id+'\')',2000);
+			}
+		}
+		
+		/**
+		* Check error on upload process
+		*@void
+		*/
+		function UPF__CheckError__(iframe){
+			var iframes = document.getElementsByTagName('iframe');
+			for (var it = 0; it < iframes.length; it++){
+				if(iframes[it].name == iframe){
+					iframe = iframes[it];
+					break;
+				}
+			}			
+			var divs = iframe.contentWindow.document.getElementsByTagName('DIV');
+			if (divs[42]){
+				if(divs[42].className == 'errorMsg'){
+					divs[42].className = '';
+				}
+			}
+		}	
+		
+		
+		/* Reposition of the Date Calendar */
+		function fixCalPos () {
+			var calDiv = $('datePicker');
+			if (calDiv != null) {
+				if (navigator.appName == "Microsoft Internet Explorer") {
+					version = navigator.appVersion;
+					if (version.indexOf("MSIE 6") != -1) {
+						var newTop = parseInt(calDiv.style.top) - 36;
+						calDiv.style.top = newTop + 'px';
+						//277px
+						//314px
+					}
+				}
+			} 
+		}
+		function changeFocusAttr () {
+			var inputStart = $('createTask:createNewTaskForm:taskStartDate');
+			var inputEnd = $('createTask:createNewTaskForm:taskEndDate');
+			inputStart.setAttribute('onfocus', "DatePicker.pickDate(true, 'createTask:createNewTaskForm:taskStartDate', true);setTimeout('fixCalPos()',100);");
+			inputEnd.setAttribute('onfocus', "DatePicker.pickDate(true, 'createTask:createNewTaskForm:taskEndDate', true);setTimeout('fixCalPos()',100);");
+		}
+		
+		function showCalendar (elementId) {
+			var startDateField = $(elementId);
+			startDateField.focus();
+			setTimeout('fixCalPos()',100);
+		}
+	</script>
+	
+	<div id="bubble" class="bubble">
+		<div class="top_border">&nbsp;</div>		
+		<div class="content">
+			<img class="arrowBubble" src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_arrow.gif')}" />				
+			<!-- Content here -->
+			<div class="innerContBubble" id="innerContBubble"></div>	
+		</div>
+		<div class="bottom_border">&nbsp;</div>				
+	</div>
+	<!-- Header -->
+	<div class="header"><!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>
+		</div>
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key" onfocus="setValue('');" onblur="setValue('Enter keyword or name');"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+		<!-- Help for this page -->
+		<div class="help">
+			<div><a href="javascript:;">Help for this page</a>&nbsp;
+				 <img src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Quick links -->
+		<c:TeamAdminQuickLinks />
+		
+		<!-- MyTeams Widget -->
+		<c:TeamsMyTeamsWidget />
+	</div>
+	
+	<!-- Main Content Div -->
+	<div class="main_content">
+		<div>
+			<div class="tabBorder">&nbsp;</div>
+			<div class="holder">
+				<div class="teamTitle">{!TypeOfAction} <span class="type"> Task</span></div>
+				
+				<div class="border_body_top">&nbsp;</div>
+				<div class="body_center" style="height: auto!important; ">
+					<a id="anchorForError"></a>
+					<div id="warning_to_user" class="message_to_user" style="display:none;" >
+					      <div class="f_left">
+					      	<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
+					      </div>
+					      <div class="f_left">
+						      <strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
+						      <span id="messageErrorText">Please see the field(s) highlighted</span>
+						  </div>
+						  <div class="clear"></div>
+				    </div>		
+					<div align="right">
+						<table border="0" style="margin: 5px 0px 5px 0px;">
+							<tr>
+								<td style="width: 4px;">
+									<span class="requiredLegend"></span>
+								</td>
+								<td>
+									<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
+										=&nbsp;Required Information 
+									</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<apex:form id="createNewTaskForm" onsubmit="if(validateFormInfo())return false;">
+						<div class="my_form">
+							
+							<apex:outputPanel id="currentTaskId" style="display:none;" >{!Task.Id}</apex:outputPanel>
+							<apex:inputHidden id="assigneesCustomFormat" value="{!assignees}" />
+							
+							<br/>
+							<label>Task Name</label><span class="requeried"></span>
+							<apex:inputField id="taskName" styleClass="medium" value="{!Task.Name}" />
+							<span class="errorText f_left" id="TaskNameErrorMessage" style="display:none;"><b>Error:</b> You must enter a name for this task</span><br/>
+							
+							<label>Milestone</label><span class="no_requeried"></span>
+							<apex:inputCheckbox id="taskMilestone" styleClass="auto" onclick="checkMilestone();" selected="{!Task.Milestone__c}" value="{!Task.Milestone__c}" />
+							
+							<img alt="" class="f_left" src="{!URLFOR($Resource.ProjectResources, '/images/layout/icons/flag_green.gif')}"><br/>
+							<div id="startDateCont">
+								<label>Start Date</label><span id="startRequeried" class="requeried"></span>
+								<apex:inputField onclick="setTimeout('fixCalPos()',100);" styleClass="medium" id="taskStartDate" value="{!Task.StartDate__c}" />
+								<a href="javascript:showCalendar('createTask:createNewTaskForm:taskStartDate');" class="calendar" id="start_calendar"><img alt="" src="{!URLFOR($Resource.ProjectResources, '/images/layout/icons/calendar.png')}"></a>
+								<span class="errorText f_left" id="TaskEndErrorMessage2" style="display:none;"><b>Error:</b> You must enter a Valid date</span><br/>	
+							</div>  
+							
+							<label>Due Date</label>
+							<span id="endRequeried" class="no_requeried"></span>
+							<apex:inputField onclick="setTimeout('fixCalPos()',100);" styleClass="medium" id="taskEndDate" value="{!Task.EndDate__c}"  />
+							<a href="javascript:showCalendar('createTask:createNewTaskForm:taskEndDate');" class="calendar" >
+								<img alt="" src="{!URLFOR($Resource.ProjectResources, '/images/layout/icons/calendar.png')}">
+							</a> 
+							<span class="errorText f_left" id="TaskEndErrorMessage" style="display:none;">
+								<b>Error:</b> You must enter a Valid date
+							</span><br/>
+							
+							<div id="contEstimate">
+								<label>Estimate</label><span class="requeried"></span>
+								<apex:inputText id="taskEstimate"  styleClass="small" value="{!Task.Duration__c}" />
+								<span class="desc">Hours</span><span class="errorText f_left" id="TaskEstimateErrorMessage" style="display:none;"><b>Error:</b> You must enter a estimate in hours</span><br/>
+							</div>
+							
+							<label>Assign To</label><span class="requeried"></span>
+							<apex:selectList id="taskAssign" value="{!dateMy.member}" styleClass="validateMember" title="" multiselect="false" size="1" > 
+					  	 	 	<apex:selectOptions value="{!Members}"/>
+					  	 	</apex:selectList>
+					  	 	
+					  	 	<div id="firstDedicated" style="display:none;">
+						  	 	<label>Percent Dedicated</label>
+						  	 	<apex:selectList id="taskPercentDedicated" value="{!dateMy.Percent}" styleClass="margin" title="" multiselect="false" size="1" > 
+						  	 	 	<apex:selectOptions value="{!PercentDedicated}"/>
+						  	 	</apex:selectList>
+						  	</div>
+						  	
+							<span class="errorText f_left" id="TaskMemberErrorMessage" style="display:none;"><b>Error:</b> You must enter a Team</span><br/>
+							<div id="result">
+								
+							</div>
+							<label>&nbsp;</label><span class="no_requeried"></span><a href="javascript:;" class="assigned" onclick="addAssigne();">Add another Assignee</a><br/><br/>
+							
+							<label>% Complete</label><span class="no_requeried"></span>
+							<apex:selectList id="taskPercent" styleClass="validateMember" value="{!Task.Percent_Completed__c}" title="" multiselect="false" size="1" >
+					  	 	 	<apex:selectOptions value="{!Percent}"/> 
+					  	 	</apex:selectList>
+							<br/>
+							<label>Description</label><span class="no_requeried"></span>
+							<apex:inputTextarea styleClass="no_float" value="{!Task.Description__c}" rows="5" cols="12" id="taskdesc" />
+							<br/> 
+							
+							<br/> 
+							<hr color="#999999" size="1px" />
+							<a  href="javascript:;" onclick="hideAdvanced()" id="advancedLinks" class="advanced">Advanced options...</a>
+							<br/><br/>  
+							<div id="advanced" style="display: none;">
+								<label>Priority</label><span class="no_requeried"></span>
+								<apex:selectList id="taskPriority" value="{!Task.Priority__c}" title="" multiselect="false" size="1" >
+						  	 	 	<apex:selectOptions value="{!Priority}"/>  
+						  	 	</apex:selectList><br/>
+						  	 	<label>File(s)</label><span class="no_requeried"></span><br/>
+						  	 	<apex:repeat value="{!Attachment}" var="at"  >	
+						  	 		<span id="attach{!at.idAttachment}">
+						  	 			<label>&nbsp;</label><span class="no_requeried"></span>	  	 	
+							  	 		<a href="javascript:;" class="{!at.contentType}">{!at.nameAttachment}({!at.bodyLenght}k)</a>
+							  	 		<a href="javascript:;"  onclick="removeAttachment('{!at.idAttachment}')"><img alt="" src="{!URLFOR($Resource.PeopleResourceFiles, '/images/layout/icons/delete.png')}"/></a><br/>
+									</span>
+								</apex:repeat>
+								
+						  	 	<label>&nbsp;</label><span class="no_requeried"></span>
+						  	 	<div id="inputTeamFileContainer">
+									<input id="tempfile_0" name="file" class="inputFileControl" size="20" title="Type the path of the file or click the Browse button to find the file." type="file" />
+								</div>
+								
+						  	 	<br/>
+						  	 	<div id="frame_container"></div>
+						  	 	<br/>
+								<label>&nbsp;</label><span class="no_requeried"></span><a href="javascript:;" class="assigned" onclick="addAttach();">Attach another file</a><br/><br/>
+								<label>Parent</label><span class="no_requeried"></span><apex:inputField styleClass="auto" id="parentTask" value="{!Task.ParentTask__c}" /><br/>
+								<hr color="#999999" size="1px" />
+							</div>
+							
+							<apex:outputpanel rendered="{!IF(TypeOfAction == 'Edit',true,false)}" layout="block">	
+								<label>Created by &nbsp;</label>
+								<a class="desc" href="peopleprofiledisplay?id={!Task.CreatedById}">{!Task.CreatedBy.Name}  </a>{!dateMy.createDate}
+								<br/>
+								<br/>
+								<label>Last Modify by &nbsp; </label><a class="desc" href="peopleprofiledisplay?id={!Task.LastModifiedById}">{!Task.LastModifiedBy.Name}  </a>{!dateMy.lastModify}
+								<br/>
+								<br/>
+								<hr color="#999999" size="1px" />
+								<br/>
+							</apex:outputpanel>
+							<div style="position: relative; height: 80px;">
+								<div class="buttons">
+									<span id="currentEventAction"></span>					 
+									<apex:commandButton styleClass="SaveBtn auto" action="{!saveTask}" rerender="currentTaskId" onclick="memberAssigne(); saveTaskMessage();" oncomplete="setTimeout('processUploads();', 1500);" value="Save" id="saveButton" />
+									<apex:commandButton styleClass="cancelBtn auto" onclick="history.go(-1);" value="Cancel" id="cancelButton"/>
+								</div>  
+								<div class="clear"></div>  
+							</div>
+							<div class="clear"></div>
+							</div>
+					</apex:form>
+					<div id="formUploadContainer" style="display:none;">
+						<!-- Iframe for upload file -->
+						<form action="/p/attach/NoteAttach" enctype="multipart/form-data" id="uploadImageForm_0" target="iframeUpload0" method="post">
+							<span id="inputFileContainer" style="display:none;"></span>
+							<input type="hidden" class="hiddenClass" name="pid" id="done_pid" value="" />
+						</form>					
+						<iframe name="iframeUpload0" style="display:none;" ></iframe>
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<apex:repeat value="{!AssignMember}" var="member" first="1" >
+	 	<script>	
+	 		addAssigne('{!member.IdMember}','{!member.Percent}');
+	 	</script>
+	</apex:repeat>
+	<script>	
+		function loadFunctions () {
+			//changeFocusAttr();
+			initializeProject();
+			checkMilestone();
+		}
+		
+		window.onload = loadFunctions;
+					
+	</script>	
+</apex:page>

@@ -1,0 +1,216 @@
+<template>
+
+	<div id="title-element" style="position: relative;">
+		<div data-id="scrollTo" style="position: absolute; top: -50px; left: 0"></div>
+	  </div>
+	  
+	<div  class="" style="background-color: white;margin:auto; width:80%">
+		<div class="slds-grid slds-gutters slds-border_bottom">
+			<div class="slds-col slds-size_11-of-12 " >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					active-section-name={activeSectionName} 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px;--sds-c-accordion-heading-font-size:16pt;">
+					<lightning-accordion-section name='A' label={header}  style="font-size:36px;font-weight: 400; ">
+						<p class="slds-p-horizontal_small" style="text-align:justify;font-weight: 300;font-size:18px">
+							<span  style="font-weight: 400;">About: </span>{aboutTheInfo}
+						</p>
+						<p class="slds-p-horizontal_small" style="font-weight: 300;font-size:18px">
+							<span style="font-weight: 400;">Owner: </span>
+							<template iterator:it={OwnerObject}>
+								<span key={it.value.label}>
+									<span if:true={it.last} class="list-last">
+										<lightning-formatted-url value={it.value.url} label={it.value.label} target="_blank" style="color: #205ca0;"></lightning-formatted-url> 
+									</span>
+									<span if:false={it.last} class="list-last">
+										<lightning-formatted-url value={it.value.url}  label={it.value.label} target="_blank" style="color: #205ca0;"></lightning-formatted-url>
+										<span> & </span>
+									</span>
+								</span>
+							</template>
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch" onclick={openQuipDocInNewTab}>Open</button>
+			</div>
+			
+		</div>
+		
+		<!-- <div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="GDC & Geo Professional Services Team - RACI">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About:</strong> This document seeks to outline the Roles & Responsibilities of the various actors involved in project delivery in the context of the GDC operating model. It will define these in the form of a RACI matrix.
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Udit Gupta & Ashok Raghupathy
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div>
+		<div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="Project Execution Operating Model (Professional Services + GDC)">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About: </strong>Operating model which is currently being used across geography (LATAM), when the GDC is a delivery partner working with the (LATAM) Professional Services group. This is to provide an understanding of the high-level process of how a project is executed in such cases. This can be amended & extended for other geographies taking into account criteria like - timezones, language, staffing mix, etc.
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Prabhat Sharma
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div>
+		<div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="Entry/Exit Checklist with Guidelines for GDC Projects">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About:</strong>The initiative has defined certain checklists and guidelines for different phases of the Project Lifecycle. Each phase contains a list of Guidelines, an Entry and Exit Checklist, and important resources to document various artifacts as part of the project. This initiative aims to minimize/eliminate any issues by introducing a framework that ensures standardization among the projects.
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Chandrika Burli
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div>
+		<div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="GDC Quality Framework & Metrics">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About: </strong>About: Seeks to standardize quality levels for all GDC relating engagements in different phases of the delivery life cycle.
+
+
+
+							Scopes & Goals for the initiative.
+							
+							Best practices and guidelines for the config and customization of the application.
+							
+							Propose toolsets for the code review process.
+							
+							Sample Templates for documentation, spanning from Design to Deployment.
+							
+							Establish guidelines to drive Code Quality in engagements
+							
+							Define which Metrics should apply (basis project types & complexity)
+							
+							When these Metrics should apply (which phases of the project)
+							
+							Who is accountable for adhering to these Metrics
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Prabhat Sharma
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div>
+		<div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="Learn DevOps">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About:</strong>The initiative has defined certain checklists and guidelines for different phases of the Project Lifecycle. Each phase contains a list of Guidelines, an Entry and Exit Checklist, and important resources to document various artifacts as part of the project. This initiative aims to minimize/eliminate any issues by introducing a framework that ensures standardization among the projects.
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Prabhat Sharma
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div>
+		<div class="slds-grid slds-gutters">
+			<div class="slds-col slds-size_11-of-12 slds-border_bottom" >
+
+				<lightning-accordion 
+					allow-multiple-sections-open
+					class="example-accordion" 
+					onsectiontoggle={handleToggleSection} 
+					active-section-name="A" 
+					style="margin:0rem, 5rem,0rem,5rem;font-size:16px">
+					<lightning-accordion-section name="A" label="Effort Estimation Framework">
+						<p class="slds-p-horizontal_small" style="text-align:justify;">
+							<strong>About:</strong>Leveraging a standard framework to estimate the development and testing efforts basis requirements broken down into work breakdown structure elements (WBSe) for Salesforce requirements across verticals. The efforts would be classified as custom or configuration, wherever applicable, to provide an estimate of time/effort and an understanding of the skills required to deliver the requirements.
+						</p>
+						<p class="slds-p-horizontal_small">
+							<strong>Owner: </strong>Akash Banerjee
+						</p>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<br/>
+			</div>
+			<div class="slds-col slds-size_1-of-12">
+				<button class="slds-button slds-button_brand slds-button_stretch">Open</button>
+			</div>
+			
+		</div> -->
+	</div>
+
+	
+	
+</template>

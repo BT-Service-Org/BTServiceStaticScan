@@ -1,0 +1,36 @@
+<template>
+    <div class="slds-box slds-theme_warning slds-theme_alert-texture slds-m-vertical_medium">
+        This feature is not currently functional.  It is on the roadmap and will be completed prior to Solution Finder being generally available.
+    </div>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-combobox label="Type" value={typeValue} options={typeOptions} onchange={handleTypeChange}></lightning-combobox>
+            <lightning-textarea name="Feedback" label="Feedback" onchange={handleFeedbackChange}></lightning-textarea>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-tile label="Arthur Lockrem" type="media">
+                <lightning-icon slot="media" icon-name="standard:user"></lightning-icon>
+                <p class="slds-truncate" title="alockrem@salesforce.com">alockrem@salesforce.com</p>
+            </lightning-tile>
+            <div class="slds-p-top_x-small slds-m-top_x-small" style='border-top: 1px #c0c0c0 solid;'>
+                <div if:true={feedback.slackChannel} class="slds-p-vertical_x-small" onclick={handleSlackClick}>
+                    <img src={slackIcon} class="slds-m-right_small" /> {feedback.slackChannel}
+                </div>
+                <div if:true={feedback.email} class="slds-p-vertical_x-small" onclick={handleEmailClick}>
+                    <lightning-icon icon-name="standard:email" size="small" class="slds-m-right_small"></lightning-icon> {feedback.email}
+                </div>
+            </div>
+            <div class="slds-p-top_x-small slds-m-top_x-small" style='border-top: 1px #c0c0c0 solid;'>
+                <template for:each={context.history} for:item="selection">
+                    <div key={selection.name} class="slds-p-vertical_x-small">
+                        - <b>{selection.title}</b> - {selection.description}<br />
+                        <i style='color: #b0b0b0;'>{selection.nextQuestion}</i>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <lightning-button label="Submit" variant="success" onclick={handleSave}></lightning-button>
+    </div>
+</template>

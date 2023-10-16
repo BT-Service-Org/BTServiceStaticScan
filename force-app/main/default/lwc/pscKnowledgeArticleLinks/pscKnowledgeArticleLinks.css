@@ -1,0 +1,17 @@
+.article_links {
+    list-style-type: disclosure-closed;
+    color: #0070D2;
+    margin-left: 2rem;
+}
+
+.card {
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.summary {
+    color: #032D60;
+    font-size: 21px;
+    line-height: 20px;
+    margin-bottom: 10px;
+}

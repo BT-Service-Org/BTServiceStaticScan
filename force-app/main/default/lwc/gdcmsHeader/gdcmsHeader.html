@@ -1,0 +1,45 @@
+<template>
+    <!--div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <a>About GDC</a>
+        <a href="https://csg-gdc-developer-edition.ap24.force.com/gdcindia/gdc-team">GDC Team</a>
+        <a>Employee Engagement</a>
+        <a href="https://csg-gdc-developer-edition.ap24.force.com/gdcindia/asset-repository">Asset Repository</a>
+        <a>Process &#38; Delivery Excellence</a>
+        <a href="https://csg-gdc-developer-edition.ap24.force.com/gdcindia/success-stories">Success Story</a>
+      </div-->
+      <div if:true={isDesktopDevice}>
+      <div class="topnav">
+        <img class="logo" src={salesforceLogo}></img>
+        <span style="font-weight:900;font-size:18px;color: #032E61;">Global Delivery Centre</span>
+        <div class="nav-items">
+          <template for:each={navBarElements} for:item="item">
+            <a data-id={item} key={item} onclick={navigate}>{item}</a>
+          </template>
+        </div>
+      </div>
+      <div style="height: 53px;"></div>
+      </div>
+      
+      <div if:false={isDesktopDevice}>
+        <c-gdcms-header-nav-bar page-name = {pageName}></c-gdcms-header-nav-bar>
+        <!-- <nav role="navigation">
+          <div class="menuToggle">
+
+             <input class="inputlogo" type="checkbox" onclick={handleClick} /> 
+             <div style="display: flex;">
+              <img class="logo" src={salesforceLogo} >
+              <div if:true={show} class="heading">Global Delivery Centre</div>
+              <div if:false={show} class="pageName">{pageName}</div>
+            </div>
+              <ul if:true={show} class="menu">
+                  <template for:each={navBarElements} for:item="item">
+                      <a key={item}>
+                          <li data-id={item} onclick={navigate}>{item}</li>
+                      </a>
+                  </template>
+              </ul>
+          </div>
+      </nav> -->
+      </div>
+</template>

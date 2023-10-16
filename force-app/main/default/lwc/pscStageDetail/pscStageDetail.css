@@ -1,0 +1,50 @@
+.stage-page {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: auto;
+    margin-top: 20px;
+}
+.font {
+    letter-spacing: -0.004em;
+}
+.stage-name {
+    font-size: 26px;
+    line-height: 32px;
+    color: #032D60;
+    margin-top: 20px;
+    margin: 20px 0px 0px 20px;
+}
+
+.desc-head {
+    font-size: 18px;
+    line-height: 40px;
+    color: #032D60;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.stage-desc {
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+    margin-left: 20px;
+
+}
+.method-cards {
+    margin-top: 20px;
+    width:90%;
+    margin:auto;
+}
+.stage-top {
+    /* background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px; */
+    padding: 1rem;
+    width: 98%;
+    margin: auto;
+    margin-top: 20px;
+}
+.stage-methods {
+    display: flex;
+    justify-content: space-between;
+}

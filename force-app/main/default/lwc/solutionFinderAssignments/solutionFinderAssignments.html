@@ -1,0 +1,24 @@
+<template>
+
+    <lightning-spinner if:true={isLoading} alternative-text="Loading..." size="large"></lightning-spinner>
+
+    <lightning-card title="Assignments">
+        <div slot="actions">
+            {selectedUserName}
+            <a if:true={selectedUser} onclick={handleChangeUser} class="slds-m-left_small">
+                Change
+            </a>
+        </div>
+        <div>
+            <div if:true={displaySearch}>
+                <c-solution-finder-user-search onselected={handleUserSelected}></c-solution-finder-user-search>
+            </div>
+            <div if:true={displayEdit}>
+                <template for:each={items} for:item="item">
+                    <c-solution-finder-assignment key={item.name} item={item} assignments={assignmentsByOptionName}
+                        indent=0 onchange={handleRoleChange}></c-solution-finder-assignment>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>

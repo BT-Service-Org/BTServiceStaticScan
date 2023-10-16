@@ -1,0 +1,132 @@
+<template>
+	<div class="slds-utility-bar_container" aria-label="Utility Bar">
+		<h2 class="slds-assistive-text">Utility Bar</h2>
+		<!--<ul class="slds-utility-bar">
+			<li class="slds-utility-bar__item">
+				<button class="slds-button slds-utility-bar__action slds-is-active" aria-pressed="true">
+					<svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+						<use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#call"></use>
+					</svg>
+					<span class="slds-utility-bar__text">Contact Us</span>
+				</button>
+			</li>
+		</ul>-->
+		<div class="slds-utility-panel slds-grid slds-grid_vertical slds-is-open" role="dialog"
+			aria-labelledby="panel-heading-01" style="right:0px; bottom: 0px; z-index:1;">
+			<div class="slds-utility-panel__header slds-grid slds-shrink-none">
+				<div class="slds-media slds-media_center">
+					<div class="slds-media__figure slds-m-right_x-small">
+						<span class="slds-icon_container">
+							<svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+								<use xlink:href={svgUrl}></use>
+							</svg>
+						</span>
+					</div>
+					<div class="slds-media__body">
+						<h2 id="panel-heading-01">{headline}</h2>
+					</div>
+				</div>
+				<div class="slds-col_bump-left slds-shrink-none">
+					<button class="slds-button slds-button_icon slds-button_icon" title="Close Panel"
+						onclick={closePanel}>
+						<svg class="slds-button__icon" aria-hidden="true">
+							<use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#minimize_window"></use>
+						</svg>
+						<span class="slds-assistive-text">Close Panel</span>
+					</button>
+				</div>
+			</div>
+			<div class="slds-utility-panel__body">
+				<template if:false={showForm1}>
+					<lightning-layout multiple-rows="true">
+
+						<lightning-layout-item padding="around-small" size="12">
+
+							<lightning-input class="inputComp" value={firstName} type="text" label="Name"
+								placeholder="Enter your name here" required onchange={changeFirstName}>
+							</lightning-input>
+
+							<lightning-input class="inputComp" value={emailAddress} type="email" label="Email"
+								placeholder="Enter your email here" required onchange={changeEmailAddress}>
+							</lightning-input>
+
+							<lightning-combobox class="inputComp" name="typeOfQuery" label="Contact us related to"
+								value={queryType} options={options} onchange={handleChange} required="true">
+							</lightning-combobox>
+
+							<lightning-textarea class="inputComp" value={descrption} name="input1" label="Description"
+								required onchange={changeDesc}>
+							</lightning-textarea>
+
+							<div class="slds-align_absolute-center">
+								<div class="slds-p-around_medium lgc-bg">
+									<lightning-button type="submit" variant="brand" label="Submit" title="Submit"
+										onclick={handleClick} class="slds-m-left_x-small" value="submit">
+									</lightning-button>
+								</div>
+							</div>
+
+						</lightning-layout-item>
+
+					</lightning-layout>
+				</template>
+
+				<template if:true={showForm1}>
+					<lightning-layout>
+						<lightning-layout-item padding="around-small" size="12">
+							<!-- <lightning-record-form 
+								object-api-name={objectApiName} 
+								fields={fields}
+								onsuccess={handleSuccess}
+								onsubmit={createFeedbackRecord}>
+							</lightning-record-form> -->
+							<lightning-record-edit-form 
+								object-api-name={objectApiName}
+								onsuccess={handleSuccess}
+								onerror={handleError}>
+								<!-- <lightning-messages> </lightning-messages> -->
+								<lightning-input-field field-name="gdc_ms_TeamMember__c" required="true"> </lightning-input-field>
+								<lightning-input-field field-name="gdc_ms_AssetTitle__c" required="true"> </lightning-input-field>
+								<lightning-input-field field-name="gdc_ms_ProjectName__c" required="true"> </lightning-input-field>
+								
+								<lightning-input-field field-name="gdc_ms_AssetUsageRating__c" required="true"> </lightning-input-field>
+								<lightning-input-field field-name="gdc_ms_AssetExperienceRating__c" required="true"> </lightning-input-field>
+								<lightning-input-field field-name="gdc_ms_AssetSuggestion__c" required="true"> </lightning-input-field>
+								<lightning-button
+									class="slds-m-top_small slds-align_absolute-center"
+									type="submit"
+									label="Submit Feedback"
+									variant="brand"
+								>
+								</lightning-button>
+							</lightning-record-edit-form>
+						</lightning-layout-item>
+
+					</lightning-layout>
+				</template>
+
+
+
+				<template if:true={showSuccessMessage}>
+					<div class="slds-align_absolute-center">
+						<p>
+							<lightning-formatted-text value="Your form has been submitted successfully!!">
+							</lightning-formatted-text>
+						</p>
+					</div>
+				</template>
+
+				<template if:true={showErrorMessage}>
+					<div class="slds-align_absolute-center">
+						<p>
+							<lightning-formatted-text
+								value="There is an issue while submitting the form. Please try again.">
+							</lightning-formatted-text>
+						</p>
+					</div>
+				</template>
+
+			</div>
+		</div>
+	</div>
+</template>

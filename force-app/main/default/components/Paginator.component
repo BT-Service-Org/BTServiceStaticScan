@@ -1,0 +1,55 @@
+<apex:component controller="PaginatorController" > 
+<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.discussionResourceFiles, 'inc/css/DiscussionSearchResults.css')}" />
+	 <div class="searchResultsPagination"> 
+		<div class="data">
+			Results {!firstItem} - {!lastItem} of {!totalItemsNumber} 
+
+		</div>
+		<div class="navigation">
+			<apex:form >
+				<ul>
+					<li>
+						<apex:commandLink action="{!firstPage}" rerender="searchResult" rendered="{!prevPageLinkShow}" >
+							<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first.gif')}" alt="" />
+						</apex:commandLink>
+						<apex:outputpanel rendered="{!NOT(prevPageLinkShow)}">
+							<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first_disabled.gif')}" alt="" />
+						</apex:outputpanel>
+					</li>
+					
+					<li>
+						<apex:commandLink styleclass="prevPage" action="{!prevPage}" value="Previous Page" rerender="searchResult" rendered="{!prevPageLinkShow}"/>	
+						<apex:outputpanel rendered="{!prevPageShow}">
+							<a href="javascript:;" class="prevPageDisabled">Previous Page </a>
+						</apex:outputpanel>
+					</li>
+					
+					<li>&nbsp; | &nbsp; </li>
+					
+					<li>
+						<apex:commandLink styleclass="nextPage" action="{!nextPage}" value="Next Page" rerender="searchResult" rendered="{!nextPageLinkShow}"/>	
+						<apex:outputPanel rendered="{!nextPageShow}">
+							<a href="javascript:;" class="nextPageDisabled">Next Page</a>
+						</apex:outputPanel>
+					</li>
+					
+					<li>
+						<apex:commandLink action="{!lastPage}" rerender="searchResult" rendered="{!nextPageLinkShow}" >
+							<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last.gif')}" alt="" />
+						</apex:commandLink>
+						<apex:outputpanel rendered="{!NOT(nextPageLinkShow)}">
+							<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last_disabled.gif')}" alt="" />
+						</apex:outputpanel>
+					</li>
+				</ul>	
+			</apex:form>						
+		</div>
+		<div class="pagecount">
+			<apex:form id="jumpToPageFormUp" onkeypress="return submitForm(event, '{!$Component.jumpToPageBtnUp}')">
+				Page <apex:inputText maxlength="3" size="1" id="jumpToPageInputUp" value="{!jumpPage}" onkeypress="submitForm(event,'{!$Component.jumpToPageBtnUp}')"/> of {!cntPagination}
+				<apex:commandButton style="display:none;" id="jumpToPageBtnUp" value="Jump to Page" action="{!jumpToPage}" rerender="searchResult"/>
+			</apex:form>
+		</div>
+	</div>
+
+</apex:component>

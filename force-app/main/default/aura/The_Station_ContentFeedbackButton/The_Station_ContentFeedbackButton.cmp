@@ -1,0 +1,59 @@
+<aura:component controller="The_Station_ContentFeedbackController">
+
+    <aura:attribute name="divStyle" type="String" default="float:left;margin-right:6px;margin-bottom:6px;" />
+    <aura:attribute name="showButton" type="boolean" default="true" />
+    <aura:attribute name="showIconButton" type="boolean" default="false" />
+    <aura:attribute name="contentName" type="String" />
+    <aura:attribute name="contentRecordId" type="String" />
+    <aura:attribute name="contentPieceId" type="String" />
+    <aura:attribute name="contentOwnerId" type="String" />
+    <aura:attribute name="contentPrimaryContactId" type="String" />
+    <aura:attribute name="contentOriginURL" type="String" />
+    <aura:attribute name="contentType" type="String" />    
+    <aura:attribute name="buttonLabel" type="String" default="Give Feedback" />
+    <aura:attribute name="runningUserInput" type="String" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />            
+    <aura:attribute name="iconName" type="String" default="utility:comments" />
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <div style="{!v.divStyle}">
+        <aura:if isTrue="{!v.showIconButton}">
+            <aura:if isTrue="{!v.showButton}">
+                <lightning:buttonIcon 
+                    aura:id="enabled-button" 
+                    class="" 
+                    iconName="{!v.iconName}" 
+                    variant="border-filled" 
+                    name="{!v.contentName}" 
+                    value="{!v.contentRecordId}" 
+                    onclick="{!c.onFeedbackButtonFlow}" 
+                    alternativeText="{!v.buttonAltText}" 
+                    title="{!v.buttonAltText}" 
+                    type="{!v.contentType}"/>
+                <aura:set attribute="else">
+                    <lightning:buttonIcon aura:id="disabled-button" class="" iconName="{!v.iconName}" variant="border-filled" name="{!v.contentName}" value="{!v.contentRecordId}" alternativeText="{!v.buttonAltText}" title="{!v.buttonAltText}" disabled="true"/>
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.showButton}">
+                <button 
+                    aura:id="enabled-button" 
+                    class="{!'slds-button ' + v.buttonTheme}" 
+                    name="{!v.contentName}" 
+                    value="{!v.contentRecordId}" 
+                    onclick="{!c.onFeedbackButtonFlow}" 
+                    alternativeText="{!v.buttonAltText}" 
+                    title="{!v.buttonAltText}" 
+                    type="{!v.contentType}">{!v.buttonLabel}
+                </button>
+                <aura:set attribute="else">
+                    <button aura:id="disabled-button" class="{!'slds-button ' + v.buttonThemeDisabled}" disabled="true">{!v.buttonLabel}</button>
+                </aura:set>    
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

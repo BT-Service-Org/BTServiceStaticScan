@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property label="Placeholder Text" name="placeholder" type="String" default="Search Methodology" />
+            <property label="Search Page Name" name="searchPageURI" type="String" default="/ServicesCentral/s/global-search/%40uri" />
+            <property label="Search Page Filter" name="searchFilter" type="String" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

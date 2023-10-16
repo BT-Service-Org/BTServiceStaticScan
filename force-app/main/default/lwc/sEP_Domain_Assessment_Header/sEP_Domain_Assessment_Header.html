@@ -1,0 +1,40 @@
+<template>
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <lightning-icon icon-name="action:new_note" alternative-text="New note" title="New note"></lightning-icon>
+            </div>
+            <h1>
+                <span class="slds-page-header__title slds-truncate" title="Domain Name">{domainName}</span>
+              </h1>
+        </div>
+
+        <div class="slds-page-header__row slds-page-header__row_gutters">
+            <div class="slds-page-header__col-details">
+                <ul class="slds-page-header__detail-row">
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Description Header">Domain Description</div>
+                        <div class="slds-truncate"
+                            title="Description">description from Domain object</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Field 2 (3)">{recordId}</div>
+                        
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Field 3">Parent Esitimate</div>
+                        <div class="slds-truncate" title="Estimate Link">
+                            <a href={estimateURL}>Parent Estimate</a>
+                        </div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Field 4">Sum of Function Points</div>
+                        <div class="slds-truncate" title="Sum of Function Points">{functionPoints}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</template>

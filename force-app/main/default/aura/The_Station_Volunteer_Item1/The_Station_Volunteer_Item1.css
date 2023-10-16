@@ -1,0 +1,33 @@
+.THIS .title1{
+    display: flex;
+  	justify-content: center;
+  	align-items: center;
+    font-style: gras;
+    font-size: 20px;
+    color: grey;
+}
+
+.THIS .slds-border_bottom{
+    margin-top : 10px;
+}
+
+.THIS .dateText{
+    margin-top: 20px;
+    margin-left: 10px;
+    font-style: gras;
+    color: black;
+    font-size : 15px;
+}
+
+.THIS .title{
+    color: #1180C0; 
+    margin-left: 10px;
+    font-style: gras;
+    margin-top: 10px;
+    font-size : 15px;
+}
+
+.THIS .text{
+    margin-left: 10px;
+    margin-top: 10px;
+}

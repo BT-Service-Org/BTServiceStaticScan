@@ -1,0 +1,129 @@
+<apex:page docType="html-5.0" sidebar="false" showHeader="false" standardStylesheets="false" controller="sh_SearchController">
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" dir="ltr" lang="en-US"><!--<![endif]-->
+ <head profile="http://gmpg.org/xfn/11">
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+   <title>Search Results Home</title>
+   <meta name='robots' content='noindex,follow' />
+   <apex:stylesheet value="{!URLFOR($Resource.ServicesHubCSS, 'css/sfServices.style.min.css')}" />
+   <apex:stylesheet value="{!URLFOR($Resource.ServicesHubCSS, 'css/sfServicesStyle.css')}" />
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'jquery1.11.1.js')}"/>
+   <apex:includeScript value="{!URLFOR($Resource.ServicesHubJS, 'javascript.min_1.22.js')}"/>
+
+   <!-- Google Analytics Tracker -->
+   <c:sh_GATracker />
+
+   <link rel="Shortcut Icon" href="{!URLFOR($Resource.ServicesHubContent, 'Content/images/favicon.ico')}" type="image/x-icon" />
+   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+   <style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+
+   <style>
+     .site-header { 
+     	background-image:url({! URLFOR($Resource.ServicesHubContent, '/Content/images/SF-Services_Header-BG_Default-A.jpg' )}); 
+     }
+   </style>
+ </head>
+ <body class="search search-results header-full-width full-width-content" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+    
+    <c:sh_searchNavigation domainVar="{!domainVariable}" />
+    
+    <div class="site-container">
+      <header class="site-header container-fluid" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+        <div class="wrap">
+          <img class="locked-flag" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/icon-locked-flag.svg')}" alt="Internal Use Only"/>
+          <div class="menu-search-buttons">
+            <div id="search-button" class="header-menu-button search-button"></div>
+            <div id="show-navigation-button" class="header-menu-button show-navigation-button"></div>
+          </div>
+          <div class="container">
+		      <a href="{!domainVariable}/sh_home" class="sf-home">
+		        <span class="sf-logo-wrapper">
+		          <img class="sf-logo" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/salesforce-logo.svg')}" alt="Salesforce.com" />
+		          <span class="sf-logo-accomp-text logo-accomp-text">SERVICES</span>
+		        </span>
+		      </a>
+		  </div>
+		  <h1 class="search-title wrapper-header-salesforce-sans">Search Results</h1>
+		  <div class="container">
+		    <div class="row">
+		      <div class="search-results-info">
+		        <span class="number-search-results-found">
+		          {!numResults}&nbsp;
+		        </span>
+		        Results for&nbsp;
+		        <apex:repeat value="{!criteria}" var="oneResult">
+		          <a href="{!oneResult.url}" class="btn btn-info">{!oneResult.display}</a>
+		        </apex:repeat>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	  </header>
+      <div class="site-inner container">
+		 <div class="content-sidebar-wrap row">
+		  <main class="content col-sm-8" id="main-content-container" role="main" itemprop="mainContentOfPage" 
+		        itemscope="itemscope" itemtype="http://schema.org/SearchResultsPage">
+		  </main>
+		  <div class="posts-grid-wrapper">
+		    <div class="row">
+		     <apex:repeat value="{!searchResults}" var="oneResult">
+		      <apex:outputPanel layout="inline" rendered="{!(oneResult.resultType == 'Project')}">
+		        <a href="{!domainVariable}/sh_project?name={!oneResult.code}" class="col-sm-2 single-post-cell">
+		          <span class="cell-container">                
+		            <img width="295" height="295" src="{!URLFOR($Action.Attachment.Download, oneResult.imageAttachmentId)}" 
+		                                        class="img-responsive wp-post-image" alt="{!oneResult.name}" />                
+		            <span class="single-project-cell-container black-hover-state">
+		              <span class="sf-title">{!oneResult.name}</span><br/>
+		              <span class="sf-date">
+		                <span class="sf-date">{!oneResult.projectYear}</span>
+		              </span>
+		            </span>
+		          </span>
+		        </a>
+		      </apex:outputPanel>
+		      <apex:outputPanel layout="inline" rendered="{!(oneResult.resultType == 'Bio')}">
+		        <a href="{!domainVariable}/sh_bio?name={!oneResult.code}" class="col-sm-2 single-post-cell">
+		          <span class="cell-container">                
+		            <span class="team-member-container">
+		              <span class="team-member-info">
+		                <span class="team-member-name">{!oneResult.name}</span><br />
+		                <span class="job-title">{!oneResult.bioTitle}</span><br />
+		                <span class="view-bio">View Bio</span>
+	  	              </span>
+  		            </span>
+		            <img width="200" height="200" src="{!URLFOR($Action.Attachment.Download, oneResult.imageAttachmentId)}" 
+		                 class="img-responsive wp-post-image" alt="{!oneResult.name}" />            
+		          </span>
+		        </a>
+		      </apex:outputPanel>
+		     </apex:repeat>
+		      <div class="col-sm-2 single-label-cell">
+		        <div class="cell-container">
+		          <div class="cell-inner">
+		            <span class="search-label">
+		              <h2>Can't find what you need?</h2>
+		              <p class="search-content">If you have a very specific case study need, contact Phil Bruni for assistance.</p>
+		              <p>pbruni@salesforce.com</p>
+		            </span>
+		          </div>
+		        </div>
+		      </div>
+		    </div> <!-- End div class="row" -->
+		  </div> <!-- End div class="posts-grid-wrapper" -->
+		 
+		  <!-- Pagination Component -->
+		  <c:sh_projectPrevNext />
+		</div> <!-- End div class="content-sidebar-wrap" -->
+      </div> <!-- End div class="site-inner container" -->
+
+      <!--footer -->
+      <c:sh_footer domainVar="{!domainVariable}"/>
+    </div><!-- End div class="site-container" --> 
+ </body>
+</html>
+  
+</apex:page>

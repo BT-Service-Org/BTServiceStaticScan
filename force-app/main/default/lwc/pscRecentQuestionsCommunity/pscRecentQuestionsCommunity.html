@@ -1,0 +1,32 @@
+<template>
+    <h3 class="section-title ITC_font">Recent Questions</h3>
+    <div class="feature_container">
+       <div class="features">
+          <template for:each={displayFeatureContent} for:item="feature"  if:false={showDefaultMessage}>
+             <div key={feature.recId} class="feature" if:true={feature.title}>
+                <h3 class="feature-title ITC_font">{feature.title}</h3>
+                <lightning-formatted-rich-text value={feature.body}
+                   class="feature_desc salesforce_font"></lightning-formatted-rich-text>
+                <a href={feature.navigationURL} target="_blank">
+                   <p  class="salesforce_font" style="font-size:14px;margin-top:10px" if:true={feature.navigationURL}>View in Slack</p>
+                </a>
+             </div>
+          </template>
+          <h3 class="coming-soon" if:true={showDefaultMessage}>No Questions Found</h3>
+       </div>
+       <div class="button ITC_font" if:false={showDefaultMessage}>
+          <span class="slackurl">
+             <lightning-button-icon icon-name="utility:left" alternative-text="Settings" title="Settings"
+                onclick={prev} disabled={isPrevDisableButton}></lightning-button-icon>
+             <lightning-button-icon icon-name="utility:right" alternative-text="Add user"
+                class="slds-m-left_xx-small" title="Add user" onclick={next} disabled={isNextDisableButton}></lightning-button-icon>
+          </span>
+          <a href={detailPageUrl}>
+             <span>
+                Show All
+                <lightning-icon icon-name="utility:forward" class="arrow" size="x-small"></lightning-icon>
+             </span>
+          </a>
+       </div>
+    </div>
+ </template>

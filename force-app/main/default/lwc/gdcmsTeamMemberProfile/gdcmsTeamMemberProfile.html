@@ -1,0 +1,79 @@
+<template>
+    <div if:true={profile}>
+        <div class="slds-container_large profile-container">
+            <article class="slds-card">
+                <div class="slds-p-around_x-large">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_2-of-12 slds-text-align_right slds-is-relative">
+                            <div class="slds-is-absolute profile-image-container">
+                                <image class="profile-image" src={imgUrl}></image>
+                            </div>
+                            <div class="slds-is-absolute dark-leaves-image">
+                                <image class="leaves-image" src={darkLeavesImageURL}></image>
+                            </div>
+                            <div class="slds-is-absolute light-leaves-image">
+                                <image class="leaves-image" src={lightLeavesImageURL}></image>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_8-of-12">
+                            <div class="slds-show_inline-block">
+                                <div
+                                    class="team-member-name-position-block slds-p-left_xx-large slds-p-bottom_medium slds-p-top_x-large">
+                                    <p class="team-member-name font-proxima-nova">
+                                        {profile.userDetails.name}
+                                    </p>
+                                    <p class="team-member-position font-proxima-nova">
+                                        {profile.userDetails.positionName}
+                                    </p>
+                                </div>
+                                <div class="slds-p-top_medium slds-p-left_small">
+                                    <p if:true={certificatesInString} class="team-member-certificates font-salesforce-sans">
+                                        {certificatesInString}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                            <span if:true={certifiedProfessionalImage}>
+                                <image class="certified-professional-image" src={certifiedProfessionalImage}></image>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="slds-p-around_large">
+                        <p class="team-member-summary font-salesforce-sans">{summaryData}</p>
+                    </div>
+                    <div class="slds-p-horizontal_large">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-small-size_4-of-12 slds-size_1-of-1" if:true={skillHighlightsData}>
+                                <h2 class="team-member-skill-heading font-proxima-nova">Skill Highlights</h2>
+                                <ul class="slds-list_dotted slds-p-top_medium">
+                                    <template for:each={skillHighlightsData} for:item="skill">
+                                        <li key={skill} class="team-member-skill slds-p-left_small font-proxima-nova">{skill}</li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <div class="slds-col slds-small-size_4-of-12 slds-size_1-of-1" if:true={verticalExpertiseData}>
+                                <h2 class="team-member-skill-heading font-proxima-nova">Industry Experience</h2>
+                                <ul class="slds-list_dotted slds-p-top_medium">
+                                    <template for:each={verticalExpertiseData} for:item="skill">
+                                        <li key={skill} class="team-member-skill slds-p-left_small font-proxima-nova">{skill}</li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <div class="slds-col slds-small-size_4-of-12 slds-size_1-of-1" if:true={customerCredentialsData}>
+                                <h2 class="team-member-skill-heading font-proxima-nova">Customer Credentials</h2>
+                                <ul class="slds-list_dotted slds-p-top_medium">
+                                    <template for:each={customerCredentialsData} for:item="skill">
+                                        <li key={skill} class="team-member-skill slds-p-left_small font-proxima-nova">{skill}</li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-curve slds-is-relative">
+                    <div class="slds-is-absolute bush-image"><image src={bushImageURL}></image></div>
+                </div>
+            </article>
+        </div>
+    </div>
+</template>

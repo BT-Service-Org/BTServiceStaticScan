@@ -1,0 +1,123 @@
+<apex:page sidebar="false" showHeader="false" controller="TeamsWidgetActiveDiscussionsController" >
+<style>
+table.discussion td {
+	border-bottom:1px solid #E1E1E1;
+}
+
+table.discussion {
+	margin-top:5px;
+}
+.minifeed_discussion {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin: 5px 0pt;
+	padding:0pt;
+}
+
+.minifeed_discussion li{
+	background: url({!URLFOR($Resource.commonResources, 'images/icons/minifeeds/minifeed_discussion.gif')}) no-repeat scroll 1px 4px;
+	
+	overflow: hidden;
+	padding: 3px 0px 3px 25px;
+	position: relative;
+	margin-bottom: 5px;
+}
+</style>
+	<div class="myBigWidget">
+		<div class="teamBlockTitle">
+			<h4>Active Discussions</h4>
+		</div>
+		<div class="linkAction">
+			<a href="javascript:viewOverlayForm('NewTopicForm');SaveNewObjectThread();" class="topRightLinks" >New</a> |
+			<a href="#" class="topRightLinks" >See More&#187;</a>
+		</div>
+		<div class="threads">
+			<div style="{!IF(activeDiscussionsSize > 0, 'display:none', '')}; padding:10px; text-align:center;">
+				<span>No discussion topic have been created yet.</span> 
+			</div>
+			<div style="{!IF(activeDiscussionsSize > 0, '', 'display:none')};" >		
+				<apex:dataTable value="{!discussions}" var="discu" id="ActiveDiscussionTable" styleClass="discussion" >
+					<apex:column width="34%">
+						<apex:facet name="header">Topics</apex:facet>
+						<apex:outputLink value="/apex/discussionReply?id={!discu.discussion.Id}" >{!discu.discussion.Subject__c}</apex:outputLink>
+					</apex:column>
+					<apex:column width="26%">
+						<apex:outputPanel layout="block" rendered="{!IF(LEN(discu.AuthorPicture) == 0, true, false)}" style="width:25px;float:left;margin-right:3px;"> 
+							<apex:image width="25" height="25" url="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />							
+						</apex:outputPanel> 
+						<apex:outputPanel layout="block" rendered="{!IF(LEN(discu.AuthorPicture) == 0, false, true)}" style="float:left;margin-right:4px;"> 
+							<apex:image width="25" height="25" url="/servlet/servlet.FileDownload?file={!discu.AuthorPicture}" />		
+						</apex:outputPanel>
+						<apex:facet name="header">Author</apex:facet>
+						<apex:outputPanel layout="block" style="float:left;margin-top:2px;"> 
+							<apex:outputLink value="PeopleProfileDisplay?id={!discu.AuthorId}" >{!discu.Author}</apex:outputLink>
+						</apex:outputPanel>
+					</apex:column>
+					<apex:column width="10%">
+						<apex:facet name="header">Views</apex:facet>
+						<div class="number" style="text-align:center;"><apex:outputText value="{!discu.Views}"/></div>
+					</apex:column>
+					<apex:column width="10%">
+						<apex:facet name="header">Replies</apex:facet>
+						<div class="number" style="text-align:center;"><apex:outputText value="{!discu.Replies}"/></div>
+					</apex:column>
+					<apex:column width="20%">
+						<apex:facet name="header">Last Reply</apex:facet>
+						<apex:outputText value="{!discu.LastPostDate}" ></apex:outputText>
+						<apex:outputText value=" by " rendered="{!IF((discu.LastReplyAuthorId != ''), true, false)}" />
+						<apex:outputText value="No Replies " rendered="{!IF((discu.LastReplyAuthorId != ''), false, true)}" />
+						<apex:outputLink value="PeopleProfileDisplay?id={!discu.LastReplyAuthorId}" >{!discu.LastReplyAuthor}</apex:outputLink>
+					</apex:column>
+				</apex:dataTable>
+			</div>
+		</div>
+	</div>
+	<!-- small widget -->
+	
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Active Discussion</h4></div></div>
+   		</div>
+   		<div class="box_content">
+    		<div class="back_gray">
+     			<a href="javascript:;">New Discussion</a> | <a href="javascript:;">See all</a>
+    		</div>   
+    		<div style="{!IF(activeDiscussionsSize > 0, 'display:none', '')}; padding:10px; text-align:center;">
+				<span>No discussion topic have been created yet.</span> 
+			</div>   
+			<div style="{!IF(activeDiscussionsSize > 0, '', 'display:none')};" >
+				<ul class="minifeed_discussion">		
+					<apex:repeat value="{!discussions}" var="discu">
+						<li>
+							<apex:outputLink value="/apex/discussionReply?id={!discu.discussion.Id}" >{!discu.discussion.Subject__c}</apex:outputLink>
+						</li>
+					</apex:repeat>
+				</ul>
+			</div>   
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+	</div>
+	</div>	
+	<script type="text/javascript">
+		widgetPosition();
+		function widgetPosition() {
+			var widSmall = $$('.mySmallWidget');
+			var widBig = $$('.myBigWidget');
+			
+			for(var i =0; i<widSmall.length; i++) {
+				if(widSmall[i].ancestors()[1].hasClassName('holder')){
+					widSmall[i].remove();
+				}
+			}
+			
+			for(var i =0; i<widBig.length; i++) {
+				if(widBig[i].ancestors()[1].hasClassName('rightCol')){
+					widBig[i].remove();
+				}
+			}
+		}
+	</script>
+	
+	
+</apex:page>

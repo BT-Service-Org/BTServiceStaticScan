@@ -1,0 +1,56 @@
+<apex:page id="deleteReplyPage" sidebar="false" controller="DiscussionReplyController" tabStyle="DiscussionForum__c">
+	<style>
+		.deleteMsj {
+			margin: 20px;
+		}
+		
+		.deleteMsj div.sure {
+			font-weight: bold;
+			margin: 3px;
+			color: #333333;
+		}
+		
+		.deleteMsj div.info {
+			color: #ADADAD;
+		}
+		
+	</style>
+	<script>
+	
+	function statusDeletingReply(obj) {
+		var buttons = $$('input.saveBtn');
+		for (var i = 0; i < buttons.size(); i++) {
+			if(buttons[i].value == 'Continue and delete reply'){
+				buttons[i].value = '  Deleting...  ';
+				buttons[i].disabled = 'disabled';
+			}
+		}
+	}	
+	
+	</script>
+	<div class="replyTopic_overlay" id="deleteReply_overlay" style="display: none;">
+		<div class="formsHeader">
+			<table border="0" style="width:100%">
+				<tr>
+					<td>Delete Reply</td>
+					<td align="right">
+						<img style="cursor:pointer;vertical-align:center;" 
+							 src="{!URLFOR($Resource.discussionResources, 'images/layout/icons/close_icon.gif')}" 
+							 onclick="modal.close();" />
+					</td>
+				</tr>
+			</table>
+		</div>
+		<apex:form id="deleteReplyForm">			
+			<div class="deleteMsj">
+				<div class="sure">Are you sure you want to delete this reply?</div>
+				<div class="info">Once a reply is deleted, it is not recoverable.</div>
+			</div>
+			<hr color="#999999" size="1px"> 
+			<div align="center">
+				<apex:commandButton id="deleteReplyBtn" rerender="replysHolder" styleclass="saveBtn" value="Continue and delete reply" action="{!deleteReply}" onclick="statusDeletingReply(this);" onComplete="modal.close();" />
+				<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+			</div>  						
+		</apex:form>
+	</div>
+</apex:page>

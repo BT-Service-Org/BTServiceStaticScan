@@ -1,0 +1,26 @@
+.statusGreen {
+    background-color: rgb(168, 255, 190);
+    text-align: left;
+    padding: 4px;
+}
+
+.statusGrey{
+    background-color: #CCCCCC;
+    text-align: left;
+    padding: 4px;
+}
+
+
+.statusRed {
+    background-color: #FFA8BE;
+    text-align: left;
+    padding: 4px;    
+}
+
+.statusWhite {
+    background-color: white;
+    text-align: left;
+    vertical-align: text-top;
+    padding: 4px;
+
+}

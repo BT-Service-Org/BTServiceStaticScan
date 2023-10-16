@@ -1,0 +1,20 @@
+<design:component label="TheStation: Statistics">
+    
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2" default="Light 1" description=""/>
+    <design:attribute name="contentGroupId" label="Content Group Id" default="" required="true" placeholder="Station Page ID"/>
+    <design:attribute name="showGroupTitle" label="Show Content Group Title" default="true"/>
+    <design:attribute name="titleFontSize" label="Title Font Size" default="42" required="true" min="16" max="60" description="In pixels"/>
+    <design:attribute name="titleAlignment" label="Title Alignment" datasource="Left,Center,Right" default="Center"/>
+    <design:attribute name="subtitleFontSize" label="Subtitle Font Size" default="28" required="true" min="20" max="34" description="In pixels"/>
+	<design:attribute name="statFontSize" label="Statistic Font Size" default="92" required="true" min="76" max="120" description="In pixels"/>    
+    <design:attribute name="statDetailFontSize" label="Statistic Detail Font Size" default="22" required="true" min="16" max="24" description="In pixels"/>
+    
+    
+    <!--
+        <design:attribute name="titleFontSize" label="Title Font Size" default="42" required="true" min="30" max="48"/>
+    <design:attribute name="subtitleFontSize" label="Subtitle Font Size" default="28" required="true" min="20" max="34"/>
+	<design:attribute name="statFontSize" label="Statistic Font Size" default="92" required="true" min="76" max="100"/>    
+    <design:attribute name="statDetailFontSize" label="Statistic Detail Font Size" default="22" required="true" min="16" max="24"/>
+    <design:attribute name="contentAlignment" label="Body Alignment" datasource="Left, Center, Right" default="Center" description=""/>
+    -->
+</design:component>

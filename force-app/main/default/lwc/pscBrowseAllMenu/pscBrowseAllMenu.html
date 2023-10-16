@@ -1,0 +1,13 @@
+<template>
+    <template if:true={menuItems}>
+        <div class="productheader productheader--big">
+            <img src={productBanner} alt="Page Banner"/>
+            <div class="product product--lit">
+                <h1 class="productheader__text ITC_font" tabindex="0" aria-label={categoryName} >
+                    Browse All {categoryName}
+                </h1>
+            </div>
+        </div>
+    </template>
+    <c-psc-browse-menu-items menu-items={menuItems}></c-psc-browse-menu-items>
+</template>

@@ -1,0 +1,151 @@
+<template>
+
+	<!--Use template if:true to display/hide popup based on isModalOpen value-->
+	<lightning-spinner if:true={isContentNotLoaded} alternative-text="Loading" size="large"></lightning-spinner>
+	<c-gdcms-base-modal onclose={closeModal} width="70%" show-footer=true>
+
+		<span slot="Title" class="headingText">
+			{headline}
+		</span>
+		<span slot="Body">
+			<template if:true={showAssetDetails}>
+				<div class="slds-grid slds-wrap">
+					<div class="slds-col slds-size_1-of-2" style="display: flex;">
+						<div style="flex: 1;">
+							<c-gdcms-five-star-rating value={assetRating} read-only="true"
+								onratingchange={handleRatingChanged} total-feedback-count={feedbackCount}>
+							</c-gdcms-five-star-rating>
+						</div>
+					</div>
+					<div class="slds-col slds-size_1-of-2 topButtonGroup">
+						<lightning-button-group class="buttonBrandStyle">
+							<lightning-button if:true={designLink} variant="brand" label="Design"
+								onclick={navigateToDesign}></lightning-button>&nbsp;
+							<lightning-button if:true={demoLink} variant="brand" label="Demo" onclick={navigateToDemo}>
+							</lightning-button>&nbsp;
+							<lightning-button if:true={repositryLink} variant="brand" label="Repository"
+								onclick={navigateToRepositry}></lightning-button>
+						</lightning-button-group>
+					</div>
+				</div>
+				<br />
+				<lightning-record-edit-form show-footer=true object-api-name='gdc_ms_ReusableAsset__c' record-id={recordId} onerror={handleError}>
+					<lightning-layout multiple-rows class={layoutCSS}>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_Title__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_CloudCompetency__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_IntendedDomainIndustries__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_ProblemSolvedByThisAsset__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_Description__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field if:true={isReadOnly} field-name='gdc_ms_Status__c'></lightning-output-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+							<lightning-output-field  read-only={isReadOnly} field-name='gdc_ms_Proposed_By_User__c' class="noLookup"></lightning-output-field>
+						</lightning-layout-item>
+					</lightning-layout>
+				</lightning-record-edit-form>
+					
+				<div if:true = {showTeamMemberTable}>
+					<lightning-card title="Asset Members" icon-name="utility:user" variant="Narrow" class="assetMemberIcon">
+						<div style="padding: 0 1rem;">
+							<lightning-datatable class="slds-table_header-fixed_container slds-table_col-bordered"
+								key-field="Id" data={staticMemberList} columns={columns} hide-checkbox-column>
+							</lightning-datatable>
+						</div>
+					</lightning-card>
+				</div>
+			</template>
+			<template if:false={showAssetDetails}>
+				<lightning-record-edit-form show-footer=true object-api-name='gdc_ms_Feedback__c'
+							record-id={feedbackRecordId} onsuccess={handleSuccess} onerror={handleError}
+							onsubmit={submitFeedbackForm}>
+							<lightning-layout multiple-rows class={layoutCSS}>
+								<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+									<lightning-layout multiple-rows>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+											<label for="Asset Rating" class="slds-form-element__label">
+												<abbr title="required" class="slds-required">*</abbr>
+												Asset Rating
+											</label>
+										</lightning-layout-item>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8">
+											<c-gdcms-five-star-rating value={feedbackRating} onratingchange={handleRatingChanged}>
+											</c-gdcms-five-star-rating>
+										</lightning-layout-item>
+									</lightning-layout>
+								</lightning-layout-item>
+								<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+									<lightning-layout multiple-rows>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+											<label for="User Name" class="slds-form-element__label">
+												User Name
+											</label>
+										</lightning-layout-item>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8">
+											{currentUserName}
+										</lightning-layout-item>
+									</lightning-layout>
+								</lightning-layout-item>
+								<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+									<lightning-layout multiple-rows>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+											<label for="Asset Name" class="slds-form-element__label">
+												<abbr title="required" class="slds-required">*</abbr>
+												Asset Name
+											</label>
+										</lightning-layout-item>
+										<lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8">
+											{assetName}
+										</lightning-layout-item>
+									</lightning-layout>
+								</lightning-layout-item>
+								<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+									<lightning-input-field field-name="gdc_ms_ProjectName__c"> </lightning-input-field>
+								</lightning-layout-item>
+								<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+									<lightning-input-field field-name="gdc_ms_AssetSuggestion__c" onchange={getSuggestion}>
+									</lightning-input-field>
+								</lightning-layout-item>
+
+							</lightning-layout>
+							<lightning-button class="slds-m-top_small slds-align_absolute-center buttonBrandStyle" type="submit"
+								label="Submit Feedback" variant="brand">
+							</lightning-button>
+				</lightning-record-edit-form>
+			</template>
+		</span>
+		<span slot="Footer">
+			<div class="slds-var-m-top_medium">
+				<lightning-button onclick={handleComments} variant="brand" label="Show Comments" class="buttonBrandStyle" style="float: left;">
+				</lightning-button>
+				<template if:true={isAssetCompleted}>
+					<template if:true={showAssetDetails}>
+						<lightning-button onclick={provideFeedback} variant="brand" label="Give Feedback"
+							style="float: left;" class="slds-var-m-left_large buttonBrandStyle">
+						</lightning-button>
+					</template>
+					<template if:false={showAssetDetails}>
+						<lightning-button onclick={showDetails} variant="brand" label="Show Details"
+							style="float: left;" class="slds-var-m-left_large buttonBrandStyle">
+						</lightning-button>
+					</template>
+				</template>
+				<lightning-button if:false={isReadOnly} onclick={handleSave} variant="brand" label="Save" class="buttonBrandStyle">
+				</lightning-button>&nbsp;&nbsp;
+				<lightning-button onclick={closeModal} variant="brand-outline" label="Cancel" class="buttonNeutralStyle">
+				</lightning-button>
+			</div>
+		</span>
+	</c-gdcms-base-modal>
+	<!-- Modal/Popup Box LWC starts here -->
+</template>

@@ -1,0 +1,45 @@
+<template>
+    <h3 class="section-title ITC_font">Community Members</h3>
+    <div class="section-container">
+
+        <!-- Search -->
+        <lightning-layout multiple-rows="true" class="search-container">
+            <lightning-layout-item size="12" small-device-size="10" medium-device-size="8" large-device-size="6"
+                class="  slds-p-right_medium slds-p-bottom_x-small" style="width: 80%;">
+                <div class="search-box">
+                    <lightning-input class="search-input" type="search" placeholder="Search Community Member"
+                        min-length={searchKeyMinLen} onchange={handleMemberName}
+                        oncommit={handleSearch}></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2" style="width: 20%;">
+                <lightning-button label="Search" variant="brand" onclick={handleSearch}></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Tabs to display members by role or all members -->
+        <lightning-tabset class="tabset">
+            <template for:each={tabNameToMemberData} for:item="row">
+                <lightning-tab key={row.tabLabel} label={row.tabLabel} value={row.tabLabel} class="tab"
+                    onactive={handleSelectTab}>
+                    <c-psc-members-data community-page-name={communityPageName} member-role={row.memberRole}
+                        search-member-key={memberNameKey} show-spinner={showSpinner} component-name={row.tabLabel}
+                        show-all-records={showAllRecords} max-records-compact-mode={displayMaxRecords}></c-psc-members-data>
+                </lightning-tab>
+            </template>
+
+            <!-- To Show All members in a Community on a new tab-->
+            <template if:false={hideShowAllLink}>
+                <div class="show-all-url slds-clearfix">
+                    <div class="slds-float_right">
+                        <a href={showAllMembersURL}>
+                            <span class="ITC_font">Show All<lightning-icon icon-name="utility:forward" class="arrow"
+                                    size="x-small"></lightning-icon>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </template>
+        </lightning-tabset>
+    </div>
+</template>

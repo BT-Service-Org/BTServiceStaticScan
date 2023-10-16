@@ -1,0 +1,214 @@
+.playbook_detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #F2F3F6;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+.playbook_item {
+    width: 100%;
+}
+
+.playbook__header {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.004em;
+    text-transform: capitalize;
+    color: #032D60;
+    margin: 25px 0px;
+}
+
+.stage_title {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 20px;
+    width: 100%;
+}
+
+.stage_desc {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    min-height: 120px;
+    border-radius: 10px;
+    background: white;
+}
+
+.desc {
+    font-size: 14px;
+    line-height: 30px;
+    color: #444444;
+    display: block;
+    margin-left: 22px;
+}
+
+.stage {
+    width: 98%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 10px;
+    min-height: 104px;
+    background: #fdfdfd;
+    border-bottom: 1px solid #dfdfdf;
+    margin: auto;
+}
+
+.inner_stage {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 0px 0px 12px;
+    gap: 6px;
+    width: 98%;
+    height: auto;
+    min-height: 80px;
+
+}
+
+.red {
+    border-left: 3px solid #FE5C4C;
+}
+
+.green {
+    border-left: 3px solid #45C65A;
+}
+
+.blue {
+    border-left: 3px solid #0070D2;
+}
+
+.outcome_item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6px 12px 12px;
+    width: 100%;
+    background: #FFFFFF;
+    margin-bottom: 25px;
+}
+
+.method_body {
+    display: flex;
+    align-items: center;
+    width: 33%;
+}
+
+.method_num {
+    position: relative;
+    background: rgba(1, 68, 134, 0.1);
+    border-radius: 50px;
+    min-width: 30px;
+    height: 30px;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.method_num p {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    font-size: 16px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.005em;
+    color: #032D60;
+}
+
+.moc_data {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0px;
+    gap: 18px;
+    width: 95%;
+    margin: auto;
+    border-bottom: 1px solid #F2F3F6;
+}
+
+.moc_data_name {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+    text-align: left;
+    text-transform: initial;
+}
+
+.moc_data_name a {
+    color: #032D60;
+}
+.method_desc {
+    width: 45%;
+    text-align: left;
+    text-transform: initial;
+}
+
+.method_desc {
+    width: 45%;
+    text-align: left;
+    text-transform: initial;
+}
+
+.method_no {
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #444444;
+}
+
+.outcome_desc {
+    font-size: 14px;
+    line-height: 30px;
+    color: #444444;
+    padding: 0px 20px;
+    text-align: left;
+    margin: 10px 0px;
+    text-transform: initial;
+}
+
+.rev_history {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.stage_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media screen and (max-width:540px) {
+    .moc_data {
+        flex-direction: column;
+    }
+
+    .method_body {
+        width: 100%;
+    }
+
+    .method_desc {
+        width: 100%;
+    }
+
+    .outcome_item {
+        padding: 6px;
+    }
+}

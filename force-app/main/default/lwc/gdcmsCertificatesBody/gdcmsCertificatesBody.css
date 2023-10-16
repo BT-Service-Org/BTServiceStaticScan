@@ -1,0 +1,16 @@
+.container{ 
+    margin: 0.5rem 0 0.5rem 0;
+} 
+
+.img-badge{
+    width:5rem;
+    height:4rem; 
+}
+
+.certi-name {
+    font-size: 15px;
+    height: 4rem;
+    word-break: break-word;
+    overflow: hidden;
+    padding : 0 0.5rem;
+}

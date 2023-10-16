@@ -1,0 +1,221 @@
+<template>
+    <template if:true={methodCardData}>
+        <template for:each={methodCardData} for:item="card">
+            <div key={card.Id} class="method-card">
+                <div class="car-header">
+                    <h2 class="method-title ITC_font" if:true={card.Name}><a
+                            href={card.Community_URL__c}>{card.Name}</a></h2>
+                </div>
+                <div class="method_groups">
+                    <div class="method-group-owner" if:true={card.Method_by_Grouping__r}>
+                        <template for:each={card.Method_by_Grouping__r} for:item="group">
+
+                            <div key={group.Id} class="method-grouping ITC_font" if:true={group.Grouping__r}>
+                                {group.Grouping__r.Name}
+                            </div>
+                        </template>
+                    </div>
+                    <div class="method-engagement-type">
+                        <div if:true={card.Agile__c}>
+                            <div class="badge-indicator-project-type true">Agile
+                                <span class="badge-icon-project-type"><img src={trueImage} alt="True"></span>
+                            </div>
+                        </div>
+                        <div if:false={card.Agile__c}>
+                            <div class="badge-indicator-project-type false">Agile
+                                <span class="badge-icon-project-type"><img src={falseImage} alt="False"></span>
+                            </div>
+                        </div>
+
+                        <div if:true={card.Waterfall__c}>
+                            <div class="badge-indicator-project-type true">Waterfall <span
+                                    class="badge-icon-project-type"><img src={trueImage} alt="True"></span></div>
+                        </div>
+                        <div if:false={card.Waterfall__c}>
+                            <div class="badge-indicator-project-type false">Waterfall <span
+                                    class="badge-icon-project-type"><img src={falseImage} alt="False"></span></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="method-title-engagment">
+                    <div if:true={card.Method_Headline__c} class="method-title-description salesforce_font">
+                        <div class="short-desc" if:true={showFullDescription}>
+                            <lightning-formatted-rich-text
+                                value={card.Method_Headline__c}></lightning-formatted-rich-text>
+                        </div>
+                        <div if:false={showFullDescription}>
+                            <lightning-formatted-rich-text
+                                value={card.Method_Headline__c}></lightning-formatted-rich-text>
+                        </div>
+                    </div>
+                    <div class="category_grouping" if:true={methodOwnerShip.length}>
+                        <h3>Method Ownerships :</h3>
+                        <template for:each={methodOwnerShip} for:item="ownership">
+                            <div key={ownership.Id}>
+                                <p class="badge-method-owner">
+                                    <span>{ownership.Product__r.Name}:</span>
+
+                                    {ownership.Role__r.Name}
+                                </p>
+                            </div>
+
+                        </template>
+                    </div>
+
+
+
+                </div>
+                <div class="method-stage-id" if:true={card.Method_with_Stages__r}>
+                    <div class="method-stage-group">
+                        <template for:each={card.Method_with_Stages__r} for:item="stage">
+                            <div key={stage.Id} class="method-stage ITC_font" if:true={stage.Stage__r}>
+                                {stage.Stage__r.Name}
+                            </div>
+                        </template>
+                    </div>
+                    <div class="method-id ITC_font">
+                        Method Id : {card.Method_Number__c}
+                    </div>
+                </div>
+
+                <div class="method-engagement-size">
+                    <div class="engagement-size-title">
+                        <p>Engagement Sizing /
+                            Project Type or Profile</p>
+                    </div>
+                    <div class="engagement-size-descriptions">
+                        <div class="engagement" if:true={card.Micro__c}>
+                            <div class="engagement_key">
+                                <p>Micro</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for micro-size engagement</div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+
+                            <span>{card.Micro__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Small__c}>
+
+                            <div class="engagement_key">
+                                <p>Small</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for small-size engagement</div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+                            <span>{card.Small__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Medium__c}>
+
+                            <div class="engagement_key">
+                                <p>Medium</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for medium-size engagement
+                                        </div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+
+                            <span>{card.Medium__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Large__c}>
+
+                            <div class="engagement_key">
+                                <p>Large</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for large-size engagement</div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+                            <span>{card.Large__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Program__c}>
+
+                            <div class="engagement_key">
+                                <p>Program</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for program-size engagement
+                                        </div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+                            <span>{card.Program__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Tier_1__c}>
+
+                            <div class="engagement_key">
+                                <p>Tier 1</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for Tier-1 engagement</div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+                            <span>{card.Tier_1__c}</span>
+                        </div>
+                        <div class="engagement" if:true={card.Tier_2__c}>
+                            <div class="engagement_key">
+                                <p>Tier 2</p>
+
+                                <div class="info">
+                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right"
+                                        role="tooltip" id={card.Micro__c}>
+                                        <div class="slds-popover__body">Method relevance for Tier-2 engagement</div>
+                                    </div>
+                                    <lightning-icon icon-name="utility:info" alternative-text="info" size="x-small"
+                                        class="info-icon"></lightning-icon>
+                                </div>
+
+                            </div>
+                            <span>{card.Tier_2__c}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+    </template>
+    <template if:false={resultFound}>
+        <div style="display: flex">
+            <img src={noresultImage} alt="No Results Found" style="margin:auto;border-radius:8px;width:37%">
+        </div>
+    </template>
+</template>

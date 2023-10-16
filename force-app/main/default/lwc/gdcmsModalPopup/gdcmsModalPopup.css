@@ -1,0 +1,46 @@
+.strong-text {
+    font-weight: bold;
+}
+ a{
+    color:#0B0B0B;
+}
+.topButtonGroup {
+    display: block;
+    text-align: right;
+}
+.noLookup{   pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: #0B0B0B;
+}
+
+.assetMemberIcon {
+    --slds-c-icon-color-foreground-default: #2EABDF;
+}
+
+.buttonBrandStyle {
+    --slds-c-button-brand-color-background: #032D60;
+    --slds-c-button-brand-color-background-hover: #0176D3;
+    --slds-c-button-brand-color-border-hover: #0176D3;
+    --sds-c-button-brand-text-color: #FFFFFF;
+    --sds-c-button-brand-text-color-hover: #FFFFFF;
+}
+
+.buttonNeutralStyle {
+    --slds-c-button-color-border: #032D60;
+    --slds-c-button-color-border-active: #032D60;
+    --slds-c-button-text-color: #032D60;
+}
+
+.layoutCssDesk{
+    width: 90%;
+    padding-left: 10%;
+}
+
+.layoutCssMob{
+    width: 100%;
+}
+
+.headingText {
+    color: #032D60;
+}

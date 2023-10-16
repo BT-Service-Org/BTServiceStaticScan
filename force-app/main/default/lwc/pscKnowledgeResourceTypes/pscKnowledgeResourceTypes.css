@@ -1,0 +1,137 @@
+.KnowledgeHeader {
+    box-sizing: border-box;
+}
+
+.KnowledgeHeader--big {
+    position: relative;
+    width: 100%;
+}
+
+.KnowledgeHeader--big img {
+    width: 100%;
+    min-height: 120px;
+}
+
+.product {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.product--lit {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    transform: translate(-50%, 0);
+    max-width: 780px;
+}
+
+.KnowledgeHeader__text {
+    font-size: 44px;
+    color: #032D60;
+}
+
+.KnowledgeHeader__title {
+    font-size: 19px;
+    line-height: 29px;
+    letter-spacing: 0.0012em;
+    color: #032D60;
+}
+
+.KnowledgeHeader__title span {
+    color: #000000;
+}
+
+.backNav {
+    display: flex;
+    font-size: 18.942px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+    justify-content: flex-start;
+    padding: 10px 0px;
+    text-decoration: none;
+
+}
+
+.back-icon {
+        margin-right: 16px;
+        color: #032D60;
+        font-size: 25px;
+}
+
+
+
+
+/* Media queries */
+@media screen and (max-width:1336px) {
+
+    .KnowledgeHeader__text {
+        font-size: 28px;
+
+    }
+
+    .KnowledgeHeader__title {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+}
+
+@media screen and (max-width:1024px) {
+
+    .KnowledgeHeader__text {
+        font-size: 25px;
+    }
+
+    .KnowledgeHeader__title {
+        font-size: 17px;
+        line-height: 23px;
+    }
+    .product--lit {
+        top:15%;
+    }
+    .backNav {
+        font-size: 14px;
+    }
+    .back-icon {
+        margin-right: 10px;
+        font-size: 22px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .KnowledgeHeader__text {
+        font-size: 18px;
+    }
+
+    .KnowledgeHeader__title {
+        font-size: 12px;
+        line-height: 17px;
+    }
+}
+
+@media screen and (max-width:540px) {
+
+    .KnowledgeHeader__text {
+        font-size: 15px;
+    }
+
+    .KnowledgeHeader__title {
+        font-size: 10px;
+        line-height: 15px;
+    }
+
+    .KnowledgeHeader--big {
+        position: relative;
+        width: 100%;
+
+    }
+    .backNav {
+        font-size: 11px;
+        padding: 4px 0px;
+    }
+    .back-icon {
+        margin-right: 5px;
+    font-size: 14px;
+    }
+}

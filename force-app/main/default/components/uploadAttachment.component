@@ -1,0 +1,45 @@
+<apex:component >
+<script>
+	/* ### Upload File ### */
+	/**
+	* Recursive function for check upload finish or errors
+	*@void
+	*/
+	function UPF__success__(){
+		if(iframeUpload.document.getElementById('ep')){
+			var ifrDiv = iframeUpload.document.getElementById('ep');
+			var pNode = ifrDiv.parentNode;
+			pNode.removeChild(ifrDiv);
+			location.href = '/apex/TeamsDetail' + currentTeamType + '?id=' + currentTeam;
+		}else{
+			setTimeout('UPF__success__(); UPF__CheckError__()',2000);
+		}
+	}
+	
+	/**
+	* Check error on upload process
+	*@void
+	*/
+	function UPF__CheckError__(){
+		var divs = iframeUpload.document.getElementsByTagName('DIV');
+		if (divs[42]){
+			if(divs[42].className == 'errorMsg'){
+				var la = document.getElementById('uploadP__');
+				la.innerHTML = '';
+				divs[42].className = '';
+			}
+		}
+	}
+</script>
+
+<div id="inputTeamFileContainer">
+	<input id="tempfile" name="file" size="20" title="Type the path of the file or click the Browse button to find the file." type="file" />
+</div>
+
+<!-- Iframe for upload file -->
+<form action="/p/attach/NoteAttach" enctype="multipart/form-data" id="uploadImageForm" target="iframeUpload" method="post">
+	<span id="inputFileContainer" style="display:none;"></span>
+	<input type="hidden" name="pid" id="done_pid" value="" />
+</form>					
+<iframe name="iframeUpload" style="display:none;" ></iframe>
+</apex:component>

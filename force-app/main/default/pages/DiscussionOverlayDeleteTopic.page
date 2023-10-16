@@ -1,0 +1,75 @@
+<apex:page sidebar="false" showHeader="false" controller="DiscussionOverlayDeleteTopicController">
+<script>
+
+
+
+function removeTopic(topicIDtoDel){
+	
+	inputHiddenTopicId = $('auxTopicInputHiddenId').innerHTML;
+	
+	$(inputHiddenTopicId).value = topicIDtoDel;
+	
+	rowDeleted = 'row-' + topicIDtoDel;
+	subrow = 'subrow-' + topicIDtoDel;
+	
+	removeTopicDef();
+	
+}
+
+function afterTopicDelete(){
+	modal.close();
+	setTimeout('highlight(rowDeleted,subrow)', 600);
+}
+
+function highlight (rowDeleted, subrow){ 
+		
+		new Effect.Highlight(rowDeleted, { startcolor: "#D10404",  endcolor: "#ffffff",duration: 0.4, 
+				afterFinish: function(){
+					$(rowDeleted).remove();
+					$(subrow).remove();
+				}				
+			 });
+		};
+
+function statusDelete(obj) {
+	var buttons = $$('input');
+	for (var i = 0; i < buttons.size(); i++) {
+		if(buttons[i].value == 'Continue and delete topic'){
+			buttons[i].value = '  Deleting...  ';
+			buttons[i].disabled = 'disabled';
+		}
+	}
+}
+</script>
+ 
+	<apex:form >
+		<apex:actionFunction name="removeTopicDef" action="{!deleteTopic}" rerender="dummy" oncomplete="afterTopicDelete();"/>
+		<apex:inputHidden value="{!topicId}" id="topicId"/>
+		<div id="auxTopicInputHiddenId" style="display:none;">{!$Component.topicId}</div>		
+	</apex:form>
+	<apex:outputPanel id="dummy"></apex:outputPanel>
+	
+	<!-- Delete Comment -->
+	<div id="deleteTopicOverlay" style="display:none;">
+		<div class="discusionOverlayTitle">
+			<div class="title">Delete discussion topic</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/icons/close_event_icon.gif')}" />
+				</a>
+			</div>
+		</div>
+		<div class="discusionOverlayContent">
+			Are you sure you want to delete this topic ?<br />
+			<span>Once a topic is deleted, replies posted to this topic are not recoverable</span>
+		</div>
+		<div class="discusionOverlayLinebar"></div>
+		<div class="discusionOverlayEvents">
+			<span id="deleteButton">
+				<input class="eventDelete" value="Continue and delete topic" onclick="statusDeleting(this);removeTopic('id');"/>
+			</span>
+			<input class="eventCancel" value="Cancel" onclick="modal.close();"/>
+		</div>	
+	</div>
+	<!-- Delete Comment -->
+</apex:page>

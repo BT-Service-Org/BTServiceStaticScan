@@ -1,0 +1,41 @@
+<template>
+    <div class="offering_page" if:true={productData}>
+        <lightning-tabset class="tabset ITC_font">
+            <lightning-tab label="Overview">
+                <c-psc-single-field-value record-id={productData.Id} field-api-name="Overview__c" object-api-name="Product_Custom__c"></c-psc-single-field-value>
+            </lightning-tab>
+
+            <lightning-tab label="Stages">
+                <p class="stage_name ITC_font">{productParam} Stages</p>
+                <div class="stage_cards" if:true={stageData.length}>
+                    
+                    <template for:each={stageData} for:item="stage">
+                        <div key={stage.Id} class="stage_card stage_card_mandatory">
+                            <div class="card_head">
+                                <p class="stage_order">{stage.number}</p>
+                                <div class="stage_title">
+                                    <p class="stage stageDesc ITC_font">{stage.Name}</p>
+                                    <p class="duration ITC_font" if:true={stage.StageDuration__c}>({stage.StageDuration__c})</p>
+                                </div>
+                            </div>
+                            <div class="item-description">
+                                <lightning-formatted-rich-text value={stage.Description__c} class="stage_desc salesforce_font">
+                                </lightning-formatted-rich-text>
+                            </div>
+                            <p class="stage_link"><a href={stage.url} class="stage_detail_link salesforce_font">More Details</a></p>
+                        </div>
+                    </template>
+                </div>
+            </lightning-tab>
+
+            <lightning-tab label="More Details">
+                <c-psc-single-field-value record-id={productData.Id} field-api-name="More_Details__c" object-api-name="Product_Custom__c"></c-psc-single-field-value>
+            </lightning-tab>
+
+        </lightning-tabset>
+        <template if:true={productData}>
+            <c-psc-generic-revision-history parent-id={productData.Id} class="revision_history"></c-psc-generic-revision-history>
+        </template>
+    </div>
+    
+</template>

@@ -1,0 +1,170 @@
+.THIS.container {
+    background: #F3F8FE;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.THIS .actions-header-area {
+    height: 4em;
+}
+
+.THIS .back-button {
+    font-size: 1rem;
+    font-family: StationWOFFFontsBold;
+    color: #FFFFFF;
+}
+
+.THIS .title {
+    font-family: StationWOFFFontsBold;
+    display: inline;
+    color: #FFFFFF;
+}
+
+.THIS .title-icon {
+    vertical-align: super;
+}
+
+.THIS .title-icon svg {
+    fill: #FFFFFF;
+}
+
+.THIS .notification-button-white {
+    color: #FFFFFF;
+}
+
+.THIS .content {
+    font-size: .85rem;
+    color: #FFFFFF;
+}
+
+.THIS .user-full-name {
+    font-family: StationWOFFFontsBold;
+}
+
+.THIS .created-by {
+    color: #FFFFFF;
+}
+
+.THIS .followers-number, .THIS .content-total-number{
+    color: #FFFFFF;    
+    font-size: 1.5rem;
+}
+
+.THIS .followers-label, .THIS .content-total-label {
+    color: #FFFFFF;    
+    font-size: .8125rem;
+}
+
+.THIS .created-by-edit-mode {
+    color: #FFFFFF;
+}
+
+.THIS .white-button-white-border {
+    border-color: #FFFFFF;
+    color: #0970D1;
+    background-color: #FFFFFF;
+}
+
+.THIS .white-button-white-border:hover {
+    border-color: #ffffff;
+    color: #0970D1;
+    background-color: #F4F6F9;    
+}
+
+.THIS .white-button-white-border-followed {
+    border-color: #0970D1;
+    color: #FFFFFF;
+    background-color: #0970D1;    
+}
+
+
+.THIS .main-field .slds-form-element__label {
+    color: #FFFFFF;
+}
+
+.THIS .secondary-field .slds-form-element__label {
+    font-family: StationWOFFFontsBold;
+    max-width: 6rem;
+    color: #FFFFFF;
+}
+
+.THIS .slds-checkbox_on, .THIS .slds-checkbox_off {
+    color: #FFFFFF;
+}
+
+.THIS .color-combobox {
+    width: 50%;
+    padding: 0;
+}
+
+.THIS .edit-actions {
+    margin-top: 1.25rem;
+    text-align: right;
+}
+
+.THIS .edit-actions .edit-save,.THIS .edit-actions .edit-cancel {
+    width: 5rem;
+}
+
+.THIS .edit-actions .edit-delete {
+    width: 10.75rem;
+    margin-left: 0 !important;
+    border-color: #FFFFFF;
+    color: #C23934;
+    background-color: #FFFFFF;    
+}
+
+.THIS .edit-actions .edit-cancel {
+    border-color: #FFFFFF;
+    color: #0970D1;
+    background-color: #FFFFFF;    
+}
+
+.THIS .edit-actions .edit-save {
+    border-color: #0970D1;
+    color: #FFFFFF;
+    background-color: #0970D1;
+}
+
+.THIS .edit-actions .edit-delete:hover {
+    border-color: #FFFFFF;
+    color: #C23934;
+    background-color: #F4F6F9;
+}
+
+.THIS .edit-actions .edit-cancel:hover {
+    border-color: #FFFFFF;
+    color: #0970D1;
+    background-color: #F4F6F9;
+}
+
+.THIS .edit-actions .edit-save:hover {
+    border-color: #0970D1;
+    color: #FFFFFF;
+    background-color: #0763ba;
+}
+
+.THIS .slds-checkbox_faux {
+    border-color: #FFFFFF !important;
+}
+
+.THIS .contributors {
+    display: inline;
+    vertical-align: super;
+}
+
+.THIS .contributor-picture {
+    border-radius: 1.5rem;
+    padding: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin-left: -.5rem;
+    border: 1px solid #fff;
+}
+
+.THIS .more-contributors {
+    font-family: StationWOFFFontsBold;
+    margin-left: .5rem;
+    color: #98999b;
+}

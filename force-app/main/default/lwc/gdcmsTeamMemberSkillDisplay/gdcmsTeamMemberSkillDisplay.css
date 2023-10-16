@@ -1,0 +1,16 @@
+.cardtile{
+    margin: 0.3rem 0 0.3rem 0;
+    box-shadow: 0px 0px 0.25rem 0px;
+    border-radius: 0.5rem;   
+    transform-origin: 100% 100%;
+    transition: 1s transform cubic-bezier(.155,1.105,.295,1.12),1s box-shadow,1s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  }
+
+  .cardtile:hover{
+    transform: scale(1.01);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.cardBody{
+    padding: 0rem 1rem;
+}

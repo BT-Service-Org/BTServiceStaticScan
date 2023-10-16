@@ -1,0 +1,14 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="buttonLabel" type="String" access="global" required="true" default="Submit or Request Content"/>
+    <aura:attribute name="UserorQueueId" type="String" access="global" required="true"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    
+    <div class="slds-p-vertical_xx-large">
+        <button class="slds-button slds-button_brand feedback-widget" onclick="{!c.handleShowModal}">
+            <span class="writing-mode">{!v.buttonLabel}</span>
+        </button>
+    </div>
+</aura:component>

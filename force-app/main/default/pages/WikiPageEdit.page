@@ -1,0 +1,450 @@
+<apex:page controller="WikiPageEditController" tabStyle="WikiPage__c" id="WikiPageEdit" sidebar="false" >
+	<!-- Scripts -->
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>	
+	<script src="{!URLFOR($Resource.FCKeditor, 'fckeditor/fckeditor.js')}"></script>
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/WikiPageEdit.js')}"></script>
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/firebug/firebug.js')}"></script>
+	
+
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPageEdit.css')}" />
+	
+	
+	<style>
+		.notationHelp img { 
+			vertical-align: bottom;
+		}
+		
+	</style>
+	
+	<script>
+		// Inicialize FCK editor	
+		
+		var oFCKeditor; 
+		function init() {
+			var idWikiPage = '{!idWikiPage}';
+			oFCKeditor = new FCKeditor( 'WikiPageEdit:editForm:theTextArea1' ) ;
+			oFCKeditor.BasePath = "{!URLFOR($Resource.FCKeditor, 'fckeditor/')}"; /* "/fckeditor/" ; */
+			oFCKeditor.ToolbarSet = 'WikiEdit';
+			oFCKeditor.Config['ImageBrowserURL'] = 'https://na1.salesforce.com/apex/WikiPageImages?idWP=' + idWikiPage;
+			oFCKeditor.Config['LinkBrowserURL'] = 'https://na1.salesforce.com/apex/WikiPageLinks?idWP=' + idWikiPage;
+			oFCKeditor.ReplaceTextarea();
+		}		
+		window.onload = init;	
+		
+		function FCKeditor_OnComplete( editorInstance ) {
+		    //document.getElementById('html').style.display = 'none';
+			//document.getElementById('WikiPageEdit:editForm:theTextArea2').style.display = 'block';
+			
+			Effect.Fade('FCKloader');
+			document.getElementById('html').style.visibility = 'visible';
+			document.getElementById('wikiSyntax').style.visibility = 'visible';
+			//document.getElementById('WikiPageEdit:editForm:theTextArea2').focus();
+		}
+
+		// TABS FUNCTIONS
+		
+		function getFCKHTML() {
+			var b = document.getElementsByTagName('iframe');
+			
+			for(var it = 0; it < b.length; it++){
+				var aux = b[it].src.split('FCKeditor');
+				if(aux.length > 1){
+					var iframes = b[it].contentWindow.document.getElementsByTagName('iframe');
+					var markup = iframes[0].contentWindow.document.body.innerHTML;
+					break;	 						
+				}
+			}
+			
+			return markup;
+		}
+
+		function getIframe() {
+			var b = document.getElementsByTagName('iframe');
+			for(var it = 0; it < b.length; it++){
+				var aux = b[it].src.split('FCKeditor');
+				if(aux.length > 1){
+					var iframes = b[it].contentWindow.document.getElementsByTagName('iframe');						
+				}
+			}
+			return iframes;
+		}	
+		
+		function assignFCKHTML(newContent) {
+			var frame = getIframe();
+			frame[0].contentWindow.document.body.innerHTML = newContent;
+		}
+		
+		function tagsToLower(sString){
+			var output = sString;
+			/*
+			var result = sString.match(/<\/?([A-Z]+)\s|([^<])+/g); // MY EXPRESION....
+			//var result = sString.match(/<\/([A-Z]+?)\/s|([^<])+/g); // CHANGE ATRIBUTE TOO....
+			//var result = sString.match(/<\/*\w+\s*\/*>|([^<])+/g); // DOESN'T WORK FINE WITH ATRIBUTES....
+			var output = "";
+			for(var i = 0; i < result.length; i++){
+			output += (result[i].charAt(0) == "<" ? result[i].toLowerCase() : result[i]);
+			}
+			*/
+			return output;
+		}
+		
+		function iframeContent () {
+			result = getFCKHTML();
+			var result2 = document.getElementById('WikiPageEdit:editForm:theTextArea2');
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				result2.value = tagsToLower(result);
+			}
+			else {
+				result2.value = result;
+			}	
+		}
+		
+		function saveContent () {
+			var textArea2 = document.getElementById('WikiPageEdit:editForm:theTextArea2');
+			if(textArea2.style.display == 'none' || textArea2.style.display == '') {
+				result = getFCKHTML();
+				var result2 = document.getElementById('WikiPageEdit:editForm:theTextArea2');
+				result2.value = result;	
+			}
+			var wikiBody = $('WikiPageEdit:editForm:theTextArea2').value;
+			wikiBody = wikiBody.replace(/[ ]*[\n]*[\r]*[\t]*/gi,'');
+			wikiBody = wikiBody.replace(/<[^>]*>/gi, '');
+			bodyLength = wikiBody.length;
+			if (bodyLength == 0) {
+				alert("Can't save wiki pages without text");
+				valResult = false;
+			} 
+			else {
+				valResult = true;
+				switchOverlay(true);
+			}
+		}
+		
+		function setValResult () {
+			valResult = true;
+		}
+		
+		function replicateOutput(){
+		
+			var outPut = document.getElementById('WikiPageEdit:editForm:controllerVar');
+			var textArea = document.getElementById('WikiPageEdit:editForm:theTextArea2');
+			//console.info(outPut.innerHTML);
+			var outPutLine = outPut.innerHTML.replace(/<br>/gi , '\n'); 
+			outPutLine = outPutLine.replace(/[ ]*\|/gi,'|'); 
+			//console.info(outPutLine);
+			//outPutLine = outPutLine.replace(/&nbsp;/gi ,' '); 
+			//console.info(outPutLine);
+			var outPutLine2 = outPutLine.replace(/<[^>]*>/gi, '');
+			outPutLine2 = outPutLine2.replace(/&gt;/gi, '>');
+			outPutLine2 = outPutLine2.replace(/&lt;/gi, '<');
+			textArea.value = outPutLine2;
+			
+			document.getElementById('html').style.display = 'none';
+			document.getElementById('htmlTab').className = 'unselectTab';
+			document.getElementById('WikiPageEdit:editForm:theTextArea2').style.display = 'block';
+			document.getElementById('wikiTab').className = 'selectTab';			
+		}
+		
+		function replicateOutputtoIframe(){	
+		
+			var outPut = document.getElementById('WikiPageEdit:editForm:controllerVar');
+			var textArea = document.getElementById('WikiPageEdit:editForm:theTextArea2');
+			assignFCKHTML(outPut.innerHTML);
+			textArea.value = outPut.innerHTML;
+			
+			document.getElementById('html').style.display = 'block';
+			document.getElementById('htmlTab').className = 'selectTab';	
+			document.getElementById('WikiPageEdit:editForm:theTextArea2').style.display = 'none';
+			document.getElementById('wikiTab').className = 'unselectTab';				
+		}
+		
+		var valResult = true;
+
+		function validateBody () {
+			return valResult;
+		}
+					
+	</script>
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - -->	
+	<!-- - - - - - - -   OVERLAY   - - - - - - - -->
+	<!-- - - - - - - - - - - - - - - - - - - - - -->
+
+	<!-- 		  Overlay		-->
+	<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
+	</div>
+	<!-- 		  Overlay		-->
+	
+	<!-- 		  Loader		-->
+	<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+	<!-- 		  Loader		-->
+		
+	<div class="BodyPage">
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   HEADER    - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Wiki</h1>
+					<h2 class="arial_black">Home / Test Wiki</h2>
+				</div>		
+			</div>		
+			<!-- Search Box Container (always Centered) -->
+			<div class="searchBox">
+				<div>
+					<div>
+						<!-- Search Form -->
+						<form action="">
+							<div class="search_box_input f_left">
+								<div class="legend">Find WIKI pages</div>
+								<input type="text" value="Enter keyword or name" name="" onclick="ActionSearchInput();" onfocus="setValue('');" onblur="setValue('Enter keyword or name');" />								
+							</div>
+							<input type="button" value="Search" class="search_btn f_left" /> 								
+						</form>
+						<!-- Advanced Search Link -->
+						<!-- <div class="advanced_search_cont">							
+							<a href="javascript:;" >Advanced Search</a>
+						</div> -->							
+					</div>
+				</div>
+			</div>
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>	
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - - PAGE HEADER - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		
+		<apex:outputpanel id="breadCrumbringPanel">
+			<div  class="breadCrumbring">
+				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing}" /><apex:outputLabel value="{!infoWiki.Name}"/><br>
+			</div>
+		</apex:outputpanel>
+		<div class="MainPage">
+			<apex:form id="editForm" onsubmit="return validateBody();">
+				<div class="PageBlock">	
+					<!-- - - - - - - - - - - - - - - - - - - - - -->	
+					<!-- - - - - - - - PAGE HEADER - - - - - - - -->
+					<!-- - - - - - - - - - - - - - - - - - - - - -->
+					<apex:outputpanel id="pageHeaderPanel">
+						<div class="UpdatedInfo"> 
+							<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,true,false)}">
+								This page hasn't been updated
+							</apex:outputpanel>
+							<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,false,true)}">
+								Updated {!infoWiki.LastModifiedDate} by <a href="javascript:;" onclick="location.href ='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!infoWiki.LastModifiedById}';">{!infoWiki.LastModifiedBy}</a> (<a href="javascript:;" class="WikiLink">more...</a>)
+							</apex:outputpanel>
+						</div>
+					</apex:outputpanel>
+					<div class="bodyPageHeader">
+						<table border="0" style="width:100%;">
+							<tr>
+								<td style="width:43%">
+									<span class="bodyPageHeaderName">Edit Page: {!infoWiki.Name}</span>
+								</td>
+								<td style="width:14%" align="center">
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!--			 	 BUTTONS  				 -->
+									<apex:commandButton value="Save" styleclass="saveBtn" action="{!SaveEdit}" onclick="saveContent();" rerender="controllerVar, theTextArea2" />
+									<apex:commandButton value="Cancel" styleclass="cancelBtn" action="{!CancelEdit}" onclick="setValResult();switchOverlay(true);" />
+								</td>
+								<td  style="width:43%" />
+							</tr>
+						</table>
+					</div>
+					<div class="bodyPage">
+						<!-- - - - - - - - - - - - - - - - - - - - - -->	
+						<!-- - - - - - - - 	EDIT BODY  - - - - - - - -->
+						<!-- - - - - - - - - - - - - - - - - - - - - -->
+						<br>
+						<table class="mainTable">
+							<tr>
+								<td valign="top" style="padding-top:23px">
+									<apex:outputpanel id="original">
+										<div class="tabsContainer">
+											<div id="tabsDiv" class="tabsDiv">
+												<!-- - - - - - - - - - - - - - - - - - - - - -->	
+												<!-- 					TABS 				 -->
+												<table cellspacing="0" cellpadding="0" border="0">
+													<tbody>
+														<tr>						
+															<td id="htmlTab" class="selectTab">
+																<div>
+																	<apex:commandLink value="Rich Text Editor"  action="{!parseHTML}" style="text-decoration:none;" oncomplete="replicateOutputtoIframe();switchOverlay(false);" onclick="setValResult();switchOverlay(true);" rerender="controllerVar, theTextArea2"/>
+																	<!-- <apex:commandLink onclick="rightTabClick()" value="Rich Text Editor" style="text-decoration:none;" rerender="aux"/> -->
+																</div>
+															</td>
+															<td id="wikiTab" class="unselectTab">
+																<div>
+																	<apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="replicateOutput();switchOverlay(false);" onclick="setValResult();iframeContent();switchOverlay(true);" rerender="controllerVar, theTextArea2"  />
+																	<!-- <apex:commandLink onclick="leftTabClick()" value="Wiki Syntax"  style="text-decoration:none;" rerender="aux"  /> -->
+																</div>
+															</td>					
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<!-- - - - - - - - - - - - - - - - - - - - - -->	
+										<!-- 				RICH TEXT 				 -->
+										<div style="visibility: hidden;" class="htmlDiv" id="html"><apex:inputTextArea value="{!iniBody}" rows="12" id="theTextArea1" ></apex:inputTextArea></div>
+										
+										<!-- - - - - - - - - - - - - - - - - - - - - -->	
+										<!-- 				WIKI SYNTAX 			 -->
+										<div style="visibility: hidden;" class="wikiSyntaxDiv" id="wikiSyntax"><apex:inputTextArea value="{!replace.Content}" id="theTextArea2" ></apex:inputTextArea></div>
+										
+										<!-- - - - - - - - - - - - - - - - - - - - - -->	
+										<!-- 				AUX TEXT 				 -->
+										<apex:outputPanel id="controllerVar" style="display:none;">
+											<apex:outputText value="{!html}" escape="false"></apex:outputText>
+										</apex:outputPanel>
+										
+										<!-- - - - - - - - - - - - - - - - - - - - - -->	
+										<!-- 				FCK LOADER 				 -->
+										<div class="FCKloader" id="FCKloader" style="display:block;"><center><img src="{!URLFOR($Resource.WikiResource, 'images/layout/FCKloader.gif')}" /></center><br />Loading...</div>
+										<br>
+									</apex:outputpanel>	
+								</td>
+								<td valign="top" width="200px">
+									
+									<!-- - - - - - - - - - - - - - - - - - - - - -->	
+									<!-- - - - - - - RIGHT SIDEBAR - - - - - - - -->
+									<!-- - - - - - - - - - - - - - - - - - - - - -->
+									<div class="rightSideBar">
+										<div class="box_round">
+											<div class="top_borders"><div><div></div></div></div>
+											<!-- Rounded Box Content -->
+											<div class="box_content">
+												<div class="contentHolder">
+													<div class="helpTips">Help tips</div>
+													Notation Help: (<a target="_blank" href="/apex/WikiNotationHelp">full guide</a>) <br>
+													<div class="notationHelp">
+														<br>
+														Text formatting:<br>
+														''' bold ''' >> <b>bold</b><br>
+														'' italic '' >> <i>italic</i><br>
+														__ underline __ >> <u>underline</u><br>
+														--(strike)-- >> <strike>strike</strike><br>
+														normal^supstring^ >> normal<sup>supstring</sup><br>
+														normal,,substring,, >> normal<sub>substring</sub><br>
+														<br>
+														Text align:<br>
+														[[> left >]]<br>
+            											[[< right <]]<br>
+            											[[= center =]]<br>
+            											[[<> justify <>]]<br>
+														<br>
+														Text ident:<br>
+														[[-> text ident 20px ->]]<br>
+											            [[--> text ident 40px -->]]<br>
+											            [[---> text ident 60px --->]]<br>
+											            ...<br>
+											            ...<br>
+														<br>	
+														Headings:<br>
+														== Header 2 == <br>
+														<h2>Header 2</h2>
+														=== Header 3 === <br>
+														<h3>Header 3</h3>
+														<br>...<br>
+														====== Header 6 ====== <br>
+														<h6>Header 6</h6>
+														<br><br>
+														Lists:<br>
+														* Bulleted point<br>
+														~ Numbered point<br>
+														<br>
+														Linking:<br>
+														[[Team Name : Page Name]] >> Link a page<br>
+														[http://host.com LinkName] >> Remote link<br>
+														[File: attachFile] >> Download an attach file<br>
+														[Image: sr:image.jpg; w: 100px; h: 200px; a: right] >> Insert an image attatchement<br>
+														[Flash: Appexchange.swf] >> Insert a flash attatchement <br><br>
+														Tables:<br>
+														{| >> start table<br>
+														|- >> table row, optional on first row -- wiki engine assumes the first row<br>
+														|  >> table data cell, required! Consecutive table data cells may be start on new lines, each with its own single mark (|).<br>
+														|} >> end table<br>
+														Example: <br>
+														{| border="1"<br>
+														| cell 1.1<br>
+														| cell 2.1<br>
+														|-<br>
+														| cell 2.1<br>
+														| cell 2.2<br>
+														|}<br>
+														<br>
+														Emoticons:<br>
+														happy :) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/regular_smile.gif')}" /><br>
+														very happy :D >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /><br>
+														sad :( >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/sad_smile.gif')}" /><br>
+														crying :'( >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/cry_smile.gif')}" /><br>
+														wink ;) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/wink_smile.gif')}" /><br>
+														devil (6) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/devil_smile.gif')}" /><br>
+														angry :@ >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/angry_smile.gif')}" /><br>
+														tongue :P >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/tounge_smile.gif')}" /><br>
+														oh :O >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/omg_smile.gif')}" /><br>
+														confused :S >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/confused_smile.gif')}" /><br>
+														embaressed :$ >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/embaressed_smile.gif')}" /><br>
+														angel (A) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/angel_smile.gif')}" /><br>
+														idea (I) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/lightbulb.gif')}" /><br>
+														thumbs up (Y) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/thumbs_up.gif')}" /><br>
+														thumbs down (N) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/thumbs_down.gif')}" /><br>
+														heart (L) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/heart.gif')}" /><br>
+														broken heart (U) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/broken_heart.gif')}" /><br>
+														kiss (K) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/kiss.gif')}" /><br>
+														email (E) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/envelope.gif')}" /><br>
+														shades (H) >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/shades_smile.gif')}" /><br>
+														surprised :| >> <img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/whatchutalkingabout_smile.gif')}" /><br>
+														<br>
+														<a target="_blank" href="/apex/WikiNotationHelp">Details and full examples are in the full notation guide </a><br>
+													</div>
+												</div>
+											</div>
+											<div class="bottom_borders"><div><div></div></div></div>
+										</div>	
+									</div>						
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+					<!-- - - - - - - - - - - - - - - - - - - - - -->	
+					<!--				 BUTTONS 				 -->
+					<div align="center">
+						<br>
+						<apex:commandButton value="Save" styleclass="saveBtn" action="{!SaveEdit}" onclick="saveContent();" rerender="controllerVar, theTextArea2" />
+						<apex:commandButton value="Cancel" styleclass="cancelBtn" action="{!CancelEdit}" onclick="setValResult();switchOverlay(true);"/>
+						<br>
+					</div>
+				</div>
+			</apex:form>
+			<br>
+			<br>
+		</div>
+	</div>
+	<apex:outputpanel id="aux" />
+	<script>
+		function fitTabs() {
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				document.getElementById('tabsDiv').style.bottom = '-2px';
+			}
+		}
+		fitTabs();
+				
+		resetSearchInput();
+		
+	</script>
+</apex:page>

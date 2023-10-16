@@ -1,0 +1,59 @@
+<apex:page standardController="Asset_Request__c" extensions="AssetController"  >
+	
+    <apex:form >
+    <apex:sectionHeader title="Sign up for Asset Request" subtitle="{!ar.name}" />
+    <apex:pageMessages id="msg" />
+        <apex:pageBlock mode="edit" id="theform" title="Asset Request Summary">
+			 
+            <apex:pageBlockButtons > 
+                <apex:commandButton action="{!signUp}" value="Sign Up" rendered="{!error==0}" />
+                <apex:commandButton action="{!cancel}" value="Cancel" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2" >
+                <apex:pageBlockSectionItem >	 
+                <apex:outputLabel value="Asset Request Name" for="the_ar"/>
+            	<apex:outputLink value="/{!ar.Id}" id="the_ar">
+                <apex:outputText value="{!ar.Name}"/>
+            	</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                	    
+                <apex:outputField value="{!ar.Community__c}"/>
+                <apex:outputField value="{!ar.Status__c}"/>
+                <apex:outputField value="{!ar.Point_Value__c}"/>
+                <apex:outputField value="{!ar.Asset_Due_Date__c}" />
+            </apex:pageBlockSection>	
+            
+            <apex:pageBlockSection title="Select Assets to sign up for" rendered="{!error==0}">
+            	<apex:selectList value="{!assets}" size="5" multiselect="true">
+            		<apex:selectOptions value="{!items}"/>
+        		</apex:selectList>            
+            </apex:pageBlockSection>
+  	</apex:pageBlock>
+
+	</apex:form>
+                   
+		
+		<apex:pageBlock id="assets" title="Assets I signed up for:" >	    	
+	    	<apex:outputText value="No records to display." rendered="{!contribSize==0}" />
+
+		  	<apex:pageBlockTable value="{!contribs}" var="item" rendered="{!contribSize>0}" id="clist">
+		  		<apex:column >
+		  		<apex:facet name="header">Action</apex:facet>
+		  			<apex:outputLink value="/{!item.Id}/e?retURL={!ar.Id}" > Edit
+					</apex:outputLink>
+		  		</apex:column>
+		  		<apex:column >
+		  		<apex:facet name="header">Contribution Name</apex:facet>
+		  			<apex:outputLink value="/{!item.Id}" > {!item.Name}
+					</apex:outputLink>
+				</apex:column>	
+				
+		    	<apex:column value="{!item.Community__c}"/>
+		    	<apex:column value="{!item.Type__c}"/>
+		    	<apex:column value="{!item.Points_Awarded__c}"/>
+		    	<apex:column value="{!item.Status__c}"/>
+		    	<apex:column value="{!item.CreatedDate}"/>
+		  	</apex:pageBlockTable> 
+	  	</apex:pageBlock>
+	  	
+</apex:page>

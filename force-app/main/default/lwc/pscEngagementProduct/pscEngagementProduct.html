@@ -1,0 +1,53 @@
+<template >
+    <template if:true={showEngagementCard}>
+        <div class="engagement-tile" if:true={fullProductData}>
+            <div class="engagement-product-title ITC_font">
+                <p>{engagementCardTitle}</p>
+                <div if:true={showIcon} class="dropdown-icon">
+                    <lightning-icon icon-name="utility:chevrondown" alternative-text="expand" title="Expand"
+                        size="small" onclick={expandHistory} if:false={expand}></lightning-icon>
+                    <lightning-icon icon-name="utility:chevronup" alternative-text="collapse" title="Collapse"
+                        size="small" onclick={collapseHistory} if:true={expand}></lightning-icon>
+                </div>
+            </div>
+            <div class="engagement-products">
+                <template if:true={engagementProductData}>
+                        <template for:each={engagementProductData} for:item="prod">
+                            <div key={prod} class="prod-img">
+                                    <div class="engagement-product-thumbnail-status" >
+                                        <img src={prod.prodImg} alt={prod.productName} class="engagement-product-thumbnail">
+                                        <div class="engagement-product-status true" if:true={prod.trueValue}><img src={trueImage} alt="True"></div>
+                                        <div class="engagement-product-status false" if:true={prod.falseValue}><img src={falseImage} alt="False"></div>
+                                        <div class="engagement-product-status alert" if:true={prod.maybeValue}><img src={alertImage} alt="MayBe"></div>
+                                    </div>
+                                <div class="prod-title salesforce_font">
+                                    {prod.productName}
+                                </div>
+                            </div>
+                        </template>
+                </template>
+            </div>
+            <div class="engagement-product-legend">
+                <template if:true={footerTrueTitle}>
+                    <div class="engagement-product-legend-item">
+                        <div class="ep-legend-icon true"><img src={trueImage} alt="True"></div>
+                        <p class="ep-legend-description salesforce_font">{footerTrueTitle}</p>
+                    </div>
+                </template>
+                <template if:true={footerFalseTitle}>
+                    <div class="engagement-product-legend-item">
+                        <div class="ep-legend-icon false"><img src={falseImage} alt="False"></div>
+                        <p class="ep-legend-description salesforce_font">{footerFalseTitle}</p>
+                    </div>
+                </template>
+                <template if:true={footerWarningTitle}>
+                    <div class="engagement-product-legend-item">
+                        <div class="ep-legend-icon alert"><img src={alertImage} alt="Alert"></div>
+                        <p class="ep-legend-description salesforce_font">{footerWarningTitle}</p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+    
+</template>

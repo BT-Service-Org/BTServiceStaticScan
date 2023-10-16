@@ -1,0 +1,70 @@
+.option {
+    position: relative;
+    float: left;
+    left: 0px;
+    top: 0px;
+    cursor: pointer;
+}
+
+.option.cards {
+    width: 200px;
+    height: 120px;
+    margin: 20px;
+    padding: 10px;
+    background: #f6f6f6;
+    border: 1px #c0c0c0 solid;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #606060;
+}
+
+.option.cards.addNew {
+    background: #f0f6f0;
+}
+
+.option.list {
+    width: 100%;
+    height: 44px;
+    padding: 9px 5px 9px 5px;
+    background: #ffffff;
+    border-bottom: 1px #c0c0c0 solid;
+}
+
+.option.cards:hover {
+    left: 1px;
+    top: 1px;
+    box-shadow: 0px 0px 0px #606060;
+}
+
+.option.list:hover {
+    background: #fffff0;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #3366cc;
+}
+
+.option.addNew .title {
+    color: #60a060;
+}
+
+.option.cards .title {
+    float: left;
+    width: 100%;
+    border-bottom: 1px #c0c0c0 solid;
+}
+
+.description {
+    font-size: 12px;
+    color: #909090;
+}
+
+.option.cards .description {
+    clear: both;
+}
+
+.option.list .description {
+    float: right;
+    padding-top: 4px;
+}

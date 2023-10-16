@@ -1,0 +1,63 @@
+.favourite {
+    width: 29px;
+    height: 30px;
+}
+
+.favourite {
+    cursor: pointer;
+    margin-right: 2rem;
+}
+
+.slds-popover_tooltip {
+    width: max-content;
+    max-width: var(--slds-c-tooltip-sizing-max-width, var(--sds-c-tooltip-sizing-max-width, var(--lwc-sizeMedium, 20rem)));
+    background-color: #0070D2;
+    border: 0;
+    margin-top: 5px;
+    visibility: hidden;
+}
+
+.fill {
+    position: absolute;
+    top: -56px;
+    right: -116px;
+}
+
+.blank {
+    position: absolute;
+    top: -56px;
+    right: -76px;
+}
+
+.slds-popover__body {
+    padding: 0px 6px;
+    font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+}
+.slds-popover {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+}
+.heart_fill {
+    position: relative;
+}
+.heart_blank {
+    position: relative;
+}
+
+.heart_fill:hover .slds-popover_tooltip {
+    cursor: pointer;
+    visibility: visible;
+}
+
+.heart_blank:hover .slds-popover_tooltip {
+    cursor: pointer;
+    visibility: visible;
+}
+
+@media screen and (max-width:540px) {
+    .favourite {
+        margin-right: 0px;
+    }
+    
+}

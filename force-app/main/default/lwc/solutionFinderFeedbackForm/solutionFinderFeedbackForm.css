@@ -1,0 +1,11 @@
+.footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px #c0c0c0 solid;
+    text-align: left;
+}
+
+img {
+    height: 24px;
+    width: 24px;
+}

@@ -1,0 +1,8 @@
+.THIS .naBadge{
+	background-color: crimson !important;
+    cursor: default !important;
+    color: white !important;
+}
+.THIS .prv-nxt{
+	width: 120px;
+}

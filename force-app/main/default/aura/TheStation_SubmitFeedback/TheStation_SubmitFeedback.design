@@ -1,0 +1,3 @@
+<design:component label="TheStation: Submit Feedback">
+    <design:attribute name="buttonLabel" label="Button Label" default="General Feedback" required="true"/>
+</design:component>

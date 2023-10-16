@@ -1,0 +1,67 @@
+:host {
+    display: inline-block;
+}
+.header_buttons {
+    display: flex;
+}
+.header__button {
+    margin-right: 1.3rem;
+    font-size: 16px;
+    font-family: 'DIN Pro Bold', sans-serif;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 2px;
+    gap: 10px;
+    width: 118px;
+    height: 39px;
+    background: #0070D2;
+    border-radius: 4px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.request_content {
+    color: #0070D2;
+    background: white;
+    border: 1px solid #0070D2 ;
+    width: 150px;
+}
+
+.request_content:hover {
+    background: #0070D2 !important;
+    color: white !important;
+}
+
+.header__button:hover {
+    color: #0070D2;
+    background-color: white;
+    border: 1px solid #0070D2;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.header__button:focus {
+    text-decoration: none;
+}
+
+@media screen and (max-width:768px) {
+    .header__button {
+        font-size: 12px;
+        width: 94px;
+        height: 33px;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    :host {
+        display: none;
+    }
+
+    .header__button {
+        display: none;
+    }
+}

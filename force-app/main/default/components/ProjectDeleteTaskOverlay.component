@@ -1,0 +1,143 @@
+<apex:component controller="ProjectTaskListController" allowDML="true" >
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/modal.css')}" />
+	
+	<!-- ### Initialize the overlay box for modal.js ### -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container" ></div>
+	<script>createOverlay('initializeModal')</script>			
+	
+	
+	<script>
+		
+		/**
+		* Create overlay to confirm tasks delete
+		*@param String id
+		*/
+		function showDeleteEvent(id, redirect, isMailstone){
+			
+			var ids = (id != 'undefined' && id != '' && id != null) ? new Array(id) : getIdsToDelete();
+			var idsString = '';
+			for(var it=0; it < ids.length; it++){
+				var taskId = ids[it];	
+				if (it == ids.length - 1) {
+					idsString += taskId;
+				}
+				else {
+					idsString += taskId + ':';
+				}
+			}
+				$(InputIdToDelete).value = idsString;
+				
+			var eventCont = $('deleteEventContainer');		
+		 	var type = $('tasktype');
+		 	//eventCont.innerHTML = '<input class="SaveBtn auto" type="button" value="Continue and delete" onclick="deleteTasks(\'' + id + '\', '+redirect+', ' +isMailstone+ ');" />';
+			//type.innerHTML = (isMailstone) ? 'Milestone(s)' : 'Task(s)';
+			createOverlay('', 'deleteTasks', 170);	
+		}
+		
+		function redirect()
+		{
+			var uri = location.href;
+			var len = uri.split('projecttaskdetail');
+			if(len.length > 1){
+				location.href = '/apex/ProjectTaskList?id=' + currentTeam;
+			}
+			
+		}
+	</script>
+	
+	
+	<style>
+		div.separator{
+			border-bottom: solid 1px #999999;
+			height:1px;
+			overflow: hidden;
+			margin: 10px 0px 10px 0px;
+		}
+		
+		div.buttons input.SaveBtn {
+			background: #004F6D none repeat scroll 0% 50%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:112% !important;
+			font-weight:bold;
+			height:28px;
+			margin:3px 2px 3px 140px;
+			text-align:center;
+			width:160px;
+		}
+		
+		div.buttons input.cancelBtn {
+			background: #999999 none repeat scroll 0% 50%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:112% !important;
+			font-weight:bold;
+			height:28px;
+			margin:3px 2px 3px 10px;
+			text-align:center;
+			width:63px;
+		}
+		
+		div.overlayContent{
+			margin: 30px 0px 20px 30px;
+		}
+		
+		div.informationPanel {
+			background-color:#FFFFBF;
+			border:1px solid #ADD1E7;
+			font-size:12px;
+			font-weight:bold;
+			margin: 0px 9px 0px 9px;
+			overflow:hidden;
+			padding:5px;
+			position:relative;
+			width: 97%;
+		}
+		
+		div.informationPanel img {
+			float:left;
+			margin:0px 8px 0px 0px;
+		}
+		
+		div.informationPanel div {
+			clear:none;
+			margin-top:10px;
+			overflow:hidden;
+			padding:0px;
+			position:relative;
+		}						
+	</style>
+	
+	<div id="deleteTasks" style="display:none;">
+		<div class="modalTitle">
+			<div class="title" id="overlayTeam">Delete <span id="tasktype"></span></div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" />
+				</a> 
+			</div>
+		</div>
+		<div class="overlayContent">
+			<strong>Are you sure you want to continue?</strong><br />
+			<span>Once task(s) are deleted, it is not recoverable</span>
+		</div>
+		<div class="separator"></div> 
+		<div class="buttons">
+			<apex:form >
+				<span id="deleteEventContainer">
+	                  	<apex:commandButton action="{!deleteTask}" value="Continue and delete" onclick="modal.close();  " oncomplete="redirect(); showMessageToUser('Deleted item(s) success');" rerender="taskListPanel" styleclass="SaveBtn auto"  >
+			        	</apex:commandButton>
+			        	<apex:inputHidden id="auxInputDeletes" value="{!idDeletes}" />
+				        	<script>
+			        		var InputIdToDelete = '{!$Component.auxInputDeletes}';
+			        	</script>
+				</span>
+				<input type="button" class="cancelBtn auto" onclick="modal.close();" value="Cancel" id="cancelButton"/>
+	        </apex:form>  
+        </div>
+	</div>
+</apex:component>

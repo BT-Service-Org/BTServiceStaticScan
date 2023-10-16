@@ -1,0 +1,13 @@
+<apex:page controller="ItemsToApproveController"> 
+    <apex:pageBlock title="Items to Approve" id="items_to_approve">  
+        <apex:PageBlockTable value="{!workItems}" var="wi">
+            
+            <apex:column headerValue="Item"><apex:outputLink value="/{!wi.ProcessInstance.TargetObject.id}" target="_blank">{!wi.ProcessInstance.TargetObject.name}</apex:outputLink></apex:column> 
+            <apex:column headerValue="Submitted by" value="{!wi.originalActor.name}"/>
+            <apex:column headerValue="Process" value="{!wi.processinstance.ProcessDefinition.name}"/>
+            <apex:column headerValue="Status" value="{!wi.processInstance.status}"/>
+            <apex:column headerValue="Started Date" value="{!wi.ProcessINstance.CreatedDate}"/>
+            
+        </apex:PageBlockTable>
+    </apex:pageBlock>
+</apex:page>

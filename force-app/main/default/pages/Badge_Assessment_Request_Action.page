@@ -1,0 +1,24 @@
+<apex:page standardcontroller="Learning_Domain__c" extensions="BadgeAssessmentExtension" showHeader="false" action="{!checkPreConditions}">
+<script type='text/javascript' src='/canvas/sdk/js/publisher.js'/>
+<style>
+.requiredInput .requiredBlock, .requiredBlock {background-color: white;}
+.custompubblock div {display: inline-block;}
+.custompublabel {width:54px;}
+</style>
+<div>
+<apex:form >
+<apex:pageMessages id="error"/>
+<apex:actionFunction action="{!createBadgeAssessment}" name="createBadgeAssessment"/>
+<apex:outputPanel id="out" > 
+<div class="custompubblock">
+<div class="custompublabel">Learning Domain:</div><apex:inputField value="{!learningDomain.Name}" style="margin-left:0;"/><br/>
+<div>Judge:&nbsp;</div>
+<apex:selectList rendered="{!validLearningDomain}" value="{!assignedJudge}" multiselect="false" size="1">    
+       <apex:selectOptions value="{!judgeItems}"/>  
+</apex:selectList><p/>    
+</div>
+</apex:outputPanel>
+<apex:commandButton rendered="{!validLearningDomain}" action="{!createBadgeAssessment}" value="Create Badge Assessment" title="Create Badge Assessment"/>                   
+</apex:form><br/>
+</div>
+</apex:page>

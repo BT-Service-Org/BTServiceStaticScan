@@ -1,0 +1,7 @@
+.assessment-table {width: 100%;margin-bottom: 1rem;border: 1px solid #e5e5e5;border-collapse: collapse;background: #ffffff;}
+.assessment-table thead td, .assessment-table thead th { border-bottom-width: 2px; } 
+.assessment-table thead th { vertical-align: bottom; border-bottom: 1px solid #e5e5e5; }
+.assessment-table td, .assessment-table th { border: 1px solid #e5e5e5; padding: 0.5rem;}
+.assessment-table td:not(:first-child), .assessment-table th:not(:first-child) {text-align: center;}
+.assessment-table .title {background: #f3f3f3;}
+.record-title {padding-left: 2.5rem !important;}

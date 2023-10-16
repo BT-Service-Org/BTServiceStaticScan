@@ -1,0 +1,75 @@
+<template>
+    <div class="spinner-container" if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    </div>
+    <div data-id="feature-slack-container">
+        <template if:true={sectionTitle}>
+            <h3 class="section-title" data-id="feature-slack-title">{sectionTitle}</h3>
+        </template>
+        <div class="section-container" if:false={showSpinner}>
+            <div>
+           
+    
+            <!-- Display No Records Found Message -->
+            <p if:false={commentData.length} class="ITC_font slds-text-align_center">{noRecordsMessage}</p>
+    
+            <!-- Display Featured Comments -->
+            <template if:true={commentData.length}>
+                <div class="comment-card-container" data-id="commentDiv" style={getColumnCount}>
+                    <template for:each={commentData} for:item="comment">
+    
+                        <!-- Feature Comment Card -->
+                        <div key={comment.Id} class="comment-card" data-card-index={comment.index}>
+                            <a href={comment.Slack_Link__c} target="_blank">
+    
+                                <!-- Feature Comment Card Header-->
+                                <div class="comment-card__header">
+                                    <div if:true={comment.Commenter__r.MediumPhotoUrl} class="profile-img-container">
+                                        <img class="profile-image" alt="Profile Photo"
+                                            src={comment.Commenter__r.MediumPhotoUrl}>
+                                    </div>
+                                    <div class="user-info slds-p-horizontal_small">
+                                        <p class="ITC_font user-name">{comment.Commenter__r.Name}</p>
+                                        <span class="salesforce_font user_detail">
+                                            <p style="word-wrap: break-word;" if:true={comment.Commenter__r.Email}>{comment.Commenter__r.Email}  </p>
+                                            <p if:true={comment.commentTime}>{comment.commentTime}</p>
+                                          
+                                            <p if:true={comment.Community__r}><span if:true={comment.Community__r.Page_Title__c}>{comment.Community__r.Page_Title__c}</span></p>
+                                        </span>
+                                    </div>
+                                    <div class="slack-img-container">
+                                        <img class="slack-logo-img" alt="Slack logo" src={slack_logo}>
+                                    </div>
+                                </div>
+    
+                                <!-- Feature Comment Card Body-->
+                                <div class="comment-card__body slds-text-align_center">
+                                    <p class="comment-card__body-content">{comment.slackComment}</p>
+                                    <span if:true={comment.isTextLengthExceeded} class="comment_load">
+                                        <template if:true={comment.Slack_Link__c}>
+                                            <a href={comment.Slack_Link__c} target="_blank">
+                                                View More
+                                                </a>
+                                        </template>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </div>
+    
+                <!-- Pagination-->
+                <div class="pagination-btn-container ITC_font">
+                    <span>
+                        <lightning-button-icon icon-name="utility:left" alternative-text="Previous"
+                            onclick={handlePrevious}  disabled={isPrevDisableButton}></lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:right" alternative-text="Next"
+                            class="slds-m-left_xx-small" onclick={handleNext}  disabled={isNextDisableButton} ></lightning-button-icon>
+                    </span>
+                </div>
+            </template>
+        </div>
+        </div>
+    </div>
+   
+</template>

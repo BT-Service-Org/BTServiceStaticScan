@@ -1,0 +1,55 @@
+<apex:page sidebar="false" showHeader="false">
+
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>New Team Profile</title>
+
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/newTeamProfile.css')}" />	
+		
+		<!-- Edit Member Info -->
+		<div id="AdminNewTeamType" style="display:none;">
+			<!-- Title of Dialog -->
+			<div class="modalTitle">
+				<div class="title">New Team Type</div>
+				<div class="closeEvent">
+					<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+				</div>
+			</div>
+			<!-- Content  -->
+			<div class="modalContent">
+				<div class="requireLegend"><span class="infoText">= Required Information</span></div>
+				<!-- Dialog Body  -->
+				<div class="modalMessage padding_Tables bottom_border_gray">
+					<table border="0" class="editInfoTables">
+						<tr>
+							<td align="right" class="labelTitle">Type  Name</td>
+							<td><div class="requireInput"></div></td>
+							<td>
+								<input id="teamTypeName" class="teamRoleInput" value="" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td align="right" valign="top" class="labelTitle">
+								<div class="divDesc">Description</div>
+							</td>
+							<td></td>
+							<td>
+								<textarea id="teamTypeDescription" rows="2" cols="20"  class="teamRoleInputTxtArea" type="text"></textarea>
+							</td>
+						</tr>
+					</table>	
+				</div>
+				<!--Actions  -->
+				<div class="divButtons">
+					<span id="teamTypeEventSave">
+						<a href="javascript:;" onclick="saveTeamType();" class="button">
+							Save and continue to setup a widgets
+						</a>
+					</span>
+					<a href="javascript:;" onclick="modal.close();" class="button gray">
+						Cancel
+					</a>
+				</div>
+			</div><!-- END Modal Content -->
+		</div>
+</apex:page>

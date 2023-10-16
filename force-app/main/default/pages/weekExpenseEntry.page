@@ -1,0 +1,25 @@
+<apex:page controller="weekExpenseEntry_Controller" tabStyle="Weekly_Expense_Entry__c">
+	<apex:form id="theForm">
+        <br />
+        <h1>LAST WEEK'S EXPENSE ENTRIES (week beginning&nbsp;<apex:outputText value="{!strLastWeekBeginning}" />)</h1>
+        <br />
+        <br />
+		<apex:dataTable value="{!WeekExpenses}" var="weekExpense" id="theTable" rowClasses="odd,even" 
+            styleClass="tableClass" cellPadding="5" border="1">
+			<apex:column >
+                <apex:facet name="header">SOW</apex:facet>
+                <apex:outputText value="{!weekExpense.sowName}"/>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Resource</apex:facet>
+                <apex:outputText value="{!weekExpense.resourceName}"/>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Expense Amount</apex:facet>
+                <apex:inputField value="{!weekExpense.expenseEntry.Expense_Amount__c}" />
+            </apex:column>
+		</apex:dataTable>
+        <br />
+        <apex:commandButton action="{!saveExpenses}" value="Save" id="saveButton" />
+	    </apex:form>        
+</apex:page>

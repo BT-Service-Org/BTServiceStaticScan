@@ -1,0 +1,270 @@
+<apex:page tabStyle="PeopleProfile__c" sidebar="false" controller="PeopleOverviewController">
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	
+	
+		
+	<!-- ### Upload File [UPF] ### -->
+	<script>
+		console.info('control');
+		var countUPF = 0; //Counts amount of uploaded files
+		var pid;
+		var validFile;
+		var outputDivContent = '';
+		//Init//
+		function init(){
+			var param = UPF__getURLParam('pid');
+			var inpt = document.getElementById('done_pid').value = param;
+			var msj = $('msjError');
+			msj.hide();
+		}
+		
+		//Get Param//
+		function UPF__getURLParam(strParamName){
+		  var strReturn = '';
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf('?') > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf('?'));
+		    var aQueryString = strQueryString.split('&');
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + '=') > -1 ){
+		        var aParam = aQueryString[iParam].split('=');
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}		
+		
+		
+		//Confirm Upload//
+		function UPF__success__(){
+
+			var la = document.getElementById('uploadP__');
+			if(iframeUpload.document.getElementById('ep')){
+				var ifrDiv = iframeUpload.document.getElementById('ep');
+				var pNode = ifrDiv.parentNode;
+				pNode.removeChild(ifrDiv);
+				la.innerHTML = '<strong style="color:green;">Success !</strong>';
+				countUPF++;
+				UPF__showInfo__();
+				pidtemp = document.getElementById('done_pid').value;
+				$('uploadAttach').reset();
+				document.getElementById('done_pid').value = pidtemp;
+				
+				var msj = $('msjError');
+				msj.hide();
+				makeFirstPhotoDefault();
+			}else{
+				setTimeout('UPF__success__(); UPF__CheckError__()',2000);
+			}
+		
+		}
+		
+		//Check Errors//
+		function UPF__CheckError__(){
+			var divs = iframeUpload.document.getElementsByTagName('DIV');
+			if (divs[42]){
+				if(divs[42].className == 'errorMsg'){
+					var la = document.getElementById('uploadP__');
+					la.innerHTML = '';
+					divs[42].className = '';
+				}
+			}
+		}
+		
+		//View Loader//
+		function UPF__loader__(){
+			var la = document.getElementById('uploadP__');
+			la.innerHTML = 'Uploading file, please wait...';
+		}
+		
+		
+		function makeFirstPhotoDefault()
+		{
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+				var pid = document.getElementById('done_pid').value;
+				resultCount = sforce.connection.query("Select count() From Attachment WHERE ParentId = '" + pid + "'");
+				countPhotosMyProf = resultCount.getInt("size");
+				if(countPhotosMyProf == 1)
+				{
+					myPhoto = sforce.connection.query("Select a.Id From Attachment a WHERE ParentId = '" + pid + "'");
+					photo = myPhoto.getArray("records");
+					var myprofile = new sforce.SObject("PeopleProfile__c");
+					myprofile.Id = pid;
+					myprofile.Picture__c = photo[0].Id;
+					result = sforce.connection.update([myprofile]);
+				}
+		}
+		
+		function goBackPhotoGallery()
+		{
+			pid = document.getElementById('done_pid').value;
+			location.href = "PeoplePhotoGallery?pid=" + pid;
+		}
+
+				 
+		function fileExtension(theFile) {
+			theFile = theFile.split('\\');
+			nom = theFile[theFile.length-1];
+			ext = nom.substr(nom.indexOf('.'),nom.length).toLowerCase();
+			return ext;
+		}
+	
+		function checkFileType()
+		{
+			extArray = new Array(".gif", ".jpg", ".png", ".bmp");
+			var file = $('file');
+			pathFile = file.value;
+			fileExt = fileExtension(pathFile);
+			for (var i = 0; i < extArray.length; i++)
+			{
+				if (extArray[i] == fileExt) 
+				{
+					return true; 
+				}
+			}
+			return false;
+		}
+		
+		function validateFile()
+		{
+			var file = $('file');
+			if(file.value == "")
+			{
+				showMessageError(1);
+			}else
+			{
+				if(!checkFileType(file))
+				{
+					showMessageError(2);
+				}else
+				{
+					$('uploadAttach').submit();
+					UPF__loader__();
+					UPF__success__();
+				}
+			}
+		}
+		
+		function showMessageError(msjerror)
+		{
+			var msj = $('msjError');
+			switch(msjerror){
+				case 1:
+					msj.innerHTML = '<img width="25px" src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />\n<strong style="color:red;">Please specify a file to upload. Type in the path to the file, or use the "Browse" button to locate it in your local filesystem.</strong>';
+				break;
+				case 2:
+					msj.innerHTML = '<img width="25px" src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />\n<strong style="color:red;">Please only upload .bmp .jpg .png .gif images</strong>';
+				break;
+			}
+			Effect.Appear(msj);
+		}
+		
+
+		
+		//Show Uploaded Files//
+		function UPF__showInfo__(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+			var pid = document.getElementById('done_pid').value;
+			var que = "SELECT a.Name, a.BodyLength FROM Attachment a WHERE a.ParentId = '" + pid + "' ORDER BY CreatedDate DESC LIMIT " + countUPF;
+			var result = sforce.connection.query(que);
+			var iter = new sforce.QueryResultIterator(result);
+			var output = '<div class="separator"></div>\n<div class="title_from_section">Attachment</div>';
+			output += '<div class="attachment_title">You have just uploaded the following files</div>\n\t<div class="attach_item" >\n<dl>';
+			while (iter.hasNext()) {
+				var attach = iter.next();
+				var aux = attach.BodyLength/1024;
+				var attName = attach.Name;
+				var attSize = Math.round(aux*100)/100;
+				output += '<dt>Filename: </dt><dd>' + attName + '</dd>\n<dt>Filesize: </dt><dd>' + attSize + ' KB</dd>\n';
+			}
+			output += '</dl><div class="separator" /></div>\n</div>';
+			
+			$("uploadOutput").innerHTML = output;
+		}
+		
+	</script>
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>		
+		</div>		
+		<!-- Search Box Container (always Centered) -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<apex:include pageName="PeopleSidebarProfile" />	
+			</div>
+		</div><!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+					<a href="javascript:history.go(-1);">< Go back to Photo Gallery</a>
+					<h1>Edit Profile</h1>
+					<h2>Upload Picture</h2>
+				</div>
+				<div class="main_form">
+					<div id='msjError' class="message_to_user" style="display:none;" >
+
+					</div>
+					<form  action="/p/attach/NoteAttach" enctype="multipart/form-data" onsubmit="if (window.ffInAlert) { return false; }" name="uploadAttach" method="post" id="uploadAttach"  target="iframeUpload">
+						<input type="hidden" name="added" id="done_added" value="1" />
+						<input type="hidden" name="pid" id="done_pid" value="" />
+						<div class="form_fields">
+							<div class="field">
+								<label class="uploader">1. Select the File</label><br />
+								<span class="info">Type the path of the file or click the Browse button to find the file.</span><br />
+								<input id="file" name="file" size="20" title="Type the path of the file or click the Browse button to find the file." type="file" />
+							</div>
+							<div class="field">
+								<label class="uploader">2. Click the "Attach File" button</label><br />
+								<span class="info">Repeat steps 1 and 2 to attach multiple files.<br />(When the upload is complete the file information will appear below.)</span><br />
+								<!--  <input type="button" class="topMargin5 action" value="Attach File" /> -->
+								<input value="Attach File"  name="Attach" type="button" onclick="validateFile();" /> <span id="uploadP__"></span>
+							</div>
+							<div class="field">
+								<label class="uploader">3. Click the "Done" button to return to the previous page.</label><br />
+								<span class="info">(This will cancel an in-progress upload.)</span><br />
+								<input type="button" value="Done" onclick="goBackPhotoGallery();"/>
+							</div>
+						</div>
+					</form>
+					<div id='uploadOutput' >
+					</div>
+					<iframe name="iframeUpload" style="display:none;" ></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		//Initialize
+		init();
+	</script>
+</apex:page>

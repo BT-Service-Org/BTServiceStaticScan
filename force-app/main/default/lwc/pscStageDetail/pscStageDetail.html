@@ -1,0 +1,30 @@
+<template>
+    <div if:true={stageData} class="font stage-page ITC_font">
+        <div class="stage-top">
+            <template if:true={stageData.Name}>
+                <p class="font stage-name ITC_font">{stageData.Name}</p>
+            </template>
+            <template if:true={stageData.Description__c}>
+                
+                <h1 class="font desc-head ITC_font">What's Involved?</h1>
+                <p class="stage-desc salesforce_font">{stageData.Description__c}</p>
+            </template>
+            <template if:true={stageData.Purpose__c}>
+                <h1 class="font desc-head ITC_font">Why Is It Important?</h1>
+                <p class="stage-desc salesforce_font">{stageData.Description__c}</p>
+               
+            </template>
+        </div>
+        <div class="stage-methods">
+            <h1 class="font desc-head ITC_font" style="margin-left:50px">Stage Methods : </h1>
+        <lightning-button label="Apply Filter" variant="brand" onclick={handleClick}></lightning-button>
+        </div>
+        
+        <div class="method-cards">
+            <template if:true={methodNumbers}>
+                <c-psc-method-card method-ids={methodNumbers} show-full-description=true></c-psc-method-card>
+            </template> 
+        </div>
+           
+    </div>
+</template>

@@ -1,0 +1,102 @@
+<template>
+    <lightning-record-view-form object-api-name="gdc_ms_Nomination__c" record-id={recordId}>
+        <!--Sections for Record Creation-->
+        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+            <!--Nominee Details-->
+            <lightning-accordion-section class="slds-section" name="A" label="Nominee Detail's">
+                <div if:true={isTrailblazers}>
+                    <lightning-output-field field-name="gdc_ms_Nominee__c" variant="label-inline">
+                    </lightning-output-field>
+                </div>
+                <div if:true={isAchieversAward}>
+                    <lightning-output-field field-name="gdc_ms_Nominee__c" variant="label-inline">
+                    </lightning-output-field>
+                </div>
+                <div if:true={isCustomerScussess}>
+                    <lightning-output-field field-name="gdc_ms_SuccessTeamName__c" variant="label-inline">
+                    </lightning-output-field>
+                </div>
+
+
+                <lightning-output-field field-name="gdc_ms_Manager__c" variant="label-inline">
+                </lightning-output-field>
+                <lightning-output-field field-name="gdc_ms_AwardCategory__c" variant="label-inline"
+                    onchange={handleAwardCategory}>
+                </lightning-output-field>
+            </lightning-accordion-section>
+            <lightning-accordion-section class="slds-section" name="B" label={accLabel}>
+
+                <div if:true={isTrailblazers}>
+
+                    <div class="slds-text-align_center slds-var-p-around_large">
+                        <h1 class="slds-text-heading_small">Examples of Nomination
+                            Criteria for
+                            Trailblazers Award</h1>
+                        <br>
+                        <p>Please choose AT LEAST TWO of the below examples and give a detailed description for
+                            each
+                            example. You may describe more than three but at least three must be filled in for
+                            the
+                            nominee to be considered.</p>
+                        <br>
+                    </div>
+                    <lightning-output-field field-name="gdc_ms_DriveGDCGoalsAsPerVision__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_TeamPlayerRecognisedMentor__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_MeasurableContributionToGDC__c" variant="label-inline">
+                    </lightning-output-field>
+                </div>
+
+                <!--Customer Success Category-->
+                <div if:true={isCustomerScussess}>
+                    <div class="slds-text-align_center slds-var-p-around_large">
+                        <h1 class="slds-text-heading_small">Examples of Nomination
+                            criteria for Customer Success Award</h1>
+                        <br>
+                        <p>Please choose AT LEAST TWO of the below examples and give a detailed description for
+                            each example. You may describe more than three but at least three must be filled in
+                            for the nominee to be considered.</p>
+                        <br>
+                    </div>
+                    <lightning-output-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                        variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_CustomerAppreciationHighCSATScore__c"
+                        variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_ProjectComplexityValueDelivered__c"
+                        variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_TeamName__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_TeamOwner__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_TeamSize__c" variant="label-inline">
+                    </lightning-output-field>
+                </div>
+                <!--Customer Success Category-->
+                <div if:true={isAchieversAward}>
+                    <div class="slds-text-align_center slds-var-p-around_large">
+                        <h1 class="slds-text-heading_small">Examples of Nomination Criteria for Achiever's Award
+                        </h1>
+                        <br>
+                        <p>Please note this is a Monthly Award. Please choose AT LEAST TWO of the below examples
+                            and give a detailed description for each example. You may describe more than three
+                            but at least three must be filled in for the nominee to be considered.</p>
+                        <br>
+                    </div>
+                    <lightning-output-field field-name="gdc_ms_CustomerGeoFeedback__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_PersonalAchievements__c" variant="label-inline">
+                    </lightning-output-field>
+                    <lightning-output-field field-name="gdc_ms_WinAsTeamCharacteristic__c"
+                        variant="label-inline">
+                    </lightning-output-field>
+                </div>
+            </lightning-accordion-section>
+            <!--Trailblazers Category-->
+        </lightning-accordion>
+    </lightning-record-view-form>
+</template>

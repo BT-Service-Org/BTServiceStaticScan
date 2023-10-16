@@ -1,0 +1,21 @@
+<template >
+    <div class="topnavMobile">
+        <nav role="navigation">
+            <div class="menuToggle">
+            <input class="inputlogo" type="checkbox" onclick={handleClick} /> 
+            <div style="display: flex;">
+                <img class="logo" src={salesforceLogo} >
+                <div if:true={show} class="heading">Global Delivery Centre</div>
+                <div if:false={show} class="pageName">{pageName}</div>
+            </div>
+                <ul if:true={show} class="menu">
+                    <template for:each={navBarElements} for:item="item">
+                        <a key={item}>
+                            <li data-id={item} onclick={navigate}>{item}</li>
+                        </a>
+                    </template>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</template>

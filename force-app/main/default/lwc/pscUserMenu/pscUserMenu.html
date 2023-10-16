@@ -1,0 +1,46 @@
+<template>
+    <div if:true={showUserMenu} class="backdrop" onclick={closeUserMenu}></div>
+    <div class="user-block" onclick={openUserMenu} onkeydown={openUserMenu} tabindex="0">
+        <div class="user-icon">
+            <div class="slds-progress-ring">
+                <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                    aria-valuenow={levelPercent}>
+                    <svg viewBox="-1 -1 2 2">
+                        <path class="slds-progress-ring__path" id="slds-progress-ring-path-53" d={diameter}></path>
+                    </svg>
+                </div>
+                <div class="slds-progress-ring__content">
+                    <img src={icons.user} alt="user profile menu" />
+                </div>
+            </div>
+        </div>
+        <template if:true={showUserMenu}>
+            <div class="user-menu" onblur={navigateLinks}>
+                <div class="user-menu__header">
+                    <div class="user-profile-icon" tabindex="0">
+                        <img src={icons.user} alt="user-img" />
+                    </div>
+                    <div class="user-menu__header-username ITC_font">{userName}</div>
+                    <div if:true={userData}>
+                                <div class="salesforce_font user_acheivement" for:each={userData} for:item="user" key={user.Badge_Count__c}/>
+                                    <ul style="display:flex" class="dot-list">
+                                    <li if:true={user.Level__r}>{user.Level__r.Name} </li>
+                                    <li if:true={user.Badge_Count__c}>{user.Badge_Count__c} badges </li>
+                                    <li if:true={user.Total_Points__c}>{user.Total_Points__c} Points</li>
+                                    </ul>
+                                </div>
+                    </div>
+                </div>
+                <ul class="user-menu__body">
+                    <template for:each={menuItems} for:item="item" for:index="index">
+                        <li class="user-menu__body-item ITC_font" key={item.url} onclick={closeUserMenu}>
+                            <a data-index={index} href={item.url} target={item.target} onkeydown={navigateLinks}>
+                                <p>{item.title}</p>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </template>
+    </div>
+</template>

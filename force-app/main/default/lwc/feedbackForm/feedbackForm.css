@@ -1,0 +1,33 @@
+/* div.slds-p-around_xx-large{
+    border: 1px solid black;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 300px;
+    margin-left: 300px;
+    padding-top: 60px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    padding-left: 100px;
+    
+ }  */
+
+/* h2{
+   font-size: large; 
+   color: rgb(12, 108, 146);
+   text-align: center;
+  
+   border-bottom-width: 0.05cm;
+} */
+.selected-row {
+   /* background :rgb(231, 229, 228); */
+   background :rgb(205, 228, 187);
+}
+.sectionHeader {
+   padding: 5px 8px;
+   border-radius: 5px;
+   background-color: #f3f2f2;
+}
+
+.deleteIcon {
+   cursor: pointer;
+}

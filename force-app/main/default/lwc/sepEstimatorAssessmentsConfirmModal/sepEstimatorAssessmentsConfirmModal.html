@@ -1,0 +1,19 @@
+<template>
+    <lightning-modal-header label=" ">
+        <h1 class="slds-modal__title slds-hyphenate slds-text-align_left"><lightning-icon icon-name="standard:picklist_choice" alternative-text="Picklist choice"></lightning-icon> {modalTitle}</h1>
+    </lightning-modal-header>
+    <lightning-modal-body>
+        <lightning-layout>
+            <lightning-layout-item size="12">
+                <div class="slds-notify slds-notify_alert slds-alert_warning slds-float_left slds-m-bottom_small slds-text-align_left" role="alert">
+                    <lightning-icon icon-name="utility:warning" alternative-text="Warning" title="Warning" size="small" class="slds-m-left_small slds-m-right_small alert-icon"></lightning-icon>
+                    <h1 class="alert-text">{modalMessage}</h1>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button variant="brand" label="Cancel" class="slds-m-right_small" onclick={handleCancel}></lightning-button>
+        <lightning-button variant="brand" label="Confirm" onclick={handleConfirm}></lightning-button>
+    </lightning-modal-footer>
+</template>

@@ -1,0 +1,9 @@
+<design:component>
+    
+    <design:attribute name="showHeader" label="Show the header?" />
+    <design:attribute name="showHero" label="Show the Hero Component?" />
+    <design:attribute name="mainMenu" label="Main Menu" description="Developer name of the main navigation menu"/>
+    <design:attribute name="childMenus" label="Child Menus" description="Developer  names of the childs menus separated by ','"/>
+    <design:attribute name="menuAlignment" label="Menu Alignment" datasource="Left,Center,Right" description="Alignment of the main menu elements"/>
+    
+</design:component>

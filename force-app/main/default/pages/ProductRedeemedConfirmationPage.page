@@ -1,0 +1,53 @@
+<apex:page standardController="Product__c" recordSetVar="prods" tabStyle="Product__c" extensions="PointsRedeemedExtension" >
+	
+	<apex:sectionHeader title="Confirm Product" subtitle="Step 2 of 2"/>
+	
+	<apex:form >	
+	
+	<apex:pageBlock title="Confirmation" mode="edit">   
+
+	
+	<apex:pageMessages />
+	
+	<apex:pageBlockButtons location="top">		
+		<apex:commandButton value="Submit" action="{!submit}" rendered="{!NOT(hideButtons)}" styleClass="btn"/>
+		<apex:commandButton value="Cancel" immediate="true" action="{!cancel}"/>
+	</apex:pageBlockButtons>
+	
+	<apex:pageBlockSection title="Shipping Info" rendered="{!NOT(hideButtons)}">
+		<apex:panelGrid columns="4" >
+		<apex:outputLabel value="Street Address: " />
+			<apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block"/>
+			<apex:inputText required="true" value="{!shipTo.street}" id="StreetAddress"/>
+			</apex:outputPanel>
+		<apex:outputLabel value="City: " /> 
+			<apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block"/>
+			<apex:inputText required="true" value="{!shipTo.city}" id="City" />
+		</apex:outputPanel>
+		<apex:outputLabel value="State: " /> <apex:inputText value="{!shipTo.state}" />
+		<apex:outputLabel value="Country: " /> <apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block"/>
+			<apex:inputText required="true" value="{!shipTo.country}" id="Country"/>
+			</apex:outputPanel>
+		<apex:outputLabel value="Zip code: " /> 
+			<apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block"/>
+			<apex:inputText required="true" value="{!shipTo.zip}" id="ZipCode"/> 
+			</apex:outputPanel>
+		</apex:panelGrid>
+	</apex:pageBlockSection>
+	
+	<apex:pageBlockSection title="Selected Prize(s)" rendered="{!NOT(hideButtons)}"> 
+		
+		<apex:pageBlockTable value="{!prods}" var="prod">
+			<apex:column value="{!prod.name}"/>
+			<apex:column value="{!prod.Points_Needed__c}"/>
+			<apex:column value="{!prod.Product_Image__c}"/>		
+		</apex:pageBlockTable>
+	</apex:pageBlockSection>
+	</apex:pageBlock>
+	</apex:form>
+
+</apex:page>

@@ -1,0 +1,15 @@
+<template>
+        <div class="playbook-page">
+            <h1 class="playbook__header ITC_font" tabindex="0" aria-label={headerInfo}>
+                {headerInfo}
+            </h1>
+            <p class="playbook__text salesforce_font">
+                {headerDescription}
+            </p>
+            <div>
+                <template if:true={sobjectList}>
+                    <c-psc-play-book-card play-books={sobjectList}></c-psc-play-book-card>
+                </template>
+            </div>
+        </div>
+</template>

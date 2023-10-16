@@ -1,0 +1,174 @@
+@font-face {
+    font-family: "Proxima Nova";
+    src: url('/resource/GDCMSProfilePageAssets/assets/gdcms_proxima_nova_font.otf') format('opentype');
+}
+
+.grad1 {
+    min-height: 40.7rem;
+    width: 100%;
+
+    position: relative;
+    color: #001639;
+    /*background-image: linear-gradient(white,#EFF0F2);
+  linear-gradient(0deg, #fff 10%, #f321d7 45%,#001639 80%)*/
+}
+
+.badges{
+    margin-top: 0.5rem;
+    width: 100%;
+    overflow: hidden;
+    height:100%;
+    padding-top: 0.5rem;
+    /*transform-origin: 50% 0%;
+    transition: 1s transform cubic-bezier(.155,1.105,.295,1.12),1s box-shadow,1s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  } 
+
+  .badges:hover{
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);*/
+}
+
+.profile{
+    /* transform-origin: 50% 50%; */
+    transition: 0.5s transform cubic-bezier(.155,1.105,.295,1.12),0.5s box-shadow,0.5s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+}
+
+.profile:hover{
+    transform: scale(1.05);
+    /* box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06); */
+}
+
+.profile-titles{
+    font-weight: 900;
+    font-size: 22px;
+}
+
+.font-proxima-nova {
+
+    font-family: 'Proxima Nova', 'Salesforce Sans', 'Inter';
+}
+
+.font-salesforce-sans {
+
+    font-family: 'Salesforce Sans', 'Inter';
+}
+
+.profile-container {
+
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+.profile-image {
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+    border: 3px solid #0d9dda;
+    background-color: #fff;
+}
+
+.profile-image-container {
+
+    right: -0.8rem;
+    z-index: 2;
+}
+
+.leaves-image {
+    height: 90px;
+}
+
+.light-leaves-image {
+    right: 0;
+    top: -1.5rem;
+    z-index: 1;
+}
+
+.dark-leaves-image {
+    right: -2.6rem;
+    top: 0;
+    z-index: 1;
+    -ms-transform: rotate(20deg);
+    transform: rotate(80deg);
+}
+
+.team-member-name {
+
+    font-size: 23px;
+    color: #032D60 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    font-weight: 700;
+}
+
+.team-member-position {
+
+    font-size: 20px;
+    color: #0d9dda !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    font-weight: 700;
+}
+
+.team-member-certificates {
+
+    font-size: 11px;
+    color: #0b5cab !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    text-align: justify;
+}
+
+.team-member-name-position-block {
+
+    border-bottom: 5px solid #032D60;
+}
+
+.certified-professional-image {
+
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+}
+
+.team-member-summary {
+
+    font-size: 13px;
+    color: #0b5cab !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    text-align: justify;
+}
+
+.team-member-skill-heading {
+
+    font-size: 16px;
+    color: #032D60 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    font-weight: 700;
+}
+
+.team-member-skill {
+
+    font-size: 10px;
+}
+
+.bottom-curve {
+
+    border-radius: 100% 100% 0 0;
+    background: rgb(224, 246, 255) !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    padding: 25px;
+    width: 100%;
+}
+
+.bush-image {
+
+    right: 0;
+    bottom: 0;
+    max-width: 12%;
+    z-index: 1;
+}

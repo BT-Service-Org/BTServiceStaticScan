@@ -1,0 +1,14 @@
+<template>
+    <div class="add-new-form">
+        <lightning-input name="title" label="Answer" value={title} onchange={handleTitleChange} max-length="40"></lightning-input>
+        <lightning-input name="description" label="Description" value={description} onchange={handleDescriptionChange}></lightning-input>
+        <lightning-input name="nextQuestion" label="Next Question" value={nextQuestion} onchange={handleNextQuestionChange}></lightning-input>
+        <lightning-textarea name="nextQuestionHelpText" label="Next Question Help Text" value={nextQuestionHelpText} onchange={handleNextQuestionHelpTextChange}></lightning-textarea>
+        <hr />
+        <lightning-input name="feedbackSlackChannel" label="Feedback Slack Channel" value={feedbackSlackChannel} onchange={handleFeedbackSlackChannelChange}></lightning-input>
+        <lightning-input name="feedbackEmail" label="Feedback Email" value={feedbackEmail} onchange={handleFeedbackEmailChange}></lightning-input>
+        <div class="footer">
+            <lightning-button label="Save" variant="success" onclick={handleSave}></lightning-button>
+        </div>
+    </div>
+</template>

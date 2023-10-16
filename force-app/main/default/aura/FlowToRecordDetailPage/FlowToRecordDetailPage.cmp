@@ -1,0 +1,23 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global" >
+    <aura:attribute name="loader" type="Boolean" default="true" />
+    <aura:attribute name="recId" type="String" />
+    <aura:attribute name="hasError" type="Boolean" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <!--This is a loader before redirecting user to the record detail page-->
+    <aura:if isTrue="{!v.loader}">
+    <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-align_absolute-center" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+     </div>
+    </aura:if>
+    
+    <!--This is a Errormessage if there is any exception occurs-->
+    <aura:if isTrue="{!v.hasError}">
+         {!v.errorMessage}
+  	</aura:if> 
+</aura:component>

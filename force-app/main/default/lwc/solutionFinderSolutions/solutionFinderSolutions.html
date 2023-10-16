@@ -1,0 +1,13 @@
+<template>
+    <div>
+        <template if:false={solutionsExist}>
+            <div class="slds-text-color_inverse-weak">
+                {noRecordsMessage}
+            </div>
+        </template>
+        <template for:each={solutions} for:item="solution">
+            <c-solution-finder-solution key={solution.id} solution={solution} option-name={optionName} button={button} onedit={handleEdit}
+                onloading={handleLoading}></c-solution-finder-solution>
+        </template>
+    </div>
+</template>

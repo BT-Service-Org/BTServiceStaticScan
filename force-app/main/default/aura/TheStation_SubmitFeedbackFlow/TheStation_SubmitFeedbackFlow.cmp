@@ -1,0 +1,14 @@
+<aura:component >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:if isTrue="{!v.flowStatus != 'FINISHED'}">
+    	<lightning:flow aura:id="submitFeedbackFlow" onstatuschange="{!c.handleStatusChange}"/>
+    </aura:if>
+    
+    
+    
+    
+</aura:component>

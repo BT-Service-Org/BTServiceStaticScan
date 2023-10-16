@@ -1,0 +1,65 @@
+<aura:component controller="The_Station_inlineEditCtrl">
+    <aura:attribute name="showSaveCancelBtn" type="boolean"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="sNo" type="string" />
+    <aura:attribute name="url" type="String" />
+    <aura:attribute name="urll" type="String" />
+    <aura:attribute name="singleRec" type="sobject" default="{'sobjectType' : 'StationGroupingAssociation__c',
+                                                             'Order__c' : '',
+                                                             'Name' : '',
+                                                             'Station_Content__c' :'',
+                                                             'Content_Type__c ' :'',
+                                                             'Id':'',    
+                                                             }"/>
+    <aura:attribute name="orderEditMode" type="boolean" default="false" />
+    <tr>
+        <td><div class="slds-truncate nbreSize">{!v.sNo}</div></td>
+        
+        <td ondblclick="{!c.inlineEditOrder}" class="{! v.showErrorClass == true ? 'slds-cell-edit slds-has-error' : 'slds-cell-edit'}">
+            <span class="slds-grid slds-grid_align-spread">
+                <!-- show input and output section based on boolean flag --> 
+                <aura:if isTrue="{!v.orderEditMode == false}">
+                    <span class="slds-truncate editSize" title="Name">{!v.singleRec.Order__c}</span>
+                    <button onclick="{!c.inlineEditOrder}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0" title="Edit Order">
+                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                    </button>
+                    <!-- Inline Edit Section in else case-->  
+                    <aura:set attribute="else">
+                        <section  tabindex="0" class="slds-popover slds-popover_edit" role="dialog" style="position: absolute; top: 0px">
+                            <div class="slds-popover__body">
+                                <div class="slds-form-element slds-grid slds-wrap">
+                                    <div class="slds-form-element__control slds-grow">
+                                        <ui:inputNumber class="slds-input inputFieldWidth"
+                                                      labelClass="slds-form-element__label slds-form-element__label_edit slds-no-flex"
+                                                      aura:id="inputId"
+                                                      blur="{!c.closeOrderBox}"
+                                                      change="{!c.onOrderChange}"
+                                                      required="true"
+                                                      label="Order"
+                                                      value="{!v.singleRec.Order__c}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <span id="form-end" tabindex="0"></span>
+                        </section>  
+                    </aura:set>  
+                </aura:if> 
+            </span>
+        </td>
+        <td>
+            <div class="slds-truncate"><a target="_blank" href="{!v.url +'/'+ v.singleRec.Id +'/view'}">{!v.singleRec.Name}</a></div>
+        </td>
+        <td>
+            <div class="slds-truncate"><a target="_blank" href="{!v.url +'/'+ v.singleRec.Station_Content__r.Id +'/view'}">{!v.singleRec.Station_Content__r.Name}</a></div>
+        </td>
+        <td>
+            <div class="slds-truncate">{!v.singleRec.Station_Content__r.Content_Type__c}</div>
+        </td>
+        <td>
+            <lightning:buttonMenu iconSize="x-small" alternativeText="Action" onselect="{!c.handleMenuSelect}" class = "{!v.singleRec.Id}">
+                <lightning:menuItem label="Edit"  value="edit"/>
+                <lightning:menuItem label="delete" value="delete"/>
+            </lightning:buttonMenu>
+        </td>
+    </tr>
+</aura:component>

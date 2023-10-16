@@ -1,0 +1,60 @@
+<apex:component controller="sh_projectContainerController">
+<!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectObj" type="sh_Project__c" required="true" assignTo="{!project}"/>
+<apex:outputPanel layout="none" rendered="{!Bios.size>0}"> 
+
+<style>
+    .team-member-container{
+        padding-top: 15px;
+    }
+    .team-member-container-row{
+         margin-left: 13%;
+    }
+    
+    .inline{
+        display:inline-table;
+        width:30%;
+        padding-bottom:15px;
+    }
+    
+    .firstCol{
+        margin-left:12.5%;
+    }
+    .secondCol{
+        margin-left:16%;
+    }
+    
+</style>
+ <div class="featured-team-wrapper">
+      <div class="featured-team-title-wrapper">
+           <div class="strikethrough"></div>
+           <span class="featured-team-title">Featured Team</span>
+      </div>
+      <div class="team-member-row-wrapper">
+            <div class="row team-member-container-row">
+                <apex:variable var="cnt" value="{!1}"/>
+                
+                
+                <apex:repeat value="{!Bios}" var="Bio">
+                
+                    <apex:outputPanel rendered="{!if(Mod(cnt,2)!=0,true,false)}" layout="block" styleClass="inline firstCol ">      
+                        
+                        <div >
+                            <a href="{!domainVariable}/sh_bio?name={!Bio.Bio_Name__c}" title="{!Bio.Name}" >{!Bio.Name}</a>
+                            
+                            <br/>{!Bio.Bio_Title__c}
+                        </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!if(Mod(cnt,2)==0,true,false)}" layout="block" styleClass="inline secondCol ">
+                        <div >
+                            <a href="{!domainVariable}/sh_bio?name={!Bio.Bio_Name__c}" title="{!Bio.Name}" >{!Bio.Name}</a>
+                            <br/>{!Bio.Bio_Title__c}
+                        </div>
+                    </apex:outputPanel>
+                    <apex:variable var="cnt" value="{!cnt+1}"/>
+                </apex:repeat>
+            </div>
+     </div>
+</div>
+</apex:outputPanel>
+</apex:component>

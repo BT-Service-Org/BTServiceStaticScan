@@ -1,0 +1,203 @@
+.THIS.backgroundColor-light1 {
+    background-color: #FFFFFF;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-light2 {
+	background-color: #F8F8F8;
+    color: #21466F;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark1 {
+	background-color: #54698D !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark2 {
+	background-color: #21466F !important;
+	color: #FFFFFF;
+    width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -1.5rem;
+}
+
+.THIS .buttonTheme-light1 {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    font-weight: bold;
+    background-color: #0070D2 !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light2 {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    font-weight: bold;
+    background-color: #0070D2 !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark1 {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    /*text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;*/
+    background-color: #54698D !important;
+	color: #FFFFFF;
+}
+
+.THIS .buttonTheme-dark2 {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    font-weight: bold;
+    border: 2px solid #FFFFFF;
+    /*text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;*/
+    background-color: #21466F !important;
+	color: #FFFFFF;
+}
+
+.THIS .main-container {
+    margin-left: 4vw;
+    margin-right: 4vw;
+    margin-bottom: 1.5rem;
+}
+
+.THIS .main-title {
+    /*justify-content:center;
+    align-items:center;
+    text-align: center;
+    font-size: 42px;*/
+    /*color: #EAEDF4;*/
+    margin-left: 50px;
+    margin-right: 50px;
+    background: none;
+	line-height: 2.0;
+    padding-top: 20px;
+}
+
+.THIS .main-sub-title {
+    /*justify-content:center;
+    align-items:center;
+    text-align: center;*/
+    margin-left: 50px;
+    margin-right: 50px;
+    font-size: 28px;
+    /*color: #EAEDF4;*/
+    line-height: 2.0;
+    background: none;
+}
+
+.THIS .button-container {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    background: none;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.THIS .stat-outer-container {
+    /*width: 100%;*/
+    /*justify-content:center;
+    align-items:center;
+    align-content:center;*/
+    text-align: center;
+    /*margin-top: 10px;
+    margin-bottom: 0px;
+    background-color: #EAEDF4;*/
+    vertical-align: top;
+    margin-left: 50px;
+    margin-right: 50px;
+    background: none;
+}
+
+.THIS .stat-container {
+    margin: 0px auto;
+    width: 235px;
+    background: none;
+}
+
+@font-face {
+   font-family: 'SalesforceSans-Thin';
+   src: url(/thestation/s/sfsites/c/resource/SalesforceSansThin) format('ttf'); 
+ }
+
+.THIS .stat-value {
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    /*font-size: 92px;*/
+    line-height: 1.0;
+    font-weight: 100;
+    font-family: "SalesforceSans-Thin";
+    letter-spacing: -2px;
+    /*color: #FFFFFF;*/
+    background: none;
+    /* overflow */
+}
+
+.THIS .stat-title {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    /*line-height: 2.0;*/
+    /*font-size: 22px;*/
+    font-family: "Salesforce Sans";
+    font-weight: normal;
+    /*color: #EAEDF4;*/
+    background: none;
+    /*line break mode*/
+}
+
+.THIS .stat-sub-title {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    line-height: 2.0;
+    font-size: 15px;
+    font-weight: normal;
+    /*color: #EAEDF4;*/
+    background: none;
+    margin-bottom: 30px;
+}

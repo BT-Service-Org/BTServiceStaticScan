@@ -1,0 +1,48 @@
+<apex:page controller="AdminProfileController">
+	<div id="removeTeamProfile" style="display:none;">
+		<div class="modalTitle">
+			<div class="title">Delete Team Profile</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, '/images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>
+		<div class="modalContent">
+			<div class="modalMessage padding_Tables bottom_border_gray">
+				<div class="divContentInfo">
+					<strong>Are you sure you want to delete the <span id="teamProfileNameLabel"></span> profile?</strong>
+					<br/><br/>
+					<span style="font-weight:normal;" id="countProfileUsers">
+						107 users are assigned to this profile
+					</span>
+					<br/><br/>
+					<div class="divCombobox">
+						<label>Reassign the user's profile to</label>
+						<select id="teamProfileSelect"></select>
+					</div>
+				</div>
+			</div>
+			<!--Actions  -->
+			<div class="divButtons">
+				<span id="removeTeamProfileEvent">
+					<apex:form >
+						<apex:inputText id="oldIdProfile" value="{!oldIdProfile}" style="display:none;"/>
+						<apex:inputText id="newIdProfile" value="{!newIdProfile}" style="display:none;"/>
+						<apex:inputText id="profileListMode" value="{!profileListMode}" style="display:none;" />
+						<apex:commandLink styleclass="button" onclick="removeTeamProfile('{!$Component.oldIdProfile}','{!$Component.newIdProfile}', '{!$Component.profileListMode}');" value="Continue and delete" action="{!reAssignUsers}" oncomplete="modal.close();reloadProfileListOverlay();" rerender="theGrid"/>						
+					</apex:form>
+					
+					<!-- <a href="javascript:;" onclick="modal.close();" class="button">Continue and delete</a> -->
+				</span>
+				<a href="javascript:;" onclick="modal.close();" class="button gray">Cancel</a>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		function reloadProfileListOverlay () {
+			if (profileListMode == 'true') {
+				reloadProfileList();
+			}
+		}
+	</script>
+</apex:page>

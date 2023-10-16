@@ -1,0 +1,22 @@
+<aura:component controller="AccordionContentPreviewController" access="global">
+    
+    <aura:attribute name="Preview" type="string" />
+    <aura:attribute name="ContentDocumentId" type="string" />
+    <aura:attribute name="ContentVersionId" type="string" />
+    <aura:attribute name="ContentDocumentExternalId" type="string" />
+    <aura:attribute name="IconPreviewUrl" type="string" />
+    <aura:attribute name="ImgSrc" type="string" />
+    <aura:handler name="init" value="{!this}" action="{!c.getPreviewFromServer}" />
+    
+    <aura:if isTrue="{!v.IconPreviewUrl}"> 
+        <img src="{!$Resource.The_Station_Icons + v.IconPreviewUrl}" class="preview" style="margin-bottom: 15px;height:300px"/>
+        <br/>
+        <div>No Preview Available :( <br/>
+            Click <b>View Content</b> to open
+        </div>
+        <aura:set attribute="else">
+            <img src="{!v.ImgSrc}" class="preview" style="max-width:100%;max-height:100%" />
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

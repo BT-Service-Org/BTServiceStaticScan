@@ -1,0 +1,11 @@
+.slds-modal__content {
+    overflow: visible !important;
+}
+
+.bookedSlot{
+    background-color: blue !important;
+}
+.moveToTop{
+    margin-top: -17px;
+    padding-bottom: 8px;
+}

@@ -1,0 +1,1010 @@
+<apex:page sidebar="false" tabStyle="Team__c" id="TeamsCreateNewTeam" controller="TeamsCreateNewTeamController">
+
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />
+
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"></script>
+	
+	<style>
+		table.newTeamForm td{
+			vertical-align: middle;
+		}
+		
+		span.requiredLegend {
+			display: block; 
+			width: 1px; 
+			height: 20px; 
+			background-color: #C0272D;
+		}
+		
+		div.body_center{
+			height: 820px !important;
+		}
+		
+		div.DivBtn div.title_line_btn{
+			margin:15px 15px 15px 38px;
+		}
+		
+		div.imageRightsHolder{
+			float:left;
+			width: 22px;
+		}
+		
+		div.messageRigthHolder{
+			float:left;
+			width: 300px;		
+		}
+		
+		div.messageRigthHolder span.errorText{
+			padding: 0px !important;
+		}
+		
+		div#warning_to_user div.f_left img{
+			margin-right: 8px !important;
+		}
+		
+		table.newTeamForm td span.errorText{
+			color:#C0272D;
+			padding-left: 7px;
+		}
+		
+		.bubble {
+			z-index:999999;
+			position:absolute;
+			width:221px;
+			overflow:visible;
+			display:none;
+			top:10px;
+			left:10px;				
+		}
+		
+		.bubble .content {
+			width:221px;
+			clear:both;
+			position:relative;
+			background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bg.png')}) repeat-y;
+			background-position: top right;
+		}
+
+		* html .bubble .content {background:none;}
+		* html .bubble .content {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bg.png')}", sizingMethod="scale")}
+		
+		.bubble .bottom_border {
+			width:221px;
+			height: 24px;			
+			overflow:hidden;
+			position:relative;
+			background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bottom.png')}) no-repeat;
+			background-position:  bottom right;
+		}
+
+		* html .bubble .bottom_border {background:none;}
+		* html .bubble .bottom_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_bottom.png')}", sizingMethod="scale")}			
+		
+		.bubble .top_border {
+			width:221px;
+			height: 25px;
+			overflow:hidden;
+			position:relative;
+			background:url({!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_top.png')}) no-repeat;
+			background-position:  bottom right;
+		}
+		
+		* html .bubble .top_border {background:none;}
+		* html .bubble .top_border {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_top.png')}", sizingMethod="scale")}			
+
+		
+		.bubble .content .innerContBubble {
+			position:relative;
+			margin:0px 20px 0px 20px;
+		}
+		
+		.bubble .arrowBubble {
+			position:absolute;
+			top:20px;
+			left:0px;					
+		}
+		.tooltip2 {
+			background-color:#F9F8CD;
+			border:1px solid #221E1F;
+			display:none;
+			font-family:"Lucida Grande",Verdana;
+			font-size:9px;
+			padding:5px;
+			position:absolute;
+			text-align:left;
+			width:125px;
+			top: -3px;
+			left: 22px;
+			z-index:9999;
+		}
+		
+		div.tooltipWrap{
+			position:relative; 
+			float:left; 
+			margin-left:3px;
+		}				
+	</style>
+	
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+		
+		
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+			
+		}		
+		
+		/* ### Upload File ### */
+		/**
+		* Recursive function for check upload finish or errors
+		*@void
+		*/
+		function UPF__success__(){
+			if(iframeUpload.document.getElementById('ep')){
+				var ifrDiv = iframeUpload.document.getElementById('ep');
+				var pNode = ifrDiv.parentNode;
+				pNode.removeChild(ifrDiv);
+				updateTeamPicture();
+			}else{
+				setTimeout('UPF__success__(); UPF__CheckError__()',2000);
+			}
+		}
+		
+		/**
+		* Forward to Detail
+		*/
+		function forwardToDetail(){
+			var teamId = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
+			location.href = '/apex/TeamsRedirect?id=' + teamId;
+		}
+		
+		/**
+		* Check error on upload process
+		*@void
+		*/
+		function UPF__CheckError__(){
+			var divs = iframeUpload.document.getElementsByTagName('DIV');
+			if (divs[42]){
+				if(divs[42].className == 'errorMsg'){
+					var la = document.getElementById('uploadP__');
+					la.innerHTML = '';
+					divs[42].className = '';
+				}
+			}
+		}
+		
+		/**
+		* Team After Insert
+		*@void
+		*/
+		function afterSaveTeam(){
+			var teamId = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
+			$('done_pid').value = teamId;
+			var inputFile = $('tempfile');
+			if(inputFile.value != ''){
+				inputFile.id = 'file';
+				$('inputFileContainer').insert(inputFile, 'after');
+				$('inputTeamFileContainer').innerHTML = '<input type="file" name="file" id="tempfile" />';
+				$('uploadImageForm').submit();
+				UPF__success__();			 
+			}else{
+				location.href = '/apex/TeamsRedirect?id=' + teamId;
+			}
+		}		
+	
+		/* ########### */
+		
+		/**
+		* For update 
+		*/
+		function initializeTeamDetail(){
+			currentTeam = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
+			if(currentTeam != ''){
+				var publicProfile = '{!Team.PublicProfile__c}';
+				var newMemberProfile = '{!Team.NewMemberProfile__c}';
+				$('TeamsCreateNewTeam:createNewTeamForm:saveButton').value = 'Update Team';
+				if(publicProfile != '' && newMemberProfile != ''){
+					$('openTeam').checked = true;
+					$('openTeam').onclick();
+				}else if(publicProfile != '' && newMemberProfile == ''){
+					$('closedTeam').checked = true;
+					$('closedTeam').onclick();
+				}else{
+					$('privateTeam').checked = true;
+					$('privateTeam').onclick();
+				}
+				$('TeamsCreateNewTeam:createNewTeamForm:TeamType').disabled = true;
+			}else{
+				$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';  
+			}
+		}
+		
+	
+		/**
+		* Enabled & Disable selects for selected team access
+		*@param Object radio
+		*/
+		function setAccess(radio){
+			if(radio.checked == true && radio.id == 'openTeam'){
+				$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';
+				$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;
+				$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = false;
+				$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = false;				
+			}else if (radio.checked == true && radio.id == 'closedTeam'){
+				$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'close';
+				$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+				$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+				$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = false;
+			}else if (radio.checked == true && radio.id == 'privateTeam'){
+				$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
+				$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+				$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+				$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;				
+			}
+		}
+		
+		/**
+		* Count character length
+		*@param Obeject area
+		*@param String Id indicator
+		*/
+		function countStringLimit(area, indicator){
+			$(indicator).innerHTML = (32700 - area.value.length);
+		}
+		
+		/**
+		* Show error div & inject custom message
+		*@param String message
+		*/
+		function showError(message){
+			//$('messageErrorText').innerHTML = '*' + message;
+			Effect.Appear('warning_to_user');
+			Effect.ScrollTo('anchorForError');
+		}
+		
+		
+		/**
+		* Validate form
+		*@void
+		*/
+		function validateFormInfo(){
+			$('currentEventAction').innerHTML = 'Validate form information...';
+			var inputAction = $('TeamsCreateNewTeam:createNewTeamForm:saveButton');
+			inputAction.style.background = '#666666';
+			inputAction.disabled = true;
+			var name = $('TeamsCreateNewTeam:createNewTeamForm:TeamName');
+			var error = false;
+			//Name Validate
+			if(name.value == ''){
+				name.style.border = 'solid #C0272D 2px';
+				Effect.Appear('TeamNameErrorMessage');
+				error = true;
+			}else{
+				name.style.border = '';
+				Effect.Fade('TeamNameErrorMessage');
+			}
+			
+			//Validate file extension for upload only images files
+			var fileVal = $('tempfile').value;
+			if(fileVal != ''){
+				var pattern = new RegExp('^.+(.jpg|.JPG|.gif|.GIF|.png|.PNG)$');
+				if(!pattern.test(fileVal)){
+					Effect.Appear('fileExtensionError');
+					error = true;
+				}else{
+					Effect.Fade('fileExtensionError');
+				}
+			}
+			
+			//Image right validate
+			if($('tempfile').value != '' && $('imageRights').checked == false){
+				$('imageRightsHolder').style.background = '#C0272D';
+				Effect.Appear('RightsErrorMessage');
+				error = true;
+			}else{
+				$('imageRightsHolder').style.background = '';
+				Effect.Fade('RightsErrorMessage');
+			}
+
+			//Check team type
+			if($F('TeamsCreateNewTeam:createNewTeamForm:TeamType') == ''){
+				$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = 'solid #C0272D 2px';
+				Effect.Appear('TeamTypeErrorMessage');
+				error = true;
+			}else{
+				$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = '';
+				$('TeamTypeErrorMessage').innerHTML = '';				
+			}
+			
+			if($('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid').value){
+				var parentTeam = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid');
+				init();
+				result = sforce.connection.query("Select Id, TeamProfile__c from TeamMember__c where User__c = '{!$User.Id}' and Team__c = '" + parentTeam.value + "'");
+				records = result.getArray("records");
+				if (records.length > 0){
+					result = sforce.connection.query("Select ManageTeams__c, Id from TeamProfile__c where Id = '" + records[0].TeamProfile__c + "'");
+					records = result.getArray("records");
+					if (records.length > 0){
+						if(!records[0].ManageTeams__c || records[0].ManageTeams__c == 'false'){
+							var parent = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
+							parent.style.border = 'solid #C0272D 2px';
+							$('ParentTeamErrorMessage').innerHTML = '<b>Error:</b> You need manager permissions to create a sub-team for <b>' + parent.value + '</b>';
+							Effect.Appear('ParentTeamErrorMessage');
+							error = true;
+						}					
+					}				
+				}else{
+					$('TeamsCreateNewTeam:createNewTeamForm:parentTeam').style.border = '';
+					Effect.Fade('ParentTeamErrorMessage');	
+				}	
+			}
+			
+			//Check error
+			if(error){
+				showError('');
+				
+				setTimeout('$(\'currentEventAction\').innerHTML = \'\';$(\'TeamsCreateNewTeam:createNewTeamForm:saveButton\').style.background = \'#287B9B\';$(\'TeamsCreateNewTeam:createNewTeamForm:saveButton\').disabled = \'\';', 1500);
+				
+			}else{
+				Effect.Fade('warning_to_user');
+			/*	alert('checking booleans');
+				alert($('closedTeam').checked);
+				alert($('openTeamPublicProfileId'));
+				if($('closedTeam').checked){
+					$('openTeamPublicProfileId').remove();
+				}
+				if($('openTeam').checked){
+					$('profileClosedTeam').remove();
+				} 
+				*/
+				// error = true;
+				$('currentEventAction').innerHTML = 'Saving Team Information...';
+			}
+			
+			
+			return error;		
+		}
+		
+		/* ### Bubble ###*/
+		
+		/**
+		* Get XY position for current element
+		*@param Object element
+		*@return Object position
+		*/
+		function getXY(obj){				
+			var pos = Position.cumulativeOffset(obj)
+			var y = pos[1];
+			var x = pos[0];
+			var x2 = x + parseInt(obj.offsetWidth);
+			var y2 = y + parseInt(obj.offsetHeight);
+			return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
+		}
+		
+		/**
+		* Show bubble overlay
+		*@param Object element
+		*@param String selectId
+		*/
+		var isShowBubble = false;
+		function showBubble(currentElement, selectId){
+			isShowBubble = true;
+			var container = $('bubble');
+			var position = getXY(currentElement);
+			var selectValue = $F('TeamsCreateNewTeam:createNewTeamForm:' + selectId);
+			container.style.display = 'block';	
+			init();
+			result = sforce.connection.query("Select Id, Description__c from TeamProfile__c where Id = '" + selectValue + "'");
+			records = result.getArray("records");			
+			
+			container.style.top = position.y2 + 'px';
+			container.style.left = position.x2 + 'px';
+			$('innerContBubble').innerHTML = records[0].Description__c;
+			
+			if(Prototype.Browser.IE){
+				topPosition = position.y2 - 150;	
+				leftPosition = position.x2 - 70;
+				container.style.top = topPosition + 'px';												
+				container.style.left = leftPosition + 'px';
+			}else{
+				// For mozilla
+				topPosition = position.y2 - 155;	
+				container.style.top = topPosition + 'px';												
+			}
+		}
+		
+		/**
+		* Hide bubble
+		*@void
+		*/
+		function hideBubble(){
+			isShowBubble = false;
+			setTimeout('if(!isShowBubble){Effect.Fade(\'bubble\');}', 1500);
+		}
+		
+		/* ### Util Functions ### */
+		
+		/**
+		* Get URL param
+		*@return string param
+		*@param string param
+		*/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}	
+		
+		/**
+		* Check if the parent id param is here.
+		*@return string param
+		*@param string param
+		*/
+		function subTeamCheck(){
+			var parentId = getURLParam('parent');
+			if((parentId != null) && (parentId != '')){
+				init();
+				var q = 'SELECT Id, Name FROM Team__c WHERE Id = \'' + parentId + '\'';
+				var result = sforce.connection.query(q,{
+					onSuccess:function(result){
+						var records = result.getArray("records");
+						var input = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
+						input.value = records[0].Name;
+					},
+					onFailure:function(error){	 
+						alert(error);
+					}
+				});
+			}
+		}
+		
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		var showingBubble = false;		
+		var time = '';
+		
+		function tooltip2(obj, selectId, h){
+			
+			// Tooltip
+			var tooltip = $('divToolTip2');
+			var tooltipMessage = $('messageTooltip2');
+			var selectValue = $F(selectId);
+			var markup = '';
+			var height = h;
+			init();
+			queryString ="Select Id, Description__c, Name, PostWikiComments__c, PostDiscussionTopicReplies__c, PostBookmarkComments__c, PostBlogComments__c, ManageWikis__c, ManageTeams__c, ManageProjectTasks__c, ManageDiscussionForums__c, ManageBookmarks__c, ManageBlogs__c, CreateWikiPages__c, CreateProjectTasks__c, CreateDiscussionTopics__c, CreateBookmarks__c, CreateBlogs__c from TeamProfile__c where Id = '" + selectValue + "'";
+			result = sforce.connection.query(queryString);
+			records = result.getArray("records");
+			markup += '<b>"'+ records[0].Name + '" profile:</b><br/>';
+			//Teams permissions
+			if(records[0].ManageTeams__c == 'true'){
+				markup += '<br/><b>Team</b><br/>-Manage Team<br/>';
+				height += 43;
+			}
+			//Blogs permissions
+			if(records[0].ManageBlogs__c == 'true'){
+				markup += '<br/><b>Blogs</b><br/>-Manage Blogs<br/>-Post comments<br/>-Create blogs<br/>';
+				height += 71;
+			}else if(records[0].PostBlogComments__c == 'true'){
+				markup += '<br/><b>Blogs</b><br/>-Post comments<br/>';
+				height += 43;
+				if(records[0].CreateBlogs__c == 'true'){
+					markup += '-Create blogs<br/>';
+					height += 16;
+				}
+			}else if(records[0].CreateBlogs__c == 'true'){
+				markup += '<br/><b>Blogs</b><br/>-Create blogs<br/>';
+				height += 43;
+			}
+			//Discussions permissions
+			if(records[0].ManageDiscussionForums__c == 'true'){
+				markup += '<br/><b>Discussion</b><br/>-Manage forums<br/>-Post topic replies<br/>-Create topics<br/>';
+				height += 71;
+			}else if(records[0].PostDiscussionTopicReplies__c == 'true'){
+				markup += '<br/><b>Discussion</b><br/>-Post topic replies<br/>';
+				height += 43;
+				if(records[0].CreateDiscussionTopics__c == 'true'){
+					markup += '-Create discussion topics<br/>';
+					height += 16;
+				}
+			}else if(records[0].CreateDiscussionTopics__c == 'true'){
+				markup += '<br/><b>Discussion</b><br/>-Create discussion topics<br/>';
+				height += 43;
+			}
+			//Wiki permissions
+			if(records[0].ManageWikis__c == 'true'){
+				markup += '<br/><b>Wiki</b><br/>-Manage wiki<br/>-Post comments<br/>-Create wiki pages<br/>';
+				height += 71;
+			}else if(records[0].PostWikiComments__c == 'true'){
+				markup += '<br/><b>Wiki</b><br/>-Post comments<br/>';
+				height += 43;
+				if(records[0].CreateWikiPages__c == 'true'){
+					markup += '-Create wiki pages<br/>';
+					height += 16;
+				}
+			}else if(records[0].CreateWikiPages__c == 'true'){
+				markup += '<br/><b>Wiki</b><br/>-Create wiki pages<br/>';
+				height += 43;
+			}
+			//Project permissions
+			if(records[0].ManageProjectTasks__c == 'true'){
+				markup += '<br/><b>Project</b><br/>-Manage project tasks<br/>-Create project tasks<br/>';
+				height += 57;
+			}else if(records[0].CreateProjectTasks__c == 'true'){
+				markup += '<br/><b>Project</b><br/>-Create project tasks<br/>';
+				height += 43;
+			}
+			//Bookmark permissions
+			if(records[0].ManageBookmarks__c == 'true'){
+				markup += '<br/><b>Bookmark</b><br/>-Manage bookmarks<br/>-Post comments<br/>-Create bookmarks<br/>';
+				height += 71;
+			}else if(records[0].PostBookmarkComments__c == 'true'){
+				markup += '<br/><b>Bookmark</b><br/>-Post comments<br/>';
+				height += 43;
+				if(records[0].CreateBookmarks__c == 'true'){
+					markup += '-Create bookmarks<br/>';
+					height += 16;
+				}
+			}else if(records[0].CreateBookmarks__c == 'true'){
+				markup += '<br/><b>Bookmark</b><br/>-Create bookmarks<br/>';
+				height += 43;
+			}
+			tooltipMessage.innerHTML = markup;				
+			tooltip.style.display = 'block';
+			tooltip.style.top = ((height - (height * 2)) / 2) + 'px';
+			showingBubble = true;
+			clearTimeout(time);
+			time = setTimeout("Effect.Fade('divToolTip2')",3000);
+				
+		}
+	
+		function tooltipoff2(){
+			// Tooltip
+			showingBubble = false;
+			clearTimeout(time);
+			var tooltip = $('divToolTip2');
+			tooltip.style.display = 'none';
+		}		
+	</script>
+	
+	<div id="bubble" class="bubble">
+		<div class="top_border">&nbsp;</div>		
+		<div class="content">
+			<img class="arrowBubble" src="{!URLFOR($Resource.TeamsResources, 'images/bubbleNewTeam/bubble_arrow.gif')}" />				
+			<!-- Content here -->
+			<div class="innerContBubble" id="innerContBubble"></div>	
+		</div>
+		<div class="bottom_border">&nbsp;</div>				
+	</div>
+	<!-- Header -->
+	<div class="header"><!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>
+		</div>
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key" onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+		<!-- Help for this page -->
+		<div class="help">
+			<div><a href="javascript:;">Help for this page</a>&nbsp;
+				 <img src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Quick links -->
+		<c:TeamAdminQuickLinks />
+		
+		<!-- MyTeams Widget -->
+		<c:TeamsMyTeamsWidget />
+	</div>
+	
+	<!-- Main Content Div -->
+	<div class="main_content">
+		<div>
+			<div class="tabBorder">&nbsp;</div>
+			<div class="holder">
+				<div class="teamTitle" style="{!IF(Team.Id == null, '', 'display:none')}" >Create New Team</div>
+				<div class="teamTitle" style="{!IF(Team.Id == null, 'display:none', '')}" >Edit Team</div>
+				<!-- <div class="teamTitle">{!IF(param == Team.Id,'Create New Team', 'Edit Team')}</div>  -->
+				<div class="border_body_top">&nbsp;</div>
+				<div class="body_center">
+					<a id="anchorForError"></a>
+					<div id="warning_to_user" class="message_to_user" style="display:none;" >
+					      <div class="f_left">
+					      	<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
+					      </div>
+					      <div class="f_left">
+						      <strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
+						      <span id="messageErrorText">Please see the field(s) highlighted</span>
+						  </div>
+						  <div class="clear"></div>
+				    </div>		
+					<div align="right">
+						<table border="0" style="margin: 5px 0px 5px 0px;">
+							<tr>
+								<td style="width: 4px;">
+									<span class="requiredLegend"></span>
+								</td>
+								<td>
+									<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
+										=&nbsp;Required Information 
+									</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<apex:form id="createNewTeamForm" onsubmit="if(validateFormInfo())return false;">
+						
+						<apex:actionFunction name="updateTeamPicture" action="{!updateTeamPicture}" oncomplete="forwardToDetail();" />						
+						<apex:outputpanel style="display:none;" id="currentTeamId">{!Team.Id}</apex:outputpanel>
+						<apex:inputHidden value="{!Team.Picture__c}" id="teamPicture" />
+						
+						<div class="div_Body">
+							<table cellpadding="0" cellspacing="0" class="newTeamForm">
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">Team Name</span>
+									</td>
+									<td style="width: 4px; vertical-align:top;">
+										<span class="requiredLegend"></span>
+									</td>
+									<td colspan="2">&nbsp;
+										<apex:inputText value="{!Team.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
+										<br />
+										<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
+											<b>Error:</b> You must enter a name for this team
+										</span>
+									</td>
+								</tr>
+								<tr>
+									<td height="7px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">Description</span>
+									</td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										<apex:inputTextarea value="{!Team.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										<span class="explain">(32k character limit) - Characters remaining:</span>
+										<span class="explain" id="stringSizeCounter">32700</span>
+										<br />
+									</td>
+								</tr>
+								<tr>
+									<td height="10px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">Team Logo</span>
+									</td>
+									<td></td>
+									<td>&nbsp;
+										<img width="99" src="{!IF(teamPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), teamPicture)}" class="imgBorder" />
+										<br />
+										<span class="explain">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current picture</span>
+									</td>
+									<td valign="top">
+										<table cellpadding="0" cellspacing="0" width="400px">
+											<tr>
+												<td>
+													<span class="inputInfoDescription">Select the image file</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
+													click the Browse button to find the file.</span>
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+											<tr>
+												<td class="paddingLeft" id="inputTeamFileContainer">
+													<input id="tempfile" name="file" size="20" title="Type the path of the file or click the Browse button to find the file." type="file" /><br />
+													<span id="fileExtensionError" class="errorText" style="display:none;">
+														<b>Error:</b> You must enter a jpg, gif or png files only
+													</span>
+												<td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+											<tr>
+												<td class="paddingLeft"><span class="explain">File size	limit 4MB. If your upload does not work, try a smaller picture. </span>
+												</td>
+											</tr>
+											<tr>
+												<td class="paddingLeft">
+													<span class="explain">Ideal	size is 100 pixels high by 100 pixels wide.</span>
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+											<tr>
+												<td class="paddingLeft">
+													<div class="imageRightsHolder" id="imageRightsHolder">
+														<input id="imageRights" type="checkbox" />
+													</div>
+													<div class="messageRigthHolder">
+														<span class="inputInfoSubDescription">I certify that I have the right to distribute this picture and that it does not violate the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a></span>
+														<br />
+														<span id="RightsErrorMessage" class="errorText" style="display:none;">
+															<b>Error:</b> You must agree to the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a> to use images for this team.															
+														</span>
+													</div>
+													<div class="clear"></div>													
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>	
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td height="10px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">
+											Team Type
+										</span>
+									</td>
+									<td style="width: 4px; vertical-align:top;">
+										<span class="requiredLegend"></span>
+									</td>
+									<td colspan="2">&nbsp;	
+										<apex:selectList id="TeamType" value="{!Team.TeamType__c}" title="" multiselect="false" size="1" >
+								  	 	 	<apex:selectOptions value="{!Types}"/>
+								  	 	</apex:selectList>
+								  	 	<span id="TeamTypeErrorMessage" class="errorText" style="display:none;">
+											<b>Error:</b> You must enter a Team Type for this team.								  	 	
+								  	 	</span>	
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">Team Parent</span>
+									</td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										<apex:inputField id="parentTeam" value="{!Team.ParentTeam__c}" /><br />
+								  	 	<span id="ParentTeamErrorMessage" class="errorText" style="display:none;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="openTeam" checked="checked" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Open</span>
+	                                </td>
+								</tr>  	
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Anyone can join. Anyone can see the team information and content.</span></td>
+								</tr>	
+								<tr>
+									<td colspan="6" >
+										<table class="newTeamForm">									
+											
+												<tr>
+														<td class="alignTopLeft">
+															<span class="inputInfoTitleSmall">Public Profile:</span>
+														</td>
+														<td></td>
+														<td id="openTeamPublicProfileId">
+															<apex:selectList value="{!newProfile.publicProfileOpen}" id="publicProfileSelect" title="" multiselect="false" size="1" styleClass="f_left">
+													  	 	 	<apex:selectOptions value="{!Profiles}"/>
+													  	 	</apex:selectList>
+															<div class="tooltipWrap">
+																<a href="Javascript:;">
+																	<img style="vertical-align:top;" onmouseover="tooltip2(this, '{!$Component.publicProfileSelect}', 34);" onmouseout="tooltipoff2();" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/info.gif')}" border="0" />
+																</a>
+																<!-- info tooltip -->
+																<div id="divToolTip2" class="tooltip2">
+																	<div id="messageTooltip2"></div>
+																</div>
+															</div>																
+														</td>
+													
+												</tr>
+											
+											<tr>
+												<td height="10px"></td>
+											</tr>
+											<tr>
+												<td class="alignTopLeft" >
+													<span class="inputInfoTitleSmall">New Member Profile:</span>
+												</td>
+												<td></td>
+												<td>
+													<apex:selectList value="{!newProfile.newProfileOpen}" id="memberProfileSelect" title="" multiselect="false" size="1" styleClass="f_left">
+											  	 	 	<apex:selectOptions value="{!Profiles}"/>
+											  	 	</apex:selectList>
+													<div class="tooltipWrap">
+														<a href="Javascript:;">
+															<img style="vertical-align:top;" onmouseover="tooltip2(this, '{!$Component.memberProfileSelect}', -30);" onmouseout="tooltipoff2();" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/info.gif')}" border="0" />
+														</a>
+														<!-- info tooltip -->
+														<div id="divToolTip2" class="tooltip2">
+															<div id="messageTooltip2"></div>
+														</div>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>					
+								<tr>
+	                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Closed</span>
+	                                </td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	<span class="inputInfoList">&nbsp;</span>
+	                                	<span class="inputInfoSubDescription">Team Administrator must invite users to join. Anyone can see the team information and content.</span>
+	                                </td>
+								</tr> 
+								<tr>
+									<td colspan="6">
+										<table>									
+											<tr>
+												<td class="alignTopLeftClose">
+													<span class="inputInfoTitleSmall">Public Profile:</span>
+												</td>
+												<td></td>
+												<td id="profileClosedTeam">
+													<apex:selectList value="{!newProfile.publicProfileClosed}" id="closedPublicProfileSelect" title="" disabled="true" multiselect="false" size="1" styleClass="f_left">
+											  	 	 	<apex:selectOptions value="{!Profiles}"/>
+											  	 	</apex:selectList> 
+											  	 	
+											  	 	<apex:inputHidden value="{!newProfile.teamOpenOrClosed}" id="openOrClosed" />
+													<div class="tooltipWrap">
+														<a href="Javascript:;">
+															<img style="vertical-align:top;" onmouseover="tooltip2(this, '{!$Component.closedPublicProfileSelect}', -150);" onmouseout="tooltipoff2();" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/info.gif')}" border="0" />
+														</a>
+														<!-- info tooltip -->
+														<div id="divToolTip2" class="tooltip2">
+															<div id="messageTooltip2"></div>
+														</div>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>	
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Private</span>
+	                                </td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<span class="inputInfoList">
+	                                	&nbsp;</span>
+	                                	<span class="inputInfoSubDescription">This team will not appear in search results or in the profiles of its members. </span>
+	                                </td>
+								</tr> 
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Membership is by invitation only, and only members can see the team</span></td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
+								</tr>   
+							</table>
+							<div class="DivBtn">
+								<div class="title_line_btn"></div>						
+								<div align="center">
+									<span id="currentEventAction"></span><br />
+									<apex:commandButton styleClass="SaveBtn" action="{!saveTeam}" oncomplete="afterSaveTeam();" value="{!IF(Team.Id == null, 'Create Team', 'Update Team')}" id="saveButton" rerender="currentTeamId" />
+									<apex:commandButton styleClass="cancelBtn" onclick="history.go(-1);" value="Cancel" id="cancelButton"/>
+								</div>
+							</div>
+						</div>
+					</apex:form>
+					<!-- Iframe for upload file -->
+					<form action="/p/attach/NoteAttach" enctype="multipart/form-data" id="uploadImageForm" target="iframeUpload" method="post">
+						<span id="inputFileContainer" style="display:none;"></span>
+						<input type="hidden" name="pid" id="done_pid" value="{!team.Id}" />
+					</form>					
+					<iframe name="iframeUpload" style="display:none;" ></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		setTimeout('subTeamCheck()',500);
+		initializeTeamDetail();
+	</script>
+</apex:page>

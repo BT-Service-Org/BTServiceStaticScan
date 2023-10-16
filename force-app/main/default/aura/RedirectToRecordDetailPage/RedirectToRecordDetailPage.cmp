@@ -1,0 +1,13 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global">
+    
+    <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-align_absolute-center" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+     </div>
+    
+	<aura:attribute name="recId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+</aura:component>

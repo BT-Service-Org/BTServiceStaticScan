@@ -1,0 +1,146 @@
+<apex:component controller="TeamWidgetRecentBookmarkController">
+
+<!-- Attribute Definitions -->
+<apex:attribute name="teamId" description="The team ID" type="String" required="true" assignTo="{!teamIdBook}" />
+<style>
+	.center {
+		text-align: center;
+	}
+	
+	.number {
+		background: #297B9C;
+		color: #fff;
+		padding:5px;
+		width:21px;
+		margin: 0 auto;
+	}
+	
+	.minifeeds.full_ tr.head td{
+		padding: 4px;
+		font-weight: bold;
+	}
+	
+	.minifeeds.full_ {
+		margin-top: 5px; 
+	}
+	
+	.minifeed_bookmark {
+		list-style-image:none;
+		list-style-position:outside;
+		list-style-type:none;
+		margin:5px 0pt;
+		padding:0pt;
+		}
+		
+	.minifeed_bookmark li {
+		background: transparent url({!URLFOR($Resource.TeamsResources, 'images/layout/icons/minifeed_bookmarks.gif')}) no-repeat scroll 1px 4px;
+		margin-bottom:5px;
+		overflow:hidden;
+		padding:3px 0px 3px 25px;
+		position:relative;
+		}
+</style>
+<div class="myBigWidget">
+		<div class="teamBlockTitle">
+			<h4>Recent Bookmarks </h4>
+		</div>
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+			
+				<a href="/apex/BookmarkTeamOverview?id={!teamIdBook}" class="topRightLinks" >See More&#187;</a>
+			</apex:outputpanel>
+			<apex:outputpanel rendered="{!IF(newPrivileges ,false,true)}">
+				<a href="/apex/BookmarkTeamOverview?id={!teamIdBook}" class="topRightLinks" >See More&#187;</a>
+			</apex:outputpanel>
+		</div>
+		<div class="threads">
+			
+			<div>		
+			
+			<apex:outputPanel layout="block" id="theFeeds" >
+					<table class="minifeeds full_" cellpadding="0" cellspacing="0">
+					<tr class="head" style="{!IF(BookmarksCount > 0, '', 'display:none;')}">
+						<td></td>
+						<td>Title</td>
+						<td >Created By</td>
+						<td>Created Date</td>
+					</tr>
+						
+						<apex:repeat value="{!Bookmarks}" var="book" >
+							
+							<tr>
+								<td><img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/minifeed_bookmarks.gif')}" /></td>
+								<td><a href="/apex/Bookmarkdetails?id={!book.Id}" class="weight_bold"><apex:outputText escape="false" value="{!book.Title__c}" /></a></td>
+								<td><a href="/apex/PeopleProfileDisplay?id={!book.CreatedBy.Id}" class="weight_bold"><apex:outputText escape="false" value="{!book.CreatedBy.Name}" /></a>
+								</td>
+								<td><apex:outputText value="{!book.PostedDate__c}"/></td>	 					
+							</tr>				 
+						</apex:repeat>
+						<div class="center" style="{!IF(BookmarksCount > 0, 'display:none;', '' )}" >
+							No Bookmarks  Yet 
+							<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+						
+							</apex:outputpanel>
+							
+						</div>
+					</table>
+				</apex:outputPanel>
+			</div>
+		</div>
+	</div>
+	<!-- small widget -->
+	
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		<div class="header_blue">
+    		<div><div><h4>Recent Bookmarks </h4></div></div>
+   		</div>
+   		<div class="box_content">
+    		<div class="back_gray">
+	
+     			<apex:outputpanel rendered="{!IF(newPrivileges ,true,false)}">
+				 <a href="BookmarkOverview">See More&#187;</a>
+				</apex:outputpanel>
+				<apex:outputpanel rendered="{!IF(newPrivileges ,false,true)}">
+					<a href="BookmarkOverview">See More&#187;</a>
+				</apex:outputpanel>
+     			
+    		</div>  
+    		 <div class="center" style="{!IF(BookmarksCount > 0, 'display:none', '' )}" >
+				No Bookmarks  Yet
+			</div>
+			<div>
+				<ul class="minifeed_bookmark">	
+				<apex:repeat value="{!Bookmarks}" var="book" rows="5" >
+					<li><a href="/apex/Bookmarkdetails?id={!book.Id}" class="weight_bold"><apex:outputText escape="false" value="{!book.Title__c}" /></a></li>						
+				</apex:repeat>
+
+				</ul>
+			</div>   
+   		</div>
+	  	<div class="bottom_borders"><div><div/></div>
+	</div>
+	</div>	
+	<script type="text/javascript">
+	
+		widgetPosition();
+		function widgetPosition() {
+			var widSmall = $$('.mySmallWidget');
+			var widBig = $$('.myBigWidget');
+			
+			for(var i =0; i<widSmall.length; i++) {
+				if(widSmall[i].ancestors()[1].hasClassName('holder')){
+					widSmall[i].remove();
+				}
+			}
+			
+			for(var i =0; i<widBig.length; i++) {
+				if(widBig[i].ancestors()[1].hasClassName('rightCol')){
+					widBig[i].remove();
+				}
+			}
+			
+			
+		}
+	</script>
+	
+</apex:component>

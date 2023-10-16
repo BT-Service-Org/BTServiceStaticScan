@@ -1,0 +1,47 @@
+<apex:page id="badgeAssessmentChooseJudge"  showHeader="true" controller="BadgeAssessmentController" title="Badge Assessment Process">
+    <head>
+    </head>
+    <script>
+    function confirmCancel() {
+        var isCancel = confirm("Are you sure you wish to cancel?");
+        if (isCancel) window.close();
+        
+        return false;     
+    }     
+    </script>   
+    <apex:sectionHeader title="Badge Assessment Process" subtitle="Your Judge"/>
+    <apex:form id="AssessmentForm" forceSSL="true">
+        <apex:pageMessages id="error"/>
+        <apex:pageBlock title="Information" mode="view">   
+            <apex:pageBlockButtons location="bottom" >
+                <apex:commandButton action="{!createCaseWithSelectedJudge}" value="Create Request"/>
+                <apex:commandButton value="Cancel" 
+                                    action="{!cancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+            
+            <apex:panelGrid columns="2" id="profileGrid" >
+                <apex:outputText value="Your assigned judge is:" id="selectJudge"/>
+                <apex:selectList value="{!assignedJudge}" multiselect="false" size="1" >    
+                    <apex:selectOptions value="{!judgeItems}"/>  
+                </apex:selectList>
+            </apex:panelGrid>
+            <p/>
+            <apex:outputText style="font-weight:800; color:red" value="Important: Please do not use the following override options unless it is hard to find an available Judge. Please be considerate to Judges' Time Zone."/>
+            <p/>
+            <apex:inputCheckbox value="{!allowOtherRegionJudges}" onchange="NoOp()">
+                Include Judges from Other Timezones? (Please do not use this option unless you find no Judges)
+            </apex:inputCheckbox>
+            <p/> 
+            <p/>
+            <apex:inputCheckbox value="{!overrideJudge}" onchange="NoOp()">
+                Override selected judge (this option will be recorded)
+            </apex:inputCheckbox>
+            <p/>
+            <apex:outputLink target="_Blank" value="https://org62.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F930000000HBdn">Click here to learn more about the Badging Process</apex:outputLink>
+            <p/>
+            <p/> 
+        </apex:pageBlock>
+        <apex:actionFunction action="{!NoOp}" name="NoOp"/>
+        
+    </apex:form>
+</apex:page>

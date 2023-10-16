@@ -1,0 +1,154 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <!--Filter Section Starts-->
+        <lightning-layout multiple-rows >
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="3" medium-device-size="5"
+                small-device-size="12">
+                <lightning-combobox name="mainFilter" label="Select Filter Type" value={mainFilterValue}
+                    options={options_MainFilter} onchange={handleChange_MainFilter}>
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="3" medium-device-size="5"
+                small-device-size="12">
+                <lightning-combobox name="filterOptions" label="Select Filter Value" value={filterValue}
+                    options={options_FilterValue} onchange={handleChange_filter}>
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="2" medium-device-size="2"
+                small-device-size="12" class="slds-m-top_large horizontal-center" style="justify-content: left;">
+               
+                <span class="slds-m-top_large slds-p-horizontal_xx-small">
+                    <lightning-button if:true={isSmallDevice} variant="brand" label="Reset Filters" title="Reset"
+                        onclick={resetSearchedResultFilters}>
+                    </lightning-button>
+                    <lightning-button-icon if:false={isSmallDevice} variant="container" title="Reset Filters"
+                        icon-name="utility:refresh" onclick={resetSearchedResultFilters}>
+                    </lightning-button-icon>
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" large-device-size="4" medium-device-size="12"
+                small-device-size="12" class="slds-m-top_large horizontal-center" style="justify-content: right;">
+                <span if:true={resultsFound} class="slds-m-top_large">
+                    <span class="slds-m-top_large slds-p-left_x-small">
+                        <lightning-button-icon title="Previous" onclick={onPrevious} icon-name="utility:chevronleft"
+                            variant="container" disabled={disablePreviousButton}>
+                        </lightning-button-icon>
+                    </span>
+                    <span class="slds-m-top_large slds-m-horizontal_small">
+                        <span class="slds-badge slds-badge_lightest badgeCss">
+                            {currentPage}
+                        </span>
+                    </span>
+                    <span class="slds-m-top_large slds-p-right_medium">
+                        <lightning-button-icon title="Next" onclick={onNext} icon-name="utility:chevronright"
+                            variant="container" disabled={disableNextButton}>
+                        </lightning-button-icon>
+                    </span>
+                </span>
+            </lightning-layout-item>
+        </lightning-layout>
+        <br /><br />
+        <!--Filter Section Ends-->
+        <div class="container">
+
+            <div class="flex-container">
+
+                <template for:each={stories} for:item="story">
+                    <div key={story.successobj.Name} class="card text-center">
+                        <div>
+                            <img src={story.successobj.gdc_ms_CompanyLogo__c} alt="Company Logo" class="image-card" />
+                        </div>
+                        <div class="container-content">
+                         
+                            <p class="heading-sub">
+                                {story.successobj.gdc_ms_EngagementTitle__c}
+                            </p>
+
+                            <div class="overlay">
+                                <div class="text">
+                                    <ul>
+                                       
+                                        <li><button name="Engagement Summary"  onclick={handleClick}
+                                                class="slds-m-left_x-small"
+                                                data-summary={story.successobj.gdc_ms_EngagementSummary__c}
+                                                data-bvalue={story.successobj.gdc_ms_BusinessValueDelivered__c}
+                                                data-solution={story.successobj.gdc_ms_SolutionComplexity__c}
+                                                data-feedback={story.successobj.gdc_ms_Feedback__c}
+                                                data-story={story.successobj.Name}>Engagement Summary</button></li>
+                                        <li><button name="Business Value Delivered" 
+                                                onclick={handleClick} class="slds-m-left_x-small"
+                                                data-summary={story.successobj.gdc_ms_EngagementSummary__c}
+                                                data-bvalue={story.successobj.gdc_ms_BusinessValueDelivered__c}
+                                                data-solution={story.successobj.gdc_ms_SolutionComplexity__c}
+                                                data-feedback={story.successobj.gdc_ms_Feedback__c}
+                                                data-story={story.successobj.Name}>Business Value Delivered</button>
+                                        </li>
+                                        <li><button name="Solution Complexity"  onclick={handleClick}
+                                                class="slds-m-left_x-small"
+                                                data-summary={story.successobj.gdc_ms_EngagementSummary__c}
+                                                data-bvalue={story.successobj.gdc_ms_BusinessValueDelivered__c}
+                                                data-solution={story.successobj.gdc_ms_SolutionComplexity__c}
+                                                data-feedback={story.successobj.gdc_ms_Feedback__c}
+                                                data-story={story.successobj.Name}>Solution Complexity</button></li>
+                                        <li><button name="Feedback" onclick={handleClick}
+                                                class="slds-m-left_x-small"
+                                                data-summary={story.successobj.gdc_ms_EngagementSummary__c}
+                                                data-bvalue={story.successobj.gdc_ms_BusinessValueDelivered__c}
+                                                data-solution={story.successobj.gdc_ms_SolutionComplexity__c}
+                                                data-feedback={story.successobj.gdc_ms_Feedback__c}
+                                                data-story={story.successobj.Name}>Feedback</button></li>
+
+                                        <template if:false={isguest}>
+                                            <template if:true={story.hasStoryMembers}>
+                                                <li><button name="Project Members" 
+                                                        onclick={handleClick} class="slds-m-left_x-small"
+                                                        data-story={story.successobj.Name}
+                                                        data-id={story.successobj.Id}>Project Members</button></li>
+                                            </template>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <c-gdcms-base-modal height="40rem">
+            <span class="modal-heading" slot="Title"> {storyName} : {clickedButtonLabel}</span>
+            <div slot="Body" class="modal-body">
+                <template if:true={showMembers}>
+                    <template for:each={successStoryMembers} for:item="member">
+                        <main key={member.Id} class="leaderboard__profiles">
+                            <article class="leaderboard__profile">
+                                <template if:true={member.gdc_ms_Team_Member__r.gdc_ms_ProfilePhoto__c}>
+                                    <img src={member.gdc_ms_Team_Member__r.gdc_ms_ProfilePhoto__c}
+                                        alt={member.gdc_ms_Team_Member__r.Name} class="leaderboard__picture">
+                                </template>
+                                <template if:false={member.gdc_ms_Team_Member__r.gdc_ms_ProfilePhoto__c}>
+                                    <img src={DefaultImage} alt={member.gdc_ms_Team_Member__r.Name}
+                                        class="leaderboard__picture">
+                                </template>
+                                <span class="leaderboard__name">{member.gdc_ms_Team_Member__r.Name}<br />
+                                    <div class="leaderboard__value"> {member.gdc_ms_Role__c}</div>
+                                </span>
+                            </article>
+                        </main>
+                    </template>
+                </template>
+                <template if:false={showMembers}>
+                    <lightning-formatted-rich-text value={modalBody}></lightning-formatted-rich-text>
+                </template>
+            </div>
+        </c-gdcms-base-modal>
+    </lightning-card>
+
+
+</template>

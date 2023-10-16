@@ -1,0 +1,55 @@
+<apex:component >
+<!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectObj" type="sh_Project__c" required="true"/>
+  <apex:attribute description="" name="domainVar" type="String" required="true"/>
+  <apex:attribute description="" name="staticImage" type="String" required="true"/>
+
+<style>
+    .site-header { 
+       background-image:url({! URLFOR($Resource.ServicesHubContent,projectObj.BackgroundImageName__c )}); 
+    }
+</style>
+    
+
+  
+  
+ <header class="site-header container-fluid" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+    <div class="wrap">
+    
+    <img class="locked-flag" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/icon-locked-flag.svg')}" alt="Internal Use Only"/>
+        <div class="menu-search-buttons">
+    <div id="search-button" class="header-menu-button search-button"></div>
+    <div id="show-navigation-button" class="header-menu-button show-navigation-button"></div>
+    </div>
+    <div class="container">
+    <a href="{!domainVar}/sh_home" class="sf-home">
+        <span class="sf-logo-wrapper">
+          <img class="sf-logo" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/salesforce-logo.svg')}" alt="Salesforce.com" />
+    <span class="sf-logo-accomp-text logo-accomp-text-static">SERVICES</span>
+    <span class="sf-logo-accomp-text sf-logo-accomp-text-white logo-accomp-text">&nbsp;PROJECTS</span>
+        </span>
+    </a>
+    <div class="project-header-container">
+        <h1 class="project-header-title wrapper-header-salesforce-sans"> {!projectObj.Name}</h1>
+        <div class="row"><div class="project-header-excerpt col-sm-6 col-sm-offset-1 wrapper-header-salesforce-sans"> {!projectObj.Excerpt__c }</div>
+    </div>
+</div>
+</div><!--? //.container ?-->
+</div>
+</header>
+<apex:outputPanel layout="none" rendered="{!(projectObj.Overview_Video_JS_Vidyard__c !=null)}">
+  <span id="vidyard_{!projectObj.Overview_Video_JS_Vidyard__c}" class="vidyard_player">
+<span id="vidyard_span_{!projectObj.Overview_Video_JS_Vidyard__c}" style="display: block; margin: auto; position: relative; width: 720px; height: 405px;">
+
+<iframe id="vidyard_iframe_{!projectObj.Overview_Video_JS_Vidyard__c}" class="vidyard_iframe" src="//play.vidyard.com/{!projectObj.Overview_Video_JS_Vidyard__c}.html?v=3.1&amp;type=inline&amp;" width="100%" height="100%" scrolling="no" frameborder="0" allowtransparency="true" style="opacity: 1; position: absolute; right: 0px; top: 0px; background-color: transparent;">
+</iframe>
+</span>
+</span>
+</apex:outputPanel>
+<apex:outputPanel layout="none" rendered="{!(staticImage !=null)}">
+    <div class="project-static-image">
+        <img width="980" height="489" src="{!URLFOR($Action.Attachment.Download, staticImage)}" class="img-responsive" alt="{!projectObj.Name}" />
+    </div>
+</apex:outputPanel>
+
+</apex:component>

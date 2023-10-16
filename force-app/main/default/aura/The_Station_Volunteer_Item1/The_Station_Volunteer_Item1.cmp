@@ -1,0 +1,11 @@
+<aura:component >
+    <div class="slds-col">
+        <article class="slds-card">
+            <div class="title1">Pro Bono Event</div>
+            <div class="slds-border_bottom"></div>
+            <div class="dateText">Jul 2, 2019 to Nov 22, 2019</div>
+            <div class="title">Stay beautiful Salesforce Deployment</div>
+            <div class="text">The stay beautiful Foundation</div>
+        </article>
+    </div>
+</aura:component>

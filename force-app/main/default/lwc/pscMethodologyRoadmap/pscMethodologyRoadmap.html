@@ -1,0 +1,24 @@
+<template>
+    <div>
+        <h3>Roadmap and Releases to Methodology “Unification”</h3>
+        <template if:true={versionData}>
+            <lightning-accordion allow-multiple-sections-open>
+                <div class="release_page">
+                    <template for:each={versionData} for:item="version">
+                    
+                        <div key={version.Id} class="release_item">
+                            <lightning-accordion-section name={version.displayLabel} label={version.displayLabel} class="release_label ITC_font">
+                                <p class="relase_status" if:true={version.Status__c}>{version.Status__c}</p>
+                                <p><lightning-formatted-rich-text
+                                    value={version.Release_Notes__c} class="release_text salesforce_font"
+                                ></lightning-formatted-rich-text></p>
+            
+                            </lightning-accordion-section>
+                        </div>
+                    </template>
+                </div>
+            </lightning-accordion>
+        </template>
+    </div>
+    
+</template>

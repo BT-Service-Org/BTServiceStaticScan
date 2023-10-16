@@ -1,0 +1,57 @@
+<template>
+
+    <div>
+        The RASIC matrix is a responsibility assignment chart that maps out every task, milestone or key decision
+        involved in completing a project and assigns which roles are Responsible for each action item, which personnel
+        are Accountable, who will Support the production of the deliverable and, where appropriate, who needs to be
+        Informed or Consulted.
+    </div>
+    <table if:true={rasicData.length}>
+
+        <tr class="rasic-header">
+            <th></th>
+            <template for:each={headerData.roleNames} for:item="role">
+
+                <th scope="col" key={role.roleName}>
+                    {role.roleName}
+                </th>
+            </template>
+        </tr>
+        <template for:each={rasicData} for:item="activity">
+            <tr key={activity.activityName} class="rasic-header">
+                <th class="activity ITC_font">
+                    <template if:true={activity.activityURL}>
+                        <a href={activity.activityURL}>{activity.activityName}</a>
+                    </template>
+                    <template if:false={activity.activityURL}>
+                        {activity.activityName}
+                    </template>
+                </th>
+                <template for:each={activity.roleNames} for:item="rasic" if:true={activity.roleNames}>
+                        <td key={rasic.roleName}>
+                            <div class="role_icons">
+                                <template if:true={rasic.r}>
+                                    <span class="rasic-icon rasic-icon-r">R</span>
+                                </template>
+                                <template if:true={rasic.a}>
+                                    <span class="rasic-icon rasic-icon-a">A</span>
+                                </template>
+                                <template if:true={rasic.s}>
+                                    <span class="rasic-icon rasic-icon-s">S</span>
+                                </template>
+                                <template if:true={rasic.i}>
+                                    <span class="rasic-icon rasic-icon-i">I</span>
+                                </template>
+                                <template if:true={rasic.c}>
+                                    <span class="rasic-icon rasic-icon-c">C</span>
+                                </template>
+                            </div>
+                        </td>
+                </template>
+            </tr>
+        </template>
+    </table>
+    <!-- <div>
+        For a reminder of the RASIC definitions, refer to <a href="#">Create RASIC Responsibility Matrix</a>
+    </div> -->
+</template>

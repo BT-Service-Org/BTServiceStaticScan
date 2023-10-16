@@ -1,0 +1,67 @@
+<template>
+    <lightning-card>
+        <h5 slot="title">
+            <lightning-icon icon-name="action:upload" size="small"></lightning-icon>
+            <lightning-formatted-text value="Upload Company Logo" style="padding-left: 0.5em;"></lightning-formatted-text> 
+        </h5>
+        <div>
+            <div>
+                <div class="slds-align_absolute-center">
+                    <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="x-small" style="padding-left: 1em; padding-bottom: 0.5em; padding-top: 1em;"></lightning-icon>
+                    <lightning-formatted-text value="Uploading a new Logo will override any previous versions." style="padding-left: 0.5em; color: red; padding-bottom: 0.5em; padding-top: 1em;"></lightning-formatted-text>
+                </div>
+                <div class="slds-align_absolute-center"> 
+                    <lightning-icon icon-name="utility:note" alternative-text="Warning" size="x-small" style="padding-left: 1em; padding-bottom: 1em; padding-top: 0.5em;"></lightning-icon>
+                    <lightning-formatted-text value="Kindly use a file with white background for best results." style="padding-left: 0.5em; color:red; padding-bottom: 1em; padding-top: 0.5em;"></lightning-formatted-text>
+                </div>
+            </div>
+            <div class = "slds-m-around_medium">
+                <c-gdcms-file-upload record-id={recordId} onclose={handleCloseWindow}></c-gdcms-file-upload>
+            </div>    
+        </div>
+        <div class="slds-grid slds-wrap" slot="footer">
+            <!-- <div class="slds-col slds-size_1-of-2 slds-align_absolute-center" if:true={file}>
+                <lightning-button variant="brand" label="Preview loaded file" onclick={filePreview}></lightning-button>  
+            </div> -->
+            <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+                <lightning-button variant="brand-outline" label="Cancel" onclick={handleCloseWindow}></lightning-button> 
+            </div> 
+        </div> 
+    </lightning-card>
+        <!-- <c-gdcms-base-modal show-footer="true">
+            <span slot="Title">
+                <h5>
+                <lightning-icon icon-name="action:upload" size="small"></lightning-icon>
+                <lightning-formatted-text value="Upload Company Logo" style="padding-left: 0.5em;"></lightning-formatted-text>
+                </h5>
+            </span>
+            <span slot="Body">
+                <div>
+                    <div>
+                        <div class="slds-align_absolute-center">
+                            <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="x-small" style="padding-left: 1em; padding-bottom: 0.5em; padding-top: 1em;"></lightning-icon>
+                            <lightning-formatted-text value="Uploading a new Logo will override any previous versions." style="padding-left: 0.5em; color: red; padding-bottom: 0.5em; padding-top: 1em;"></lightning-formatted-text>
+                        </div>
+                        <div class="slds-align_absolute-center"> 
+                            <lightning-icon icon-name="utility:note" alternative-text="Warning" size="x-small" style="padding-left: 1em; padding-bottom: 1em; padding-top: 0.5em;"></lightning-icon>
+                            <lightning-formatted-text value="Kindly use a file with white background for best results." style="padding-left: 0.5em; color:red; padding-bottom: 1em; padding-top: 0.5em;"></lightning-formatted-text>
+                        </div>
+                    </div>
+                    <div class = "slds-m-around_medium">
+                        <c-gdcms-file-upload record-id={recordId}></c-gdcms-file-upload>
+                    </div>    
+                </div>    
+            </span>
+            <span class="slds-grid slds-wrap" slot="Footer">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-align_absolute-center" if:true={file}>
+                        <lightning-button variant="brand" label="Preview loaded file" onclick={filePreview}></lightning-button>  
+                    </div> 
+                    <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+                        <lightning-button variant="brand-outline" label="Cancel" onclick={handleCloseWindow}></lightning-button> 
+                    </div> 
+                </div>
+            </span>
+        </c-gdcms-base-modal> -->
+        
+</template>

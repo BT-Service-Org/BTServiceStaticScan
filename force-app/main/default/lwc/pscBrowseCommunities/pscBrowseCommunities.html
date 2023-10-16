@@ -1,0 +1,23 @@
+<template>
+
+    <div class="communities-container">
+        <h3> Browse Communities</h3>
+        <div class="communities_tabs">
+            <lightning-tabset class="tabset">
+                <lightning-tab label="All Communities" class="tab">
+                    <c-psc-communities-data communities={allCommunities} if:true={allCommunities}></c-psc-communities-data>
+                    <p class="ITC_font text-center" if:false={allCommunities}>{noRecordsMessage}</p>
+
+                </lightning-tab>
+                <lightning-tab label="My Communities" class="tab">
+                    <c-psc-communities-data communities={myCommunities} if:true={myCommunities}></c-psc-communities-data>
+                    <p class="ITC_font text-center" if:false={myCommunities}>{noRecordsMessage}</p>
+                </lightning-tab>
+                
+            </lightning-tabset>
+        </div>
+       
+    </div>
+   
+    
+</template>

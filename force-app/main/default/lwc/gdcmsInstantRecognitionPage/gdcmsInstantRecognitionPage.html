@@ -1,0 +1,48 @@
+<template>
+  <div>
+    <h1 style="color: #032D60;font-weight: 600;font-size: 2rem;" class="slds-m-bottom--large slds-text-align--center">
+      {AwardCategory}</h1>
+  </div>
+  <template if:true={lstData}>
+    <div class="center slds-p-top_large">
+      <div class="wrapper">
+        <div class="inner">
+          <template if:true={lstData}>
+            <template for:each={lstData} for:item="lst">
+              <template if:false={isCustomerSuccess}>
+                <div key={lst.Id} class="card">
+                  <img src={lst.gdc_ms_ProfilePhoto__c} />
+                  <div class="content">
+                    <h1>{lst.Name}</h1>
+                    <h4>{lst.gdc_ms_Designation__c}</h4>
+                  </div>
+                </div>
+              </template>
+              <template if:true={isCustomerSuccess}>
+                <div key={lst.Id} class="card">
+                  <img src={lst.gdc_ms_ProfilePhoto__c} style="scale: 0.5;"/>
+                  <div class="content">
+                    <h1>{lst.Name}</h1>
+                  </div>
+                </div>
+              </template>
+
+            </template>
+          </template>
+        </div>
+      </div>
+
+      <div class="map">
+        <template for:each={buttonlst} for:item="button">
+          <button key={button.name} data-id={button.name} class={button.className} onclick={onButtonClick}></button>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <template if:false={lstData}>
+    <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-align_absolute-center noResult">
+      <p>Sorry, there are no {AwardCategory} Winners as of now. <br /></p>
+    </div>
+  </template>
+</template>

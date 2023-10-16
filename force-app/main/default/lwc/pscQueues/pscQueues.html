@@ -1,0 +1,33 @@
+<template>
+
+    <div class="slds-theme_default slds-align_absolute-center slds-p-vertical_large QueueContainer"
+        if:true={comboboxGroupData}>
+        <div class="slds-size_3-of-4" style="margin-bottom: 25px;">
+            <lightning-combobox name="progress" label="Groups" value='Select' placeholder="Select Group"
+                options={comboboxGroupData} onchange={handleChange}></lightning-combobox>
+        </div>
+        <p if:true={showerror} style="color:red;font-family:'salesforce_font'">{errorMessage}</p>
+
+        <div class="Queue_data_table">
+            <lightning-spinner alternative-text="Loading" size="small" if:true={showSpinner}></lightning-spinner>
+            <lightning-datatable key-field="groupMemberRecId" data={usersData} columns={columns} show-row-number-column
+                hide-checkbox-column onrowaction={handleRowAction} class="data-table" if:true={usersData.length}>
+            </lightning-datatable>
+
+            <div class="add_user_form" if:true={selectedGroupValue}>
+                <h2 slot="header" id="modal-heading-01"
+                    class="slds-text-heading_small slds-m-bottom_medium header ITC_font">
+                    Add Group Member</h2>
+
+                <lightning-record-edit-form record-type-id={recordId} object-api-name="UserCompetencies__c"
+                    onsubmit={onSubmit}>
+
+                    <lightning-input-field field-name="User__c"> </lightning-input-field>
+                    <lightning-button label="Add Members" variant="brand" class="addbutton"
+                        type="submit"></lightning-button>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </div>
+
+</template>

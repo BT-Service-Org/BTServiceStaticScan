@@ -1,0 +1,331 @@
+lightning-card{
+ 
+  --sds-c-card-color-border: white;
+
+}
+
+.heading{
+
+  font-family: 'ITCAvantGarde', sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: -0.3px;
+  text-rendering: geometricPrecision;
+  color: rgb(3,45,96);
+  margin-bottom: 10px;
+  
+}
+
+.modal-heading{
+  font-family: 'ITCAvantGarde', sans-serif;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.5px;
+  text-rendering: geometricPrecision;
+  color: #032D60;
+  font-weight: 600;
+}
+
+.modal-body{
+  font-family: 'Salesforce Sans', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-rendering: geometricPrecision;
+    color: #0B0B0B;
+    font-style: normal;
+    font-weight: 400;
+    margin: 30px 50px 30px 50px;
+}
+
+@media screen and (min-width: 750px) {
+  .modal-body{
+      margin: 30px 50px 30px 50px;
+  }
+}
+
+
+
+.back-content{
+  font-family: 'Salesforce Sans', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-rendering: geometricPrecision;
+  color: white;
+
+}
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0.5rem;
+    width: 100%;
+   margin-bottom: 0.3rem;
+    justify-content: center;
+ }
+
+.container{
+ background: white;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 30px 30px;
+  position: relative;
+}
+
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+
+.flex-container > div {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  border-radius: 5px;
+  transition: .5s;
+  max-width: 275px;
+  min-width: 250px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  background: white;
+  min-height: 350px;
+  border-radius: 16px;
+  transition: box-shadow 0.3s ease-in-out; 
+
+}
+
+@media screen and (max-width: 1600px) {
+  .container{
+    height: 100%;
+  }
+}
+.card{
+  margin: 15px 10px;
+  box-shadow: 0px 0px 2px 0px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+}
+
+.card:hover{
+ box-shadow: 0px 12px 24px -4px rgb(24 24 24 / 8%), 0px 16px 32px -4px rgb(24 24 24 / 16%);
+}
+
+.image-card{
+  min-width: 150px;
+  max-width: 250px;
+  min-height: 150px;
+  max-height: 150px;
+  object-fit: fill;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.container-content{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 15px;
+  height: 100%;
+}
+.container-content:hover .overlay {
+  opacity: 1;
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #001639;
+  color: white;
+  --sds-c-button-inverse-color-background: #001639 !important;
+}
+.text {
+
+  font-size: 10px;
+
+  text-align: left;
+  padding-top: 15px;
+  padding-left: 15px;
+}
+
+button{
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: transparent;
+}
+button:hover {
+
+  background-color: transparent;
+  border-bottom: 2px solid white;
+}
+
+.option {
+  position: relative;
+  z-index: 2;
+}
+.option ul {
+  margin: 0;
+  padding: 0;
+}
+.option ul li {
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+  color: #fff;
+  font-size: 16px;
+}
+
+li{
+ 
+  color: white;
+  margin: 0.5rem 0;
+font-family : 'Salesforce Sans';
+}
+
+.heading-sub{
+ 
+  padding: 1rem 1rem;
+  font-size: 16px;
+  font-family: 'Salesforce Sans';
+  color: #0B0B0B;
+}
+
+.horizontal-center{
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.leaderboard {
+  max-width: 490px;
+  width: 100%;
+  border-radius: 12px;
+}
+.leaderboard header {
+  --start: 15%;
+  height: 130px;
+  background-image: repeating-radial-gradient(circle at var(--start), transparent 0%, transparent 10%, rgba(54, 89, 219, 0.33) 10%, rgba(54, 89, 219, 0.33) 17%), linear-gradient(to right, #5b7cfa, #3659db);
+  color: #fff;
+  position: relative;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+.leaderboard header .leaderboard__title {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: calc(var(--start) * .75);
+  transform: translateY(-50%);
+  text-transform: uppercase;
+  margin: 0;
+}
+.leaderboard header .leaderboard__title span {
+  display: block;
+}
+.leaderboard header .leaderboard__title--top {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 6.5px;
+}
+.leaderboard header .leaderboard__title--bottom {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 3.55px;
+  opacity: 0.65;
+  transform: translateY(-2px);
+}
+.leaderboard header .leaderboard__icon {
+  fill: #fff;
+  opacity: 0.35;
+  width: 50px;
+  position: absolute;
+  top: 50%;
+  left: var(--start);
+  transform: translate(-50%, -50%);
+}
+.leaderboard__profiles {
+  background-color: #fff;
+  border-radius: 0 0 12px 12px;
+  padding: 8px 8px 10px;
+  display: grid;
+  row-gap: 8px;
+}
+.leaderboard__profile {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  align-items: center;
+  padding: 7px 15px 7px 7px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 5px 7px -1px rgba(51, 51, 51, 0.23);
+  transition: transform 0.25s cubic-bezier(0.7, 0.98, 0.86, 0.98), box-shadow 0.25s cubic-bezier(0.7, 0.98, 0.86, 0.98);
+  background-color: #EEF0F2;
+}
+
+.leaderboard__picture {
+  max-width: 100%;
+  width: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px #ebeef3, 0 0 0 22px #f3f4f6;
+}
+.leaderboard__name {
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.64px;
+  margin-left: 12px;
+  text-transform: capitalize;
+}
+.leaderboard__value {
+  color: rgb(1, 68, 134);
+  font-weight: 700;
+  font-size: 15px;
+}
+.leaderboard__value > span {
+  opacity: 0.8;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 3px;
+}
+
+body {
+  margin: 0;
+  background-color: #eaeaea;
+  display: grid;
+  height: 100vh;
+  place-items: center;
+  font-family: 'Salesforce Sans', sans-serif;
+}
+
+.leaderboard {
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.4);
+}
+
+.badgeCss {
+ --slds-c-badge-color-background: RGB(3,45,96);
+ --slds-c-badge-text-color: RGB(255,255,255);
+}

@@ -1,0 +1,25 @@
+.THIS .item-image {
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    background-color: #F3F2F2;
+    margin-bottom:1rem;
+    border-radius: 6px;
+    position: relative;
+    /* aspect clamp */
+    /*display: block;*/
+    display: flex;
+    padding-bottom: 56.25%;
+}
+
+.THIS .item-img {
+    position: absolute;
+    top: 0;
+    /*left: 50%;
+    transform: translateX(-50%);*/
+    height: 100%;
+    overflow: hidden;
+    /*background-image:  url('/sfsites/c/resource/The_Station_Icons/Icons/UNKNOWN@2x.png');
+    background-position: center;
+    background-size: contain;*/
+}

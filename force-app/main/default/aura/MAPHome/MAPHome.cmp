@@ -1,0 +1,120 @@
+<aura:component extends="c:MAPBase" Controller="MAPController">
+
+    <!--Attributes-->
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="screen" type="String" access="public"/>
+
+    <aura:attribute name="customer" type="Object" access="public"/>
+    <aura:attribute name="contact" type="Object" access="public"/>
+    <aura:attribute name="domain" type="Object" access="public"/>
+    <aura:attribute name="assessment" type="Object" access="public"/>
+    <aura:attribute name="interview" type="Object" access="public"/>
+
+    <aura:attribute name="assessments" type="Object[]" access="public"/>
+    <aura:attribute name="notes" type="Object[]" access="public"/>
+
+    <aura:attribute name="summary" type="String" access="public"/>
+    <aura:attribute name="message" type="Object" access="public"/>
+    <aura:attribute name="autoSave" type="Object" access="public"/>
+
+   	<!--Event Handlers-->
+   	<aura:handler event="c:MAPOptionChange" action="{!c.handleOptionChange}"/>
+
+   	<!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+	<!--Content-->
+	<div class="slds-container slds-container_center">
+
+		<!--Message-->
+		<aura:if isTrue="{!v.message.show}">
+   			<div class="{!'alert-top alert slds-text-heading_small '+if(v.message.success,'alert-success','alert-danger')}">
+			  	<lightning:buttonIcon iconName="utility:close" variant="bare-inverse"  class="slds-float_right slds-popover__close"
+			  		alternativeText="Close dialog" onclick="{!c.closeMessage}"/>
+			  	<strong>{!v.message.success ? 'Success! ' : 'Danger! '}</strong> {!v.message.body}
+			</div>
+   		</aura:if>
+
+   		<!--Title & Auto Save-->
+		<div class="slds-grid slds-grid_align-end" style="margin-bottom:-15px;">
+			<aura:if isTrue="{!v.interview.options.enableAutoSave}">
+				<div class="slds-col slds-text-color_weak slds-p-right_large">
+					<aura:if isTrue="{!!empty(v.autoSave.message)}">
+						<strong style="color:green;"> Success! </strong> {!v.autoSave.message}
+						<aura:set attribute="else">
+							<aura:if isTrue="{!v.autoSave.time}">
+							 	Auto saving in {!v.autoSave.time} seconds...
+							 	<aura:set attribute="else">
+							 		Saving...
+							 	</aura:set>
+							 </aura:if>
+						</aura:set>
+					</aura:if>
+				</div>
+			</aura:if>
+			<div class="slds-col" style="margin-top:-5px;">
+				<span class="slds-text-heading_medium"><b>S360</b></span> 
+				<span class="slds-text-body_small slds-text-color_weak slds-p-left_xx-small">v1.7</span>
+			</div>
+		</div>
+
+		<!--Header-->
+		<c:MAPHeader customer="{!v.customer}" contact="{!v.contact}" 
+			domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}"/>
+
+		<!--Persona View-->
+		<aura:if isTrue="{!equals(v.screen,'MAPPersona')}">
+			<c:MAPPersona assessments="{!v.assessments}" onViewAssessment="{!c.handleViewAssessment}" 
+				onCreateAssessment="{!c.handleCreateAssessment}"/>
+		</aura:if>
+
+		<!--<aura:if isTrue="{!or(equals(v.screen,'MAPPersona'),equals(v.screen,'MAPAssessment'))}">
+			<div class="slds-grid slds-gutters">
+				<div class="slds-col slds-grow-none">
+					<c:MAPPersona assessments="{!v.assessments}" assessment="{!v.assessment}" onViewAssessment="{!c.handleViewAssessment}" 
+						onCreateAssessment="{!c.handleCreateAssessment}"/>
+				</div>
+				<aura:if isTrue="{!v.assessment}">
+					<div class="slds-col slds-grow-none">
+						<c:MAPAssessment interviews="{!v.assessment.interviews}" onViewInterview="{!c.handleViewInterview}" 
+							onCreateInterview="{!c.handleCreateInterview}" onCancel="{!c.showAssessments}"/>
+					</div>
+				</aura:if>
+			</div>
+		</aura:if>-->
+
+		<!--Assessment View-->
+		<aura:if isTrue="{!equals(v.screen,'MAPAssessment')}">
+			<c:MAPAssessment interviews="{!v.assessment.interviews}" onViewInterview="{!c.handleViewInterview}" 
+				onCreateInterview="{!c.handleCreateInterview}" onCancel="{!c.showAssessments}"/>
+		</aura:if>
+
+		<!--Interview View-->
+		<aura:if isTrue="{!equals(v.screen,'MAPInterview')}">
+			<c:MAPNotes notes="{!v.notes}" types="{!v.interview.noteTypes}" editable="{!!v.interview.completed}"/>
+			<c:MAPInterview domain="{!v.domain}" assessment="{!v.assessment}" interview="{!v.interview}" 
+				onSave="{!c.handleSaveInterview}" onSubmit="{!c.handleSubmitInterview}" onCancel="{!c.handleCancelInterview}"/>
+		</aura:if>
+
+		<!--Create Assessment View-->
+		<aura:if isTrue="{!equals(v.screen,'MAPCreateAssessment')}">
+			<div style="width:50vw;">
+				<div class="slds-text-heading_small slds-p-vertical_medium"> Create New Assessment </div>									
+				<lightning:textarea required="true" value="{!v.summary}" placeholder="Enter Summary" label="Summary" maxlength="140"
+					messageWhenTooLong="A maximum of 140 characters are allowed" messageWhenValueMissing="You must enter a value"/>
+				<div class="slds-p-top_large">
+					<lightning:button class="slds-button_destructive" label="Cancel" onclick="{!c.cancelAssessment}"/>
+					<lightning:button class="slds-button_brand" label="Save Assessment" onclick="{!c.saveAssessment}" 
+						disabled="{!empty(v.summary)}"/>
+				</div>
+			</div>
+		</aura:if>
+
+		<!--Spinner-->
+		<aura:if isTrue="{!empty(v.screen)}">
+			<lightning:spinner alternativeText="Loading" size="medium" />
+		</aura:if>
+
+	</div>
+
+</aura:component>

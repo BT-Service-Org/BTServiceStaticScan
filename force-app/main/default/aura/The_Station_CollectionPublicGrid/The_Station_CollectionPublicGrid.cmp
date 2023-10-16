@@ -1,0 +1,105 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="The_Station_CollectionController" access="global">
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="collectionList" type="List" default="[]"/>
+    <aura:attribute name="totalResults" type="Integer" default="0"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="searchTermValue" type="String" default=""/>
+    <aura:attribute name="selectedValue" type="String" default="Red"/>
+    <aura:attribute name="showFollowCollection" type="boolean" default="false"/>
+
+    <aura:attribute name="issearching" type="Boolean" default="false"/>
+
+    <!-- DESIGN ATTRIBUTES-->    
+    <aura:attribute name="componentPadding" type="String" default="0px 100px 0px 100px"/>    
+    <aura:attribute name="collectionFilterTitle" type="String" default="Public Collections"/>    
+    <aura:attribute name="showCollectionFilterTitle" type="boolean" default="true"/>    
+    
+    <aura:attribute name="showCollectionSearch" type="boolean" default="true"/>    
+
+    <aura:attribute name="collectionFilter" type="String" default="Public Collections"/>        
+    <aura:attribute name="showSort" type="boolean" default="true"/>
+    <aura:attribute name="showShareCollection" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionTitle" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionFollowers" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionContentCount" type="boolean" default="true"/>
+    <aura:attribute name="showCollectionDescription" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionLastUpdatedDate" type="boolean" default="true"/>    
+    <aura:attribute name="showCollectionCreatedDate" type="boolean" default="true"/>            
+    <!-- DESIGN ATTRIBUTES-->
+
+    <aura:handler event="c:The_Station_CollectionPublicGridEvent" action="{!c.doSort}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    
+    <div class="collection-grid-container" style="{! 'padding: ' + v.componentPadding + ';'}">
+        <div class="slds-grid">            
+            <h3 class="slds-col slds-size_1-of-2">
+                <aura:if isTrue="{!v.showCollectionFilterTitle}">
+                    <span class="collection-name">{!v.collectionFilterTitle}</span>
+                    <aura:set attribute="else">
+                        <span class="results-total">{!v.searchTermValue} ({! v.totalResults } Results)</span>                        
+                    </aura:set>
+                </aura:if>
+                
+            </h3>
+
+            <div class="slds-col slds-size_1-of-2 actions">
+                <aura:if isTrue="{!v.showSort}">
+                    <lightning:combobox 
+                        class="slds-size_1-of-2 sort-action" 
+                        label="Sort" 
+                        aura:id="collectionSort" 
+                        name="collectionSort" 
+                        value="{!v.selectedValue}" 
+                        placeholder="Select filter" 
+                        options="{!v.options}"
+                        onchange="{!c.doSort}" 
+                        variant="label-hidden"/>
+                </aura:if>  
+                <aura:if isTrue="{!v.showCollectionSearch}">                
+                    <div class="search-action-container" onkeyup="{! c.handleKeyUp }" onchange="{!c.onchangeSearch}" >
+                        <lightning:input
+                            class="slds-size_1-of-2 search-action" 
+                            aura:id="enter-search"
+                            name="enter-search"
+                            label="Search"
+                            isLoading="{! v.issearching }"
+                            type="search"
+                            placeholder="Search collection" 
+                            variant="label-hidden"
+                        />
+                    </div>                    
+                </aura:if>              
+            </div>
+        </div>    
+
+        <div class="slds-grid slds-gutters slds-wrap collection-items slds-grid--pull-padded">
+            <aura:if isTrue="{!not(empty(v.collectionList))}">
+                <aura:iteration var="collection" items="{!v.collectionList}" indexVar="index">
+                    <div class="slds-col slds-max-small-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+                    <c:The_Station_CollectionUserProfileGridItem 
+                    stationContentGroup="{!collection}"                        
+                    showFollowButton="{!v.showFollowCollection}"
+                    showShareCollection="{!v.showShareCollection}"
+                    showCollectionTitle="{!v.showCollectionTitle}"
+                    showCollectionFollowers="{!v.showCollectionFollowers}"
+                    showCollectionContentCount="{!v.showCollectionContentCount}"
+                    showCollectionDescription="{!v.showCollectionDescription}"
+                    showCollectionLastUpdatedDate="{!v.showCollectionLastUpdatedDate}"
+                    showCollectionCreatedDate="{!v.showCollectionCreatedDate}"
+                    />
+                    </div>
+                </aura:iteration>    
+                <aura:set attribute="else">
+                    <div class="slds-col slds-max-small-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4 collection-name">                        
+                        <br/>
+                        <br/>
+                        <div>No results...</div>                                                  
+                    </div>
+                </aura:set>
+            </aura:if>            
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,23 @@
+<aura:component implements="flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="buttonLabel" type="String" required="true"/>
+    <aura:attribute name="showButtonHoverLabel" type="boolean" required="true"/>
+    <aura:attribute name="buttonHoverLabel" type="String" required="true"/>
+    <aura:attribute name="buttonURL" type="String" required="true"/>
+    
+    <div class="slds-p-vertical_xx-large">
+        <aura:if isTrue="{!v.showButtonHoverLabel}">
+                <button class="slds-button_brand my-button feedback-widget slds-float_right slds-m-right_xx-large" onclick="{!c.redirectToURL}">
+                            <div class="show-me-on-hover">{!v.buttonHoverLabel}</div>
+                            <div class="divider"></div>
+                            <div class="main-comp">{!v.buttonLabel}</div>
+                </button>
+            <aura:set attribute="else">
+                <button class="slds-button_brand my-button feedback-widget2 slds-float_right slds-m-right_xx-large" onclick="{!c.redirectToURL}">
+                <div class="hidden-label">{!v.buttonLabel}</div>
+                </button>
+            </aura:set>
+        </aura:if>
+    </div>
+    
+</aura:component>

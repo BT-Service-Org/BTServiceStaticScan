@@ -1,0 +1,88 @@
+<template>
+    <div>
+        <h2 class="ITC_font comments-header">Comments & Feedback</h2>
+        <div class="comments-container">
+            <template for:each={commentData} for:item="each" if:true={commentData.length}>
+                <div key={each.Id} class={each.feedbackType}>
+                    <lightning-avatar src={each.CreatedBy.MediumPhotoUrl} alternative-text={each.CreatedBy.LastName}
+                        size="small"></lightning-avatar>
+                    <div class="user-comment">
+                        <div class="feedback">
+                            <div class="feedback-header">
+
+                                <p class="user_info">
+                                    <span class="ITC_font" style="color:#032D60">{each.CreatedBy.FirstName}
+                                        {each.CreatedBy.LastName}</span>
+                                    <span class="salaesforce_font comment_time">{each.feedbackTime}</span>
+                                </p>
+                                <span class="salesforce_font">{each.Feedback__c} </span>
+                                <span onclick={handleReplyClick} data-id={each.Id}
+                                    style="margin-top:6px"><a>Reply</a></span>
+                            </div>
+
+                            <div class="feedback_icon">
+                                <img src={likeImage} if:true={each.upVote} width="60">
+                                <img src={dislikeImage} if:true={each.downVote} width="60">
+
+                                <!-- <lightning-icon icon-name="utility:like" size="small" alternative-text="Upvote" title="Upvote" if:true={each.upVote} class="vote_icon"></lightning-icon>
+                            <lightning-icon icon-name="utility:dislike" size="small" alternative-text="DownVote" title="DownVote" if:true={each.downVote}></lightning-icon> -->
+                                <template if:false={each.upVote}>
+                                    <lightning-icon icon-name="utility:comments" size="medium"
+                                        alternative-text="Comments" title="Comments"
+                                        if:false={each.downVote}></lightning-icon>
+                                </template>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Reply Section -->
+                        <template if:true={each.commentReplySection}>
+                            <template for:each={each.commentReplySection} for:item="reply">
+                                <div key={reply.Id} class="reply-section">
+
+                                    <lightning-avatar src={reply.CreatedBy.MediumPhotoUrl}
+                                        alternative-text={reply.CreatedBy.LastName} size="small"></lightning-avatar>
+                                    <div class="user-comment">
+                                        <div class="feedback">
+                                        <div class="feedback-header">
+                                        <p class="user_info">
+                                        <span class="ITC_font" style="color:#032D60">{reply.CreatedBy.FirstName}
+                                            {reply.CreatedBy.LastName}</span>
+                                        <span class="salaesforce_font comment_time">{reply.replyTime}</span>
+                                        </p>
+                                        <span class="salesforce_font">{reply.Feedback__c}</span>
+                                        <span onclick={handleReplyClick} data-id={each.Id}
+                                            style="margin-top:6px"><a>Reply</a></span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <!-- on click of this open a text box and create a reply-->
+                        <!-- Reply Box -->
+                        <template if:true={each.showReplyBox}>
+                            <div class="feedback-container">
+                                <lightning-textarea name={each.Id} label="Please provide your response here"
+                                    value={reply} onchange={handleReplyChange} required data-id={each.Id}
+                                    class="feedback-text salesforce_font"
+                                    message-when-value-missing="Please enter your reply"></lightning-textarea>
+                                <div class="feedback-btn">
+                                    <div class="submit-button" onclick={handleReplySubmit} data-id={each.Id}>
+                                        Reply
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+            </template>
+            <c-psc-article-feedback parent-id={recordId} user-up-voted={userUpVoted}
+                onfeedbacksuccess={handleFeedbackCreate} user-down-voted={userDownVoted} parent-type={parentType}
+                feedback-label={feedbackLabel} feedback-type="Comment" is-required=true></c-psc-article-feedback>
+
+        </div>
+    </div>
+</template>

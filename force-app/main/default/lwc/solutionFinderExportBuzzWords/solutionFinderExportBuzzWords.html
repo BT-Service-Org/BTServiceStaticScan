@@ -1,0 +1,24 @@
+<template>
+    <div class="sidebar">
+        <div class="title">
+            Buzz Words
+        </div>
+        <div class="content">
+            <template for:each={buzzWords} for:item="buzzWord">
+                <div key={buzzWord.name}>
+                    <div class="word">
+                        {buzzWord.label}
+                    </div>
+                    <div class="definition">
+                        {buzzWord.definition}
+                    </div>
+                    <ul class="slds-list_dotted">
+                        <template for:each={buzzWord.details} for:item="detail">
+                            <li key={detail.name} class="slds-item">{detail.label}</li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

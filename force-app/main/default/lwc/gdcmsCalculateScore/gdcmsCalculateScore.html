@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="Delivery Hub Summary">
+            <template if:true={boolShowSpinner}>
+                <div class="slds-spinner_container">
+                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+            <div class="slds-grid slds-wrap slds-gutters card">
+                <div class="slds-col slds-size_1-of-4">
+                    <p class="headerScore">Score</p>
+                    <p class="contentScore">{count}/{total}</p>
+                </div>
+                <div class="slds-col slds-size_3-of-4">
+                    <canvas class="chart slds-col slds-size_3-of-4"></canvas>
+                </div>
+            </div>
+        </lightning-card>
+</template>

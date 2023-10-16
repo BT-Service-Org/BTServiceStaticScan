@@ -1,0 +1,299 @@
+.stage_landing_page {
+    padding: 30px 0px;
+    width: 96%;
+    margin: auto;
+}
+
+.stage_landing_page h3 {
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 32px;
+    letter-spacing: -0.004em;
+    color: #032D60;
+    margin-bottom: 10px;
+}
+
+.stage_head p {
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.004em;
+    color: #032D60;
+    margin-bottom: 15px;
+}
+
+.stage_point {
+    font-family: 'Salesforce Sans' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+    /* or 143% */
+
+
+    /* Foundation/Gray/Neutral-30 */
+
+    color: #444444;
+}
+
+.stage_cards {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 0px;
+    gap: 18px;
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.stage_card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 18px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+}
+.stage_link {
+    margin-top: 25px;
+}
+
+.stage_card_optional {
+    width: 23%;
+    height: auto;
+    min-height: 220px;
+    position: relative;
+}
+
+.stage_card_mandatory {
+    width: 30%;
+    min-height: 220px;
+    height: auto;
+    position: relative;
+}
+
+.card_head {
+    display: flex;
+    align-items: center;
+}
+
+.stage_title {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+/* .stage_title a:hover {
+    color:#FF5D2D;
+} */
+
+.stage {
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+}
+
+.duration {
+    font-size: 10px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    color: #444444;
+}
+
+.stage_order {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50px;
+}
+
+.stage_desc {
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #444444;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 10px 0px;
+}
+
+
+.stage_card:nth-child(3n+1) .card_head .stage_order {
+    background: rgba(255, 93, 45, 0.1);
+    color: #FF5D2D;
+}
+
+.stage_card:nth-child(3n+1) .card_head .stage_title .stageDesc {
+    color: #FF5D2D;
+}
+
+.stage_card:nth-child(3n+1) .card_head .stage_title a:hover {
+    color: #FF5D2D;
+}
+
+.stage_card:nth-child(3n+1) .item-description {
+    border-left: 3px solid #FF5D2D;
+}
+
+.stage_card:nth-child(3n-1) .card_head .stage_order {
+    background: rgba(69, 198, 90, 0.1);
+    color: #396547;
+}
+
+.stage_card:nth-child(3n-1) .card_head .stage_title .stageDesc {
+    color: #396547;
+}
+
+.stage_card:nth-child(3n-1) .card_head .stage_title a:hover {
+    color: #396547;
+}
+
+.stage_card:nth-child(3n-1) .item-description {
+    border-left: 3px solid #396547;
+}
+
+.stage_card:nth-child(3n) .card_head .stage_order {
+    background: rgba(1, 118, 211, 0.1);
+    color: #0070D2;
+}
+
+.stage_card:nth-child(3n) .card_head .stage_title .stageDesc {
+    color: #0070D2;
+}
+
+.stage_card:nth-child(3n) .card_head .stage_title a:hover {
+    color: #0070D2;
+}
+
+.stage_card:nth-child(3n) .item-description {
+    border-left: 3px solid #0070D2;
+}
+
+.item-description {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 0px 0px 12px;
+    gap: 6px;
+    width: 98%;
+    margin: auto;
+    margin: 10px 0px
+}
+
+.stage_detail_link {
+    position: absolute;
+    bottom: 15px;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #1B96FF;
+    cursor: pointer;
+}
+
+.optional_stage_order {
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50px;
+    background: rgba(1, 68, 134, 0.1);
+    color: #032D60;
+}
+
+.optional_stage_name {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+}
+
+.optional_stage_duration {
+    font-size: 10px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    color: #444444;
+}
+
+.optional_item-description {
+    border-left: 3px solid #032D60;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 0px 0px 12px;
+    gap: 6px;
+    width: 98%;
+    margin: 10px 0px;
+}
+
+@media screen and (max-width:920px) {
+    
+
+    .stage_card_mandatory, .stage_card_optional {
+        width: 30%;
+        max-height: 300px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .stage_landing_page h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .stage_head p {
+        font-size: 16px;
+        line-height: 6px;
+    }
+
+    .stage_card_mandatory, .stage_card_optional {
+        width: 30%;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .stage_landing_page h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .stage_head p {
+        font-size: 16px;
+        line-height: 6px;
+    }
+
+    .stage_cards {
+        flex-direction: column;
+    }
+
+    .stage_card_mandatory, .stage_card_optional {
+        width: 98%;
+        margin: auto;
+    }
+}

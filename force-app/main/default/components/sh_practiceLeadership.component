@@ -1,0 +1,47 @@
+<apex:component controller="sh_BioController">
+<!-- ToDo:
+  Component with controller to take practice name as input and provide following outputs 
+  1. Leader Name
+  2. Leader Title
+  3. Leader bio link
+  4. Leader image
+-->
+
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="projectCode" type="String" required="false" assignTo="{!projectCode}"/>
+  <apex:attribute description="" name="practiceCode" type="String" required="false" assignTo="{!practiceCode}" />
+
+ <div id="leadership-team-members-wrapper" class="leadership-team-members-wrapper">
+   <div class="posts-grid-wrapper">
+     <div class="row">                
+       <div class="col-sm-2 single-label-cell">
+         <div class="cell-container">
+           <div class="cell-inner">
+             <div class="single-label">
+               <span class="label-cell-text">Leadership</span>
+             </div>
+           </div>
+         </div>
+       </div>
+     <apex:repeat value="{!practiceLeaders}" var="pl">
+       <a href="{!domainVariable}/sh_bio?name={!pl.personCode}" class="col-sm-2 single-post-cell">
+         <span class="cell-container">                
+           <span class="team-member-container">
+             <span class="team-member-info">
+               <span class="team-member-name">{!pl.personName}</span><br />
+               <span class="job-title">{!pl.personTitle}</span><br />
+               <span class="view-bio">View Bio</span>
+             </span>
+           </span>
+           <img width="295" height="295" src="{!URLFOR($Action.Attachment.Download, pl.personImageId)}" class="img-responsive wp-post-image" alt="{!pl.personName}" />
+         </span>
+       </a>
+     </apex:repeat>
+     <!-- </div> <div class="row">  -->
+     </div>
+   </div> <!-- End posts-grid-wrapper -->
+   <div class="pagination-wrapper">
+     <div class="pagination-links"></div>
+   </div>
+ </div> <!-- End leadership-team-members-wrapper -->
+</apex:component>

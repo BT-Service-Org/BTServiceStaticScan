@@ -1,0 +1,36 @@
+<apex:page sidebar="false" showHeader="false">
+
+	<!-- CSS de TS -->
+	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/modal.css')}" />
+    <!-- Common Layout -->
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamDetailEdit.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMemberList.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/adminMainSetUp.css')}" />
+    
+    
+	<div class="box_round_blue">
+		<!-- Header -->
+		<div class="header">
+			<div><div><h3>Administrator</h3></div></div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+				<div style="margin-bottom:10px">						
+		</div>	
+		<div class="team_detail_commentedItemLeftProfile">					    
+		    <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/admin.png')}"  />	 
+		    <div>
+		    	<span class="membersDescription">
+					<a href="/apex/AdminMainSetup">Setup</a>
+				</span>
+		   	</div>
+		</div>	
+		<div style="margin-bottom:5px"></div>		
+		</div>
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>	
+</apex:page>

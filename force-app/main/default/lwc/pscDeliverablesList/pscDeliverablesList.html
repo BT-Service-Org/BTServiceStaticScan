@@ -1,0 +1,7 @@
+<template>
+    <ul class="slds-list_dotted">
+        <template for:each={deliverables} for:item="item">
+            <li key={item.Id}> {item.Name} </li>
+        </template>
+    </ul>
+</template>

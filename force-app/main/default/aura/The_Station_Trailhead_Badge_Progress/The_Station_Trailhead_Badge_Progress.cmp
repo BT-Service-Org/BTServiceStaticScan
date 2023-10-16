@@ -1,0 +1,43 @@
+<aura:component >
+    
+    <!-- Handlers -->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <!-- Public Attributes -->
+    <aura:attribute name="icon" type="String" access="public"/>
+    <aura:attribute name="progress" type="String" access="public"/>
+    <aura:attribute name="type" type="String" access="public"/>
+    <aura:attribute name="name" type="String" access="public"/>
+    <aura:attribute name="description" type="String" access="public"/>
+    <aura:attribute name="tags" type="String" access="public"/>
+    <aura:attribute name="url" type="String" access="public"/>
+    
+    <!-- Private Attributes -->
+    <aura:attribute name="tagsList" type="List" access="private"/>
+    <aura:attribute name="progressCssClass" type="String" access="private"/>
+    
+    <div class="slds-grid slds-p-around_medium container">
+        <div class="slds-col logo-section">
+            <img src="{! v.icon }" class="icon" border="0"/>
+        </div>
+        <div class="slds-col info-section">
+            <div class="{! 'progress slds-p-horizontal_medium slds-p-vertical_xx-small ' + v.progressCssClass }">
+                {! v.progress }
+            </div>
+            <div class="slds-text-body_small type">
+                {! v.type }
+            </div>
+            <a href="{! v.url }" target="_blank" class="slds-text-heading_medium slds-m-vertical_xx-small name">
+                {! v.name }
+            </a>
+            <div class="slds-text-body_regular slds-m-bottom_medium description">
+                {! v.description }
+            </div>
+            <div class="tags">
+                <aura:iteration items="{! v.tagsList }" var="tag">
+                    <span class="slds-p-horizontal_small slds-p-vertical_xx-small slds-m-right_small tag">{! tag }</span>
+                </aura:iteration>
+            </div>
+        </div>
+    </div>
+</aura:component>

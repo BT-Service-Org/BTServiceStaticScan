@@ -1,0 +1,9 @@
+<aura:tokens extends="force:base">
+    <aura:token name="Earthblue" value="#1F45FC"/>
+    <aura:token name="blueGrey" value="#2B547E"/>
+    <aura:token name="textSize" value="15px"/>
+    <aura:token name="divFontWeight" value="bold"/>
+    <aura:token name="normalFont" value="font-family-heading"/>
+    <aura:token name="blackTitles" value="#0d0e12"/>
+    <aura:token name="listHeader" value="size-xx-large"/>
+</aura:tokens>

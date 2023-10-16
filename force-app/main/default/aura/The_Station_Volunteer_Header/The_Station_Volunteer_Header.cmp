@@ -1,0 +1,25 @@
+<aura:component>
+
+    <aura:attribute name="title" type="String" default="Total Volunteer Hours"/>
+    <aura:attribute name="currentHours" type="String" default="0"/>
+    <aura:attribute name="maxHours" type="String" default="56"/>
+    <aura:attribute name="percent" type="String" default="33"/>
+
+    <div class="slds-col slds-size-12-of-12">
+        <article class="slds-card">
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-card__header-title">
+                    {!v.title}
+                </div>
+                <div class="slds-progress-bar__container">
+                    <div class="slds-progress-bar slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.percent}" role="progressbar" style="flex-grow:100;">
+                        <span class="slds-progress-bar__value" style="{!'width:' + v.percent + '%;'}"></span>         
+                    </div>
+                    <div class="slds-col_bump-right slds-progress-bar__text">{!v.currentHours}/{!v.maxHours} hours</div>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+
+</aura:component>

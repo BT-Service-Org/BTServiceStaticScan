@@ -1,0 +1,13 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global">
+    <aura:attribute name="selectedSort" type="String" default="Last" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="sortEvent" event="c:The_Station_CollectionSortEvent" action="{!c.handleComponentEvent}"/>
+
+    <c:The_Station_CollectionDetailHeaderNew recordId="{!v.recordId}"/>
+<!-- Update to add search and sort, removing Athena's code to replace with Ryan's -->
+    <!--
+    <c:The_Station_CollectionContentSearchSort/>
+    -->    
+    <c:The_StationCollectionItems recordId="{!v.recordId}" selectedSort="{!v.selectedSort}"/>
+
+</aura:component>

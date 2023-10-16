@@ -1,0 +1,16 @@
+<template>
+  <nav role="navigation" aria-label="Breadcrumbs" class="breadcrumbs" if:true={displaydata}>
+    <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+      <template for:each={displaydata} for:item="links">
+      <li key={links.Name} class="slds-breadcrumb__item salesforce_font">
+        <a href={links.url}>{links.Name}</a>
+      </li>
+    </template>
+    <template if:true={lastName}>
+    <li  class="slds-breadcrumb__item salesforce_font">
+      <p class="lastitem">{lastName}</p>
+    </li>
+  </template>
+    </ol>
+  </nav>
+</template>

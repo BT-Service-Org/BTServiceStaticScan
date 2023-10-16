@@ -1,0 +1,82 @@
+.THIS .cellType-1{
+    display: table-cell;
+    text-align: center;
+    align-items: center;
+    justify-content:center;
+    border-bottom: 1px solid black;
+    padding: 10px;
+}
+.THIS .Table-row{
+    background-color: none;
+    font-size: 13px;
+    font-weight: normal;
+    display: table-row;
+}
+.THIS .width-15{
+    width: 15%;
+}
+.THIS .width-9{
+    width: 9%;
+}
+.THIS .width-16{
+    width: 16%;
+}
+.THIS .list-table{
+    width: 100%;
+    display: table;
+    empty-cells: show;     
+}
+/* .THIS .buttonTheme-light1 {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:130px;
+    font-weight: bold;
+    background-color: #018EDA !important;
+    color: #FFFFFF;
+}
+
+.THIS .buttonTheme-light2{
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:130px;
+    font-weight: bold;
+    background-color: green;
+    color: #FFFFFF; 
+}
+.THIS .buttonTheme-light3{
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:130px;
+    font-weight: bold;
+    background-color: rgb(255, 0, 0);
+    color: #FFFFFF; 
+} */
+
+/* .THIS .buttonTheme-small{
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: #FFFFFF;
+    color: #018EDA; 
+} */
+
+.THIS .color-red{
+    color: red;
+}
+
+.THIS .color-yellow{
+    color: #CCCC00;
+}
+
+.THIS .color-orange{
+    color: orange;
+}
+
+.THIS .color-green{
+    color: green;
+}

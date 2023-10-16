@@ -1,0 +1,33 @@
+<apex:component >
+<!-- links to be replaced:
+  1. http://www.serviceshub.com
+  2. Image: http://www.serviceshub.com/wp-content/themes/salesforce-services/images/svg/salesforce-logo.svg  
+-->
+  <apex:attribute description="" name="domainVar" type="String" required="true" />
+
+<footer class="site-footer " role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+  <div class="wrap">
+    <div class="container footer-container">
+      <div class="row">
+        <div class="col-sm-2">
+            <p>&#169; Copyright 2016 Salesforce Services. All rights reserved.</p>
+            <p>Salesforce.com, Inc. The Landmark @ One Market, Suite 300, San Francisco, CA, 94105, United States</p>
+        </div>
+        <div class="col-sm-offset-1 col-sm-2">
+            <a href="{!domainVar}/sh_home" class="sf-home">
+                <span class="sf-logo-footer-wrapper">
+                    <img class="sf-logo" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/salesforce-logo.svg')}" alt="Salesforce.com"/>
+                    <span class="sf-logo-accomp-text">SERVICES</span>
+                </span>
+            </a>
+        </div>
+      </div>
+    </div>
+    <div class="internal-use-only-warning">
+      <div class="container internal-use-only-container">
+        <p class="warning-message">Content is Internal Use Only</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</apex:component>

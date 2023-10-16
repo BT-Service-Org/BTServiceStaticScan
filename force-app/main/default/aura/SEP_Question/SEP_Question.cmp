@@ -1,0 +1,54 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="domain" type="Object" access="public"/>
+	<aura:attribute name="assessment" type="Object" access="public"/>
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="dimension" type="Object" access="public"/>
+	<aura:attribute name="capability" type="Object" access="public"/>
+    <aura:attribute name="question" type="Object" access="public"/>
+    <aura:attribute name="isChild" type="Boolean" access="public"/>
+    
+    <aura:attribute name="initDone" type="Boolean" default="false" access="public"/>
+
+    <!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+   	<!--Event Handlers-->
+   	<aura:handler event="c:SEP_AnswerChange" action="{!c.doInit}"/>
+
+	<!--Styles-->
+   	<style>
+		.hidden-question{
+			background: rgb(236, 235, 234);
+			pointer-events: none;
+			display: none;
+		}
+   	</style>
+	
+	<!--Content-->
+	<tr class="{!if(v.question.hidden,'hidden-question','')}">
+		<td scope="row" data-label="Question" class="slds-cell-wrap">
+			<div class="slds-grid slds-grid_vertical-align-center">
+				<span class="{!'slds-col slds-grow-none '+if(v.isChild,'child-number','question-number')}"> 
+					{!v.question.number}. 
+				</span>
+				<div class="slds-col slds-text-heading_small" style="color:rgb(0, 109, 204);"> 
+					{!v.question.query}
+					<aura:if isTrue="{!!empty(v.question.help)}">
+						<span aria-label="{!v.question.help}" class="slds-p-left_x-small">
+							<lightning:buttonIcon iconName="utility:info" variant="bare"/>
+						</span>
+					</aura:if>
+				</div>
+			</div>
+		</td>
+		<aura:if isTrue="{!v.initDone}">
+			<aura:iteration items="{!v.domain.levels}" var="level" indexVar="index">
+				<c:SEP_Answer interview="{!v.interview}" question="{!v.question}" position="{!index}" level="{!level}"/>
+			</aura:iteration>
+			<c:SEP_Answer interview="{!v.interview}" question="{!v.question}" position="{!v.domain.levels.length}"/>
+		</aura:if>
+	</tr>
+
+</aura:component>

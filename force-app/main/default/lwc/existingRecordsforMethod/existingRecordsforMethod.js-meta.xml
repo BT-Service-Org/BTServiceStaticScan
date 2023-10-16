@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets> 
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="methodRecordId" type="String" label="methodRecordId" />
+            <property name="objApiName" type="String" label="objApiName" />
+            <property name="deleteDeliverables" type="String" label="deleteDeliverables" />
+            <property name="defaultDeliverables" type="String" label="defaultDeliverables" />
+            <property name="deleteFies" type="String" label="deleteFies" />
+            <property name="defaultFiles" type="String" label="defaultFiles" />
+            <property name="deleteTemplates" type="String" label="deleteTemplates" />
+            <property name="defaultTemplates" type="String" label="defaultTemplates" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

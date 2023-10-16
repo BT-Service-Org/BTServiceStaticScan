@@ -1,0 +1,66 @@
+<apex:page tabStyle="PeopleProfile__c" sidebar="false" controller="PeopleOverviewController">
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/effects.js')}" />
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />		
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript" />
+	<script>
+	function initSession(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+	</script>
+	<!-- People Photo Upload Js  -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/peoplePhotoUpload.js')}" />
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Overview</h2>
+			</div>		
+		</div>		
+		<!-- Search Box -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />			
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<apex:include pageName="PeopleSidebarProfile" />		
+			</div>		
+		</div><!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+					<a href="peopleprofiledisplay">< Go back to My Profile</a>
+					<h1>My Profile</h1>
+					<h2>Profile Picture Gallery</h2>
+				</div>
+				<div class="main_form" id='photoProfileOut'>
+									
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		//Initialize
+		init();
+	</script>
+</apex:page>

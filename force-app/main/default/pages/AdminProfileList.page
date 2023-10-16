@@ -1,0 +1,334 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="AdminProfileListController">
+<!-- Javascript -->
+	
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, '/inc/js/modal.js')}"></script>
+	
+	<!-- Common Js for All Sections -->
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}" />
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/admin.js')}" />
+    <script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/sorttable.js')}"></script>
+	
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/modal.css')}"/>
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamMemberList.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamListContributorMemberView.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamProfileList.css')}" />
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/DeleteTeamProfile.css')}"/>		
+    
+	<!-- ### Ajax Toolkit Include ### -->
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+	</script>    
+	
+	<style>
+		div.holder {
+			min-height: 0px !important;
+		}
+		* html div.main_cont div.holder {
+			height: auto;
+		}
+	</style> 
+    
+    <!-- ### Overlay's Includes ### -->
+    <apex:include pageName="AdminOverlayNewTeamType" />
+	<apex:include pageName="AdminOverlayNewProfile" />
+	<apex:include pageName="AdminOverlayRemoveTeamProfile" />   
+	
+	<!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script> 	 
+	
+	<script>
+		function showSelect () {		
+			var inputSelect = $('teamProfileSelect');
+			if (inputSelect != null) {
+				inputSelect.style.visibility = 'visible';
+			}
+		}
+		
+		/**
+		* Get URL param
+		*@return string param
+		*@param string param
+		*/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}
+		
+		/**
+		* Show message to user div
+		*@void
+		*@param string message
+		*@param string type
+		*/
+		function showMessageToUser(message, type){
+			var messageDiv = $('infoToUser');
+			var imageInfo = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoBig.gif')}';
+			var imageSuccess = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/checkNew.gif')}';
+			var currentSource = (type == 'success') ? imageSuccess : imageInfo;
+			markup = '<img src="'+currentSource+'" />';
+			markup += '<div>' + message + '</div>';
+			messageDiv.innerHTML = markup;
+			Effect.Appear('infoToUser');
+		}		
+		
+		/**
+		* Show message on action success
+		*@void
+		*/
+		function showActionSuccess (){
+			var success = getURLParam('success');
+			var message = '';
+			switch(success){
+				case 'clone':
+					message = 'Cloned new Team Profile.';
+				break;
+				case 'edit':
+					message = 'Updated Team Profile.';
+				break;
+				case 'create':
+					message = 'Created new Team Profile.';			
+				break;
+			}
+			if(message != ''){
+				showMessageToUser(message, 'success');
+			}
+		}	
+		window.onload = showActionSuccess		
+	</script>
+	<style>
+		div.divblackbtnProfileCenterMargin {
+			margin-left: 0px !important;
+		}
+		.informationPanel {
+			background-color:#FFFFBF;
+			border:1px solid #ADD1E7;
+			font-size:12px;
+			font-weight:bold;
+			margin: 8px 5px 0px 5px;
+			overflow:hidden;
+			padding:5px;
+			position:relative;
+			width: 97%;
+		}
+		
+		.informationPanel img {
+			float:left;
+			margin:0px 8px 0px 0px;
+		}
+		
+		.informationPanel div {
+			clear:none;
+			margin-top:10px;
+			overflow:hidden;
+			padding:0px;
+			position:relative;
+		}					
+	</style>	
+    
+    <!-- Header -->
+    <div class="header">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Team</h1>
+                <h2 class="arial_black">Administrator</h2>
+            </div>
+        </div>
+        
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key" onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div>  -->
+	            </div>
+	       </div>
+	    </div>		
+        
+        
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt=""/>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="top_content">
+		<div class="breadCrumb">
+			<a class="smallLinkColor" href="/apex/AdminMainSetup">Administrator Setup</a>
+			<span class="linkSeparator"> > </>
+			
+			<span class="smallLink">Team Profile List</span>
+			<span class="linkSeparator"> 
+			
+			<span class="breadcrumb_actualpage"></span>
+			
+		</div>
+	</div>
+		<div class="divblackbtnProfileCenterMargin" >
+		<a href="/apex/AdminProfile" class="blackbtnTitleBottom">
+			<span>New</span>
+		</a>
+	</div> 
+	
+	<!-- Sidebar -->
+	<div class="sidebar">			
+		<!-- Quick links sidebar -->
+		<c:TeamAdminQuickLinks />
+	</div>
+	
+    <!-- Main Content Div -->
+    <div class="main_cont">
+        <div>
+            <div class="main_cont">
+                <div>
+                     <div class="informationPanel" id="infoToUser" style="display:none;"></div>
+                     <div class="holder">
+                        <table><tr><td class="teamTitleButton" >                        	
+							 Team Profile List 							
+                        </td>
+						<td>
+						</td>	
+						</tr>
+						</table> 
+                        </div>						
+                        <div class="border_body_top">
+                            &nbsp;
+                        </div> 
+		                <apex:form id="theForm">
+		                     <apex:outputPanel layout="block" id="theGrid">					
+			                     <table cellspacing="0" cellpadding="0" class="pageListProfile sortable" width="100%">
+			                        <thead>
+			                            <tr>
+			                                <td class="manage_title_descriptionNoUnderline sorttable_nosort" width="22%">
+			                                    Action
+			                                </td>
+			                                <td class="manage_title_description" width="23%">
+			                                    Name
+			                                </td>
+			                                <td class="manage_title_description" width="25%">
+			                                    Creator
+			                                </td>
+											  <td class="manage_title_description" width="20%">
+			                                    Created date
+			                                </td>
+			                            </tr>
+			                        </thead>
+			                        <!-- Description  -->
+			                        <tbody>
+			                            <apex:repeat value="{!profiles}" var="profile">
+				                            <tr>
+				                                <td>
+				                                	<span class="manage_detail_description_underline">
+				                                  		<a href="/apex/AdminProfile?id={!profile.teamProfile.Id}">
+				                                  			Edit
+				                                  		</a> 
+				                                  	</span>
+				                                    <span class="separator">|</span>
+				                                    <apex:outputpanel rendered="{!profile.hasMember}">
+					                                    <a class="manage_detail_description_underline" href="javascript:;" onclick="getCountMembersForTeamProfile('{!profile.teamProfile.Id}', '{!profile.teamProfile.Name}');">
+					                                    	Delete
+					                                    </a>
+					                               	</apex:outputpanel>
+					                               	<apex:outputpanel rendered="{!NOT(profile.hasMember)}">
+					                               		<apex:commandLink action="{!removeTeamProfileNoMembers}" oncomplete="reinitializeSort=true; sorttable.init();" rerender="theGrid" styleclass="manage_detail_description_underline" value="Delete" >
+					                               			<apex:param name="idRmvTP" value="{!profile.teamProfile.Id}" />
+					                               		</apex:commandLink>
+					                               	</apex:outputpanel>
+													<span class="separator">|</span>
+													<span class="manage_detail_description_underline">
+														<a href="/apex/AdminProfile?clone={!profile.teamProfile.Id}">
+															Clone
+														</a> 
+													</span>
+				                                </td>
+				                                <td class="manage_detail_description_underlineColorBold">
+				                                	<a class="manage_detail_description_underlineColorBold" href="/apex/AdminProfile?view={!profile.teamProfile.Id}">
+														{!profile.teamProfile.Name}	
+													</a
+				                                </td>
+				                                <td class="manage_detail_description_underlineColor">
+				                                    <a href="/apex/PeopleProfileDisplay?id={!profile.creator.Id}">
+				                                    	{!profile.creator.Name}
+				                                    </a>
+				                                </td>
+												  <td class="manage_detail_description">
+				                                    {!profile.createdDate}
+				                                </td>
+				                            </tr>
+			                            </apex:repeat>       
+			                        </tbody>
+			                    </table>
+							</apex:outputPanel>
+							
+			                 <!-- Reload Event -->
+			                 <apex:actionFunction name="reloadProfileList" action="{!getTeamProfiles}" oncomplete="reinitializeSort=true; sorttable.init();modal.close();" rerender="theGrid"/>
+	                	 	 <script>reloadEvent = '{!$Component.reloadGrid}'</script>
+	                	 	 
+	                	 	 <!-- Reassign Profiles Event -->
+							<apex:commandLink id="reassignEvent" action="{!reAssignUsers}" rerender="theForm"></apex:commandLink>
+							<apex:inputHidden id="oldProfileId" value="{!oldIdProfile}" />
+							<apex:inputHidden id="newProfileId" value="{!newIdProfile}" />
+							<script>
+								oldProfileElementId = '{!$Component.oldProfileId}';
+								newProfileElementId = '{!$Component.newProfileId}';
+								reassingEventId 	= '{!$Component.reassignEvent}';
+								var profileListMode = 'true';
+							</script>		
+						</apex:form>                   
+                    </div>                   
+                </div>
+            </div>
+              <div class="divblackbtnProfileCenter">
+				<a href="/apex/AdminProfile" class="blackbtnTitleBottom">
+					<span>New</span>
+				</a>
+			</div> 
+        </div>	
+      </div>
+	</html>
+
+</apex:page>

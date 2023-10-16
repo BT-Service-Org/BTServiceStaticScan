@@ -1,0 +1,1552 @@
+<apex:page sidebar="false" id="AdminWidgetConfig" tabStyle="Team__c" controller="AdminWidgetConfigController" action="{!verifyAdminPerm}">
+
+	<script>
+        //Hack for Google gadgets works
+        /*var l = window.location;
+        if ( l.protocol == 'https:' ) {
+            l.href = l.href.replace(/https/,'http');
+        }*/
+    </script>    
+    
+    <!-- ### Prototype + Scriptaculous ### -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	
+	<!-- ### Common Js ### -->
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}" />
+	<!--<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/AdminWidgetConfig.js')}"></script>-->
+	<script src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/AddWidget.js')}"></script>	   
+    
+    <!-- ### Common Layout ### -->
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/AdminWidgetConfig.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/profileEdition.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/modal.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/AddWidget.css')}" />    
+   
+	<!-- ### Ajax Toolkit Include ### -->
+	<!-- <style>
+	
+	testA{
+		font-size: 18px;
+		color: #0270BB;
+		text-decoration: none;
+		background: transparent url(../../images/layout/icons/WidgetConfig/plusWhite.gif) no-repeat;
+		background-position: left top;
+		padding-left: 25px;	
+	}
+	
+	</style> -->
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+        var l = window.location;
+        /*if ( l.protocol == 'https:' ) {
+            // This code replaces the iframe protocol to match google
+            l.href = l.href.replace(/https/,'http');
+            return;		           
+        };*/
+		/**
+		* Initialize toolkit connection
+		* @void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+		
+		/* ### Temporal Soruce - Should be in JS include ### */
+		
+		function underLineLink (link) {
+			if (link.style.textDecoration == 'underline') {
+				link.style.textDecoration = 'none';
+			}
+			else {
+				link.style.textDecoration = 'underline';
+			}
+			
+			var widget = link.parentNode;
+			widget = widget.parentNode;
+		}
+		
+		function leftWidgetHover(widget) {
+			if (widget.className == 'emptyWidgetLeft') {
+				widget.className = 'emptyWidgetLeftHover';
+			}
+			else {
+				widget.className = 'emptyWidgetLeft';
+			}
+		}
+		
+		function rightWidgetHover(widget) {
+			if (widget.className == 'emptyWidgetRight') {
+				widget.className = 'emptyWidgetRightHover';
+			}
+			else {
+				widget.className = 'emptyWidgetRight';
+			}
+		}
+		
+		/* ### WidgetConfig JS Source ### */
+		
+		// Initialize global vars for WidgetConfig use
+		var rightHoldersCount =  0;
+		var leftHoldersCount = 0;
+		var widgetsAdded = new Array();
+		var currentHolder = null;
+		var currentWidgets = null;
+		var currentTeamType = getURLParam('id');
+		var currentTeam = (getURLParam('team')) ? getURLParam('team') : 'a0B30000001u1fEEAQ';
+		var backupMarkup = null;
+		var backupClass = null;
+		
+		var WidgetConfig = {
+			
+			/**
+			* Create new right holder
+			*@void
+			*/
+			createNewRightHolder: function(){
+				$('rightGroup').style.height = 'auto';
+				var rightColum = $('rightGroup');
+				var markup = '';
+				var currentId = 'widgetRightHolder_' + (rightHoldersCount + 1);
+				markup += '<div id="'+currentId+'" class="holderRight">';
+				markup +=	'	<div onmouseout="rightWidgetHover(this);" onmouseover="rightWidgetHover(this);" class="emptyWidgetRight">';
+				markup +=	'		<div class="eventContainer">';
+				markup +=	'			<div class="divRemove">';
+				markup +=	'				<a class="removeLink" href="Javascript:;" onclick="WidgetConfig.removeHolder(\''+ currentId +'\')" title="Delete this holder">Remove This Placeholder</a>';
+				markup +=	'			</div>';
+				markup +=	'			<div class="event">';		
+				markup +=	'				<a style="background-position-y:-25%" onmouseover="underLineLink(this)" onmouseout="underLineLink(this)" href="javascript:;" onclick="createOverlay(\'\',\'addWidget\', 490, \'WidgetConfig.getSalesforceWidgetList(\\\''+ currentId +'\\\')\');">';
+				markup +=	'					Click to add side module widget';
+				markup +=	'				</a>';
+				markup +=	'			</div>';		
+				markup +=	'		</div>';
+				markup +=	'	</div>';
+				markup +=	'</div>';			
+				rightHoldersCount++;
+				rightColum.innerHTML += markup;
+				normalizeHeight();
+			
+			},
+			
+			/**
+			* Create new left holder
+			*@void
+			*/
+			createNewLeftHolder: function(){
+				$('leftGroup').style.height = 'auto';
+				var leftColum = $('leftGroup');
+				var markup = '';
+				var currentId = 'widgetLeftHolder_' + (leftHoldersCount + 1);
+				markup += '<div id="'+ currentId +'" class="holderLeft">';
+				markup +=	'	<div onmouseout="leftWidgetHover(this);" onmouseover="leftWidgetHover(this);" class="emptyWidgetLeft">';
+				markup +=	'		<div class="eventContainer">';
+				markup +=	'			<div class="divRemove">';
+				markup +=	'				<a class="removeLink" href="Javascript:;" onclick="WidgetConfig.removeHolder(\''+ currentId + '\')" title="Delete this holder">Remove This Placeholder</a>';
+				markup +=	'			</div>';
+				markup +=	'			<div class="event">';
+				markup +=	'				<a onmouseover="underLineLink(this)" onmouseout="underLineLink(this)" href="Javascript:;" onclick="createOverlay(\'\',\'addWidget\', 490, \'WidgetConfig.getSalesforceWidgetList(\\\''+ currentId +'\\\')\');">';
+				markup +=	'					Click to add widget';
+				markup +=	'				</a>';
+				markup +=	'			</div>';		
+				markup +=	'		</div>';
+				markup +=	'	</div>';
+				markup +=	'</div>';
+				leftHoldersCount++;
+				leftColum.innerHTML += markup;
+				normalizeHeight();	
+			},
+
+			/**
+			* Get all widgets
+			*@void
+			*/
+			getWidgets: function (){
+				if(currentWidgets == null){
+					init();
+					result = sforce.connection.query("Select Id, Name, Type__c, Image__c, WidgetUrl__c, Description__c From Widget__c order by Type__c asc");
+					records = result.getArray("records");
+					currentWidgets = records
+				}
+			},
+			
+			/**
+			* Get team type
+			*@return Object TeamType
+			*@param Id typeId
+			*/
+			getTeamType: function (typeId){
+				result = sforce.connection.query("Select Id, Name, Description__c From TeamType__c where Id = '" + typeId + "'");
+				records = result.getArray("records");
+				return records[0];			
+			},
+			
+			findWidgetPosition: function (widgetId){
+				for(var it=0; it < currentWidgets.length; it++){
+					if(currentWidgets[it].Id == widgetId)
+						return it;
+				}
+			},
+			
+			/**
+			* Get salesforce widget list
+			*@void
+			*@param string holder
+			*/
+			getSalesforceWidgetList: function (holder){
+				
+				//Set current holder
+				currentHolder = holder;
+				
+				var widgetsCont = $('salesforceWidgets'); 
+				var itemCount = $('itemCount');
+				var widgetsCount = 0;
+				
+				//Load widgets
+				this.getWidgets();
+
+				//Set widget count
+				//itemCount.innerHTML = currentWidgets.length + ' items';
+				
+				var markup = '<div class="widgetsLine">';
+				var j = 5;
+				var count = 0;
+				for (var i = 0; i < currentWidgets.length; i++){
+					//View only widgets
+					if(currentWidgets[i].Type__c == 'Widget'){
+						widgetsCount++;
+						//Divisor Line
+						if((count != 0) && ((count % j) == 0)) {
+							markup += '</div><div class="separateLine"></div>';
+							markup += '<div class="widgetsLine">';
+						}
+						//Create widget markup
+						markup += '\
+							<div onmouseOver="selectedItem(this);" onmouseout="selectedItem(this);">\
+								<div>\
+									<img src="{!URLFOR($Resource.TeamsResources, 'images/AddWidget/widgetImage.jpg')}" />\
+									<br>\
+									<a href="javascript:;" onclick="WidgetConfig.setWidget(\'' + i + '\', true);modal.close();">' + currentWidgets[i].Name + '</a>\
+								</div>\
+							</div>';
+						count++;
+						if(i == (currentWidgets.length - 1))
+							markup += '</div>';
+					}
+				}
+				itemCount.innerHTML = widgetsCount + ' items';
+				//Inject markup
+				widgetsCont.innerHTML = markup;
+			},
+			
+			/**
+			* Set widget into selected holder
+			*@void
+			*@param int widget position 
+			*@param boolean isNew
+			*/
+			setWidget: function (widgetId, isNew, type){
+
+				var holderType = currentHolder.substring(6, 10);
+				var holder = $(currentHolder);
+				var markup = '';
+				backupClass = holder.className;
+				
+				if(isNew){
+					var widgetIds = $$('.widgetIdHidden');
+					for (var it = 0; it < widgetIds.length; it++){
+						if(widgetIds[it].value == widgetId){
+							alert('The selected widget has already been added');
+							return;
+						}
+						
+					}
+				}
+				
+				//If Gadget
+				if(type == 'gadget'){
+					init();
+					var gadget = widgetId.split('|');
+					result = sforce.connection.query("Select Id, Name, Image__c, WidgetUrl__c, Description__c From Widget__c where WidgetUrl__c = '"+gadget[0]+"'");
+					records = result.getArray("records");
+					if(records.length == 0){					
+						var newWidget = new sforce.SObject("Widget__c");
+						newWidget.Name = gadget[1];
+						newWidget.WidgetUrl__c = gadget[0];
+						newWidget.Type__c = 'Gadget';
+						result = sforce.connection.create([newWidget]);
+						if(result[0].getBoolean("success")){
+							newWidget.Id = result[0].id;
+							currentWidgets.push(newWidget);
+						}
+					}else{
+						currentWidgets.push(records[0]);
+					}
+					widgetId = (currentWidgets.length - 1);
+				}
+				
+				var description = (currentWidgets[widgetId].Description__c) ? currentWidgets[widgetId].Description__c : 'No Description';
+				if(holderType == 'Left'){
+					
+					//Set holder type class
+					holder.className = 'widgetLeft';					
+					markup+= '	<input type="hidden" class="widgetIdHidden" value="'+widgetId+'" />';
+					markup+= '	<div class="header">';
+					markup+= '		<span>'+ currentWidgets[widgetId].Name +'</span>';
+					markup+= '	</div>';
+					markup+= '	<div class="headerButtons">';
+					markup+= '		<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/editWhite.gif')}" width="17" height="16" />';
+					markup+= '		<span><a href="javascript:;" title="Edit Widget" onclick="createOverlay(\'\',\'addWidget\', 490, \'WidgetConfig.getSalesforceWidgetList(\\\''+ currentHolder +'\\\')\');">Edit</a></span>';
+					markup+= '		&nbsp;&nbsp;';
+					markup+= '		<img style="float" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/removeWhite.gif')}" alt="test"/>';
+					markup+= '		<span>';
+					markup+= '			<a href="Javascript:;" onclick="deleteWidgetOverlay(\'' + currentHolder + '\')" title="Delete Widget">Delete</a>';
+					markup+= '		</span>';
+					markup+= '	</div>';
+					markup+= '	<div class="description">';
+					markup+= '		' + description;
+					markup+= '	</div>';
+					$('leftGroup').style.height = 'auto';
+					normalizeHeight();
+				}else{
+					
+					//Set holder type class
+					holder.className = 'widgetRight';
+					markup+= '	<input type="hidden" class="widgetIdHidden" value="'+widgetId+'" />';					
+					markup+= '	<div class="header">';
+					markup+= '		<div>';
+					markup+= '			<div><h3>'+ currentWidgets[widgetId].Name +'</h3></div>';
+					markup+= '		</div>';
+					markup+= '	</div>';
+					markup+= '	<div class="box_content">';
+					markup+= '		<div class="headerBtn">';
+					markup+= '			<div class="headerButtons">';
+					markup+= '				<img style="float" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/editGrey.gif')}" alt="test"/>';
+					markup+= '				<span><a href="javascript:;" onclick="createOverlay(\'\',\'addWidget\', 490, \'WidgetConfig.getSalesforceWidgetList(\\\''+ currentHolder +'\\\')\');">Edit</a></span>';
+					markup+= '				&nbsp;&nbsp;';
+					markup+= '				<img style="float" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/removeGrey.gif')}" alt="test"/>';
+					markup+= '				<span><a href="Javascript:;" title="Edit Widget" onclick="deleteWidgetOverlay(\'' + currentHolder + '\')" title="Delete Widget">Delete</a></span>';
+					markup+= '			</div>';
+					markup+= '		</div>';
+					markup+= '		<div class="holder">';
+					markup+= '			' + description;
+					markup+= '		</div>';
+					markup+= '	</div>';
+					markup+= '	<div class="bottom_borders">';
+					markup+= '		<div><div></div></div>';
+					markup+= '	</div>';
+					$('rightGroup').style.height = 'auto';
+					normalizeHeight();
+				}
+				//Inject markup
+				backupMarkup = holder.innerHTML;
+				holder.innerHTML = markup;
+				//Reinitialize sortable for drag holders
+				initializeSortable();
+				if(isNew){
+					showMessageToUser('New widget added <a href="Javascript:;" onclick="WidgetConfig.unsetWidget(\''+ currentHolder +'\')">Undo</a>', 'success');				
+					effectBorder(currentHolder);
+				}
+				else{
+					showMessageToUser('To rearrange your widgets, drag and drop the title bars.', 'info');
+				}					
+			},
+			
+						
+			/**
+			* Remove widget holder
+			*@param Id elementId
+			*/
+			removeHolder: function (elementId){
+				Effect.Fade(elementId, 
+					{afterFinish: function (){$(elementId).remove(); normalizeHeight()}});
+			},
+			
+			/**
+			* Unset widget 
+			*@void
+			*@param string holder
+			*/
+			unsetWidget: function (holder){
+				var holder = $(holder);
+				holder.innerHTML = backupMarkup;
+				holder.className = backupClass;
+				initializeSortable();
+				showMessageToUser('To rearrange your widgets, drag and drop the title bars.', 'info');
+			},
+			
+			/**
+			* Assign correctly class to widget holder on drag 
+			*@void
+			*@param string type
+			*/
+			assignCorrectlyClass: function(type){
+				var currentColum = $(type + 'Group');
+				var allHolders = currentColum.getElementsByTagName('DIV');
+				for(var it=0; it < allHolders.length; it++){
+					if(type == 'left' && allHolders[it].className == 'widgetRight'){
+						allHolders[it].id = 'widgetLeftHolder_' + (leftHoldersCount + 1);
+						leftHoldersCount++;
+						currentHolder = allHolders[it].id;
+						allHolders[it].className = 'widgetLeft';
+						var inputId = allHolders[it].getElementsByTagName('INPUT');
+						this.setWidget(inputId[0].value, false);
+					}else if (type == 'right' && allHolders[it].className == 'widgetLeft'){
+						allHolders[it].id = 'widgetRightHolder_' + (rightHoldersCount + 1);
+						rightHoldersCount++;
+						currentHolder = allHolders[it].id;
+						allHolders[it].className = 'widgetRight';
+						var inputId = allHolders[it].getElementsByTagName('INPUT');
+						this.setWidget(inputId[0].value, false);
+					}
+				}
+			},
+			
+			/**
+			* Save widgets layout
+			*@void
+			*@param boolean type
+			*/
+			saveLayout: function (type){
+				
+				var type = (!type || type == '') ? false : true;
+				var leftColum = $('leftGroup');
+				var rightColum = $('rightGroup');
+				var leftDivs = leftColum.getElementsByTagName('DIV');
+				var rightDivs = rightColum.getElementsByTagName('DIV');
+				var leftLayout = new Array();
+				var rightLayout = new Array();
+				
+				init();
+				var teamType = new sforce.SObject("TeamType__c");
+				teamType.Name = $('teamTypeName').value;
+				teamType.Description__c = $('teamTypeDescription').value;				
+				
+				if(teamType.Name == ''){
+					modal.close();
+					alert('Team Type name is required.');
+					return;
+				}
+				
+				
+				//Determine if is a edit, clone or create process
+				if(!type){
+					result = sforce.connection.query("select Name from TeamType__c where Name ='" + teamType.Name + "' and Id != '" + currentTeamType + "'");    		
+					records = result.getArray("records");					
+					if(records.length == 0){
+						teamType.Id = currentTeamType;
+						result = sforce.connection.update([teamType]);					
+					}else{
+						alert(teamType.Name + ' is already used. Please enter an unique name.');
+						modal.close();
+						return;
+					}
+					result = sforce.connection.query("Select Id From WidgetLayout__c where TeamType__c = '" + currentTeamType + "'");
+					records = result.getArray("records");	
+					var deleteIds = new Array();
+					for (var i = 0; i < records.length; i++){
+						deleteIds.push(records[i].Id);
+					}
+					dels = sforce.connection.deleteIds(deleteIds);				
+				}else{
+					result = sforce.connection.query("select Name from TeamType__c where Name ='" + teamType.Name + "'");    		
+					records = result.getArray("records");				
+					if(records.length == 0){					
+						result = sforce.connection.create([teamType]);
+						if(result[0].getBoolean("success")){						
+							currentTeamType = result[0].id;
+						}
+					}else{
+						alert(teamType.Name + ' is already used. Please enter an unique name.');
+						modal.close();
+						return;					
+					}
+				}
+				// console.info(currentTeamType);
+				
+				//Get left widgets
+				for(var it=0; it < leftDivs.length; it++){
+					if(leftDivs[it].className == 'widgetLeft'){
+						var widgetId = leftDivs[it].getElementsByTagName('INPUT');
+						var layout = new sforce.SObject("WidgetLayout__c");
+						layout.Column__c = 1;
+						layout.Row__c = (leftLayout.length + 1);
+						layout.TeamType__c = currentTeamType;
+						layout.widget__c = currentWidgets[widgetId[0].value].Id;
+						leftLayout.push(layout);
+					}
+				}
+				result = sforce.connection.create(leftLayout);
+				
+				//Get right widgets
+				for(var i=0; i < rightDivs.length; i++ ){
+					if(rightDivs[i].className == 'widgetRight'){
+						var widgetId = rightDivs[i].getElementsByTagName('INPUT');
+						var layout = new sforce.SObject("WidgetLayout__c");
+						layout.Column__c = 2;
+						layout.Row__c = (rightLayout.length + 1);
+						layout.TeamType__c = currentTeamType;
+						layout.widget__c = currentWidgets[widgetId[0].value].Id;
+						rightLayout.push(layout);						
+					}
+				}
+				
+				//Save widget layout position
+				result = sforce.connection.create(rightLayout);
+
+				//Get or Create ApexPage detail for current team type 
+				var apexPage = this.stubPage(currentTeamType);
+				
+				//Create markup for current detail page
+				var markup = '<';
+				markup += 'apex';
+				markup += ':page sidebar="false" tabstyle="Team__c">';
+				markup += '<';
+				markup += 'apex';
+				markup += ':include pageName="TeamDetailMarkupTop" ';
+				markup += '/>';				
+				markup += '<div class="main_content">';
+				markup += '	<div class="centerCol">';
+				markup += '		<div class="holder">';
+				
+				for(var it=0; it < leftLayout.length; it++){
+					var widget = currentWidgets[this.findWidgetPosition(leftLayout[it].widget__c)];
+					if(widget.Type__c == 'Widget'){
+						markup += '<';
+						markup += 'c';
+						markup += ':'+widget.WidgetUrl__c + ' team="{\!$CurrentPage.parameters.id}"';
+						markup += ' />';
+					}else{
+						markup += '<iframe src="' + widget.WidgetUrl__c + '"></iframe>';					
+					}											
+				}
+				
+				markup += '		</div>';
+				markup += '	</div>';
+				markup += '</div>';
+				markup += '<div class="rightCol">';
+				
+				for(var it=0; it < rightLayout.length; it++){
+					var widget = currentWidgets[this.findWidgetPosition(rightLayout[it].widget__c)];					
+					if(widget.Type__c == 'Widget'){
+						markup += '<';
+						markup += 'c';
+						markup += ':'+widget.WidgetUrl__c + ' team="{\!$CurrentPage.parameters.id}"';
+						markup += ' />';					
+					}else{
+						markup += '<iframe src="' + widget.WidgetUrl__c + '"></iframe>';
+					}
+				}				
+				
+				markup += '</div>';																								
+				markup += '<';
+				markup += 'apex';
+				markup += ':include pageName="TeamDetailMarkupBottom" ';
+				markup += '/>';								
+				markup += '</';
+				markup += 'apex:page>';				
+				apexPage.Markup = markup;				
+				result = sforce.connection.update([apexPage]);
+				
+				//Change loader message
+				$('loadMessageText').innerHTML = 'Redirecting to Team Type List...';
+				if(result[0].getBoolean("success")){
+					location.href = '/apex/AdminTeamTypeList' + '?success='+wc_actionType;
+				}				
+			
+			},
+			
+			/**
+			* Assembling Layout
+			*@void
+			*/
+			assemblingLayout: function (){
+				init();
+				this.getWidgets();
+				res = sforce.connection.query("Select Id, Column__c, Row__c, Widget__c From WidgetLayout__c where TeamType__c = '" + currentTeamType + "'");
+				records = res.getArray("records");
+				for(var it=0; it < records.length; it++){
+					if(parseInt(records[it].Column__c) == 1){
+						this.createNewLeftHolder();
+						currentHolder = 'widgetLeftHolder_' + leftHoldersCount;
+						leftHoldersCount++;
+						this.setWidget(this.findWidgetPosition(records[it].Widget__c), false);
+					}else if (parseInt(records[it].Column__c) == 2){
+						this.createNewRightHolder();
+						currentHolder = 'widgetRightHolder_' + rightHoldersCount;
+						rightHoldersCount++;
+						this.setWidget(this.findWidgetPosition(records[it].Widget__c), false);
+					}
+				}
+				if(rightHoldersCount == 0 && leftHoldersCount == 0){
+					WidgetConfig.createNewRightHolder();
+					WidgetConfig.createNewLeftHolder();
+				}
+			},
+		
+			/**
+			* Check if detail page exist or create it
+			*@return Object ApexPage
+			*/
+			stubPage: function (teamTypeId){
+				init();
+				var detailPage = 'TeamsDetail' + teamTypeId;
+				result_ = sforce.connection.query("Select Id, Name, Markup from ApexPage where Name = '" + detailPage + "'");
+				records_ = result_.getArray("records");
+				if (records_.length > 0){
+					return records_[0];
+				}else{
+					var page = new sforce.SObject("ApexPage");
+					page.Name = detailPage;
+					page.MasterLabel = detailPage;
+					var markup = '<';
+					markup += 'apex';
+					markup += ':page>';
+					markup += '</';
+					markup += 'apex:page>';				
+					page.Markup = markup;				
+					result = sforce.connection.create([page]);
+					page.Id = result[0].id 
+					return page;
+				}
+			}		
+		
+		};
+		
+		
+		/* ### Initizalize Layout ### */
+		
+		/**
+		* Initizalize WidgetConfig Layout
+		*@void
+		*/
+		var wc_actionType = '';
+		function InitializeWidgetConfig(){
+			init();
+			var isNew = false;
+			var editCont = $('TeamTypeDetailContainer');
+			if(!currentTeamType){
+				currentTeamType = getURLParam('clone');
+				if(!currentTeamType){
+					currentTeamType = getURLParam('view');
+					if(!currentTeamType){
+						wc_actionType = 'Create';
+						isNew = true;						
+					}else{
+						wc_actionType = 'View';
+					}
+				}else{
+					isNew = true;
+					wc_actionType = 'Clone';
+				}
+			}else{
+				wc_actionType = 'Edit';
+			}
+			
+			//Determine if is a create action
+			if(currentTeamType){
+				var teamType = WidgetConfig.getTeamType(currentTeamType);
+				WidgetConfig.assemblingLayout();
+				$('teamTypeName').value = (wc_actionType != 'Clone') ? teamType.Name : 'clon_' + teamType.Name;
+				if(teamType.Description__c != null){
+					$('teamTypeDescription').value = teamType.Description__c;
+				}
+							
+			}else{
+				WidgetConfig.createNewRightHolder();
+				WidgetConfig.createNewLeftHolder();			
+			}
+
+			//Determine if is a view action
+			if(wc_actionType != 'View'){
+				var markup = '<a href="Javascript:;" onclick="showLoader(\'Saving layout...\'); setTimeout(\'WidgetConfig.saveLayout(' + isNew + ')\', 500);" class="blackbutton">';
+				markup +=    '	<span>Save</span>';
+				markup +=    '</a>';
+				$('saveLayoutEvent').innerHTML = markup;
+				$('saveLayoutEventBottom').innerHTML = markup;
+				editCont.style.display = 'block';
+			}else{
+				$('TeamTypeDetailContainerReadOnly').style.display = 'block';
+				$('teamTypeNameReadOnly').innerHTML = $('teamTypeName').value;
+				$('teamTypeDescriptionReadOnly').innerHTML = $('teamTypeDescription').value;
+				var la = $$('.informationPanel');
+				for (it=0; it < la.length; it++){
+    				la[it].style.display = 'none';
+				}
+				var la = $$('.buttons');
+				for (it=0; it < la.length; it++){
+    				la[it].style.display = 'none';
+				}
+				var la = $$('.addAnother');
+				for (it=0; it < la.length; it++){
+    				la[it].style.display = 'none';
+				}
+				var la = $$('.headerButtons');
+				for (it=0; it < la.length; it++){
+    				la[it].style.display = 'none';
+				}
+			}
+			$('currentProcess').innerHTML = wc_actionType;		
+			$('breadcrumbCurrentAction').innerHTML = wc_actionType;
+			adjustRightCol();
+		}
+		
+		//Run initialize WidgetConfig onload event
+		window.onload = InitializeWidgetConfig;
+		
+		
+		/* ### Drag & Drop by Sortable ### */
+		
+		/**
+		* Create sortable
+		*@void
+		*/
+		function initializeSortable(){
+			// <![CDATA[
+			Sortable.create('leftGroup',
+				{
+				tag:'div',
+				dropOnEmpty: true, 
+				containment: ['leftGroup','rightGroup'], 
+				only: ['widgetRight','widgetLeft'], 
+				onUpdate: function(){setTimeout('WidgetConfig.assignCorrectlyClass(\'left\');', 1000);}
+				}
+			);
+			
+			Sortable.create('rightGroup',
+				{
+				tag:'div',
+				dropOnEmpty: true,
+				containment: ['leftGroup','rightGroup'],
+				only: ['widgetRight','widgetLeft'],
+				onUpdate: function(){setTimeout('WidgetConfig.assignCorrectlyClass(\'right\');', 1000);}
+				}
+			);
+			// ]]>
+		}		
+		
+		/* ### Utils functions & Misc ### */
+		
+		/**
+		* Normalize main holder height
+		*@void
+		*/
+		function normalizeHeight(){
+		
+			var divsOnThePage = document.getElementsByTagName('div');
+			
+			
+			/*
+			* Define some vars to store heights
+			*/
+			var mainHolder = $('main_holder');
+			var rHolders = 0;
+			var lHolders = 0;
+			var lWidgets = 0;
+			var rWidgets = 0;
+						
+			for(var i = 0; i < divsOnThePage.length; i++){
+				
+				if(divsOnThePage[i].className == 'holderLeft'){
+					lHolders++;				
+				} else if ( divsOnThePage[i].className == 'holderRight' ){
+					rHolders++;
+				} else if ( divsOnThePage[i].className == 'widgetLeft' ){
+					lWidgets++;
+				} else if ( divsOnThePage[i].className == 'widgetRight' ){
+					rWidgets++;
+				}
+				 
+			}
+			
+			var rightCount = (rHolders + rWidgets);
+			var leftCount = (lHolders + lWidgets);
+						
+			var maxCol;
+			
+			if(rightCount > leftCount){ maxCol = rightCount; } else { maxCol = leftCount; }
+			if(rightCount == 0){ $('rightGroup').style.height = '165px'; }
+			if(leftCount == 0){ $('leftGroup').style.height = '165px'; }
+			if(maxCol == 0){
+				$('main_holder').style.height = '200px';
+			}else if(maxCol > 4 ){
+				mainHolder.style.height = (maxCol * 190) + 'px'; 
+			}else {			
+				mainHolder.style.height = (maxCol * 200) + 'px'; 
+			}
+		
+		}
+		
+		/**
+		* Get URL param
+		*@return string param
+		*@param string param
+		*/
+		function getURLParam(strParamName){
+		  var strReturn = "";
+		  var strHref = window.location.href;
+		  if ( strHref.indexOf("?") > -1 ){
+		    var strQueryString = strHref.substr(strHref.indexOf("?"));
+		    var aQueryString = strQueryString.split("&");
+		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+		      if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+		        var aParam = aQueryString[iParam].split("=");
+		        strReturn = aParam[1];
+		        break;
+		      }
+		    }
+		  }
+		  return unescape(strReturn);
+		}
+		
+		/**
+		* Show overlay with process message
+		*@void
+		*@param string message
+		*/
+		function showLoader(message){
+			$('loadMessageText').innerHTML = message;
+			var modalDiv = $('modal_container');
+			modalDiv.style.color = 'white';
+			modalDiv.style.background = 'transparent';
+			createOverlay('','loadMessage');		
+		}
+		
+		/**
+		* Restore modal_container styles
+		*@void
+		*/
+		function hideLoader(){
+			var modalDiv = $('modal_container');
+			modalDiv.style.color = 'black';
+			modalDiv.style.background = 'white';
+		}
+		
+		
+		/**
+		* Show remove widget overlay
+		*@void
+		*@param string holder
+		*/
+		function deleteWidgetOverlay(holder){
+			var deleteInput = $('deleteButton');
+			deleteInput.innerHTML = '<input class=\"buttonColor\" value=\"Continue and remove\" onclick=\"WidgetConfig.removeHolder(\''+ holder +'\'); modal.close();\"/>';
+			createOverlay('','removeWidget','160');
+		}		
+		
+		
+		/**
+		* Effect border fade 
+		*@void
+		*@param string elementId
+		*/
+		function effectBorder(elementId){
+			var count = 0;
+			var r = 29;
+			var g = 151;
+			var b = 29;
+			while(count < 255){
+			    r = (r >= 255) ? 255 : r+1;
+			    g = (g >= 255) ? 255 : g+1 ;
+			    b = (b >= 255) ? 255 : b+1;
+			    setTimeout('setRgbColor(\'' + elementId + '\',' + r + ',' + g + ',' + b + ')', (count * 6));
+			    if(r == 255 && g == 255 && b == 255){
+			        break;
+			    }
+			    count++;
+			}
+			setTimeout('Effect.ScrollTo(\'undoWidgetAdded\'); $(\''+elementId+'\').style.border=\'none\'', 1600);
+		}
+		
+		
+		/**
+		* Set RGB border color to element.
+		*@void
+		*@param string elementId
+		*@param int red
+		*@param int green
+		*@param int blue		
+		*/
+		function setRgbColor (elementId, r, g, b){
+			 var element = $(elementId);
+			 element.style.border = 'solid 5px' + ' rgb(' + r +',' + g + ',' + b + ')';			
+		}
+		
+		/**
+		* Show message to user div
+		*@void
+		*@param string message
+		*@param string type
+		*/
+		function showMessageToUser(message, type){
+			var messageDiv = $('infoToUser');
+			var imageInfo = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoBig.gif')}';
+			var imageSuccess = '{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/checkNew.gif')}';
+			var currentSource = (type == 'success') ? imageSuccess : imageInfo;
+			markup = '<img src="'+currentSource+'" />';
+			markup += '<div>' + message + '</div>';
+			messageDiv.innerHTML = markup;
+		}
+		
+		/**
+		* Adjust rigthCol top on init
+		*@void
+		*/
+		function adjustRightCol(){
+			var editCont = $('TeamTypeDetailContainer');
+			if(Prototype.Browser.IE){	
+				if(editCont.style.display == 'none'){
+					//$('rightCol').style.top = '302px';
+					$('rightCol').style.top = '218px';
+				}else{
+					$('rightCol').style.top = '387px';
+				}
+			}else{
+				if(editCont.style.display == 'none'){
+					//$('rightCol').style.top = '273px';
+					$('rightCol').style.top = '218px';
+				}else{
+					$('rightCol').style.top = '383px';
+				}			
+			}
+		}
+		
+		
+		/************************************************
+			Get google gadget list
+		************************************************/
+		var activeCategory = 'all';
+	
+		function filterGadgets() {
+			// Get gadget category
+			var cat = $F('gadgetListFilter');
+			url='http://www.google.com/ig/directory?synd=open&source=gghx&cat=' + cat;
+			activeCategory = cat;	
+			$('googleWidgets').innerHTML = '';
+			getGoogleGadgetList(url);
+			setTimeout('showSelect()', 500);
+		}
+		
+		function gadgetListNextPage(searchWord){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var currentItemCount = tempSpacers[2].innerHTML;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + currentItemCount + '&sa=N';
+			if (searchWord) {
+				url += '&q='+searchWord+'&btnG=Buscar+en+Google+Gadgets';
+				gadgetSearch(url);
+			} else {
+				url += '&cat=' + activeCategory;						
+				getGoogleGadgetList(url);
+			}			
+		}
+	
+		function gadgetListPrevPage(searchWord){
+			// Paginate the gadgets
+			var tempSpacers = $$('#response table b');
+			var prevItemCount = tempSpacers[1].innerHTML - 25;
+			url = 'http://www.google.com/ig/directory?hl=en&synd=open&start=' + prevItemCount + '&sa=N';	
+			if (searchWord) {
+				url += '&q='+searchWord+'&btnG=Buscar+en+Google+Gadgets';
+				gadgetSearch(url);
+			} else {
+				url += '&cat=' + activeCategory;						
+				getGoogleGadgetList(url);
+			}
+		}
+		
+		function getGoogleGadgetList(url) { 
+			
+			if($('gadgetListFilter').style.display == 'none'){
+				$('gadgetListFilter').style.display = '';
+			}
+			
+		    if (url != '') {
+		        var l = window.location;
+		        sforce.connection.remoteFunction({
+		            url : url, 
+		            onSuccess : function(response) {		            		
+		            		// Initialize Arrays to store valid data
+		            		var titleArray = [];
+		            		var imageArray = [];
+		            		var linkArray = [];		            		
+		            		// Put the response into a hidden div
+		            		$('response').innerHTML = response;	            				            		
+		            	
+		            		// Get all images into the container
+		            		gadgetsImages = $$('#response #container img');
+							// Get all divs into the container
+							gadgetsContainers = $$('#response #container div');
+							// Get all inputs into te container
+							gadgetsParams = $$('#response #container input');														
+							// Take only the gadgets thumbnails
+							for(var i = 0; i < gadgetsImages.size(); i++){
+								if(gadgetsImages[i].title){
+							    	imageArray[imageArray.length] = gadgetsImages[i];
+							    }
+							}
+							// Get links
+							for(var i = 0; i < gadgetsParams.size(); i++){								
+								var inputOnClick = new String((gadgetsParams[i]).getAttribute('onclick'));
+								/*
+								var urlpos = inputOnClick.split('&url=');
+								var trimmed = urlpos[1];
+								var finalUrl = 'http://gmodules.com/ig/ifr?' + trimmed;
+								*/
+								var urlpos = inputOnClick.indexOf('&url=');								        
+						        var urlpos = urlpos + 1;
+								var trimmed = inputOnClick.substr(urlpos, inputOnClick.length);
+								var urlpos = trimmed.split('&pt=');
+								var finalUrl = 'http://gmodules.com/ig/ifr?' + urlpos[0];
+								linkArray[linkArray.length] = finalUrl;	
+							}
+							// take only the Title Divs
+							for(var i = 0; i < gadgetsContainers.size(); i++){
+							    var checkTitle = (gadgetsContainers[i].id).indexOf('title');
+							    if(checkTitle != -1){
+							            titleArray[titleArray.length] = gadgetsContainers[i].innerHTML;
+							   }					
+							}
+							gadgetCount = 0;							
+							var parsedOutput = '';							
+							// mix it all into parsetOutput 
+							for(var i = 0; i < imageArray.size(); i++){
+								if(imageArray[i].title){
+									gadgetCount++;
+									var title = titleArray[i];
+									title = title.substr(13, (titleArray[i].length - 13));
+									title = title.substr(0, (title.length - 15));
+									var src = linkArray[i];
+									src = src.replace (/'/g, "\\'");
+									if(title.length > 23){ 
+										title = title.substr(0,23) + '...';
+									 }
+									var widgetDiv = '<div class="widgetContainer">\n <div onmouseover="selectedGadgetItem(this)" onmouseout="selectedGadgetItem(this)" > \n <img alt="" width="70" src="' + imageArray[i].src + '\"/> \n <br>\n<a href="javascript:;" onclick="WidgetConfig.setWidget(\'' + linkArray[i] + '|'+ title + '\', true, \'gadget\'); modal.close();" style="display:block;">' + title + '</a>\n</div>\n </div> \n ';
+									parsedOutput += widgetDiv;
+									if( gadgetCount % 5 == 0 ){
+										parsedOutput += '<div style="clear:both;"></div>';
+										parsedOutput += '<div class="separateLine"></div>';
+							    	}
+								}
+							}			
+							
+							$('googleWidgets').show();	
+							$('noResultContainer').hide();
+										
+							$('googleWidgets').innerHTML = parsedOutput;
+							// Paginate the gadgets
+							var tempSpacers = $$('#response table b');
+							var prevItem = tempSpacers[1].innerHTML;
+							var currentItemCount = tempSpacers[2].innerHTML;
+							var itemTotalNumber = tempSpacers[3].innerHTML;
+							var paginationElements = document.createElement('div');
+							paginationElements.style.clear = "both";
+							if(prevItem == 1){
+								paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+							} else {
+								if(currentItemCount == itemTotalNumber){
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a>';
+								} else{
+									paginationElements.innerHTML = '<a href="javascript:;" onclick="gadgetListPrevPage();"><< less</a> <a href="javascript:;" onclick="gadgetListNextPage();">more >> </a>';
+								}
+							}								
+							$('googleWidgets').appendChild(paginationElements);
+							var bolds = $$('#response b');
+							var multiplier = bolds[3].innerHTML;
+							var numberofGadgets = multiplier * 24;
+							$('gadgetItemCount').innerHTML = itemTotalNumber + ' items'; 
+		            	},
+		            onFailure : function(error) {}
+		            });     
+		        }
+		}    
+		
+		// Gadget Hover		
+		function selectedGadgetItem(e){
+			var gadgetItem = e.parentNode;
+			if(gadgetItem.className == 'widgetContainer'){
+				gadgetItem.className = 'widgetContainerSelected';
+			} else {
+				gadgetItem.className = 'widgetContainer';
+			}
+		}	
+		
+		var searchTerm = '';
+		
+		function doSearch(){
+			
+			searchTerm = $F('searchCriteria');
+			$('searchCriteriaWords2').innerHTML = searchTerm;
+			$('searchCriteriaWords1').innerHTML = searchTerm;
+			
+			searchTerm = searchTerm.replace(/\s/, "+");			
+			var url = 'http://www.google.com/ig/directory?synd=open&q=' + searchTerm + '&btnG=Search+Google+Gadgets';
+			gadgetSearch(url);			
+		}
+		
+		
+		// Gadget Search Core
+		function gadgetSearch(url){
+		
+			 if (url != '') {
+			 	
+		        var l = window.location;
+		        sforce.connection.remoteFunction({
+			            url : url, 
+			            onSuccess : function(response) {
+			            	          	
+			            	$('response').innerHTML = response;		            		
+		            		
+			            	// Initialize Arrays to store valid data
+		            		var titleArray = [];
+							var imageArray = [];
+							var linkArray = [];
+							var linkID = '';
+							var idNum = '';
+							var title = '';
+							var links = $$('#response td.j a');
+							var inputs = $$('#response td.j input');
+							
+							// console.info(tables.size());
+							if(links.size() > 0) {
+							
+								for (var i = 0; i < links.size(); i++) {
+									linkID = links[i].readAttribute('id');
+									idNum = linkID.substr(5);
+									title = links[i].innerHTML;
+									title = title.replace("<b>", '');
+									title = title.replace("</b>", '');
+									titleArray[titleArray.length] = title;
+									imageArray[imageArray.length] = $('ss'+idNum);	
+								}
+								
+								for(var i = 0; i < inputs.size(); i++){								
+									var inputOnClick = new String((inputs[i]).readAttribute('onclick'));
+									var urlpos = inputOnClick.indexOf('&url=');								        
+							        var urlpos = urlpos + 1;
+									var trimmed = inputOnClick.substr(urlpos, inputOnClick.length);
+									var urlpos = trimmed.split('&pt=');
+									var finalUrl = 'http://gmodules.com/ig/ifr?' + urlpos[0];
+									linkArray[linkArray.length] = finalUrl;	
+								}
+								
+								var gadgetCount = 0;							
+								var parsedOutput = '';		
+								var gadgetTitle = '';
+													
+								// mix it all into parsetOutput 
+								for(var i = 0; i < imageArray.size(); i++){
+									gadgetCount++;
+									gadgetTitle = titleArray[i];
+									if(gadgetTitle.length > 23){ 
+										gadgetTitle = gadgetTitle.substr(0,23) + '...';
+									}
+									var widgetDiv = '<div class="widgetContainer">\n <div onmouseover="selectedGadgetItem(this)" onmouseout="selectedGadgetItem(this)" > \n <img alt="" width="70" src="' + imageArray[i].src + '\"/> \n <br>\n<a href="javascript:;" onclick="WidgetConfig.setWidget(\'' + linkArray[i] + '|'+ titleArray[i] + '\', true, \'gadget\'); modal.close();" style="display:block;">' + gadgetTitle + '</a>\n</div>\n </div> \n ';
+									parsedOutput += widgetDiv;
+									if( gadgetCount % 5 == 0 ){
+										parsedOutput += '<div style="clear:both;"></div>';
+										parsedOutput += '<div class="separateLine"></div>';
+							    	}
+								}							
+								
+								// Build List (for testing only now)
+								$('noResultContainer').hide();										
+								$('googleWidgets').update(parsedOutput);
+								$('googleWidgets').show();								
+								
+								// Paginate the gadgets
+								var tempSpacers = $$('#response table b');
+								var prevItem = tempSpacers[1].innerHTML;
+								var currentItemCount = tempSpacers[2].innerHTML;
+								var itemTotalNumber = tempSpacers[3].innerHTML;
+								var paginationElements = document.createElement('div');
+								paginationElements.style.clear = "both";
+								if(prevItem == 1){
+									paginationElements.update('<a href="javascript:;" onclick="gadgetListNextPage(\''+searchTerm+'\');">more >> </a>');
+								} else {
+									if(currentItemCount == itemTotalNumber){
+										paginationElements.update('<a href="javascript:;" onclick="gadgetListPrevPage(\''+searchTerm+'\');"><< less</a>');
+									} else{
+										paginationElements.update('<a href="javascript:;" onclick="gadgetListPrevPage(\''+searchTerm+'\');"><< less</a> <a href="javascript:;" onclick="gadgetListNextPage(\''+searchTerm+'\');">more >> </a>');
+									}
+								}								
+								$('googleWidgets').appendChild(paginationElements);
+								$('gadgetItemCount').update(itemTotalNumber + ' items');
+								
+							} else { 
+								$('googleWidgets').hide();
+								$('noResultContainer').show();
+								
+							
+							}
+			            },
+			            onFailure : function(error) {
+			            	// console.warn('Error: ', error);
+			            }
+			     	});			     
+				}
+			}				
+	</script>
+	
+	<style>
+		div#modal_container div#loadMessage span{
+			text-align: center !important;
+			font-weight: bold;
+		}
+		
+		.buttonColor{
+			background:#21637D none repeat scroll 0%;
+			border:0px solid;
+			color:#FFFFFF;
+			cursor:pointer;
+			font-size:12px;
+			xheight:22px;
+			margin-top:0px;
+			margin-left:10px;
+			text-align:center;
+			xwidth:190px;
+			font-weight:bold;
+			padding:6px 17px;
+			text-decoration:none;
+			float:left;
+		}
+		
+		div.widgetContainer {
+			background:#FFFFFF none repeat scroll 0%;
+			border:0px none;
+			float:left;
+			height:92px;
+			margin:0px;
+			padding:5px;
+			width:84px;
+		}
+		
+		div.widgetContainer div {
+			background:#FFFFFF none repeat scroll 0%;
+			border:1px solid #FFFFFF;
+			height:80px;
+			margin:0px;
+			padding:5px;
+			text-align:center;
+			width:70px;
+		}
+		
+		
+		div.widgetContainerSelected {
+			background:#DDF0F7 none repeat scroll 0%;
+			border:0px none;
+			float:left;
+			height:92px;
+			margin:0px;
+			padding:5px;
+			width:84px;
+		}
+		
+		div.widgetContainerSelected div {
+			background:#EFEFEF none repeat scroll 0%;
+			border:1px solid #99CCE7;
+			height:80px;
+			margin:0px;
+			padding:5px;
+			text-align:center;
+			width:70px;
+		}
+		
+		/* Overlay */
+		
+		div#overlayLoader {
+			background:#FFFFFF;
+			height:79%;
+			position:absolute;
+			bottom:0;
+			left:0;
+			z-index:9999;
+			width:100%;
+			opacity: 0.6;
+			-moz-opacity: 0.6;
+			filter: alpha(opacity=60);
+		}
+		
+		div#overlayLoader div.loader {
+			width:60px;
+			margin:0 auto;
+			height:60px;
+			margin-top:145px;
+		}
+		
+		.main_content .widgetConfigForm {
+			position:relative;
+			overflow:hidden;
+			clear:both;		
+		}
+		
+		* html .main_content .widgetConfigForm .teamTypeForm {
+			padding:0px !important;
+			clear:both;
+			width:100%;
+			overflow:hidden;
+		}
+		
+		div.rightGroup {
+			height: 165px;
+		}
+	
+		div.leftGroup {
+			height: 165px;
+		}
+	
+	</style>   	
+	
+	<!-- ### AjaxProxy response container ### -->	
+	<div id="response" style="display:none;"></div>	
+	
+	<!-- ### Initialize the overlay box for modal.js ### -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>	
+	
+	<!-- ### Overlay's Includes ### -->
+	<apex:include pageName="AdminOverlayAddWidget" />
+	<apex:include pageName="AdminOverlayRemoveWidget" />
+	
+	<div id="loadMessage" style="display:none;">
+		<span id="loadMessageText"></span>
+	</div>
+	
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">Team</h1>
+				<h2 class="arial_black">Administrator</h2>
+			</div>
+		</div>
+		
+		
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key"   onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+		
+		
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt=""/>
+			</div>
+		</div>
+	</div>
+
+	<div class="breadcrumbs">
+		<div class="map">
+			<a class="smallLinkColor" href="/apex/AdminMainSetup">Administrator Setup</a>
+			<span class="linkSeparator"> > </span>
+			<a class="smallLinkColor" href="/apex/AdminTeamTypeList">Team Type List</a>
+			<span class="linkSeparator"> > </span>
+			<span class="smallLink">
+				Team Type <span id="breadcrumbCurrentAction"></span>
+			</span>
+		</div>
+		<div class="buttons">
+			<span id="saveLayoutEvent"></span>
+			<a href="javascript:history.back()" class="blackbutton">
+				<span>Cancel</span>
+			</a>
+		</div>
+	</div>
+
+	<div class="sidebar">
+		<!-- Information Panel -->
+		<div class="informationPanel ajustWidthInfo1">
+			<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/infoSmall.gif')}"/>
+			Left side bar is NOT a configurable area.
+		</div>
+		
+		<!-- Rounded Box -->
+		<div class="box_round_blue">
+			<!-- Header -->
+			<div class="header">
+				<div>
+					<div>
+						<h3>{Team type name}</h3>
+					</div>
+				</div>
+			</div>
+			<!-- Rounded Box Content -->
+			<div class="box_content">
+				<div class="teamDescription">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/WidgetConfig/teamImg.gif')}" />
+					Team Description will appear here (<a href="javascript:;">more</a>)
+				</div>
+			</div>
+			<div class="bottom_borders">
+				<div>
+					<div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Rounded Box -->
+		
+		<!-- Rounded Box -->
+		<div class="box_round_blue" style="display:none">
+			<!-- Header -->
+			<div class="header">
+				<div>
+					<div>
+						<h3>Team Members</h3>
+					</div>
+				</div>
+			</div>			
+			<!-- Rounded Box Content -->
+			<div class="box_content">
+				<div class="teamMembersList">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />
+					<a href="javascript:;">Member's Fullname</a>
+					<span>current status</span>
+				</div>
+				<div class="teamMembersList">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />
+					<a href="javascript:;">Member's Fullname</a>
+					<span>current status</span>
+				</div>
+				<div class="teamMembersList">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />
+					<a href="javascript:;">Member's Fullname</a>
+					<span>current status</span>
+				</div>
+			</div>
+			<div class="bottom_borders">
+				<div>
+					<div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Rounded Box -->
+	</div>
+	
+
+	<div class="main_content">
+		<!-- Information Panel -->
+		<a id="undoWidgetAdded"></a>
+		<div class="informationPanel margin_top ajustWidthInfo2" id="infoToUser"></div>
+		<script>showMessageToUser('To rearrange your widgets, drag and drop the title bars.', 'info')</script>
+		
+		<div class="widgetConfigForm">
+			<!-- Section Title -->
+			<div class="teamsTitleBlue">
+				Team Type <span id="currentProcess"></span>
+			</div>
+			
+			<!-- Form Begin -->
+			<div class="teamTypeForm" >
+				
+				<div id="TeamTypeDetailContainer" style="display:none;">
+					<span class="requiredInfo">= Required Information</span>
+					<div class="inputContent">
+						<label>
+							Type name:
+						</label>
+						<div class="requiredInput">
+							<div>
+								<input id="teamTypeName" type="text" class="percentInput"/>
+							</div>
+						</div>
+					</div>
+					<div class="inputContent">
+						<label>
+							Description:
+						</label>
+						<div>
+							<div>
+								<textarea id="teamTypeDescription"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="TeamTypeDetailContainerReadOnly" style="display:none;">
+					<div class="inputContent">
+						<label>
+							Type name:
+						</label>
+						<div>
+							<div id="teamTypeNameReadOnly"></div>
+						</div>
+					</div>
+					<div class="inputContent">
+						<label>
+							Description:
+						</label>
+						<div>
+							<div id="teamTypeDescriptionReadOnly"></div>
+						</div>
+					</div>				
+				</div>
+			
+			</div>
+			<!-- End Form container -->
+		</div>
+		
+		<!-- Start Main Content -->
+		<div class="main_holder" id="main_holder">
+			<div class="widgetsArea">
+				
+				<!-- LEFT COLUMN -->
+				<div class="leftCol">
+					<div id="leftGroup"></div>
+					
+					<div class="addAnother" align="center">
+						<a href="Javascript:;" onclick="WidgetConfig.createNewLeftHolder();" class="blackBtn">
+							<span>Add another module</span>
+						</a>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<!-- RIGH COLUMN -->
+		<div class="widgetsArea">
+			<div class="rightCol rightColTop" id="rightCol">
+				<!-- Rounded Box -->
+				<div id="rightGroup" class="rightGroup"></div>
+				
+				<div class="addAnother"  align="center">
+					<a href="Javascript:;" onclick="WidgetConfig.createNewRightHolder();" class="blackBtn">
+						<span>Add another module</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="breadcrumbs">
+		<div class="map"></div>
+		<div class="buttons">							
+			<span id="saveLayoutEventBottom"></span>
+			<a href="javascript:history.back()" class="blackbutton">
+				<span>Cancel</span>
+			</a>				
+		</div>
+	</div>
+</apex:page>

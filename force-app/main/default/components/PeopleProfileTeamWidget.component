@@ -1,0 +1,28 @@
+<apex:component Controller="PeopleProfileTeamWidgetController" >
+	<div class="box_round">
+	    <!-- Header -->
+	    <div class="header edition">
+	        <div><div><h4>Teams</h4><a class="edit" href="/apex/TeamsOverview">See More&#187;</a></div></div>
+	    </div> 
+	    <!-- Rounded Box Content -->
+	    <div class="box_content">
+	        <div class="contentHolder">
+	            <ul class="teamspaces">
+	            <apex:repeat value="{!teamspaces}" var="team">
+	                <li>
+	                    <apex:outputLink value="TeamsRedirect">
+	                        {!team.Name}
+	                        <apex:param name="id" value="{!team.Id}" />
+	                    </apex:outputLink><br />
+	                    <strong>
+	                        <script>trunkText('{!team.Description}', 25);</script>
+	                    </strong>
+	                    ({!team.CreatedDate} - present)
+	                </li>
+	            </apex:repeat>
+	            </ul>
+	        </div>  
+	    </div>
+	    <div class="bottom_borders"><div><div></div></div></div>
+	</div>
+</apex:component>

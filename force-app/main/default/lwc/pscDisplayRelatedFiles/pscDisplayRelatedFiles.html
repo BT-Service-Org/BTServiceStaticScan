@@ -1,0 +1,21 @@
+<template>
+    <template if:true={showAttachments}>
+        <p class="heading ITC_font">
+            Attachments
+        </p>
+        <div class="documents">
+            <template for:each={fileData} for:item="eachFile">
+                <div key={eachFile.fileName} class="document">
+                    <a href={eachFile.fileURL} target="_blank">
+                        <lightning-avatar src={eachFile.fileIconUrl} fallback-icon-name="doctype:unknown"
+                            alternative-text={eachFile.fileExt} class="doc-Icon">
+                        </lightning-avatar>
+                        {eachFile.fileName}.{eachFile.fileExt}
+                    </a>
+
+                </div>
+            </template>
+        </div>
+
+    </template>
+</template>

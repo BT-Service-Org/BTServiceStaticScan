@@ -1,0 +1,35 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:actionOverride,lightning:hasPageReference,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:appHostable,force:lightningQuickActionWithoutHeader" 
+                access="global"
+                controller="customMethodCreationController"
+                >
+     <aura:attribute name="isOpen" type="Boolean" default="false" access="private"/>
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     <aura:attribute name="isDraft" type="Boolean" default="false"/>
+     <aura:attribute name="message" type="String" />
+
+    <!--
+        This is a modal to open Screen FLow for custom method creation based on the selected record type upon clicking on NEW button.
+        Rendering condition: If it is Draft type method then we invoke the Flow else showing custom message that stored in label(Not_Draft_Method). 
+    -->
+    <aura:if isTrue="{!v.isOpen}">
+            <div style="height: 750px; width: 600px;">
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header slds-modal__header_empty">
+                            <lightning:buttonIcon iconName="utility:close" class="slds-modal__close" onclick="{!c.closeFlowModal}"/>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <aura:if isTrue="{!v.isDraft}">
+                                <lightning:flow aura:id="flow" onstatuschange="{!c.closeModalOnFinish}" />
+                                <aura:set attribute="else" >
+                                    <p style="text-align: center; color: red;">{!v.message}</p>
+                                </aura:set>
+                            </aura:if>
+                            
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div> 
+    </aura:if>
+</aura:component>

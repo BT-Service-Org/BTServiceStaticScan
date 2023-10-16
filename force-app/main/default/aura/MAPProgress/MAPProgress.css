@@ -1,0 +1,55 @@
+.THIS {
+	text-align: center;
+}
+.THIS .circle,
+.THIS .bar {
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	border-radius: 1em;
+	margin-bottom: 10px;
+	color: white;
+}
+.THIS .bar {
+	position: relative;
+	min-width: 8px;
+	height: 6px;
+	border-radius: 0;
+	top: 10px;
+	background-color: rgb(0, 109, 204);
+}
+.THIS .circle .label {
+	display: inline-block;
+	margin-top: 3px;
+	font-size: 12px;
+}
+.THIS .answered {
+	background-color: green;
+}
+.THIS .skipped {
+	background-color: crimson;
+}
+.THIS .answeredWithGoal {
+	background-color: goldenrod;
+}
+.THIS .default {
+	background-color: rgb(236, 235, 234);
+	color: black;
+}
+.THIS .box{
+	width: 20px;
+    height: 20px;
+    border-radius: 1em;
+}
+.THIS .box-answered{
+	background-color: green;
+}
+.THIS .box-skipped{
+	background-color: crimson;
+}
+.THIS .box-answeredWithGoal{
+	background-color: goldenrod;
+}
+.THIS .box-default{
+	background-color: rgb(236, 235, 234);
+}

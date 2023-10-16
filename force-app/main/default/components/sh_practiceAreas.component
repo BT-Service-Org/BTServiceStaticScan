@@ -1,0 +1,30 @@
+<apex:component controller="sh_PracticeController">
+
+  <div id="practice-areas-wrapper" class="practice-areas-wrapper" style="margin-top:40px;">
+    <div class="posts-grid-wrapper">
+      <div class="row">                
+        <div class="col-sm-2 single-label-cell">
+          <div class="cell-container">
+            <div class="cell-inner">
+              <div class="single-practice-label single-label">
+                <span class="label-cell-text">Practice Areas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  <apex:repeat value="{!practicesDto}" var="practiceDto">
+        <a href="{!domainVariable}/sh_practice?name={!practiceDto.practiceCode}" class="col-sm-2 single-post-cell">
+          <span class="cell-container">                
+            <span class="cell-inner">
+              <span class="single-practice">
+                <span class="single-practice-title">{!practiceDto.practiceName} Practice</span>
+                <p class="single-practice-content"></p>
+              </span>
+            </span>
+          </span>
+        </a>
+  </apex:repeat>
+      </div>
+    </div>
+  </div>
+</apex:component>

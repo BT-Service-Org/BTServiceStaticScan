@@ -1,0 +1,42 @@
+.user_analytics {
+    padding-top: 8px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+}
+
+.tabset {
+    width: 60%;
+    margin: auto;
+}
+
+c-psc-badges-data {
+    width: 100%;
+}
+
+.tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    margin: auto;
+    padding: 20px;
+}
+
+.slds-tabs_default__link {
+    font-size: 16px;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    color: #032D60;
+}
+
+
+
+@media screen and (max-width:540px) {
+    .tab {
+        flex-direction: column;
+    }
+}

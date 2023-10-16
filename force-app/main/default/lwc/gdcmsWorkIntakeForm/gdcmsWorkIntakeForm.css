@@ -1,0 +1,16 @@
+.THIS .test:focus{
+   box-shadow:none;
+}
+
+.modalheight{
+    height: 7rem;
+}
+
+.icn {
+    --lwc-colorTextIconDefault: rgba(84,105,141,.97);
+}
+
+.infoCls{
+    color: #2980b9;
+    padding-bottom: 10px;
+}

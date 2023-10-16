@@ -1,0 +1,652 @@
+<apex:component >
+   <div id="search" class="CoveoSearchInterface" data-enable-history="true" data-enable-duplicate-filtering="true" data-pipeline=""
+      data-responsive-medium-breakpoint="" data-responsive-small-breakpoint="" data-results-per-page="" data-excerpt-length="200"
+      data-maximum-age="">
+      <div class="CoveoFoldingForThread" data-range="1"></div>
+      <div class="CoveoAnalytics"></div>
+      <div class="CoveoSearchHistory" style="display:none;"></div>
+      <div class="coveo-search-section">
+         <div class="CoveoUserActions"></div>
+      </div>
+      <div class="CoveoCommunityStateManager">
+      </div>
+      <div class="coveo-main-section">
+         <div class="CoveoBreadcrumb"></div>
+         <div class="coveo-facet-column">
+            <div class="coveo-facet-header-filter-by-container">
+               <div class="coveo-facet-header-filter-by">Filter by:</div>
+            </div>
+            <div class="CoveoDynamicFacet" data-title="Sources" data-field="@gkcsource" data-number-of-values="12" data-sort-criteria="occurrences" data-expression="NOT @objecttype==(Article_Product__c, Product_Custom__c)"
+               style="color:#000000"></div>
+            <div class="CoveoDynamicFacet" data-title="Parent Product" data-number-of-values="5" data-field="@gkcparentproductnames" data-sort-criteria="occurrences"  
+               data-value-caption="{&quot;Communications Cloud&quot;:&quot;Communications and Media&quot;,&quot;Energy &amp; Utilities Cloud&quot;:&quot;Energy and Utilities&quot;,&quot;Transform Public Services Delivery with Public Sector Solutions&quot;:&quot;Public Sector Solutions&quot;}"></div>
+            <div class="CoveoDynamicFacet" data-title="Child Product" data-number-of-values="5" data-field="@pscproductnames" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Industries" data-number-of-values="5" data-field="@pscindustrynames" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfdeal_size__c" data-number-of-values="5" data-title="Deal Size" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@targetaudience" data-number-of-values="5" data-title="Target Audience" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Project Phase" data-number-of-values="5" data-field="@sfstage__rname" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Content Type" data-number-of-values="5" data-field="@resource_content_type" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Curation Level" data-number-of-values="5" data-field="@sfcuration_level__c" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@contributors" data-number-of-values="5" data-title="contributors" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@tags_relationship" data-number-of-values="5" data-title="Tags" data-sort-criteria="occurrences" ></div>
+            <div class="CoveoDynamicFacet" data-field="@sfstatus__c" data-number-of-values="5" data-title="Status" data-sort-criteria="occurrences" data-depends-on="@gkcsource"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfasked_by__rname" data-number-of-values="5" data-title="Asked By" data-sort-criteria="occurrences" data-depends-on="@gkcsource"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfregion__c" data-number-of-values="5" data-title="Region" data-sort-criteria="occurrences" data-depends-on="@gkcsource"></div>
+            <div class="CoveoDynamicFacet" data-field="@community_name" data-number-of-values="5" data-title="Community" data-sort-criteria="occurrences" data-depends-on="@gkcsource"></div>
+            <div class="CoveoDynamicFacet" data-title="Confluence Space Name" data-number-of-values="5" data-field="@confspacename" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@gkcmethodrole" data-number-of-values="5" data-title="Delivery Owner" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@gkcmethodproduct" data-number-of-values="5" data-title="Engagement Type" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Stage" data-number-of-values="5" data-field="@gkcmethodstagename" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-title="Group" data-number-of-values="5" data-field="@gkcmethodgroupname" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@pscproductstatus" data-number-of-values="5" data-title="Product Status" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfmicro__c" data-number-of-values="5" data-title="Micro" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfsmall__c" data-number-of-values="5" data-title="Small" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfmedium__c" data-number-of-values="5" data-title="Medium" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sflarge__c" data-number-of-values="5" data-title="Large" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sfprogram__c" data-number-of-values="5" data-title="Program" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sftier_1__c" data-number-of-values="5" data-title="Tier 1" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoDynamicFacet" data-field="@sftier_2__c" data-number-of-values="5" data-title="Tier 2" data-depends-on="@gkcsource" data-sort-criteria="occurrences"></div>
+            <div class="CoveoFacet" data-title="Products &amp; Programs" data-number-of-values="5" data-field="@SfCloud_Product__c" data-use-and="true"></div>
+         </div>
+         <div class="coveo-results-column">
+            <div class="CoveoShareQuery"></div>
+            <div class="CoveoPreferencesPanel">
+               <div class="CoveoResultsPreferences"></div>
+               <div class="CoveoResultsFiltersPreferences"></div>
+            </div>
+            <div class="CoveoTriggers"></div>
+            <div class="coveo-results-header">
+               <div class="coveo-summary-section">
+                  <!-- <span class="CoveoQuerySummary" data-enable-no-results-found-message="true"
+                     data-enable-cancel-last-action="false"> -->
+                  <span class="CoveoQuerySummary" data-enable-no-results-found-message="true" data-no-results-found-message="Sorry! No results found.  Please try again or submit a Content Request to the appropriate Content Manager."
+                     data-enable-cancel-last-action="false">
+                     <!-- <div class="coveo-show-if-no-results">
+                        <div class="result-frame zero-result">
+                          <h3 class="ITC_font" style="font-size: 18px;margin: 5px auto 20px;">Can't find what you're looking for? </h3>
+                          <div style="display:flex; justfify-content:space-between">
+                            <p class="salesforce-font" style="
+                            width: 70%;
+                            font-weight: 400;
+                            margin-top: 10px;
+                        ">Are you looking for specific content but can't find it? Interested in seeing a new feature? Please submit a request and Service Central Admins
+                              will be in touch.</p>
+                              <div class="no-result" id="request-content">Submit Request</div>
+                          </div>
+                        </div>
+                        </div> -->
+                  </span>
+               </div>
+               <div class="coveo-result-layout-section">
+                  <span class="CoveoResultLayout"></span>
+               </div>
+               <div class="coveo-sort-section">
+                  <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+                  <span class="CoveoSort" data-sort-criteria="@sflastpublisheddate descending,@sflastpublisheddate ascending" data-caption="Date"></span>
+               </div>
+            </div>
+            <div class="CoveoHiddenQuery"></div>
+            <div class="CoveoDidYouMean" data-enable-auto-correction="true"></div>
+            <div class="CoveoErrorReport" data-pop-up="false"></div>
+            <div class="CoveoResultList" data-layout="list" data-wait-animation="fade" data-infinite-scroll-page-size="10">
+               <script id="CKH Template" class="result-template" type="text/html" data-layout="list" data-field-source="Catalyst Knowledge Hub">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center">
+                      <span class="CoveoIcon icon catalyst" data-small="true" data-with-label="false"></span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                         
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;">
+                  
+                            <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span>
+                            <br>
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sfokta_url__c}" data-always-open-in-new-window="true"></a>
+                          <br />
+                              <span class="CoveoExcerpt summary"></span>
+                              <br/>
+                                  <div class="article_info">
+                          <span class="CoveoFieldValue date" data-field="@sflastpublisheddate" data-helper="dateTime" data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY" data-text-caption="Published Date: "></span>
+                           </div></div>
+                       
+                      </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="resultfolding" class="result-template" type="text/html" data-field-common_type="Attachment">
+                  <div>
+                    <div class="coveo-result-row">
+                      <div class="coveo-result-cell">
+                          <span class="CoveoFieldValue" data-field="@title"></span>
+                           
+                       <!-- <a class="CoveoResultLink result-link" data-href-template="${raw.sfcontentversionfilename}"></a>-->
+                      </div>
+                    </div>
+                   
+                  </div>
+               </script>
+               <script id="pagesectionfolding" class="result-template" type="text/html" data-field-objecttype="PSC_Page_Section__c">
+                  <div>
+                    <div class="coveo-result-row">
+                      <div class="coveo-result-cell">
+                          <span class="CoveoFieldValue" data-field="@sfpage_section_title__c"></span>
+                      </div>
+                    </div>
+                   
+                  </div>
+               </script>
+               <script id="GKC Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Knowledge">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon psc icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sfcommunity_url__c}"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                           <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                               <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                   <lightning:icon iconName="utility:world" size="small" />
+                               </span>
+                           </span>
+                           <div class="CoveoText" data-value="Knowledge Article"></div>
+                           </span></div>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <span class="CoveoResultFolding" data-result-template-id="resultfolding"></span>
+                  <div class="article_info">
+                   <div class="article_authors">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                                <span class="CoveoFieldValue" data-field="@sfadditional_author__rname" data-text-caption=","></span>
+                  </div>
+                            <span class="CoveoFieldValue" data-field="@sflastpublisheddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          <span class="CoveoFieldValue" data-field="@sfcuration_level__c" data-text-caption="CurationLevel:"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Communities Of Practice" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Question__c">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon psc icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-title-template="${raw.sftitle__c}" data-href-template="${raw.sfslack_link__c}" target="_blank"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                           <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                               <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                   <lightning:icon iconName="utility:world" size="small" />
+                               </span>
+                           </span>
+                           <div class="CoveoFieldValue" data-field="@sfStatus__c"></div>
+                           </span>
+                           <div class="CoveoImageFieldValue answeredIcon" data-field="@sfStatus__c" data-condition-field-sfStatus__c="Answered" data-src-template='/ServicesCentral/resource/pscImages/Icons/icon-project-type-true.png'></div>
+                          
+                          </div>
+                  
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <div class="article_info">
+                   <div class="article_authors">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Asked By:"></span>
+                  </div>
+                  <span class="CoveoFieldValue" data-field="@sfregion__c" data-text-caption="Region:"></span>
+                  
+                  <span class="CoveoFieldValue" data-field="@community_name" data-text-caption="Community:"></span>
+                    
+                            <span class="CoveoFieldValue" data-field="@sfcreateddate" data-helper="dateTime" data-text-caption="Date"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="GKC Content Requests Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Content_Requests__c">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon req_content icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sfcommunity_portal_url__c}"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                           <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                               <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                   <lightning:icon iconName="utility:world" size="small" />
+                               </span>
+                           </span>
+                  
+                           <div class="CoveoText" data-value="Content Request"></div>
+                           </span></div>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <span class="CoveoResultFolding" data-result-template-id="resultfolding"></span>
+                  <div class="article_info">
+                            <span class="CoveoFieldValue" data-field="@sfstatus__c" data-text-caption="Status:"></span>
+                            <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Requested By: "></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="GKC Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="PSC_Page__c">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon psc icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-title-template="${raw.sfpage_title__c}" data-href-template="${raw.sfservices_central_link__c}"></a> 
+                          <span class="slds-badge slds-badge_lightest">
+                            <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                                <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                    <lightning:icon iconName="utility:world" size="small" />
+                                </span>
+                            </span>
+                            <div class="CoveoFieldValue" data-field="@sftype__c" data-condition-field-sftype__c="Community Page" ></div>
+
+                            <div class="CoveoFieldValue" data-helper="pageType"  data-field="@sftype__c" data-condition-field-not-sftype__c="Community Page"></div>
+                            </span>
+                          </div>
+                       <span class="CoveoExcerpt coveo-result-row"></span> 
+                  
+                  <span class="CoveoResultFolding" data-result-template-id="pagesectionfolding"></span>
+                  <div class="article_info">
+                   <div class="article_authors">
+                                <span class="CoveoFieldValue" data-field="@sfauthor__rname" data-text-caption="Author:"></span>
+                              
+                  </div>
+                            <span class="CoveoFieldValue" data-field="@sflast_published__c" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                         
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="GKC Reusable Asset Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Reusable_Asset__c">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon psc icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="/ServicesCentral/s/reusable-asset?recordId=${raw.sfid}"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                            <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                                <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                    <lightning:icon iconName="utility:world" size="small" />
+                                </span>
+                            </span>
+                            <div class="CoveoText" data-value="Reusable Asset"></div>
+                            </span>
+                          </div>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <span class="CoveoResultFolding" data-result-template-id="resultfolding"></span>
+                  <div class="article_info">
+                    <div class="article_authors">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                                <span class="CoveoFieldValue" data-field="@sfadditional_author__rname" data-text-caption=","></span>
+                  </div>
+                            <span class="CoveoFieldValue" data-field="@sflastmodifieddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Confluence" class="result-template" type="text/html" data-layout="list" data-field-gkcsource="Confluence">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon confluence icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                            <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                                <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                    <lightning:icon iconName="utility:world" size="small" />
+                                </span>
+                            </span>
+                            <div class="CoveoFieldValue bubbleText" data-field="@confspacename" data-text-caption=""></div>
+                            </span>
+                          </div>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <div class="article_info">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                            <span class="CoveoFieldValue" data-field="@sflastmodifieddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Salesforce Docs" class="result-template" type="text/html" data-layout="list" data-field-gkcsource="Salesforce Docs">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon sitemap icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <div class="article_info">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                            <span class="CoveoFieldValue" data-field="@sflastmodifieddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Sitemap - Salesforce Architects" class="result-template" type="text/html" data-layout="list" data-field-gkcsource="Well Architected">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon sitemap-architects icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <div class="article_info">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                            <span class="CoveoFieldValue" data-field="@sflastmodifieddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Known Product Issues" class="result-template" type="text/html" data-layout="list" data-field-gkcsource="Known Product Issues">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon knownIssue icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.publicurl}" data-always-open-in-new-window="true"></a>
+                       <span class="CoveoExcerpt summary"></span>
+                  <br />
+                  <div class="article_info">
+                                <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                            <span class="CoveoFieldValue" data-field="@sflastmodifieddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          </div>
+                          </div>
+                       </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="GKC Methodology Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Method__C">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon methodology icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                          <div class="methodology-tile-header">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <div>
+                             <span class="CoveoFieldValue methodologyAgileImg"
+                               data-field="@sfagile_image__c "
+                               data-helper="shorten"
+                               data-helper-options-length="200" data-html-value="true">
+                              </span>
+                              <span class="CoveoFieldValue methodologyWaterfallImg"
+                              data-field="@sfwaterfall_image__c"
+                              data-helper="shorten"
+                              data-helper-options-length="200" data-html-value="true">
+                             </span>
+                            </div>
+                          </div>   
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sfcommunity_url__c}"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                           <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                               <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                   <lightning:icon iconName="utility:world" size="small" />
+                               </span>
+                           </span>
+                           <div class="CoveoText ITC_font" data-value="Method"></div>
+                           </span>
+                         </div>
+                       <br />
+                  
+                  <div class="CoveoFieldValue summary"
+                   data-field="@sfdescription__c "
+                   data-helper="shorten"
+                     data-helper-options-length="200" data-html-value="true">
+                  </div>
+                           <br />
+                  <span class="CoveoResultFolding" data-result-template-id="resultfolding"></span>
+                  
+                  <div class="article_info">
+                   <span class="CoveoFieldValue group-name" data-field="@gkcmethodgroupname" data-text-caption="Group:"></span>
+                   <span class="CoveoFieldValue stage-name" data-field="@gkcmethodstagename" data-text-caption="Stage:"></span>
+                   <span class="CoveoFieldValue" data-field="@sfownername" data-text-caption="Author:"></span>
+                      <div class="engagement-sizing">
+                          <span class="CoveoFieldValue" data-field="@sfmicro__c" data-text-caption="Micro:"></span>
+                  <span class="CoveoFieldValue" data-field="@sfsmall__c" data-text-caption="Small:"></span>
+                  <span class="CoveoFieldValue" data-field="@sfmedium__c" data-text-caption="Medium:"></span>
+                  <span class="CoveoFieldValue" data-field="@sflarge__c" data-text-caption="Large:"></span>
+                  <span class="CoveoFieldValue" data-field="@sfprogram__c" data-text-caption="Program:"></span>
+                  <span class="CoveoFieldValue" data-field="@sftier_1__c" data-text-caption="Tier 1:"></span>
+                  <span class="CoveoFieldValue" data-field="@sftier_2__c" data-text-caption="Tier 2:"></span>
+                  
+                  </div>
+                     
+                                
+                              <span class="CoveoFieldValue" data-field="@sflastpublisheddate" data-helper="dateTime" data-text-caption="Published Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                          <span class="CoveoFieldValue" data-field="@sfcuration_level__c" data-text-caption="CurationLevel:"></span>
+                          </div>
+                          </div>
+                        <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px">
+                          <span class="CoveoFieldValue" data-field="@sflastmodifieddate__c" data-helper="dateTime" data-html-value="false"></span>
+                          <span class="CoveoFieldValue" data-field="@sfnext_review_date_c__c" data-helper="dateTime" data-html-value="false"></span>
+                           </div>
+                      </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="GKC Methodology Salesforce Template" class="result-template" type="text/html" data-layout="list" data-field-objecttype="Playbook__c">
+                  <div class="coveo-result-frame result-frame">
+                    <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                      <span class="CoveoIcon methodology icon" data-small="true" data-with-label="false">
+                          </span>
+                    </div>
+                    <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                      <div class="coveo-result-row" style="margin-top:0;">
+                        <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                             <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                             <br>
+                             <div class="Knowledge_title">
+                          <a class="CoveoResultLink result-link" data-href-template="${raw.sfcommunity_url__c}"></a>
+                          <span class="slds-badge slds-badge_lightest">
+                           <span class="slds-icon_container slds-icon-utility-world slds-m-right_xx-small" title="Description of icon when needed">
+                               <span class="slds-icon slds-icon_xx-small slds-icon-text-default">
+                                   <lightning:icon iconName="utility:world" size="small" />
+                               </span>
+                           </span>
+                           <div class="CoveoText ITC_font" data-value="Playbook"></div>
+                           </span>
+                         </div>
+                       <br />
+                  
+                  <div class="CoveoFieldValue summary"
+                   data-field="@sfdescription__c "
+                   data-helper="shorten"
+                     data-helper-options-length="200" data-html-value="true">
+                  </div>
+                  <br/>
+                     
+                          </div>
+                          </div>
+                      </div>
+                      <div class="coveo-result-row" style="margin-top:10px;">
+                      </div>
+                    </div>
+                  </div>
+               </script>
+               <script id="Salesforcehelp" class="result-template" type="text/html" data-field-source="Salesforce Help">
+                  <div class="coveo-result-frame result-frame">
+                   <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                     <span class="CoveoIcon helpCenter icon" data-small="true" data-with-label="false">
+                         </span>
+                   </div>
+                   <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                     <div class="coveo-result-row" style="margin-top:0;">
+                       <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                            <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                            <br>
+                           
+                      <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                      <br/>
+                      <span class="CoveoExcerpt summary"></span>
+                      <br/>
+                          </div>
+                         </div>
+                     </div>
+                   </div>
+                  </div>
+                  
+               </script>
+               <script id="Salesforcehelptest1" class="result-template" type="text/html" data-field-gkcsource="Google Drive">
+                  <div class="coveo-result-frame result-frame">
+                   <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                     <span class="CoveoIcon icon" data-small="true" data-with-label="false">
+                         </span>
+                   </div>
+                   <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                     <div class="coveo-result-row" style="margin-top:0;">
+                       <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                            <span class="CoveoFieldValue data-field" data-field="@source"></span> 
+                            <br>
+                           
+                      <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                      <br/>
+                      <span class="CoveoExcerpt summary"></span>
+                      <br/>
+                          <div class="article_date_info">
+                          <span class="CoveoFieldValue" data-field="@gdfilecreateddate" data-helper="dateTime" data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY" data-text-caption="Created Date: "></span>
+                          <span class="CoveoFieldValue" data-field="@gdmodifieddate" data-helper="dateTime" data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY" data-text-caption="Last Modified Date: "></span>
+                          </div>
+                          </div>
+                         </div>
+                     </div>
+                   </div>
+                  </div>
+                  
+               </script>
+               <script id="HighSpot" class="result-template" type="text/html" data-field-sourcetype ="GenericRest">
+                  <div class="coveo-result-frame result-frame">
+                   <div class="coveo-result-cell result-cell" style="vertical-align:top;text-align:center;">
+                     <span class="CoveoIcon highspot icon" data-small="true" data-with-label="false">
+                         </span>
+                   </div>
+                   <div class="coveo-result-cell result-cell" style="vertical-align: top;padding-left: 16px;">
+                     <div class="coveo-result-row" style="margin-top:0;">
+                       <div class="coveo-result-cell result-cell" style="vertical-align:top;font-size:16px;">
+                            <span class="CoveoFieldValue data-field" data-field="@gkcsource"></span> 
+                            <br>
+                           
+                      <a class="CoveoResultLink result-link" data-href-template="${raw.sysclickableuri}" data-always-open-in-new-window="true"></a>
+                      <br/>
+                      <span class="CoveoExcerpt summary"></span>
+                      <br/>
+                      <div class="article_date_info">
+                        <span class="CoveoFieldValue" data-field="@highspotaddeddate" data-helper="dateTime" data-text-caption="Created Date:"data-html-value="false" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-use-long-date-format="true" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="MM/DD/YYYY"></span>
+                      </div>
+                      <br/> 
+                          </div>
+                         </div>
+                     </div>
+                   </div>
+                  </div>
+                  
+               </script>
+            </div>
+            <div class="pagination">
+               <div class="CoveoPager" data-maximum-number-of-results-from-index='10000'></div>
+               <div class="CoveoResultsPerPage"></div>
+            </div>
+         </div>
+      </div>
+      <div class="CoveoFieldSuggestions" data-field="@title" data-number-of-suggestions="2"></div>
+      <div class="CoveoFieldSuggestions" data-field="@sfdescription__c" data-number-of-suggestions="2"></div>
+   </div>
+</apex:component>

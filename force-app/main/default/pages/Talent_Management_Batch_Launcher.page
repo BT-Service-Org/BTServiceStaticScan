@@ -1,0 +1,57 @@
+<apex:page standardController="TM_Tech_Batch__c" extensions="IC_Talent_Management_Batch_Launcher" lightningStylesheets="TRUE">
+    <apex:form >
+        <apex:actionFunction name="UpdateNumbers" action="{!UpdateNumbers}" reRender="AllPanel" />
+        <apex:actionFunction name="LaunchCreations" action="{!LaunchCreations}" reRender="AllPanel" />
+        <apex:actionFunction name="RecalculateSharing" action="{!RecalculateSharing}" />
+        <apex:actionFunction name="GrantPermSet" action="{!GrantPermSet}" />
+        <apex:actionFunction name="UpdateAllRecords" action="{!UpdateAllRecords}" />
+        <apex:outputPanel Id="AllPanel">
+            <apex:pageBlock >
+                <apex:pageBlockSection columns="1">
+                    <apex:outputField label="Leader Name" value="{!TM_Tech_Batch__c.Leader__c}"/>
+                    <apex:outputField label="Leader's Id" value="{!TM_Tech_Batch__c.Leader__r.Id }" rendered="FALSE"/>
+                    <apex:outputField value="{!TM_Tech_Batch__c.Manager_Level__c }" rendered="FALSE"/>
+                    <div align="center" draggable="false" >
+                        <button type="button" onclick="UpdateNumbers()">Update Figures</button>
+                    </div>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1" title="Potential impact of the batch" collapsible="FALSE">
+                	<apex:outputField value="{!TM_Tech_Batch__c.Filter__c}"/>
+                	<apex:outputField value="{!TM_Tech_Batch__c.Users_in_Org__c}"/>
+                    <apex:outputField value="{!TM_Tech_Batch__c.Users_with_a_Record__c }"/>
+                	<apex:outputField value="{!TM_Tech_Batch__c.Record_Creation__c}"/>
+                    <div align="center" draggable="false" >
+                        <button type="button" onclick="LaunchCreations()">Launch Creation Batch</button>
+                    </div>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1" title="Results" collapsible="FALSE">
+                	<apex:outputField value="{!TM_Tech_Batch__c.Finished__c}"/>
+                    <apex:outputField value="{!TM_Tech_Batch__c.Last_launched__c }"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1" title="Grant end-user access for Users matching {!TM_Tech_Batch__c.Filter__c}" collapsible="false">
+                    <div align="center" draggable="false" >
+                        <button type="button" onclick="GrantPermSet()">Grant PermSet</button>
+                    </div>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <apex:outputPanel >
+            <apex:pageBlock >
+                <apex:pageBlockSection columns="1" title="Recalculate all sharing rules on Talent Management records" collapsible="false">
+                    <div align="center" draggable="false" >
+                        <button type="button" onclick="RecalculateSharing()">Calculate Sharing</button>
+                    </div>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <apex:outputPanel >
+            <apex:pageBlock >
+                <apex:pageBlockSection columns="1" title="Recalculate Readiness for all Talent Management records" collapsible="false">
+                    <div align="center" draggable="false" >
+                        <button type="button" onclick="UpdateAllRecords()">Calculate Readiness</button>
+                    </div>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

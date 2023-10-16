@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Event fired to open links">
+    <aura:attribute name="url" type="String"/>
+</aura:event>

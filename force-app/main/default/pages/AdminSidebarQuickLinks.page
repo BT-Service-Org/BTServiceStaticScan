@@ -1,0 +1,37 @@
+<apex:page sidebar="false" showHeader="false" >
+	<div class="box_round_blue">
+		<!-- Header -->
+		<div class="header">
+			<div><div><h3>Quick links</h3></div></div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+				<div style="margin-bottom:15px">						
+		</div>	
+		<div class="team_detail_commentedItemLeftProfile">					    
+		    <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/star.gif')}"  />	
+		    <div>
+		    	<span class="text_link_underlineColorPaddRight">
+		    	  	<a style="color:#0F6CB0" href="Javascript:;" onclick="createOverlay('','AdminNewTeamType', '290');">
+		    	  		Create a new team type
+		    	  	</a>
+		    	</span>
+		   	</div>
+		</div>	
+		<div class="team_detail_commentedItemLeftProfile">					    
+		      <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/star.gif')}"  />	
+		   	<div>
+				<span class="text_link_underlineColorPaddRight">
+		      		<a style="color:#0F6CB0" href="Javascript:;" onclick="createOverlay('','newTeamProfile', '290');">
+		      			Create a new team profile
+		      		</a>
+		    	</span>
+		    </div>
+		</div>
+		<div style="margin-bottom:15px"></div>		
+		</div>
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>	
+</apex:page>

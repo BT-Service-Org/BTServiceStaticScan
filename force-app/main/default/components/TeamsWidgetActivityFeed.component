@@ -1,0 +1,38 @@
+<apex:component controller="TeamsWidgetActivityFeedController">
+<style>
+	table.minifeeds.widget td {
+		border: none;
+		font-size: 11px;
+	}
+	
+	table.minifeeds.widget {
+		margin-left: 3px;
+		width:209px;
+	}
+</style>
+<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+        <div class="header_blue">
+            <div><div><h4>Activity Feed</h4></div></div>
+        </div>
+        <div class="box_content">
+        	<div class="cont_links">
+        		<a href="/apex/TeamsActivityFeed">See more</a>
+        	</div>
+         	<table class="minifeeds activity_page widget" cellpadding="0" cellspacing="0">
+				<apex:repeat value="{!minifeeds}" var="m" rows="25">				
+					<tr>
+						<td class="feed_type {!m.feed.Type__c}"></td>
+						<td>
+							<a href="/apex/PeopleProfileDisplay?id={!m.feed.User__c}" class="weight_bold">
+								<apex:outputText escape="false" value="{!m.feed.User__r.Name}" />
+							</a>&nbsp;<apex:outputText escape="false" value="{!m.feed.Message__c}" />
+						</td>
+					</tr>
+				</apex:repeat> 
+			</table>
+        </div>
+        <div class="bottom_borders">
+            <div><div/></div>
+        </div>
+    </div>
+</apex:component>

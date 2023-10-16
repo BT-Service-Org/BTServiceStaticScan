@@ -1,0 +1,17 @@
+<apex:page id="WikiPageTableParser" tabStyle="WikiPage__c" controller="WikiPageTableParserController" sidebar="false">
+	<apex:outputpanel id="tableWikiSintax">
+		<apex:form >
+			<apex:inputTextArea value="{!tableWikiSintax}" style="width: 100%; height: 300px;" />
+			<br>
+			<apex:commandButton value="Html Result!" rerender="tableHtmlResult" action="{!parseTableWikiSintax}" />
+		</apex:form>
+	</apex:outputpanel>
+	
+	<apex:outputpanel id="tableHtmlResult">
+		<apex:outputtext value="{!tableHtmlResult}" escape="false" />
+	</apex:outputpanel>
+
+	<apex:form >
+		<apex:commandLink value="insert the group member" action="{!insertGroupMember}" />
+	</apex:form>
+</apex:page>

@@ -1,0 +1,306 @@
+<apex:page sidebar="false" tabStyle="Team__c" controller="AdminMainSetupController">
+	
+	<!-- Javascript --><!-- Prototype + Scriptaculous -->
+	
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/prototype.js')}" />
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/effects.js')}" />
+	       
+    <!-- Common Js -->
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}" />
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/admin.js')}" />
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/teamType.js')}" />
+    <script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+ 	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/sorttable.js')}"></script>
+
+	<!-- CSS de TS -->
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/modal.css')}" />
+    <!-- Common Layout -->
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamDetailEdit.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMemberList.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/adminMainSetUp.css')}" />
+	
+   
+	<!-- ### Ajax Toolkit Include ### -->
+	<script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+	<script>
+		/**
+		* Initialize toolkit connection
+		*@void
+		*/
+		function init(){
+			sforce.connection.sessionId = '{!$Api.Session_ID}';
+		}
+	</script>    
+	
+	<style>
+		div.holder {
+			min-height: 0px !important;
+		}
+		
+		* html div.main_cont div.holder {
+			height: auto;
+		}
+		
+		.createdDateWidth {
+			width: 180px;  
+		}
+	</style>
+    
+    <!-- ### Overlay's Includes ### -->
+    <apex:include pageName="AdminOverlayNewTeamType" />
+	<apex:include pageName="AdminOverlayDeactivateTeamType" />
+	<apex:include pageName="AdminOverlayRemoveTeamType" />
+	<apex:include pageName="AdminOverlayNewProfile" />	
+   	<apex:include pageName="AdminOverlayRemoveTeamProfile" />  	
+	
+	<!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script> 
+	
+    <!-- Header -->
+    <div class="header">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Teams</h1>
+                <h2 class="arial_black">Administrator</h2>
+            </div>
+        </div>
+        <!-- Search Box Container (always Centered) -->
+        <div class="searchBox">
+            <div>
+                <div>
+                    <!-- Search Form -->
+                    <form action="/apex/TeamSearchResult" method="get">
+                        <div class="search_box_input f_left">
+                            <div class="legend">
+                                Find Teams 
+                            </div>
+                            <input type="text" value="Enter keyword or name" name="key"   onfocus="setValue('');" onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+                        </div><input type="submit" value="Search" class="search_btn f_left"/>
+                    </form><!-- Advanced Search Link -->
+                    <!-- <div class="advanced_search_cont">
+                        <a href="javascript:;">Advanced Search</a>
+                    </div>  -->
+                </div>
+            </div>
+        </div>
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, '/images/layout/icons/help_icon.gif')}" alt=""/>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="top_content">
+		<div class="breadCrumb">						
+		</div>
+	</div>		
+	
+	<!-- Sidebar -->
+	<div class="sidebar">			
+		<!-- Quick links sidebar -->
+		<c:TeamAdminQuickLinks />
+		<c:TeamAdminValidateSharing />	 
+	</div>
+				
+    <!-- Main Content Div -->
+    <div class="main_cont">
+      <apex:form >
+        <div>
+            <div class="main_cont">
+            	<apex:outputPanel layout="block" id="theGrid">
+                <div>
+					<a class="linkMore" href="/apex/TeamsOverview"> << back to teams overview</a>
+                    <div class="holder">
+                        <table>
+							<tr>
+								<td class="teamTitleButton" >                        	
+									Popular Team Types							
+								</td>
+								<td>
+								</td>	
+							</tr>
+						</table> 
+					</div>						
+					<div class="border_body_top">
+						&nbsp;
+					</div> 
+					<div class="divButtonNew">
+						<table cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td align="right" valign="top" width="50%">
+									<a href="/apex/AdminWidgetConfig" class="blackbtnTitleBottom" style="margin: 0px; float: right; position: inherit;"><span>New</span></a>
+								</td>
+								<td align="right" width="50%">
+									<a class="linkMore" href="/apex/AdminTeamTypeList" >See more > </a>
+								</td>
+							</tr>
+						</table>
+					</div>
+             		<table cellspacing="0" cellpadding="0" class="pageListProfile sortable"  style="width:100%;">
+                        <thead>
+                            <tr>
+                                <td  class="manage_title_descriptionNoUnderline sorttable_nosort" width="21%" >
+                                    Actions
+                                </td>
+                                <td class="manage_title_description" width="19%">
+                                    Name
+                                </td>
+								<td class="manage_title_alignCenter_description sorttable_numeric" width="21%">
+									Number of Teams
+								</td>
+                                <td class="manage_title_description" width="20%">
+                                    Creator
+                                </td>
+								  <td class="manage_title_description" width="19%">
+                                    Created date
+                                </td>
+                            </tr>
+                        </thead>
+                        <!-- Description  -->
+                        <tbody>
+                            <apex:repeat value="{!types}" var="type">				                            
+	                            <tr >
+	                                <td>													
+										<apex:outputPanel rendered="{!IF(type.teamType.IsActive__c, true, false)}">		                                
+											<span class="manage_detail_description_underline">
+												<a href="/apex/AdminWidgetConfig?id={!type.teamType.Id}">Edit</a> 
+											</span>
+											<span class="separator"> | </span>
+											<span class="manage_detail_description_underline">
+												<a href="Javascript:;" onclick="createOverlay('','AdminDeactivateteamType', '290', 'getTeams(\'{!type.teamType.Id}\')');">Deactivate </a>
+											</span>
+											<span class="separator"> | </span>
+											<span class="manage_detail_description_underline">
+												<a href="/apex/AdminWidgetConfig?clone={!type.teamType.Id}">Clone</a>
+											</span>
+	                                	</apex:outputPanel>
+                							
+                							<apex:outputPanel rendered="{!IF(!type.teamType.IsActive__c, true, false)}">	
+											<span class="manage_detail_description_underline">
+												<a href="Javascript:;" onclick="activateTeamType('{!type.teamType.Id}','true');">Reactivate</a>
+											</span>
+											<apex:outputPanel styleClass="separator" rendered="{!IF(type.hasTeams, false, true)}"> | </apex:outputPanel>
+											<apex:outputPanel styleClass="manage_detail_description_underline" rendered="{!IF(type.hasTeams, false, true)}">
+												<a href="Javascript:;" onclick="createOverlay('', 'removeTeamType', '165', 'injectEventRemove(\'{!type.teamType.Id}\')');">Delete</a>
+											</apex:outputPanel>                							
+                							</apex:outputPanel>
+	                                
+	                                </td>
+	                                <td class="manage_detail_description_underlineColorBold{!IF(!type.teamType.IsActive__c, ' red', '')}">
+	                                	<a style="color:#0F6CB0" href="/apex/AdminWidgetConfig?view={!type.teamType.Id}">{!type.teamType.Name}</a>
+	                                	<!-- <a style="color:#0F6CB0" href="Javascript:;" onclick="createOverlay('','AdminNewTeamType', '290', 'getTeamType(\'{!type.teamType.Id}\')');">   {!type.teamType.Name}</a>--> 
+	                                </td>
+									<td class="number_teams_field">
+										{!type.teams}
+									</td>
+	                                <td class="manage_detail_description_underlineColorBold">
+	                                    <a  href="/apex/peopleprofiledisplay?id={!type.creator.Id}">{!type.creator.Name}</a>
+	                                </td>
+									  <td class="manage_detail_description createdDateWidth" nowrap="false">
+	                                    {!type.createdDate}
+	                                </td>
+	                            </tr>				                            
+                              </apex:repeat>   
+                        </tbody>
+                  	</table>
+				</div>	 
+				<!-- here comes the other table -->
+				<div style="margin-top:50px;">
+                    <div class="holder">
+                        <table>
+							<tr>
+								<td class="teamTitleButton" >                        	
+									Team Profiles 							
+								</td>
+								<td>
+								</td>	
+							</tr>
+						</table> 
+					</div>						
+					<div class="border_body_top">
+						&nbsp;
+					</div> 
+					<div class="divButtonNew">
+						<table cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td align="right" valign="top" width="50%">
+									<a href="/apex/AdminProfile" class="blackbtnTitleBottom" style="margin: 0px; float: right; position: inherit;"><span>New</span></a>
+								</td>
+								<td align="right" width="50%">
+									<a class="linkMore" href="/apex/AdminProfileList">See more > </a>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<table cellspacing="0" cellpadding="0" class="pageListProfile sortable" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <td class="manage_title_descriptionNoUnderline sorttable_nosort" width="25%">
+                                    Action
+                                </td>
+                                <td class="manage_title_description" width="25%">
+                                    Name
+                                </td>
+                                <td class="manage_title_description" width="25%">
+                                    Creator
+                                </td>
+								  <td class="manage_title_description" width="25%">
+                                    Created date
+                                </td>
+                            </tr>
+                        </thead>
+                        <!-- Description  -->
+                        <tbody>
+                            <apex:repeat value="{!profiles}" var="profile">
+	                            <tr>
+	                                <td>
+	                                	<span class="manage_detail_description_underline">
+	                                  		<a href="/apex/AdminProfile?id={!profile.teamProfile.Id}">
+	                                  			Edit
+	                                  		</a> 
+	                                  	</span>
+	                                    <span class="separator">|</span>
+	                                    <a class="manage_detail_description_underline" href="javascript:;" onclick="getCountMembersForTeamProfile('{!profile.teamProfile.Id}', '{!profile.teamProfile.Name}');">
+	                                    	Delete
+	                                    </a>
+										<span class="separator">|</span>
+										<span class="manage_detail_description_underline">
+											<a href="/apex/AdminProfile?clone={!profile.teamProfile.Id}">
+												Clone
+											</a> 
+										</span>
+	                                </td>
+	                                <td class="manage_detail_description_underlineColorBold">
+	                                	<a style="color:#0F6CB0" href="/apex/AdminProfile?view={!profile.teamProfile.Id}">
+											{!profile.teamProfile.Name}
+										</a>
+	                                </td>
+	                                <td class="manage_detail_description_underlineColor">
+	                                    <a href="/apex/PeopleProfileDisplay?id={!profile.creator.Id}">
+	                                    	{!profile.creator.Name}
+	                                    </a>
+	                                </td>
+									  <td class="manage_detail_description">
+	                                    {!profile.createdDate}
+	                                </td>
+	                            </tr>
+                            </apex:repeat>       
+                        </tbody>
+		         	</table>   
+		         </div>
+		         </apex:outputPanel>                 
+	             <!-- Reload Event -->
+	             <apex:commandLink action="{!getAll}" oncomplete="reinitializeSort=true; sorttable.init();"  rerender="theGrid" id="reloadGrid" style="display:none;">Reload</apex:commandLink>
+	             <script>reloadEvent = '{!$Component.reloadGrid}'</script>
+	         </div>
+         </div>
+      </apex:form>
+   </div>              
+</apex:page>

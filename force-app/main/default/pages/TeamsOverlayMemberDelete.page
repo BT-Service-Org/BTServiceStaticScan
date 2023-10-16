@@ -1,0 +1,53 @@
+<apex:page sidebar="false">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Delete Team Member</title>
+ <!-- Javascript -->
+	<!-- Prototype + Scriptaculous -->
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+	<!-- Common Js for All Sections -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<!-- Common Js for modal -->
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />	
+
+	<body>
+		<!-- Initialize the overlay box for modal.js -->
+		<a href="#modal_container" id="initializeModal" style="display:none;"></a>
+		<div id="modal_container"></div>
+		<script>createOverlay('initializeModal')</script>
+		
+		<!-- Delete Team -->
+		<div id="deleteTeam" style="display:none;">
+		  <!-- Title of Dialog -->
+		  <div class="modalTitle">
+			  <div class="title">Confirmation</div>
+			  <div class="closeEvent">
+				  <a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			  </div>
+		  </div>
+		  <!-- Content  -->
+		  <div class="modalContent">
+			  <!-- Dialog Body  -->
+			  <div class="modalMessage padding_30px bottom_border_gray">
+				  Are you sure you want to remove Thom Mayne from {Team Name 1} team? <br />
+				  <div class="gray">
+					Once a member is removed, there is no way to undo this action.
+				  </div>
+			  </div>
+			  <!--Actions  -->
+			  <div class="actions">
+				  <a href="javascript:;" class="button">Continue and delete</a>
+				  <a href="javascript:;" onclick="modal.close();" class="button gray">Cancel</a>
+			  </div>
+		  </div><!-- END Modal Content -->
+		</div><!-- END announcement delete -->    
+		
+		<a href="javascript:;" onclick="createOverlay('','deleteTeam','200');">Delete Team</a>
+	</body>
+</html>
+</apex:page>

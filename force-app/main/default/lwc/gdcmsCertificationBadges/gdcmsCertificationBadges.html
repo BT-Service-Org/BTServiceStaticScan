@@ -1,0 +1,38 @@
+<template>
+    <div if:true={displayView}>
+        <div data-id="badges">
+            <lightning-layout class="slds-align_absolute-center" multiple-rows="true" if:true={certs}>
+                <template for:each={certs} for:item="certy" for:index="index">
+                    <lightning-layout-item  key={certy.index} size="3" class="slds-p-around_x-small slds-align_absolute-center">
+                            <c-gdcms-certification-badge-image cert-name={certy}></c-gdcms-certification-badge-image>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </div>
+        <lightning-button variant="brand" style="padding-top:0.5rem;" class="slds-align_absolute-center"
+            if:true={showButton} label={labelShowMore} onclick={handleShowMore}></lightning-button>
+    </div>
+    <template if:false={displayView}>
+        <div data-id="badges">
+        <lightning-layout multiple-rows="true">
+            <template for:each={allCerts} for:item="certy" for:index="index">
+                <lightning-layout-item key={certy.index} flexibility="auto" size="3">
+                    <div class="img-badge">
+                        <c-gdcms-certification-badge-image cert-name={certy}></c-gdcms-certification-badge-image>
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </div>
+    </template>
+    <c-gdcms-base-modal show-footer="true" onclose={handleClose} width="83%">
+        <span slot="Title">
+            <p style="color:black; font-weight:bold">{certTitle}</p>
+        </span>
+        <span slot="Body">
+            <div style="color: black;">
+                <c-gdcms-certificates-body></c-gdcms-certificates-body>
+            </div>
+        </span>
+    </c-gdcms-base-modal>
+</template>

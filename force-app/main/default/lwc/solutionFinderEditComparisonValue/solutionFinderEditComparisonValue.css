@@ -1,0 +1,19 @@
+div {
+    padding: 2px;
+}
+
+input {
+    background: #F6F6F6;
+    color: #3366cc;
+    border-width: 0px;
+    border-radius: 3px;
+    padding: 2px 5px 2px 5px;
+}
+
+input.text {
+    width: 100%;
+}
+
+input.number {
+    width: 80px;
+}

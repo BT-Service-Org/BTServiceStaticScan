@@ -1,0 +1,132 @@
+.feedback-contribution {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background: #FFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    width: 98%;
+    margin-left: 5px;
+    margin-top:25px;
+}
+
+.feedback-image {
+    padding: 1.25rem;
+}
+
+.feedback-image img {
+    width: 90px;
+}
+
+.feedback {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.feedback-head {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+    margin-bottom: 5px;
+}
+
+.feedback-head span h3 {
+    font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.005em;
+    color: #032D60;
+    margin-bottom: 5px;
+}
+
+.feedback-description{
+    font-size: 12px;
+    line-height: 26px;
+    letter-spacing: 0.0012em;
+    color: #032D60;
+}
+
+.feedback-cta {
+    display: flex;
+}
+
+.slack-button {
+    display: inline-block;
+    padding: 8px 24px;
+    background: #0070D2;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 24px;
+    color: #FFFFFF;
+    margin: 1.5rem 1rem 0.75rem 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.labelClass {
+    display: inline-block;
+    font-family: 'Salesforce Sans', sans-serif;
+    color: #444444;
+}
+
+.header {
+    color: #032D60;
+}
+.tagline {
+    font-family: 'Salesforce Sans', sans-serif;
+    color:#444444;
+}
+@media screen and (max-width:1024px) {
+    .slack-button {
+        padding: 4px 8px;
+
+    }
+}
+
+@media screen and (max-width:820px) {
+    .feedback-contribution {
+        width: 95%;
+        margin: auto;
+        margin-top: 20px;
+
+    }
+}
+
+@media screen and (max-width:540px) {
+    .feedback-contribution {
+        flex-direction: column;
+        width: 100%;
+        margin: auto;
+        margin-top: 25px;
+    }
+
+    .feedback-description {
+        width: 95%;
+    }
+
+    .feedback-cta {
+        flex-direction: column;
+    }
+
+    .slack-button {
+        width: 70%;
+        margin: auto;
+        margin-top: 12px;
+    }
+}
+
+.slds-modal__content {
+    overflow: visible;
+    overflow-y: visible;
+}
+
+.modal-hidden {
+    display: none;
+}
+
+.slds-form-element {
+    margin-top: 0%;
+}

@@ -1,0 +1,85 @@
+.THIS .slds-card__body{
+    width:100%;
+}
+.THIS .slds-progress-bar__container{
+    margin-top:1.2rem;
+    display:flex;
+    margin-bottom:0.4rem;
+}
+.THIS .slds-progress-bar{
+    background: #EBEBEB;
+    height: 18px;
+    /*width: 150px;*/
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-width: 30px;
+    float:left;
+    /*margin-left: 60px;    */
+}
+.THIS .slds-progress-bar__value{
+    background: #3AC44C  ;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.THIS .slds-progress-bar__text {
+    float:right;
+    width:110px;
+    text-align:right;
+    height:18px;
+}
+.THIS .slds-card__body{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.THIS .slds-box{
+    border-radius: 60px;
+    background:#F4F1F2;
+    width:82px;
+    height:25px;
+    margin-top: -21px;
+    margin-left: 420px;
+    border:none;
+    
+}
+.THIS .slds-text-align_center{
+    color:#797979   ; 
+    font-weight:500;
+    
+}
+.THIS .completed-box-style{
+    background:#3AC44C;
+}
+.THIS .completed-text-style{
+    color:#FFFFFF; 
+    font-weight:500;
+}
+.THIS .overdue-box-style{
+    background:#c91616;
+}
+.THIS .rate-style{
+    padding-left: 180px;
+    margin-top: -2px;
+    margin-left: 45px;
+    color:#707A8A ;
+    font-size: 13px;
+    font-weight: 500;  
+}
+.THIS .compassIcon{
+    width: 65px; height: 50px; 
+    margin-top: -8px;
+    margin-left: -10px;   
+    
+}
+.THIS .slds-card__header-title{
+    color: #1180C0; /*blue: Title Color*/
+    font-weight: bold;
+}
+.THIS .desc-Style{
+    color: #929292 ; 
+    margin-left: 60px;
+    margin-top: 6px;
+    
+}

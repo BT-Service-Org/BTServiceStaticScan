@@ -1,0 +1,19 @@
+.nomination-list{
+    max-height: 750px; 
+    overflow-y: scroll; 
+    scroll-behavior: smooth; 
+    position:relative;
+}
+.noResult{
+    border: 1px solid #950101;
+    text-align: center;
+    color: #950101;
+    box-shadow: 0px 0px 5px 0px;
+    width:100%;
+}
+.winner-list{
+    max-height: 750px; 
+    overflow-y: scroll; 
+    scroll-behavior: smooth; 
+    position:relative;
+}

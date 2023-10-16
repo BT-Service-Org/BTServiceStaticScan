@@ -1,0 +1,154 @@
+<apex:page tabStyle="PeopleProfile__c" sidebar="false" controller="PeopleEditEducationHistoryController">
+	<!-- Ajax Toolkit SDFC -->
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	<!-- Prototype / Scriptaculous Framework -->
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}" />
+	<!-- Autocompleter -->		
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/autocomplete.js')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}"  />	
+	<!-- Common Js to all people Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}" />	
+	<!-- Common CSS Styling  -->
+	<apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/commonLayout.css')}" />
+	<!-- Form Validator -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/Validator.js')}" />
+	<!-- Common Js for Edition Sections -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/editionScripts.js')}" />
+	<!-- Stylesheets for people Editions -->
+	<script src="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/peopleEditions.css')}" />		
+	<!-- Page Begin  -->
+	<!-- Header -->
+	<div class="header">
+		<!-- Page Section -->
+		<div class="page_section">
+			<div>
+				<h1 class="arial_black">People</h1>
+				<h2 class="arial_black">Edit Profile</h2>
+			</div>		
+		</div>		
+		<!-- Search Box  -->
+		<div class="searchBox">
+			<apex:include pageName="PeopleHeaderSearch" />
+		</div>
+		<!-- Help for this page -->
+		<div class="help">
+			<div>
+				<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/icons/help_icon.gif')}" alt="" />
+			</div>
+		</div>
+	</div>
+	<div class="leftBar">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<apex:include pageName="PeopleSidebarProfile" />	
+		</div>
+	</div><!-- /Left Column container -->
+	<!-- Contain All -->
+	<div class="two_colsContainer">		
+		<!--  Central content -->
+		<div class="content">
+			<!-- The center div at content -->
+			<div class="main_form_holder">
+				<div class="main_form_header">
+					<a href="peopleprofiledisplay">< Go back to My Profile</a>
+					<br />
+					<h2>{!IF(IsNewRecord,'New','Edit')}  Education</h2>
+					<br />
+				</div>
+				<div class="main_form">
+					<div id="warning_to_user" class="message_to_user" style="display:none;">
+				      <img src="{!URLFOR($Resource.PeopleResourceFiles, 'images/layout/warning.gif')}" />
+				      Some required fields are empty or its format is incorrect.
+				      Please enter the data correctly.
+				    </div>					
+					<div class="require_reference">
+						<span class="reference">&nbsp;</span>
+						<span> = Required Information</span>
+					</div>
+					<apex:form id="education" onsubmit="if(validator('{!$Component.education}', 'warning_to_user')){ return false;}">
+					<div class="form_fields">
+						<div class="f_left">
+							<div class="field">
+								<label>College/University</label>
+								<div class="require">&nbsp;</div>
+								<div id="ajaxResult" style="display:none;"></div>
+								<script>
+										function hideSuggest(){
+											Effect.Fade('ac_{!$Component.SchoolName}',{duration: 0.2});
+										}
+								</script>
+								<apex:inputText value="{!ed.School}" id="SchoolName" styleClass="RQ_String" onblur="checkValue(this,'School__c');" onFocus="javascript:
+									var options = {
+											script: function (input) { return ('SuggestDispatcher?input='+input+'&class=School'); },
+									        callback: function (obj) {}    
+											};
+											var xml=new AutoComplete('{!$Component.SchoolName}',options);return true;" onBlur="hideSuggest();" />							
+							</div>
+							<div class="field" id="School__c_dependant" style="display:none;">
+								<label>Location</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!ed.SchoolLocationCity}" id="locationCity" styleClass="RQ_String" style="diplay:none;" />
+								&nbsp;
+								<apex:selectList value="{!ed.SchoolLocationState}" title="Choose a State" multiselect="false" size="1" >
+						  	 	 	<apex:selectOptions value="{!states}"/>
+						  	 	</apex:selectList>
+							</div>
+							<div class="field">
+								<label>Degree</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!ed.Degree}" id="degree" styleClass="RQ_String" />
+							</div>
+							<div class="field">
+								<label>Field(s) of Study</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!ed.FieldsOfStudy}" id="fieldsofstudy" styleClass="RQ_String" />
+								<span class="explain">Ex: English, Physics, Economics</span>
+							</div>							
+							<div class="field">
+								<label>Date Attended</label>
+								<div class="require">&nbsp;</div>
+								<apex:inputText value="{!ed.AttendedFrom}" id="AttendedFrom" styleClass="small RQ_DependableDate" maxlength="4" />&nbsp; to&nbsp; 
+								<apex:inputText value="{!ed.AttendedTo}" id="AttendedTo" styleClass="small RQ_DependableDate" maxlength="4" />
+								<span class="explain">Current students: enter your expected graduation year</span>
+							</div>
+							<div class="field">
+								<label>Activities and Societies</label>
+								<apex:inputTextarea value="{!ed.Activities}" id="Activities" styleClass="medium"/>
+								<span class="explain">Ex: Alpha Phi Omega, Chamber Chorale.</span>
+								<br />
+								<label>&nbsp;</label>
+								<span class="explain">Use commas to separate multiple activities</span>
+							</div>
+							<div class="separator"></div>							
+							<div class="field">
+								<label>Aditional Notes</label>
+								<apex:inputTextarea value="{!ed.AdditionalNotes}" id="AdditionalNotes" styleClass="medium"/>
+							</div>							
+						</div>  
+					</div>
+					<div class="title_from_section">&nbsp;</div>
+					<div class="form_action">
+						<div class="buttons">
+							<apex:commandButton action="{!save}" value="Save" id="saveButton"/>	
+							<div class="form_optional_action grayButton" style="{!IF(isNewRecord,'','display:none;')}">
+								<apex:commandLink action="{!saveAndAddAnother}" value="Save & new" id="save" />
+							</div>
+							<div class="form_optional_action grayButton" style="{!IF(isNewRecord,'display:none;','')}">
+								<apex:commandLink action="{!remove}" value="Remove this Education" id="delete" onclick="if(!confirm('Are You Sure ?')) return false;" />
+							</div>
+							<div class="cancel grayButton">
+								<a href="Javascript:;" onclick="if(confirm('Are You Sure ?')){document.location.href='./peopleprofiledisplay'}">Cancel</a>	
+							</div>
+						</div>
+					</div>					
+				</div>
+				</apex:form>
+			</div>
+		</div>
+	</div>
+</apex:page>

@@ -1,0 +1,892 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+    controller="StationSPController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Title" />
+    <aura:attribute name="groupList" type="List" default="[]" />
+    <aura:attribute name="intNumColumns" type="Integer" default="2" />
+    <aura:attribute name="hrefColorStyle" type="String" />
+    <aura:attribute name="intTitleFontSize" type="String" default="42px" />
+    <aura:attribute name="intTitleAlignment" type="String" default="Center" />
+    <aura:attribute name="originUrl" type="String" />
+    <aura:attribute name="columnClass" type="String" />
+    <aura:attribute name="columnStyle" type="String" />
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="contentGroupId" type="string" default="" />
+    <aura:attribute name="backgroundColor" type="string" />
+    <aura:attribute name="showGroupTitle" type="boolean" default="true" />
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="contentAlignment" type="String" default="Left" />
+    <aura:attribute name="numColumns" type="string" />
+    <aura:attribute name="hideFeedbackButtons" type="boolean" default="false" />
+    <aura:attribute name="hideTitleURLs" type="boolean" default="false" />
+    <aura:attribute name="splitMode" type="boolean" default="false" />
+    <!-- DESIGN ATTRIBUTES-->
+
+    <!--Share button attributes-->
+    <aura:attribute name="sharedUrl" type="String" />
+    <aura:attribute name="buttonBorder" type="String" default="2px solid #FFFFFF;" />
+    <aura:attribute name="buttonBackground" type="String" default="#018EDA !important;" />
+    <aura:attribute name="buttonHeight" type="String" default="34px;" />
+    <aura:attribute name="runningUser" type="User" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonMenuTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isLoading" type="boolean" default="true" />
+
+    <div aura:id="parent"
+        style="{! '--buttonBorder:' + v.buttonBorder + ';' + '--buttonBackground:' + v.buttonBackground + ';' + '--buttonHeight:' + v.buttonHeight}">
+
+
+        <div class="main-container" style="{! v.splitMode ? 'margin-left: 0; margin-right:  0;' : ''}">
+            <aura:if isTrue="{!v.isLoading}">
+                <!-- Loading Spinner -->
+                <div class="exampleHolder">
+                    <lightning:spinner variant="brand" alternativeText="Loading" size="medium" />
+                </div>
+                <!-- Loading Spinner -->
+            </aura:if>
+
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="column-outer-container" style="{! v.splitMode ? 'margin-left: 0; margin-right:  0;' : ''}">
+                <div class="slds-grid slds-wrap" style="height:100%;">
+                    <aura:iteration var="section" items="{!v.groupList}" indexVar="index">
+                        <!-- 0 = highlight, 1 = smaller highlight, 2,3,4 = columns-->
+                        <aura:if isTrue="{!or(v.intNumColumns == 0, v.intNumColumns == 1)}">
+                            <!-- left right layout -->
+                            <div class="slds-col slds-size_12-of-12">
+                                <div class="item-container slds-grid">
+
+                                    <aura:if
+                                        isTrue="{!v.contentAlignment == 'Left' ? not(mod(index, 2)) : mod(index, 2)}">
+                                        <!-- IMAGE LEFT LAYOUT -->
+                                        <div
+                                            class="{!if(v.intNumColumns == 1, 'slds-size_1-of-3 item-right-padding','slds-size_3-of-6 item-right-padding_large') + ' slds-col'}">
+                                            <div aura:id="image-container" class="item-image">
+                                                <aura:if isTrue="{!section.content.freshContent}">
+                                                    <div class="flag" style="position: unset;margin-top:15px;">
+                                                        <span class="shape"></span>
+                                                        <span class="flag-text">New/Updated!</span>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Upload_Image__c != null}">
+                                                    <div class="uiOutputRichText item-img" linkify="true">
+                                                        <div class="item-richtext-container">
+                                                            <aura:unescapedHtml
+                                                                value="{!section.content.Upload_Image__c}" />
+                                                        </div>
+                                                    </div>
+                                                    <aura:set attribute="else">
+                                                        <aura:if
+                                                            isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                            <c:The_Station_Component_Image_Preview>
+                                                                <aura:set attribute="ContentDocumentId"
+                                                                    value="{!section.contentPiece.ContentDocumentId__c}" />
+                                                                <aura:set attribute="ContentDocumentExternalId"
+                                                                    value="{!section.contentPiece.ExternalDocumentInfo2__c}" />
+                                                                <aura:set attribute="ContentVersionId"
+                                                                    value="{!section.contentPiece.ExternalId}" />
+                                                                <aura:set attribute="IconPreviewUrl"
+                                                                    value="{!section.previewIcon}" />
+                                                            </c:The_Station_Component_Image_Preview>
+                                                        </aura:if>
+                                                        <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                            <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                                class="item-img" />
+                                                        </aura:if>
+                                                        <aura:if
+                                                            isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                            <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                                                class="item-img" />
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="{!if(v.intNumColumns == 1, 'slds-size_2-of-3 item-left-padding','slds-size_3-of-6 item-left-padding_large') + ' item-copy slds-col'}">
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                <div class="item-title">
+                                                    <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                        <aura:if isTrue="{!section.contentPiece.FileType__c == 'PDF'}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!'https://org62.lightning.force.com/'+section.contentPiece.ContentDocumentId__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <aura:if
+                                                                    isTrue="{!section.contentPiece.ContentUrl__c != null}">
+                                                                    <a style="{!v.hrefColorStyle}"
+                                                                        href="{!section.contentPiece.ContentUrl__c}"
+                                                                        target="_blank">{!section.content.Name}</a>
+                                                                    <aura:set attribute="else">
+                                                                        <a style="{!v.hrefColorStyle}"
+                                                                            href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+section.contentPiece.ExternalId+'&amp;operationContext=S1'}"
+                                                                            target="_blank">{!section.content.Name}</a>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                        <aura:set attribute="else">
+                                                            <span
+                                                                style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                        </aura:set>
+                                                    </aura:if>
+
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    {!section.content.Subtitle__c}
+                                                </div>
+                                                <div class="item-description">
+                                                    <div style="max-width: 600px;">
+                                                        {!section.contentPiece.Description__c}
+                                                    </div>
+                                                </div>
+
+                                                <div class="button-container">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                                <div class="item-title">
+                                                    <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                        <a style="{!v.hrefColorStyle}"
+                                                            href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+section.contentPiece.ExternalId+'/view'}"
+                                                            target="_blank">{!section.content.Name}</a>
+                                                        <aura:set attribute="else">
+                                                            <span
+                                                                style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                        </aura:set>
+                                                    </aura:if>
+
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    {!section.content.Subtitle__c}
+                                                </div>
+                                                <div class="item-description">
+                                                    <div style="max-width: 600px;">
+                                                        {!section.contentPiece.Description_c__c}
+                                                    </div>
+                                                </div>
+                                                <div class="button-container">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                                <div class="item-title">
+                                                    <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                        <a style="{!v.hrefColorStyle}"
+                                                            href="{!section.contentPiece.Trailhead_URL__c}"
+                                                            target="_blank">{!section.content.Name}</a>
+                                                        <aura:set attribute="else">
+                                                            <span
+                                                                style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                        </aura:set>
+                                                    </aura:if>
+
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    {!section.content.Subtitle__c}
+                                                </div>
+                                                <div class="item-description">
+                                                    <div style="max-width: 600px;">
+                                                        {!section.contentPiece.Trailhead_Description__c}
+                                                    </div>
+                                                </div>
+                                                <div class="button-container">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                <div class="item-title">
+                                                    <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                        <a style="{!v.hrefColorStyle}"
+                                                            href="{!section.content.Content_URL__c}"
+                                                            target="_blank">{!section.content.Name}</a>
+                                                        <aura:set attribute="else">
+                                                            <span
+                                                                style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                        </aura:set>
+                                                    </aura:if>
+
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    {!section.content.Subtitle__c}
+                                                </div>
+                                                <div class="item-description">
+                                                    <div style="max-width: 600px;">
+                                                        {!section.content.Description__c}
+                                                    </div>
+                                                </div>
+                                                <aura:if isTrue="{!section.content.Additional_URL_Link__c}">
+                                                    <div class="button-container">
+                                                        <aura:if
+                                                            isTrue="{!section.content.Additional_URL_Button_Title__c}">
+                                                            <button
+                                                                style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                                aura:id="enabled-button"
+                                                                class="slds-button buttonTheme-light1"><a
+                                                                    href="{!section.content.Additional_URL_Link__c}"
+                                                                    target="_blank" onclick="{!c.onAdditionalLinkClick}"
+                                                                    name="{!section.content.Id}">{!section.content.Additional_URL_Button_Title__c}</a></button>
+                                                            <aura:set attribute="else">
+                                                                <button
+                                                                    style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                                    aura:id="enabled-button"
+                                                                    class="slds-button buttonTheme-light1"><a
+                                                                        href="{!section.content.Additional_URL_Link__c}"
+                                                                        target="_blank"
+                                                                        onclick="{!c.onAdditionalLinkClick}"
+                                                                        name="{!section.content.Id}">Additional
+                                                                        Link</a></button>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </aura:if>
+                                                <div class="button-container">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                <div class="item-title">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!section.content.Content_URL__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                        <aura:set attribute="else">
+                                                            <span
+                                                                style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                        </aura:set>
+                                                    </aura:if>
+
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    {!section.content.Subtitle__c}
+                                                </div>
+                                                <div class="item-description">
+                                                    <div style="max-width: 600px;">
+                                                        {!section.content.Description__c}
+                                                    </div>
+                                                </div>
+                                                <div class="button-container">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                </div>
+                                            </aura:if>
+                                        </div>
+                                        <aura:set attribute="else">
+                                            <!-- IMAGE RIGHT LAYOUT -->
+                                            <div class="{!if(v.intNumColumns == 1, 'slds-size_2-of-3 item-right-padding','slds-size_3-of-6 item-right-padding_large') + ' item-copy slds-col'}"
+                                                style="text-align: right;">
+
+                                                <aura:if
+                                                    isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                    <div class="item-title">
+                                                        <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                            <aura:if
+                                                                isTrue="{!section.contentPiece.FileType__c == 'PDF'}">
+                                                                <a style="{!v.hrefColorStyle}"
+                                                                    href="{!'https://org62.lightning.force.com/'+section.contentPiece.ContentDocumentId__c}"
+                                                                    target="_blank">{!section.content.Name}</a>
+                                                                <aura:set attribute="else">
+                                                                    <aura:if
+                                                                        isTrue="{!section.contentPiece.ContentUrl__c != null}">
+                                                                        <a style="{!v.hrefColorStyle}"
+                                                                            href="{!section.contentPiece.ContentUrl__c}"
+                                                                            target="_blank">{!section.content.Name}</a>
+                                                                        <aura:set attribute="else">
+                                                                            <a style="{!v.hrefColorStyle}"
+                                                                                href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+section.contentPiece.ExternalId+'&amp;operationContext=S1'}"
+                                                                                target="_blank">{!section.content.Name}</a>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                            <aura:set attribute="else">
+                                                                <span
+                                                                    style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                            </aura:set>
+                                                        </aura:if>
+
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        {!section.content.Subtitle__c}
+                                                    </div>
+                                                    <div class="item-description"
+                                                        style="display:flex;justify-content:flex-end;">
+                                                        <div style="max-width: 600px;">
+                                                            {!section.contentPiece.Description__c}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="button-container">
+                                                        <c:StationUserActionButtons>
+                                                            <aura:set attribute="contentpiece" value="{!section}" />
+                                                            <aura:set attribute="runningUser"
+                                                                value="{!v.runningUser}" />
+                                                            <aura:set attribute="buttonMenuTheme"
+                                                                value="{!v.buttonMenuTheme}" />
+                                                            <aura:set attribute="stationContentGroup"
+                                                                value="{!v.contentGroupId}" />
+                                                            <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                            <aura:set attribute="showFeedback"
+                                                                value="{!not(v.hideFeedbackButtons)}" />
+                                                            <aura:set attribute="showDownload" value="false" />
+                                                        </c:StationUserActionButtons>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if
+                                                    isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                                    <div class="item-title">
+                                                        <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+section.contentPiece.ExternalId+'/view'}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <span
+                                                                    style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                            </aura:set>
+                                                        </aura:if>
+
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        {!section.content.Subtitle__c}
+                                                    </div>
+                                                    <div class="item-description"
+                                                        style="display:flex;justify-content:flex-end;">
+                                                        <div style="max-width: 600px;">
+                                                            {!section.contentPiece.Description_c__c}
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-container">
+                                                        <c:StationUserActionButtons>
+                                                            <aura:set attribute="contentpiece" value="{!section}" />
+                                                            <aura:set attribute="runningUser"
+                                                                value="{!v.runningUser}" />
+                                                            <aura:set attribute="buttonMenuTheme"
+                                                                value="{!v.buttonMenuTheme}" />
+                                                            <aura:set attribute="stationContentGroup"
+                                                                value="{!v.contentGroupId}" />
+                                                            <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                            <aura:set attribute="showFeedback"
+                                                                value="{!not(v.hideFeedbackButtons)}" />
+                                                            <aura:set attribute="showDownload" value="false" />
+                                                        </c:StationUserActionButtons>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                                    <div class="item-title">
+                                                        <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!section.contentPiece.Trailhead_URL__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <span
+                                                                    style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                            </aura:set>
+                                                        </aura:if>
+
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        {!section.content.Subtitle__c}
+                                                    </div>
+                                                    <div class="item-description"
+                                                        style="display:flex;justify-content:flex-end;">
+                                                        <div style="max-width: 600px;">
+                                                            {!section.contentPiece.Trailhead_Description__c}
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-container">
+                                                        <c:StationUserActionButtons>
+                                                            <aura:set attribute="contentpiece" value="{!section}" />
+                                                            <aura:set attribute="runningUser"
+                                                                value="{!v.runningUser}" />
+                                                            <aura:set attribute="buttonMenuTheme"
+                                                                value="{!v.buttonMenuTheme}" />
+                                                            <aura:set attribute="stationContentGroup"
+                                                                value="{!v.contentGroupId}" />
+                                                            <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                            <aura:set attribute="showFeedback"
+                                                                value="{!not(v.hideFeedbackButtons)}" />
+                                                            <aura:set attribute="showDownload" value="false" />
+                                                        </c:StationUserActionButtons>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                    <div class="item-title">
+                                                        <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!section.content.Content_URL__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <span
+                                                                    style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                            </aura:set>
+                                                        </aura:if>
+
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        {!section.content.Subtitle__c}
+                                                    </div>
+                                                    <div class="item-description"
+                                                        style="display:flex;justify-content:flex-end;">
+                                                        <div style="max-width: 600px;">
+                                                            {!section.content.Description__c}
+                                                        </div>
+                                                    </div>
+                                                    <aura:if isTrue="{!section.content.Additional_URL_Link__c}">
+                                                        <div class="button-container">
+                                                            <aura:if
+                                                                isTrue="{!section.content.Additional_URL_Button_Title__c}">
+                                                                <button
+                                                                    style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                                    aura:id="enabled-button"
+                                                                    class="slds-button buttonTheme-light1"><a
+                                                                        href="{!section.content.Additional_URL_Link__c}"
+                                                                        target="_blank"
+                                                                        onclick="{!c.onAdditionalLinkClick}"
+                                                                        name="{!section.content.Id}">{!section.content.Additional_URL_Button_Title__c}</a></button>
+                                                                <aura:set attribute="else">
+                                                                    <button
+                                                                        style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                                        aura:id="enabled-button"
+                                                                        class="slds-button buttonTheme-light1"><a
+                                                                            href="{!section.content.Additional_URL_Link__c}"
+                                                                            target="_blank"
+                                                                            onclick="{!c.onAdditionalLinkClick}"
+                                                                            name="{!section.content.Id}">Additional
+                                                                            Link</a></button>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                    </aura:if>
+                                                    <div class="button-container">
+                                                        <c:StationUserActionButtons>
+                                                            <aura:set attribute="contentpiece" value="{!section}" />
+                                                            <aura:set attribute="runningUser"
+                                                                value="{!v.runningUser}" />
+                                                            <aura:set attribute="buttonMenuTheme"
+                                                                value="{!v.buttonMenuTheme}" />
+                                                            <aura:set attribute="stationContentGroup"
+                                                                value="{!v.contentGroupId}" />
+                                                            <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                            <aura:set attribute="showFeedback"
+                                                                value="{!not(v.hideFeedbackButtons)}" />
+                                                            <aura:set attribute="showDownload" value="false" />
+                                                        </c:StationUserActionButtons>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                    <div class="item-title">
+                                                        <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                            <a style="{!v.hrefColorStyle}"
+                                                                href="{!section.content.Content_URL__c}"
+                                                                target="_blank">{!section.content.Name}</a>
+                                                            <aura:set attribute="else">
+                                                                <span
+                                                                    style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                            </aura:set>
+                                                        </aura:if>
+
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        {!section.content.Subtitle__c}
+                                                    </div>
+                                                    <div class="item-description"
+                                                        style="display:flex;justify-content:flex-end;">
+                                                        <div style="max-width: 600px;">
+                                                            {!section.content.Description__c}
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-container">
+                                                        <c:StationUserActionButtons>
+                                                            <aura:set attribute="contentpiece" value="{!section}" />
+                                                            <aura:set attribute="runningUser"
+                                                                value="{!v.runningUser}" />
+                                                            <aura:set attribute="buttonMenuTheme"
+                                                                value="{!v.buttonMenuTheme}" />
+                                                            <aura:set attribute="stationContentGroup"
+                                                                value="{!v.contentGroupId}" />
+                                                            <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                            <aura:set attribute="showFeedback"
+                                                                value="{!not(v.hideFeedbackButtons)}" />
+                                                            <aura:set attribute="showDownload" value="false" />
+                                                        </c:StationUserActionButtons>
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            <div
+                                                class="{!if(v.intNumColumns == 1, 'slds-size_1-of-3 item-left-padding','slds-size_3-of-6 item-left-padding_large') + ' slds-col'}">
+                                                <aura:if isTrue="{!section.content.freshContent}">
+                                                    <div class="flag">
+                                                        <span class="shape"></span>
+                                                        <span class="flag-text">New/Updated!</span>
+                                                    </div>
+                                                </aura:if>
+                                                <div aura:id="image-container" class="item-image">
+                                                    <aura:if isTrue="{!section.content.Upload_Image__c != null}">
+                                                        <div class="uiOutputRichText item-img" linkify="true">
+                                                            <div class="item-richtext-container">
+                                                                <aura:unescapedHtml
+                                                                    value="{!section.content.Upload_Image__c}" />
+                                                            </div>
+                                                        </div>
+                                                        <aura:set attribute="else">
+                                                            <aura:if
+                                                                isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                                <c:The_Station_Component_Image_Preview>
+                                                                    <aura:set attribute="ContentDocumentId"
+                                                                        value="{!section.contentPiece.ContentDocumentId__c}" />
+                                                                    <aura:set attribute="ContentDocumentExternalId"
+                                                                        value="{!section.contentPiece.ExternalDocumentInfo2__c}" />
+                                                                    <aura:set attribute="ContentVersionId"
+                                                                        value="{!section.contentPiece.ExternalId}" />
+                                                                    <aura:set attribute="IconPreviewUrl"
+                                                                        value="{!section.previewIcon}" />
+                                                                </c:The_Station_Component_Image_Preview>
+                                                            </aura:if>
+                                                            <aura:if
+                                                                isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                                <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                                    class="item-img" />
+                                                            </aura:if>
+                                                            <aura:if
+                                                                isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                                <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                                                    class="item-img" />
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <!-- column layout -->
+                            <aura:set attribute="else">
+                                <div class="{!'item-container slds-col ' + v.columnClass}" style="{!v.columnStyle}">
+
+                                    <aura:if isTrue="{!section.content.freshContent}">
+                                        <div class="flag">
+                                            <span class="shape"></span>
+                                            <span class="flag-text">New/Updated!</span>
+                                        </div>
+                                    </aura:if>
+
+                                    <div aura:id="image-container" class="item-image">
+                                        <aura:if isTrue="{!section.content.Upload_Image__c != null}">
+                                            <div class="uiOutputRichText item-img" linkify="true">
+                                                <div class="item-richtext-container">
+                                                    <aura:unescapedHtml value="{!section.content.Upload_Image__c}" />
+                                                </div>
+                                            </div>
+                                            <aura:set attribute="else">
+                                                <aura:if
+                                                    isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                                    <c:The_Station_Component_Image_Preview>
+                                                        <aura:set attribute="ContentDocumentId"
+                                                            value="{!section.contentPiece.ContentDocumentId__c}" />
+                                                        <aura:set attribute="ContentDocumentExternalId"
+                                                            value="{!section.contentPiece.ExternalDocumentInfo2__c}" />
+                                                        <aura:set attribute="ContentVersionId"
+                                                            value="{!section.contentPiece.ExternalId}" />
+                                                        <aura:set attribute="IconPreviewUrl"
+                                                            value="{!section.previewIcon}" />
+                                                    </c:The_Station_Component_Image_Preview>
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                                    <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                        class="item-img" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                                    <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                                        class="item-img" />
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                    <div class="item-copy">
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Content Version'}">
+                                            <div class="item-title"
+                                                style="text-align:center;height: 2.8em;overflow: hidden;text-overflow: ellipsis;">
+                                                <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                    <aura:if isTrue="{!section.contentPiece.FileType__c == 'PDF'}">
+                                                        <a style="{!v.hrefColorStyle}"
+                                                            href="{!'https://org62.lightning.force.com/'+section.contentPiece.ContentDocumentId__c}"
+                                                            target="_blank">{!section.content.Name}</a>
+                                                        <aura:set attribute="else">
+                                                            <aura:if
+                                                                isTrue="{!section.contentPiece.ContentUrl__c != null}">
+                                                                <a style="{!v.hrefColorStyle}"
+                                                                    href="{!section.contentPiece.ContentUrl__c}"
+                                                                    target="_blank">{!section.content.Name}</a>
+                                                                <aura:set attribute="else">
+                                                                    <a style="{!v.hrefColorStyle}"
+                                                                        href="{!'https://org62.lightning.force.com/contenthub/openintarget?ref_id='+section.contentPiece.ExternalId+'&amp;operationContext=S1'}"
+                                                                        target="_blank">{!section.content.Name}</a>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <span style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                    </aura:set>
+                                                </aura:if>
+
+                                            </div>
+                                            <div style="display:flex;justify-content:center;">
+                                                <div style="width:fit-content">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item-description">
+                                                {!section.contentPiece.Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Success Program'}">
+                                            <div class="item-title"
+                                                style="text-align:center;height: 2.8em;overflow: hidden;text-overflow: ellipsis;">
+                                                <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+section.contentPiece.ExternalId+'/view'}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:set attribute="else">
+                                                        <span style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                    </aura:set>
+                                                </aura:if>
+
+                                            </div>
+                                            <div style="display:flex;justify-content:center;">
+                                                <div style="width:fit-content">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item-description">
+                                                {!section.contentPiece.Description_c__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'Trailhead'}">
+                                            <div class="item-title"
+                                                style="text-align:center;height: 2.8em;overflow: hidden;text-overflow: ellipsis;">
+                                                <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!section.contentPiece.Trailhead_URL__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:set attribute="else">
+                                                        <span style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                    </aura:set>
+                                                </aura:if>
+
+                                            </div>
+                                            <div style="display:flex;justify-content:center;">
+                                                <div style="width:fit-content">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item-description">
+                                                {!section.contentPiece.Trailhead_Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'URL'}">
+                                            <div class="item-title"
+                                                style="text-align:center;height: 2.8em;overflow: hidden;text-overflow: ellipsis;">
+                                                <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!section.content.Content_URL__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:set attribute="else">
+                                                        <span style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                    </aura:set>
+                                                </aura:if>
+
+                                            </div>
+                                            <aura:if isTrue="{!section.content.Additional_URL_Link__c}">
+                                                <div class="button-container"
+                                                    style="display:flex;justify-content:center;margin-bottom:0px;">
+                                                    <aura:if isTrue="{!section.content.Additional_URL_Button_Title__c}">
+                                                        <button
+                                                            style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                            aura:id="enabled-button"
+                                                            class="slds-button buttonTheme-light1"><a
+                                                                href="{!section.content.Additional_URL_Link__c}"
+                                                                target="_blank" onclick="{!c.onAdditionalLinkClick}"
+                                                                name="{!section.content.Id}">{!section.content.Additional_URL_Button_Title__c}</a></button>
+                                                        <aura:set attribute="else">
+                                                            <button
+                                                                style="clear:left;float:left;margin-right:6px;margin-bottom:6px;"
+                                                                aura:id="enabled-button"
+                                                                class="slds-button buttonTheme-light1"><a
+                                                                    href="{!section.content.Additional_URL_Link__c}"
+                                                                    target="_blank" onclick="{!c.onAdditionalLinkClick}"
+                                                                    name="{!section.content.Id}">Additional
+                                                                    Link</a></button>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <!--<br />-->
+                                            </aura:if>
+                                            <div style="display:flex;justify-content:center;">
+                                                <div style="width:fit-content">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item-description">
+                                                {!section.content.Description__c}
+                                            </div>
+                                        </aura:if>
+                                        <aura:if isTrue="{!section.content.Content_Type__c == 'App Exchange'}">
+                                            <div class="item-title"
+                                                style="text-align:center;height: 2.8em;overflow: hidden;text-overflow: ellipsis;">
+                                                <aura:if isTrue="{!not(v.hideTitleURLs)}">
+                                                    <a style="{!v.hrefColorStyle}"
+                                                        href="{!section.content.Content_URL__c}"
+                                                        target="_blank">{!section.content.Name}</a>
+                                                    <aura:set attribute="else">
+                                                        <span style="{!v.hrefColorStyle}">{!section.content.Name}</span>
+                                                    </aura:set>
+                                                </aura:if>
+
+                                            </div>
+                                            <div style="display:flex;justify-content:center;">
+                                                <div style="width:fit-content">
+                                                    <c:StationUserActionButtons>
+                                                        <aura:set attribute="contentpiece" value="{!section}" />
+                                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                                        <aura:set attribute="buttonMenuTheme"
+                                                            value="{!v.buttonMenuTheme}" />
+                                                        <aura:set attribute="stationContentGroup"
+                                                            value="{!v.contentGroupId}" />
+                                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                                        <aura:set attribute="showFeedback"
+                                                            value="{!not(v.hideFeedbackButtons)}" />
+                                                        <aura:set attribute="showDownload" value="false" />
+                                                    </c:StationUserActionButtons>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item-description">
+                                                {!section.content.Description__c}
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

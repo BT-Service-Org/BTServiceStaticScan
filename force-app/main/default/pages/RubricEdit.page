@@ -1,0 +1,312 @@
+<apex:page standardController="Rubric__c" extensions="RubricExtensionController" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-ui.min.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-2.1.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.JQueryUIFull, 'jquery-ui-1.11.1.custom/jquery-ui.min.js')}" />
+    <head>
+        <style type="text/css">
+            .fullHeight
+            {
+                height: 100%;
+            }
+            .fullWidth
+            {
+                width: 100%;
+            }
+            .nearFullWidth
+            {
+                width: 98%;
+            }
+            .hidden
+            {
+                display: none;
+            }
+            .defLinks
+            {
+                display: inline-block;
+                text-align: center;
+                width: 23%;
+            }
+            a.defLink
+            {
+                color: blue;
+                text-decoration: underline;
+            }
+            a.defLink:hover
+            {
+                cursor: pointer;
+            }
+            .defLinks > a.selected
+            {
+                color: black !important;
+                text-decoration: none !important;
+            }
+        </style>
+        <script type="text/javascript">
+            var timer;
+            var delay = 500;
+            var $jq = jQuery.noConflict();
+            var $rdDivs = null;
+            var $divAs = null;
+            var $ratingsDialog = null
+            var $commentsDialog = null;
+            var $commentsText = null;
+            var $objectiveCommentsField = null;
+            var $failDefinition = null;
+            var $partialpassDefinition = null;
+            var $passDefinition = null;
+            var $rockstarDefinition = null;
+            var generalRating1Definition = "<b>{!rubricScores.Rating1_Score_Label__c}</b><br/>{!rubricScores.Rating1_Definition__c}<br/><br/>";
+            var generalRating2Definition = "<b>{!rubricScores.Rating2_Score_Label__c}</b><br/>{!rubricScores.Rating2_Definition__c}<br/><br/>";
+            var generalRating3Definition = "<b>{!rubricScores.Rating3_Score_Label__c}</b><br/>{!rubricScores.Rating3_Definition__c}<br/><br/>";
+            var generalRating4Definition = "<b>{!rubricScores.Rating4_Score_Label__c}</b><br/>{!rubricScores.Rating4_Definition__c}<br/><br/>";
+
+            $jq(function()
+            {
+                $rdDivs = $jq("div.ratingsDefinitions");
+                $divAs = $jq("div.defLinks > a");
+                $commentsText = $jq("#commentsText");
+                $ratingsDialog = $jq("#ratingsDialog");
+                $commentsDialog = $jq("#commentsDialog");
+                $rating1Definition = $jq("#rating1Definition");
+                $rating2Definition = $jq("#rating2Definition");
+                $rating3Definition = $jq("#rating3Definition");
+                $rating4Definition = $jq("#rating4Definition");
+
+                $ratingsDialog.dialog(
+                {
+                    autoOpen: false,
+                    height: 600,
+                    width: 600,
+                    buttons:
+                    [
+                        {
+                            text: "Close",
+                            click: function()
+                            {
+                                $jq(this).dialog("close");
+                            }
+                        }
+                    ],
+                    show:
+                    {
+                        effect: "slide",
+                        options:
+                        {
+                            direction: "bottom"
+                        },
+                        duration: 500
+                    },
+                    hide:
+                    {
+                        effect: "slide",
+                        options:
+                        {
+                            direction: "top"
+                        },
+                        duration: 500
+                    }
+                });
+
+                $commentsDialog.dialog(
+                {
+                    autoOpen: false,
+                    height: 600,
+                    width: 600,
+                    buttons:
+                    [
+                        {
+                            text: "Save",
+                            click: function()
+                            {
+                                $objectiveCommentsField.val($commentsText.val());
+                                $jq(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            click: function()
+                            {
+                                $jq(this).dialog("close");
+                            }
+                        }
+                    ],
+                    show:
+                    {
+                        effect: "blind",
+                        duration: 100
+                    },
+                    hide:
+                    {
+                        effect: "explode",
+                        duration: 100
+                    }
+                });
+
+                $divAs.on("click", function(e)
+                {
+                    e.preventDefault();
+                    if($jq(this).hasClass("selected"))
+                    {
+                        $jq(this).removeClass("selected");
+                        $rdDivs.show();
+                    }
+                    else
+                    {
+                        $rdDivs.hide();
+                        $divAs.removeClass("selected");
+                        $jq(this).addClass("selected");
+                        if($jq(this).hasClass("rating1"))
+                        {
+                            $rating1Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating2"))
+                        {
+                            $rating2Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating3"))
+                        {
+                            $rating3Definition.show();
+                        }
+                        else if($jq(this).hasClass("rating4"))
+                        {
+                            $rating4Definition.show();
+                        }
+                    }
+                });
+
+                $jq('[id*=objRating').hide();
+            });
+
+            function showRatingsDialog(objective, rating1, rating2, rating3, rating4, showDefinitionLinks)
+            {
+                $rdDivs.show();
+                if(showDefinitionLinks)
+                {
+                    $jq("#divDefinitionLinks").show();
+                }
+                else
+                {
+                    $jq("#divDefinitionLinks").hide();
+                }
+                $divAs.removeClass("selected");
+                $rating1Definition.html("<b>{!rubricScores.Rating1_Score_Label__c}</b><br/>" + $jq('[id="' + rating1 + '"]').html() + "<br/><br/>");
+                $rating2Definition.html("<b>{!rubricScores.Rating2_Score_Label__c}</b><br/>" + $jq('[id="' + rating2 + '"]').html() + "<br/><br/>");
+                $rating3Definition.html("<b>{!rubricScores.Rating3_Score_Label__c}</b><br/>" + $jq('[id="' + rating3 + '"]').html() + "<br/><br/>");
+                $rating4Definition.html("<b>{!rubricScores.Rating4_Score_Label__c}</b><br/>" + $jq('[id="' + rating4 + '"]').html() + "<br/><br/>");
+                $ratingsDialog.dialog("option", "title", objective + " Ratings Definition");
+                $ratingsDialog.dialog("open");
+            }
+
+            function showComments(linkId, objective)
+            {
+                $objectiveCommentsField = $jq('[id="' + linkId + '"]');
+                $commentsText.val($objectiveCommentsField.val());
+                $ratingsDialog.dialog("option", "title", "Edit " + objective + " Comments");
+                $commentsDialog.dialog("open");
+                return false;
+            }
+        </script>
+    </head>
+    <apex:form >
+        <apex:pageBlock mode="edit">
+            <apex:pageMessages id="pMessages"/>
+            <apex:pageBlockButtons >
+                <!-- Sriram Venkatraman 1/31/2020 - No one should be using these buttons on legacy Rubrics any more 
+                <apex:commandButton action="{!saveScores}" rendered="{!not(Rubric__c.Locked__c)}" value="Save"/>
+                <apex:commandButton action="{!grade}" rendered="{!not(Rubric__c.Locked__c) || $Permission.ReGrade_Rubrics}" value="Grade"/>
+                <apex:commandButton action="{!resetObjectives}" immediate="true" rendered="{!not(Rubric__c.Locked__c)}" value="Reset Objectives"/>
+                <apex:commandButton action="{!cloneRubric}" rendered="{!Rubric__c.Locked__c}" value="Clone"/>
+	            -->
+                <apex:commandButton action="{!cancel}" immediate="true" value="Go Back"/> 
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2" title="Rubric Details" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Skill" for="Skill"/>
+                    <apex:outputField value="{!Rubric__c.Learning_Domain__r.Skill__c}" id="Skill"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Candidate" for="Candidate"/>
+                    <apex:outputField value="{!Rubric__c.Learning_Domain__r.PA_Onboarding__r.Contact__c}" id="Candidate"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Evaluator Name" for="Evaluator"/>
+                    <apex:inputField value="{!Rubric__c.Primary_Evaluator__c}" required="true" id="Evaluator"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Evaluation Date" for="eval_date"/>
+                    <apex:inputField value="{!Rubric__c.Evaluation_Date__c}" required="true" id="eval_date"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Average Score" for="Score"/>
+                    <apex:outputText value="{!averageScore}" id="Score"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Suppress Chatter Post" for="suppressPost"/>
+                    <apex:inputField value="{!Rubric__c.Suppress_Chatter_Post__c}" id="suppressPost"/>
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Potential Judge" for="judge"/>
+                    <apex:inputField value="{!Rubric__c.Potential_Judge__c}" id="judge"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Bedrock" for="BedRock"/>
+                    <apex:inputField value="{!Rubric__c.BedRock__c}" id="BedRock"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Overall Comments" for="Comments"/>
+                    <apex:inputTextArea cols="125" rows="6" value="{!Rubric__c.Comments__c}" id="Comments"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" title="Rubric Objectives" collapsible="false">
+                <apex:pageBlockTable value="{!assessments}" var="ro" styleClass="fullWidth">
+                    <apex:column headerValue="Objective" value="{!ro.objective.Domain_Rubric_Objective__r.Objective__c}" style="width: 400px;" />
+                    <apex:column headerValue="MFP" style="width: 50px;">
+                        <apex:outputText value="{!if(ro.objective.Domain_Rubric_Objective__r.Mandatory_for_Pass__c, 'Yes', 'No')}" />
+                    </apex:column>
+                    <apex:column style="width: 250px;">
+                        <apex:facet name="header">
+                            Rating
+                            <img src="/img/alohaSkin/help_grey.png" onmouseover="timer = setTimeout(function() {showRatingsDialog('General',generalRating1Definition, generalRating2Definition, generalRating3Definition, generalRating4Definition, false) }, delay)" onmouseout="clearTimeout(timer)" />
+                        </apex:facet>
+                        <apex:selectList multiselect="false" size="1" value="{!ro.scoreString}">
+                            <apex:selectOptions value="{!ratings}" />
+                        </apex:selectList>
+                        <apex:outputField id="objRating1" value="{!ro.objective.Domain_Rubric_Objective__r.Rating1_Definition__c}"/>
+                        <apex:outputField id="objRating2" value="{!ro.objective.Domain_Rubric_Objective__r.Rating2_Definition__c}"/>
+                        <apex:outputField id="objRating3" value="{!ro.objective.Domain_Rubric_Objective__r.Rating3_Definition__c}"/>
+                        <apex:outputField id="objRating4" value="{!ro.objective.Domain_Rubric_Objective__r.Rating4_Definition__c}"/>
+                        <img src="/img/alohaSkin/help_grey.png" onmouseover="timer = setTimeout(function() { showRatingsDialog('{!ro.objective.Domain_Rubric_Objective__r.Objective__c}', '{!$Component.objRating1}', '{!$Component.objRating2}', '{!$Component.objRating3}', '{!$Component.objRating4}', true) }, delay)" onmouseout="clearTimeout(timer)"/>
+                    </apex:column>
+                    <apex:column headerValue="Comments">
+                        <div style="float: left; width: 95%;">
+                            <apex:inputField id="questionComments" value="{!ro.objective.Score_Comments__c}" styleClass="nearFullWidth"/>
+                        </div>
+                        <div style="float: left; width: 5%;">
+                            <apex:outputLink id="questionCommentsIcon" onclick="return showComments('{!$Component.questionComments}', '{!ro.objective.Domain_Rubric_Objective__r.Objective__c}')" value="">
+                                <img src="/img/func_icons/util/pencil12.gif"/>
+                            </apex:outputLink>
+                        </div>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <div id="ratingsDialog">
+        <div id="divDefinitionLinks" class="fullWidth">
+            <div class="defLinks"><a href="" class="rating1 defLink">{!rubricScores.Rating1_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating2 defLink">{!rubricScores.Rating2_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating3 defLink">{!rubricScores.Rating3_Score_Label__c}</a></div>
+            <div class="defLinks"><a href="" class="rating4 defLink">{!rubricScores.Rating4_Score_Label__c}</a></div>
+        </div>
+        <br/><br/>
+        <div id="rating1Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating2Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating3Definition" class="ratingsDefinitions fullWidth"></div>
+        <div id="rating4Definition" class="ratingsDefinitions fullWidth"></div>
+    </div>
+    <div id="commentsDialog" title="Edit Comments">
+        <textarea id="commentsText" class="fullWidth fullHeight"></textarea>
+    </div>
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:page sidebar="false" lightningStylesheets="true">
+    <apex:includeLightning />
+    <div id="lightningvf" />
+    <script>
+        $Lightning.use("c:GDCContainerApp", function() {
+          $Lightning.createComponent("c:gdcisbInterviewerCalender",
+              { label : "Press Me!" },
+              "lightningvf",
+              function(cmp) {
+              }
+          );
+        });
+    </script>
+</apex:page>

@@ -1,0 +1,1 @@
+<apex:page standardController="Interview_Candidate__c" action="{!URLFOR($Action.Interview_Candidate__c.New, null, ['Name'='DO NOT USE'], true)}" />

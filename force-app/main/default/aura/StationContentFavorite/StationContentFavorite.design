@@ -1,0 +1,4 @@
+<design:component label="TheStation: Content Favorites">
+    <design:attribute name="backgroundColor" label="Background" datasource="Light 1, Light 2, Dark 1, Dark 2" default="Light 1" description="Change component theme"/>
+    <design:attribute name="displayAsAccordion" label="Display As Accordion" default="true"/>
+</design:component>

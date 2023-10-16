@@ -1,0 +1,42 @@
+<template>
+    <div class="container">
+        <p>Was this article helpful?</p>
+        <div class="vote">
+            <template if:true={userVote}>
+                <template if:true={voteData}>
+                    <div class="vote_button" onclick={handleLikeClick} onkeydown={handleLikeClick} tabindex="0">
+                        <lightning-icon icon-name="utility:like" size="small" alternative-text="Like"
+                            class="neutral-button" data-id="likeblock">
+                        </lightning-icon>
+                        <p>{voteData.upVoteCount}</p>
+                    </div>
+                    <div class="vote_button" onclick={handleDislikeClick} onkeydown={handleDislikeClick} tabindex="0">
+                        <lightning-icon icon-name="utility:dislike" size="small" alternative-text="Dislike"
+                            data-id="dislikeblock" class="neutral-button">
+                        </lightning-icon>
+                        <p>{voteData.downVoteCount}</p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+
+    <template if:true={userVote}>
+        <template if:true={voteData}>  
+           
+    <c-psc-modal onclosedialog={closeModal}>
+        <h2 slot="header" id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate header ITC_font">Content Feedback</h2>
+        <!-- <p slot="tagline" class="salesforce_font">Why you Like/Dislike the article ?</p> -->
+       
+        <c-psc-article-feedback parent-id={recordId} user-up-voted={userVote.userUpVoted} onfeedbacksuccess={handleFeedbackCreate}
+                user-down-voted={userVote.userDownVoted} parent-type="Knowledge__kav" feedback-label={feedBackLabel} feedback-type="Suggestion" is-required=false oncancelaction={closeModal}></c-psc-article-feedback>
+    </c-psc-modal>
+
+</template>
+</template>
+    <template if:true={userVote}>
+        <c-psc-comments parent-detail-rec-id={recordId} record-id ={recordId} user-up-voted={userVote.userUpVoted}
+        user-down-voted={userVote.userDownVoted} parent-type="Knowledge__kav"></c-psc-comments>
+
+    </template>
+</template>

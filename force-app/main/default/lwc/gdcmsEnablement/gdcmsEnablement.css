@@ -1,0 +1,84 @@
+.container {
+    background-color: white;
+    width: 90%;
+    margin: auto;
+    font-size: 18px;
+    font-weight: 300;
+    --sds-c-card-color-background:white;
+}
+
+.our-vision{
+    font-size: 36px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #080707;
+    padding-top: 16px;
+}
+
+.headerContent {
+    text-align: center;
+    margin: auto;
+    font-size: 18px;
+    color: #080707;
+    font-weight: 300;
+    padding-left:20%;
+    padding-right:20%;
+}
+.hyper-link {
+    font-size: 18px;
+    --lwc-brandTextLink: #0D7377;
+}
+
+h1 {
+    font-size: 36px;
+    color:#080707;
+    font-weight: 300;
+}
+
+.action-list {
+    list-style-type:square;
+    font-size: 18px;
+    padding-left: 3rem;
+    color: #080707;
+    padding-top: 1rem;
+    font-weight: 300;
+}
+
+.accordion-faqs {
+    margin:0rem, 5rem,0rem,5rem;
+    font-size: 18px;
+    --sds-c-accordion-heading-font-size:18px;
+    font-weight: 300;
+}
+.container-section {
+    /*border-bottom: 1px solid gray;*/
+    padding-bottom: 3.2rem;
+    margin-bottom: 2rem;
+    --lwc-brandTextLink:#3FC1C9;
+}
+.container-section-header {
+    /*border-bottom: 1px solid gray;*/
+    padding-bottom: 3.2rem;
+    /* margin-bottom: 2rem; */
+    --lwc-brandTextLink:#3FC1C9;
+}
+
+.listeningHeader {
+    color: #080707;
+    font-weight: 300;
+
+}
+.slds_card {
+    --sds-c-card-radius-border: 1.5rem;
+    
+    --lwc-fontSize5: 1.5rem;
+    --sds-c-card-heading-font-weight: 300px;
+}
+.button-icon {
+    /* --lwc-buttonColorBorderPrimary	: white; */
+    /* --sds-c-button-color-background: red; */
+    /* --lwc-buttonColorBorderPrimary: var(--sds-c-card-color-border); */
+    /* --sds-c-button-color-background: #f9fbfb; */
+    --sds-c-button-color-backgroun: white;
+}

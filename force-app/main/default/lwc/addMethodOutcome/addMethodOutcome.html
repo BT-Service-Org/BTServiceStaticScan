@@ -1,0 +1,32 @@
+<template>
+    <!-- <c-create-outcome onrecordcreated={outcomeCreated}></c-create-outcome> -->
+    <div class="slds-grid slds-wrap slds-box">
+        <div class="slds-col slds-size_1-of-2 slds-p-bottom_x-small">
+            <lightning-record-edit-form object-api-name="Method_Outcome__c">
+                <lightning-input-field field-name="Outcome__c" data-id="outcome-lookup"></lightning-input-field>
+            </lightning-record-edit-form>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-bottom_x-small slds-p-top_large" style="text-align: end;">
+            <lightning-button label="Add Outcome" title="Add Outcome" onclick={addOutcome} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-bottom_x-small">
+            <span></span>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-bottom_x-small" style="text-align: end;">
+            <lightning-button label="Create Outcome" title="Create Outcome" onclick={createOutcomeRecord} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+        <div  class="slds-col slds-size_1-of-1" style="height: 300px;"> 
+            <template if:true={showData}>
+            <lightning-datatable key-field="id"  
+                                data={tableData}  
+                                columns={tableColumns}  
+                                hide-checkbox-column="true"  
+                                show-row-number-column="true"  
+                                onrowaction={handleRowAction}>  
+            </lightning-datatable>   
+            </template> 
+        </div>  
+    </div>  
+</template>

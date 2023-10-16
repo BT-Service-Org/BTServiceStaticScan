@@ -1,0 +1,93 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #CFE9FE;
+    border-radius: 8px;
+    width: 98%;
+    margin-right: 4%;
+    margin-top: 20px;
+    justify-content: space-between;
+    padding: 12px 24px;
+}
+
+.container p {
+    font-family: 'Salesforce Sans', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
+    color: #242626;
+    margin: 0 20px;
+}
+
+.vote {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    margin: 0 20px;
+}
+
+.vote_button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    padding: 8px 0px;
+}
+
+.vote_button p {
+    font-size: 14px;
+    font-weight: 400;
+    align-items: center;
+    color: #000000;
+    left: 16px;
+    margin-left: 10px;
+}
+
+.vote_button:hover {
+    cursor: pointer;
+}
+
+.neutral-button {
+    --sds-c-icon-color-foreground-default: #7d7575;
+    --sds-c-icon-color-background: white;
+    border-radius: 4px;
+    margin-left: 12px;
+
+}
+
+.active-button {
+    --sds-c-icon-color-foreground-default: #0070D2;
+    border-radius: 4px;
+    margin-left: 12px;
+}
+
+.neutral-button :hover {
+    --sds-c-button-text-color: #7d7575;
+
+}
+@media screen and (max-width:1024px){
+    .container {
+        width: 97%;
+    }
+}
+
+
+@media screen and (max-width:540px){
+    .container {
+        flex-direction: column;
+        width: 93%;
+        margin-right: 8%;
+    }
+
+    .vote {
+        margin: 10px 20px 0px 20px;
+    }
+    
+}

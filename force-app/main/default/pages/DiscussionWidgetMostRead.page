@@ -1,0 +1,54 @@
+<apex:page controller="DiscussionWidgetMostReadController" >
+
+
+<style>
+	
+	div.box_round_blue.no_subtitle h3 {
+		padding: 13px;
+	}	
+	
+	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team {
+		margin:4px 0pt;
+	}
+	
+	div.box_round_blue.no_subtitle div.box_content div.contentHolder div.team div.desc {
+		height:auto;
+
+	}
+	
+</style>
+	
+	
+<div class="box_round_blue no_subtitle">
+
+					<div class="header">
+						<div>
+							<div>
+							
+							<h3>Most Read Discussions</h3>
+							</div>
+						</div>							
+					</div>
+					<div class="box_content">
+						<div class="contentHolder">
+							<div class="">
+								<div class="desc">
+									<ul class="minifeed_discussion">
+										<apex:repeat value="{!mostRead}" var="dt" >						
+											<li><a href="/apex/DiscussionDetail?id={!dt.Id}">
+												{!dt.Subject__c} 
+												</a>
+											</li>
+										</apex:repeat>
+									</ul>								
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="bottom_borders"><div><div></div></div></div>
+				</div>	
+				
+				
+				
+	
+</apex:page>

@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Edit/Save Mode">
+    <aura:attribute name="mode" type="String"/>
+</aura:event>

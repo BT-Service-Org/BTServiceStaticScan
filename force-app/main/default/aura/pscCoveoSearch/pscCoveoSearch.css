@@ -1,0 +1,828 @@
+.THIS .CoveoSearchInterface {
+    background-color: #f3f3f3;
+}
+
+.THIS .CoveoSearchInterface .coveo-search-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.THIS .CoveoSearchInterface .coveo-results-column {
+    overflow: hidden;
+    padding: 0px 10px 10px 15px;
+}
+
+.THIS .CoveoSearchInterface .coveo-facet-column {
+    float: left;
+    width: 28%;
+    background-color: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1px 16px 24px;
+    gap: 18px;
+}
+
+.THIS .coveo-facet-header-filter-by {
+    display: block;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 16px;
+    letter-spacing: -0.004em;
+    color: #032D60;
+}
+
+.THIS .coveo-dynamic-facet-header h2 span {
+    display: block;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 39px;
+    letter-spacing: -.004em;
+    color: #444444;
+}
+
+.THIS .coveo-checkbox-button,
+.THIS.input[type='checkbox'].coveo-checkbox+button::before {
+    position: relative !important;
+    transition: all 200ms !important;
+    cursor: pointer !important;
+    display: flex !important;
+    flex-direction: row;
+    width: 18px !important;
+    height: 18px !important;
+    background: white !important;
+    border: 1px solid #C9C9C9 !important;
+    border-radius: 4px !important;
+}
+
+
+input[type='checkbox'].THIS.coveo-checkbox:checked+button:before {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    box-sizing: content-box;
+    display: block;
+    width: 3px;
+    height: 7px;
+    content: '';
+    border: solid #fefefe;
+    border-width: 0 2px 2px 0;
+    transform: rotate(43deg);
+}
+
+.THIS .coveo-dynamic-facet-value .coveo-checkbox-label button+.coveo-checkbox-span-label {
+    margin-left: 12px;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    flex: 1 1 0;
+    line-height: 21px;
+}
+
+.THIS .icon {
+    display: inline-block !important;
+    width: 65px !important;
+    height: 65px !important;
+    background-size: 65px 65px !important;
+}
+
+.THIS .psc {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/servicesknowledgecenter.png') !important;
+}
+
+.THIS .communities {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/communities.png') !important;
+}
+
+.THIS .req_content {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/reqcontent.png') !important;
+}
+
+.THIS .no-result {
+    font-size: 16px;
+    font-family: 'DIN Pro Bold', sans-serif;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 54px;
+    background: #0070D2;
+    border-radius: 24px;
+    margin-left: 20px;
+    cursor: pointer
+}
+
+.THIS .zero-result {
+    flex-direction: column;
+    border-radius: 24px;
+    margin-top: 20px;
+    padding: 16px;
+}
+
+.THIS .helpCenter {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/SFHelp.png') !important;
+}
+
+.THIS .knownIssue {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/Known-issue.png') !important;
+}
+
+.THIS .confluence {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/confluence.png') !important;
+}
+
+.THIS .sitemap {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/developers.png') !important;
+}
+
+.THIS .sitemap-architects {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/sitemap-architects.png') !important;
+}
+
+.THIS .methodology {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/SFMethodology.png') !important;
+}
+
+.THIS .catalyst {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/CKH_Logo1.png') !important;
+}
+
+.THIS .highspot {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/highspot_img.png') !important;
+}
+
+.THIS .vsdx {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/vsdx.png') !important;
+}
+
+.THIS .pptx {
+    background-image: url('/ServicesCentral/resource/1667204417000/pscImages/Icons/pptx.png') !important;
+}
+
+.THIS .filetype {
+    background-repeat: no-repeat;
+}
+
+.THIS .article_date_info {
+    display: flex;
+    margin-top: 6px;
+
+}
+
+.THIS .article_date_info span {
+    margin-right: 8px;
+    font-size: 13px;
+}
+
+.THIS .fileDate {
+    margin-top: 5px;
+    margin-right: 4px;
+}
+
+.THIS .fileDate span {
+    font-weight: 600;
+}
+
+
+.THIS .data-field {
+    color: #032D60 !important;
+    font-family: 'Salesforce Sans';
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.THIS .coveo-clickable {
+    color: #032D60 !important;
+    letter-spacing: 0.5px;
+}
+
+.THIS .result-link {
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.005em;
+    color: #032D60 !important;
+
+}
+
+.THIS .coveo-label {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444 !important;
+}
+
+.THIS .bubbleText span {
+    color: #333 !important;
+    font-weight: 700;
+}
+
+.THIS .result-frame {
+    display: flex;
+    align-items: flex-start;
+    padding: 24px 24px 10px 24px;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 2px rgb(24 24 24 / 8%), 0 2px 4px 1px rgb(24 24 24 / 16%);
+    background-color: white;
+}
+
+.THIS .result-cell {
+    line-height: 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.THIS .coveo-result-cell {
+    display: block;
+}
+
+.THIS .article_info {
+    margin-top: 10px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.THIS .article_info>* {
+    margin-right: 14px;
+}
+.THIS .coveo-field-caption  {
+    margin-right: 5px;
+}
+.THIS .article_info p {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+}
+
+.THIS .article_info span {
+    font-weight: 600;
+    font-size: 13px;
+    height: 20px;
+    width: auto;
+}
+
+.THIS .article_authors {
+    display: flex;
+    align-items: baseline;
+}
+
+.THIS .article_authors>span {
+    font-weight: 600;
+    font-size: 13px;
+    height: 20px;
+}
+
+.THIS .summary {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+    display: block;
+}
+
+.THIS .coveo-list-layout.CoveoResult {
+    padding: 2px 0 16px 16px;
+    border: none;
+}
+
+.THIS .coveo-pager-list-item {
+    border: thin solid #7e8c9a;
+    margin: 5px 6px;
+    padding: 3px 1px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    color: white;
+    text-decoration: none;
+    cursor: default;
+    background-color: #0070D2;
+    border-radius: 4px;
+    font-family: 'Salesforce Sans';
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+
+}
+
+.THIS .coveo-results-per-page-text {
+    padding-left: 0;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    margin-right: 18px;
+}
+
+.THIS .coveo-results-per-page-list-item {
+    border: thin solid #7e8c9a;
+    border-radius: 2px;
+    margin: 5px 6px;
+    padding: 3px 1px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    color: white;
+    text-decoration: none;
+    cursor: default;
+    font-size: 14px;
+    background-color: #0070D2;
+    border-radius: 4px;
+
+}
+
+.THIS .coveo-pager-list-item-text {
+    padding: 3px 10px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.THIS .coveo-results-per-page-list-item-text {
+    padding: 3px 10px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.THIS .coveo-pager-next {
+    background-color: #f3f3f3 !important;
+    border: none !important;
+    color: #000000 !important;
+    margin-right: 7px !important;
+}
+
+.THIS .coveo-pager-previous {
+    background-color: #f3f3f3 !important;
+    border: none !important;
+    color: #000000 !important;
+    margin-right: 7px !important;
+}
+
+
+
+.THIS .coveo-pager-previous:hover {
+    border: thin solid #7e8c9a !important;
+    font-size: 14px;
+}
+
+.THIS .coveo-pager-next:hover {
+    border: thin solid #7e8c9a !important;
+    font-size: 14px;
+}
+
+.THIS .coveo-pager-next-icon-svg {
+    height: 13px;
+    color: #000000;
+}
+
+.THIS .coveo-pager-previous-icon-svg {
+    height: 13px;
+    color: #000000;
+}
+
+.THIS .coveo-pager-list-item.coveo-active {
+    border: 2px solid #3b3c3d;
+}
+
+.THIS .coveo-results-per-page-list-item.coveo-active {
+    border: 2px solid #3b3c3d;
+}
+
+.THIS .CoveoResultList {
+    margin-top: 15px;
+}
+
+.THIS .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.THIS .coveo-results-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-left: 18px;
+    min-height: 35px;
+    box-shadow: none;
+    padding: 0;
+
+}
+
+.THIS .CoveoQuerySummary {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+}
+
+.THIS .CoveoSort {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444444;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 82px;
+    height: 40px;
+    text-transform: capitalize;
+}
+
+.THIS .CoveoSort.coveo-selected {
+    border-bottom: 3px solid #032D60;
+}
+
+.THIS .CoveoBreadcrumb {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+    border: none;
+}
+
+.THIS .CoveoDynamicHierarchicalFacet {
+    background: white;
+    width: 100%;
+}
+
+.THIS .coveo-dynamic-hierarchical-facet-value-count {
+    flex: 1 1 0;
+}
+
+.THIS .coveo-dynamic-facet-breadcrumb-title {
+    display: inline;
+    margin-right: 8px;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000000;
+}
+
+.THIS .coveo-breadcrumb-item button {
+    display: inline-flex;
+}
+
+.THIS .coveo-dynamic-facet-breadcrumb-value-list-item button {
+    display: flex;
+}
+
+.THIS .coveo-dynamic-facet-breadcrumb-value {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 5px 8px 5px 12px;
+    gap: 10px;
+    width: auto;
+    height: auto;
+    background: #FFFFFF;
+    border-radius: 8px;
+    color: #000000;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 5px;
+}
+
+.THIS .coveo-dynamic-facet-breadcrumb-value-clear {
+    margin-left: 5px;
+    font-size: 2px;
+}
+
+.THIS .coveo-breadcrumb-clear-all {
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 28px;
+    letter-spacing: -0.004em;
+    color: #0070D2;
+}
+
+.THIS .coveo-dynamic-facet-header-clear {
+    background: none;
+    border: none;
+    padding: 0 5px;
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 28px;
+    letter-spacing: -0.004em;
+    color: #0070D2;
+}
+
+.THIS .coveo-dynamic-facet-collapse-toggle-svg {
+    width: 12px;
+    color: #000000;
+}
+
+.THIS .CoveoDynamicFacet {
+    background: #ffffff;
+    width: 100%;
+}
+
+.THIS .CoveoResultList {
+    margin-top: 15px;
+    outline: none;
+}
+
+.THIS .coveo-dynamic-facet-breadcrumb-value-clear svg {
+    width: 20px;
+    height: 12px;
+}
+
+.THIS .coveo-facet-header-filter-by-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.THIS .coveo-dynamic-facet-show-more {
+    color: #313a45;
+}
+
+.THIS .coveo-checkbox+button:focus:after {
+    background-color: rgb(255 245 245 / 8%) !important;
+}
+
+.THIS .coveo-checkbox-label button[aria-checked="true"] {
+    background-color: #1B96FF !important;
+}
+
+.THIS .coveo-checkbox-label button[aria-checked="true"]::before {
+    width: 3px !important;
+    height: 7px !important;
+    top: 2px !important;
+    left: 5px !important;
+    border: solid #ffffff !important;
+    border-width: 0 2px 2px 0 !important;
+}
+
+.THIS .coveo-checkbox-label {
+    display: flex;
+}
+
+.THIS .coveo-checkbox-label :last-child {
+    display: flex;
+    align-items: flex-end;
+}
+
+.THIS .coveo-folding-footer {
+    display: none;
+}
+
+.THIS .CoveoFieldValue {
+    font-family: 'Salesforce Sans';
+    line-height: 20px;
+}
+
+.THIS .coveo-folding-results {
+    margin: 14px 0px;
+}
+
+.THIS .group-name .THIS .coveo-accessible-button {
+    background-color: #032D60;
+}
+
+.THIS .group-name {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.THIS .stage-name {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.THIS .engagement-sizing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 7px;
+}
+
+.THIS .engagement-sizing span {
+    font-weight: 600;
+    font-size: 13px;
+    width: auto;
+    margin-right: 6px;
+    margin-top: 9px;
+}
+
+.THIS .Knowledge_title {
+    display: flex;
+    align-items: center;
+}
+
+.THIS .methodologyAgileImg span img {
+    width:90px !important;
+    height:37px !important;
+}
+
+.THIS .methodologyWaterfallImg span img {
+    width:120px !important;
+    height:37px !important;
+}
+
+.THIS .methodology-tile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+}
+.THIS .answeredIcon {
+	margin-left: 10px;
+    background: #41b658;
+    border-radius: 20px;
+}
+
+.THIS .answeredIcon span img {
+	padding: 5px;
+	width: 25px;
+}
+@media screen and (max-width: 980px) {
+    .THIS .article_info {
+        flex-wrap: wrap;
+        flex-direction: column;
+        word-break: break-word;
+    }
+
+    .THIS .article_info span {
+        margin-top: 14px;
+    }
+
+    .THIS .pagination {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .THIS .article_info {
+        flex-direction: column;
+    }
+
+    .THIS .article_info span {
+        margin-top: 5px;
+        height: auto;
+        margin-left: 0px;
+    }
+
+    .THIS .coveo-dynamic-facet-breadcrumb-value {
+        margin-top: 10px;
+    }
+
+    .THIS .CoveoSearchInterface.coveo-small-facets .coveo-facet-column.coveo-facet-dropdown-content {
+
+        padding: 13px;
+
+    }
+
+    .THIS .result-cell {
+        line-height: 1.25em;
+    }
+
+    .THIS .result-link {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .THIS .data-field {
+        font-size: 12px;
+        line-height: 22px;
+    }
+
+    .THIS .CoveoResultList {
+        margin-bottom: 0px;
+    }
+
+    .THIS .coveo-pager-list-item {
+        border: thin solid #7e8c9a;
+        margin: 5px 6px;
+        padding: 4px 10px;
+        font-size: 13px;
+        line-height: 21px;
+    }
+
+    .THIS .coveo-results-per-page-text {
+        display: none;
+    }
+
+    .THIS .CoveoResultsPerPage {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: initial;
+    }
+
+    .THIS .CoveoSearchInterface .coveo-search-section {
+        margin: 2px auto;
+    }
+
+    .THIS .coveo-list-layout.CoveoResult {
+        padding: 2px 8px 16px 8px;
+    }
+
+    .THIS .coveo-breadcrumb-clear-all {
+        font-size: 15px;
+        margin-top: 10px;
+    }
+
+    .THIS .coveo-breadcrumb-items {
+        padding-bottom: 0px;
+        margin-left: 30px;
+    }
+
+    .THIS .coveo-pager-list-item {
+        margin: 3px 2px;
+        padding: 0px 5px;
+        font-size: 11px;
+        line-height: 20px;
+    }
+
+    .THIS .coveo-results-per-page-list-item {
+        margin: 0px 2px;
+        padding: 2px 2px;
+        font-size: 11px;
+    }
+
+    .THIS .coveo-results-per-page-text {
+        padding-left: 0;
+        font-family: 'Salesforce Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 14px;
+        text-align: center;
+        margin-right: 0px;
+    }
+
+    .THIS .CoveoPager {
+        margin-left: 18px;
+    }
+
+    .THIS .coveo-results-per-page-text {
+        padding-left: 0;
+        font-family: 'Salesforce Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 17px;
+        text-align: center;
+        margin-right: 1px;
+    }
+
+    .THIS .pagination {
+        width: 96%;
+    }
+
+    .THIS .methodology-tile-header {
+        flex-direction: column;
+    }
+    .THIS .result-frame {
+        padding: 10px 0px;
+    }
+}

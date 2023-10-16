@@ -1,0 +1,412 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="StationSPController" access="global">
+
+    <aura:attribute name="contentpiece" type="StationContentWrapper" />
+    <aura:attribute name="contentTitle" type="String" />
+    <aura:attribute name="asAccordion" type="boolean" default="true" />
+    <aura:attribute name="asAccordionIsOpen" type="boolean" default="false" />
+    <aura:attribute name="componentUUID" type="String" />
+    <aura:attribute name="backgroundTheme" type="string" />
+    <aura:attribute name="downloadHidden" type="boolean" default="false" />
+    <aura:attribute name="showFileCardModal" type="boolean" default="false" />
+    <aura:attribute name="selectedDocumentId" type="string" />
+    <aura:attribute name="originUrl" type="String" />
+    <aura:registerEvent name="urlEvent" type="c.StationContentEvent" />
+    <aura:handler event="lightning:openFiles" action="{!c.handleOpenFiles}" />
+    <lightning:navigation aura:id="navLink" />
+    <aura:attribute name="languageColor" type="String" default="#000000" />
+    <aura:attribute name="runningUser" type="User" />
+    <aura:attribute name="buttonTheme" type="String" />
+    <aura:attribute name="buttonThemeDisabled" type="String" />
+    <aura:attribute name="buttonMenuTheme" type="String" />
+    <aura:attribute name="stationContentGroup" type="string" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:dependency resource="force:showToast" type="EVENT" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}" />
+    <aura:attribute name="sharedUrl" type="String" />
+    <aura:attribute name="buttonBorder" type="String" default="2px solid #FFFFFF;" />
+    <aura:attribute name="buttonBackground" type="String" default="#018EDA !important;" />
+    <aura:attribute name="buttonHeight" type="String" default="34px;" />
+    <aura:attribute name="contentIdtoOpen" type="String" />
+    <aura:attribute name="openToggle" type="boolean" default="true" />
+
+    <aura:attribute name="splitMode" type="boolean" default="false" />
+    <aura:attribute name="freshContent" type="boolean" default="false" />
+
+    <div class="slds-accordion__list-item"
+        style="{! '--buttonBorder:' + v.buttonBorder + ';' + '--buttonBackground:' + v.buttonBackground + ';' + '--buttonHeight:' + v.buttonHeight +  ';padding-top:5px;padding-bottom:5px;padding-left:1rem;padding-right:1rem;'}">
+        <div class="item-title-container" onclick="{!c.onSectionClick}">
+            <!-- Unapproved Content Flap -->
+            <aura:if isTrue="{!v.freshContent}">
+                <div class="flag">
+                    <span class="shape"></span>
+                    <span class="flag-text">New/Updated!</span>
+                    <!--<section class="flag-popover slds-popover slds-nubbin_top-left" role="dialog">
+                        <div class="slds-popover__body">
+                            <p>Unapproved Content is only visible in a collection. To upgrade to Approved, submit this content to the appropriate Product/Offering page.</p>
+                        </div>
+                    </section>-->
+                </div>
+            </aura:if>
+
+            <section class="slds-clearfix" style="display:flex;align-items:center;">
+                <aura:if isTrue="{!v.asAccordion}">
+                    <div class="slds-float--left" style="display:contents;padding-left:4px;">
+                        <img src="{!$Resource.The_Station_Arrows + '/The_Station_Arrows/arrow_right_light.png'}"
+                            class="slds-hide arrow arrow-right--light"
+                            id="{!'section_arrow_right_light' + v.componentUUID}" />
+                        <img src="{!$Resource.The_Station_Arrows + '/The_Station_Arrows/arrow_down_light.png'}"
+                            class="slds-hide arrow arrow-down--light"
+                            id="{!'section_arrow_down_light' + v.componentUUID}" />
+                        <img src="{!$Resource.The_Station_Arrows + '/The_Station_Arrows/arrow_right_dark.png'}"
+                            class="slds-hide arrow arrow-right--dark"
+                            id="{!'section_arrow_right_dark' + v.componentUUID}" />
+                        <img src="{!$Resource.The_Station_Arrows + '/The_Station_Arrows/arrow_down_dark.png'}"
+                            class="slds-hide arrow arrow-down--dark"
+                            id="{!'section_arrow_down_dark' + v.componentUUID}" />
+                    </div>
+
+                </aura:if>
+                <div class="item-title" style="{!v.asAccordion? 'display:flex;' : 'display:flex;padding-left:16px;'}">
+                    {!v.contentpiece.content.Name}
+                </div>
+            </section>
+        </div>
+        <div class="{!v.asAccordion? 'slds-hide item-copy': 'item-copy'}"
+            id="{!'station-sp-record-section' + v.componentUUID}">
+            <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Content Version'}">
+                <div class="slds-grid slds-wrap">
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_2 slds-size_1-of-1' : 'slds-col slds-order_2 slds-large-order_1 slds-size_1-of-1 slds-large-size_5-of-12' }">
+                        <div class="slds-text-body_regular">
+                            <aura:if isTrue="{!greaterthan(v.contentpiece.contentPiece.Description__c.length, 0)}">
+                                <p class="slds-text-body_larger">{!v.contentpiece.contentPiece.Description__c}</p>
+                                <br />
+                            </aura:if>
+                            <strong>Last Modified Date: </strong>
+                            <lightning:formattedDateTime value="{!v.contentpiece.contentPiece.LastModifiedDate__c}" />
+                            <br />
+                            <strong>Next Review Date: </strong>
+                            <lightning:formattedDateTime value="{!v.contentpiece.contentPiece.Next_Review_Date_c__c}" />
+                            <br />
+                            <strong>Asset Type: </strong>{!v.contentpiece.contentPiece.Asset_Type_c__c}<br />
+                            <strong>File Type: </strong>{!v.contentpiece.contentPiece.FileType__c}<br />
+                            <strong>Visibility: </strong>{!v.contentpiece.contentPiece.Visibility_c__c}<br />
+                            <strong>Content Owner: </strong>{!v.contentpiece.contentPiece.OwnerId__r.Name__c}<br />
+                            <aura:if isTrue="{!v.contentpiece.contentPiece.Id}">
+                                <lightning:recordViewForm density="compact" recordId="{!v.contentpiece.contentPiece.Id}"
+                                    objectApiName="Org62_ContentVersion__x">
+                                    <div style="float:left;"><label for="LanguageField">Language: </label></div>
+                                    <div style="float:left;" aura:id="LanguageField">
+                                        <lightning:outputField variant="label-hidden" fieldName="Language_c__c" />
+                                    </div>
+                                </lightning:recordViewForm>
+                                <br />
+                            </aura:if>
+                            <br />
+                            <div class="button-container">
+                                <aura:if isTrue="{!v.contentpiece.contentPiece.Id}">
+                                    <!-- content has loaded -->
+                                    <c:StationContentActionButtons>
+                                        <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                        <aura:set attribute="buttonTheme" value="{!v.buttonTheme}" />
+                                        <aura:set attribute="buttonThemeDisabled" value="{!v.buttonThemeDisabled}" />
+                                        <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                    </c:StationContentActionButtons>
+                                    <c:StationUserActionButtons>
+                                        <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                        <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                        <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                        <aura:set attribute="stationContentGroup" value="{!v.stationContentGroup}" />
+                                        <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                        <aura:set attribute="showDownload" value="{!not(v.downloadHidden)}" />
+                                    </c:StationUserActionButtons>
+
+                                    <aura:set attribute="else">
+                                        <!-- content not loaded -->
+                                        <div>
+                                            <button aura:id="disabled-button"
+                                                class="slds-button buttonTheme-light1-disabled" disabled="true">View
+                                                Content</button>
+                                            <button aura:id="disabled-button"
+                                                class="slds-button buttonTheme-light1-disabled" disabled="true">Org62
+                                                Details</button>
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_1 slds-size_1-of-1' : 'slds-col slds-order_1 slds-large-order_2 slds-size_1-of-1 slds-large-size_7-of-12' }">
+                        <div
+                            style="width: 100%;display: flex;justify-content: center;padding-bottom:10px;padding-left:10px;">
+                            <c:AccordionContentPreview>
+                                <aura:set attribute="ContentDocumentId"
+                                    value="{!v.contentpiece.contentPiece.ContentDocumentId__c}" />
+                                <aura:set attribute="ContentDocumentExternalId"
+                                    value="{!v.contentpiece.contentPiece.ExternalDocumentInfo2__c}" />
+                                <aura:set attribute="ContentVersionId"
+                                    value="{!v.contentpiece.contentPiece.ExternalId}" />
+                                <aura:set attribute="IconPreviewUrl" value="{!v.contentpiece.previewIcon}" />
+                            </c:AccordionContentPreview>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Success Program'}">
+                <div class="slds-grid slds-wrap">
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_2 slds-size_1-of-1' : 'slds-col slds-order_2 slds-large-order_1 slds-size_1-of-1 slds-large-size_5-of-12' }">
+                        <p class="slds-text-body_larger">{!v.contentpiece.contentPiece.Description_c__c}</p>
+                        <br /><br />
+                        <strong>Validation Date: </strong>
+                        <lightning:formattedDateTime value="{!v.contentpiece.contentPiece.Validation_Date_c__c}" />
+                        <br />
+                        <strong>Estimated Delivery Hours:
+                        </strong>{!v.contentpiece.contentPiece.Estimated_Delivery_Hours_c__c}<br />
+                        <strong>Estimated Internal Hours:
+                        </strong>{!v.contentpiece.contentPiece.Estimated_Internal_Hours_c__c}<br />
+                        <strong>Delivery Method: </strong>{!v.contentpiece.contentPiece.Delivery_Method_c__c}<br />
+                        <strong>Content Owner: </strong>{!v.contentpiece.contentPiece.OwnerId__r.Name__c}<br />
+                        <strong>Content Primary Contact:
+                        </strong>{!v.contentpiece.contentPiece.Primary_Contact__r.Name}<br /><br />
+                        <div class="button-container">
+                            <c:StationUserActionButtons>
+                                <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                <aura:set attribute="stationContentGroup" value="{!v.stationContentGroup}" />
+                                <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                            </c:StationUserActionButtons>
+                        </div>
+                    </div>
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_1 slds-size_1-of-1' : 'slds-col slds-order_1 slds-large-order_2 slds-size_1-of-1 slds-large-size_7-of-12' }">
+                        <div class="slds-col button-three-row bt-flex" style="padding-bottom:10px;">
+                            <div class="button-column">
+                                <span>
+                                    <aura:if isTrue="{!v.contentpiece.contentPiece.ExternalId}">
+                                        <button aura:id="enabled-sp-button" class="slds-button square-button-light">
+                                            <a href="{!'https://org62.lightning.force.com/lightning/r/Success_Program__c/'+v.contentpiece.contentPiece.ExternalId+'/view'}"
+                                                onclick="{!c.onSPDetails}" name="{!v.contentpiece.content.Id}"
+                                                target="_blank">SP Record Details
+                                            </a>
+                                        </button>
+                                        <aura:set attribute="else">
+                                            <button aura:id="disabled-sp-button" class="square-button-light-disabled"
+                                                disabled="true">SP Record
+                                                Details
+                                            </button>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                            </div>
+                            <div class="button-column">
+                                <span>
+                                    <aura:if
+                                        isTrue="{!v.contentpiece.contentPiece.Certification_Activity_Instructions_c__c}">
+                                        <button aura:id="enabled-sp-button" class="slds-button square-button-light">
+                                            <a href="{!v.contentpiece.contentPiece.Certification_Activity_Instructions_c__c}"
+                                                onclick="{!c.onEnablementDocs}" name="{!v.contentpiece.content.Id}"
+                                                target="_blank">Enablement Documents
+                                            </a>
+                                        </button>
+                                        <aura:set attribute="else">
+                                            <button aura:id="disabled-sp-button" class="square-button-light-disabled"
+                                                disabled="true">Enablement
+                                                Documents
+                                            </button>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                            </div>
+                            <div class="button-column">
+                                <span>
+                                    <aura:if isTrue="{!v.contentpiece.contentPiece.Website_Datasheet_URL_c__c}">
+                                        <button aura:id="enabled-sp-button" class="slds-button square-button-light">
+                                            <a href="{!v.contentpiece.contentPiece.Website_Datasheet_URL_c__c}"
+                                                onclick="{!c.onKnowledgeArticle}" name="{!v.contentpiece.content.Id}"
+                                                target="_blank">Knowledge
+                                                Article
+                                            </a>
+                                        </button>
+                                        <aura:set attribute="else">
+                                            <button aura:id="disabled-sp-button" class="square-button-light-disabled"
+                                                disabled="true">Knowledge
+                                                Article
+                                            </button>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'Trailhead'}">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+                        <div class="slds-text-body_regular">
+                            <p class="slds-text-body_larger">{!v.contentpiece.contentPiece.Trailhead_Description__c}
+                            </p>
+                            <strong>Asset Type: </strong>Trailhead
+                            {!v.contentpiece.contentPiece.Trailhead_Type__c}<br />
+                            <strong>Visibility: </strong>Public<br /><br />
+                            <aura:if isTrue="{!v.contentpiece.contentPiece.Trailhead_URL__c != null}">
+                                <button class="slds-button slds-button_brand"><a
+                                        href="{!v.contentpiece.contentPiece.Trailhead_URL__c}" target="_blank"
+                                        onclick="{!c.onViewTrailhead}" name="{!v.contentpiece.content.Id}">View in
+                                        Trailhead</a></button>
+                                <aura:set attribute="else">
+                                    <lightning:button class="slds-button disabled_button_brand" variant="neutral"
+                                        disabled="true">View in Trailhead</lightning:button>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_9-of-12">
+                        <!-- <div class="content-container" style="padding: 10px;"> -->
+                        <div style="width: 100%;display: flex;justify-content: center;">
+                            <img
+                                src="https://sfservices.my.salesforce.com/resource/1561350737000/StationTrailheadImage?" />
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'URL'}">
+                <div class="slds-grid slds-wrap">
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_2 slds-size_1-of-1' : 'slds-col slds-order_2 slds-large-order_1 slds-size_1-of-1 slds-large-size_5-of-12' }">
+                        <p class="slds-text-body_larger">{!v.contentpiece.content.Description__c}</p><br />
+                        <strong>Next Review Date: </strong>
+                        <lightning:formattedDateTime value="{!v.contentpiece.content.Next_Review_Date__c}" /><br />
+                        <strong>Asset Type: </strong>{!v.contentpiece.content.Asset_Type_L1__c}<br />
+                        <strong>File Type: </strong>{!v.contentpiece.content.File_Type__c}<br />
+                        <strong>Language: </strong>{!v.contentpiece.content.Language__c}<br />
+                        <strong>Visibility: </strong>{!v.contentpiece.content.Visibility__c}<br />
+                        <strong>Audience: </strong>{!v.contentpiece.content.Audience__c}<br />
+                        <strong>Region: </strong>{!v.contentpiece.content.Region__c}<br />
+                        <strong>Market Segment: </strong>{!v.contentpiece.content.Market_Segment__c}<br />
+                        <br />
+
+                        <div class="button-container" style="overflow: hidden;">
+                            <c:StationContentActionButtons>
+                                <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                <aura:set attribute="buttonTheme" value="{!v.buttonTheme}" />
+                                <aura:set attribute="buttonThemeDisabled" value="{!v.buttonThemeDisabled}" />
+                                <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                            </c:StationContentActionButtons>
+                            <c:StationUserActionButtons>
+                                <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                <aura:set attribute="stationContentGroup" value="{!v.stationContentGroup}" />
+                                <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                <aura:set attribute="showDownload" value="{!not(v.downloadHidden)}" />
+                            </c:StationUserActionButtons>
+                        </div>
+                    </div>
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_1 slds-size_1-of-1' : 'slds-col slds-order_1 slds-large-order_2 slds-size_1-of-1 slds-large-size_7-of-12' }">
+                        <div
+                            style="width: 100%;display: flex;justify-content: center;padding-bottom:10px;padding-left:10px;">
+                            <aura:if isTrue="{!v.contentpiece.content.Upload_Image__c != null}">
+                                <div
+                                    style="width: 100%;max-height:340px;max-width:600px;display: flex;justify-content: center;">
+                                    <aura:unescapedHtml value="{!v.contentpiece.content.Upload_Image__c}" />
+                                </div>
+                                <aura:set attribute="else">
+                                    <div class="slds-col slds-size_12-of-12" style="text-align:center;">
+                                        <div
+                                            style="padding-top:6px;padding-left:6px;padding-right:6px;padding-bottom:50px;width:100%;display:block;">
+                                            <img src="{!$Resource.The_Station_Icons + '/Icons/LINK@2x.png'}"
+                                                class="preview"
+                                                style="margin-bottom:15px;margin-top:15px;max-width:600px;max-height:340px;width:auto;height:auto;" />
+                                            <br />
+                                            <div>
+                                                No Preview Available<br />
+                                                Click <b>View Content</b> to open
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.contentpiece.content.Content_Type__c == 'App Exchange'}">
+                <div class="slds-grid slds-wrap">
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_2 slds-size_1-of-1' : 'slds-col slds-order_2 slds-large-order_1 slds-size_1-of-1 slds-large-size_5-of-12' }">
+                        <div class="slds-text-body_regular content-container" style="padding: 10px;">
+                            <p class="slds-text-body_larger">{!v.contentpiece.content.Description__c}</p><br />
+                            <strong>Primary Contact:
+                            </strong>{!v.contentpiece.content.Primary_Contact__r.Name}<br />
+                            <strong>Sales Region: </strong>{!v.contentpiece.content.Sales_Region__c}<br />
+                            <strong>Industry: </strong>{!v.contentpiece.content.Industry__c}<br />
+                            <strong>Partner Type: </strong>{!v.contentpiece.content.Partner_Type__c}<br />
+                            <strong>Type of Application:
+                            </strong>{!v.contentpiece.content.Type_of_Application__c}<br />
+                            <strong>Visibility: </strong>{!v.contentpiece.content.Visibility__c}<br />
+                            <br />
+                            <div class="button-container">
+                                <c:StationContentActionButtons>
+                                    <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                    <aura:set attribute="buttonTheme" value="{!v.buttonTheme}" />
+                                    <aura:set attribute="buttonThemeDisabled" value="{!v.buttonThemeDisabled}" />
+                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                </c:StationContentActionButtons>
+                                <c:StationUserActionButtons>
+                                    <aura:set attribute="contentpiece" value="{!v.contentpiece}" />
+                                    <aura:set attribute="runningUser" value="{!v.runningUser}" />
+                                    <aura:set attribute="buttonMenuTheme" value="{!v.buttonMenuTheme}" />
+                                    <aura:set attribute="stationContentGroup" value="{!v.stationContentGroup}" />
+                                    <aura:set attribute="originUrl" value="{!v.originUrl}" />
+                                </c:StationUserActionButtons>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="{! v.splitMode ? 'slds-col slds-order_1 slds-size_1-of-1' : 'slds-col slds-order_1 slds-large-order_2 slds-size_1-of-1 slds-large-size_7-of-12' }">
+                        <aura:if isTrue="{!v.contentpiece.content.Upload_Image__c != null}">
+                            <div style="width: 100%;display: flex;justify-content: center;">
+                                <!-- <div class="uiOutputRichText img" linkify="true" > -->
+                                <aura:unescapedHtml value="{!v.contentpiece.content.Upload_Image__c}" />
+                                <!-- </div> -->
+                            </div>
+                            <aura:set attribute="else">
+                                <div style="text-align:center;">
+                                    <img src="{!$Resource.The_Station_Icons + '/Icons/Appexchange@2x.png'}"
+                                        class="preview"
+                                        style="margin-bottom:15px;margin-top:15px;max-width:600px;max-height:340px;width:auto;height:auto;" />
+                                    <br />
+                                    <div style="margin-left:30px;">No Preview Available :( <br />
+                                        Click <b>View Content</b> to open
+                                    </div>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.showFileCardModal}">
+                <section onclick="{!c.closeContentPreviewModel}" role="dialog" aria-modal="true"
+                    class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__content slds-p-around_medium slds-text-align_center"
+                            style="background: transparent;">
+                            <div style="width: 50%; margin: 0 auto; text-align: left">
+                                <lightning:fileCard fileId="{!v.selectedDocumentId}" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </aura:if>
+        </div>
+    </div>
+
+</aura:component>

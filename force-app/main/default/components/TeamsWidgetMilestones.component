@@ -1,0 +1,223 @@
+<apex:component controller="TeamsWidgetMilestonesController">
+	
+	<!-- Attribute Definitions -->
+	<apex:attribute name="team" description="The team ID" type="String" required="true" assignTo="{!teamId}" />  
+	
+	<!-- Styles includes -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/projectLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamsWidgetMilestones.css')}" />
+	
+	<!-- Javascript includes -->
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetMilestones.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}"></script>
+	
+	<!-- Swirly Style -->
+	<style>
+		.swirly_milestone
+			{
+				background: #FFFFFF url({!URLFOR($Resource.TeamsResources, 'images/layout/small_loader.gif')}) no-repeat center center;
+				left: 0pt;
+				opacity: 0.6;
+				-moz-opacity: 0.6;
+				filter: alpha(opacity=60);
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+				width: 100%;
+				z-index: 9999;
+			}
+	</style>
+	
+	<!-- Swirly Function -->
+	<script> 
+		
+		function showSwirly(elemClass)
+		{
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+			divLoaders.each(function(elem) {
+				var div = elem.ancestors()[0];
+				elem.style.height = div.getHeight()+'px';
+				Effect.Appear(elem, { duration: 0.1, to: 0.8 });
+			});
+		}
+		
+		function hideSwirly(elemClass){
+			var concat = '.'+elemClass;
+			var divLoaders = $$(concat);
+				divLoaders.each(function(elem) {
+				Effect.Fade(elem);
+			});
+		}
+	</script>
+	
+	<!--### Rerender Method ###-->
+	<apex:form >
+		<apex:actionFunction name="reloadMilestoneList" action="{!refresh}"
+       		rerender="milestonePanelCenter, milestonePanelright"  onComplete="hideSwirly('swirly_milestone')" />
+    </apex:form>
+    
+	    
+	<!-- Wide Widget -->
+	<div class="myBigWidget">
+		<!-- Widget Title -->	
+		<div class="teamBlockTitle"> 
+			<h4>Milestones</h4>
+		</div>
+		<apex:outputpanel id="milestonePanelCenter" > 
+		<!-- Links -->
+		<div class="linkAction">
+			<apex:outputpanel rendered="{!userPermissions.canCreate}"  > 
+				<a class="topRightLinks" href="javascript:;" onclick="fixedModalNewMilestone.open(); resetFormMilestone();" >New</a> |  
+			</apex:outputpanel>
+			<a href="ProjectTimeLine?id={!TeamId}">Timeline</a> |
+			<a href="ProjectTaskList?id={!TeamId}" class="topRightLinks" >See More&#187;</a>
+		</div>
+		<div style="overflow: hidden; position: relative"> 
+			<div class="swirly_milestone" style="display: none;"></div>
+				<div style="{!IF(listSize > 0, 'display:none', '')};"  class="empty"  >
+					<ul class="nomilestone">
+						<li>
+							No Milestones<br/>
+							<apex:outputpanel rendered="{!userPermissions.canCreate}"  > 
+								<a  href="TeamsCreateNewTask?id={!TeamId}&t=true" >Create New Milestone</a>
+							</apex:outputpanel>
+						</li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+			
+				<!-- Widget Container -->
+				<div style="position: relative; overflow: hidden;">
+					<div style="{!IF(listSize > 0, '', 'display:none')};text-align:center;">
+						<apex:dataTable value="{!AllProjectTasks}" var="task" id="ActiveDiscussionTable" styleClass="discussion" >	
+							<apex:column width="350">	
+								<div class="{!task.isToLate}">
+									<a href="projectTaskDetail?id={!task.TaskId}">{!task.TaskName}</a><br/>
+		                       		<apex:outputpanel layout="block" rendered="{!IF(task.isToLate == 'latter',false,true)}"  styleClass="margin_top">	
+		                       			<apex:outputpanel layout="block" rendered="{!IF(task.DayPercent > 44 ,true,false)}" >
+											<div class="proj_percent_complete_outline_milestone white_day" style="width:{!task.DayPercent}px ">  
+												<span class="gray"> {!task.DaysCount}</span>   		
+				                       		</div>
+				                       		<div class="sup_margin"><img  src="{!IF(task.isToLate == '',URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_green.png'),URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_red.png'))}"  /></div>	
+			                       		</apex:outputpanel>
+			                       		<apex:outputpanel layout="block" rendered="{!IF(task.DayPercent > 44 ,false,true)}">
+											<div class="proj_percent_complete_outline_milestone white_day" style="width:{!task.DayPercent}px ">  
+												   		
+				                       		</div><span class="gray f_left_margin"> {!task.DaysCount}</span>
+				                       		<div class="sup_margin"><img  src="{!IF(task.isToLate == '',URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_green.png'),URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_red.png'))}"  /></div>	
+			                       		</apex:outputpanel>
+									</apex:outputpanel>
+									<apex:outputpanel layout="block"  rendered="{!IF(task.isToLate == 'latter',true,false)}" styleClass="div_left margin_top">	
+										<div class="proj_percent_complete_outline_milestone" style="width:{!task.DayPercent}px ">  
+											  		
+			                       		</div><span class="gray f_left_margin"> {!task.DaysCount}</span> 
+			                       		<div class="sup_margin"><img  src="{!IF(task.isToLate == '',URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_green.png'),URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_red.png'))}"  /></div>	
+									</apex:outputpanel>
+		                       		
+		                       		
+		                       		
+									
+								</div>
+							</apex:column>
+							<apex:column >						
+								<a href="PeopleProfileDisplay?id={!task.UserId}"  class="name_margin f_right ">{!task.UserName}</a>
+								
+									<apex:outputpanel rendered="{!IF(task.Picture == ' ',false,true)}">	
+										<div class="photoWrapper_32px_right" >
+											<a href="javascript:;"><img alt="{!task.UserName}" src="/servlet/servlet.FileDownload?file={!task.Picture}" width="32" /></a>	
+										</div>
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!IF(task.Picture == ' ',true,false)}" >	
+										<div class="photoWrapper_32px_right">
+											<a href="javascript:;"><img  src="{!URLFOR($Resource.TeamsResources, 'images/placeholders/unknownperson32x32.jpg')}"  width="32" /></a>	
+										</div>
+									</apex:outputpanel>
+								
+							</apex:column>
+						</apex:dataTable>
+					</div>
+				</div>
+			</div>
+		</apex:outputpanel>
+	</div>
+	
+	
+	<!-- thin widget -->
+	<div class="box_round forwidget mySmallWidget" style="width: 216px;">
+		
+		<!-- Widget Title -->
+		<div class="header_blue">
+    		<div><div><h4>Milestones</h4></div></div>
+   		</div>
+   		
+   		<!-- Container -->
+   		<div style="overflow: hidden; position: relative"> 
+			<div class="swirly_milestone" style="display: none;"></div>
+		   		<apex:outputpanel id="milestonePanelright" > 
+			   		<div class="box_content">
+			   		 
+			    		<div class="back_gray">
+			    			<apex:outputpanel rendered="{!userPermissions.canCreate}"  > 
+								<a  href="javascript:;" onclick="fixedModalNewMilestone.open();" >New</a> 
+								| 
+								<a href="ProjectTimeLine?id={!TeamId}">Timeline</a> | 
+							</apex:outputpanel>
+			    			
+							<a href="ProjectTaskList?id={!TeamId}">See More&#187;</a>
+			     			
+			    		</div>  
+			    		<div class="clear" ></div>
+			    		<div style="{!IF(listSize > 0, 'display:none', '')};"  class="empty"  >
+							<ul class="nomilestone">
+								<li>
+								No Milestones<br/>
+								<apex:outputpanel rendered="{!userPermissions.canCreate}"  > 
+									<a   href="javascript:;" onclick="fixedModalNewMilestone.open();" >Create New Milestone</a>
+								</apex:outputpanel>
+								
+								</li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						  
+						<div style="{!IF(listSize > 0, '', 'display:none')};">
+							<div style="position: relative;">
+								<ul class="milestone_pr">
+									<apex:repeat value="{!AllProjectTasks}" var="task" rows="5">		
+											<li class="{!task.Priority}">
+												
+												<div class="{!task.isToLate}">
+													<a href="projectTaskDetail?id={!task.TaskId}" class="bold" >{!task.TaskName}</a><br/>
+													<div class="margin_top">
+														<div class="proj_percent_complete_outline_milestone" style="width:{!task.DayPercentRight}px ">         		
+							                       		</div>
+						                       			<div class="sup_margin"><img  src="{!IF(task.isToLate == '',URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_green.png'),URLFOR($Resource.TeamsResources, '/images/layout/icons/flag_red.png'))}"  /></div>	
+													<span class="gray"> {!task.EndDateRight}</span>
+													</div>
+												</div>
+											</li>
+									</apex:repeat>
+								</ul>
+								<div class="clear"></div>
+							</div>
+							
+						</div>    
+			   		</div>
+		   		</apex:outputpanel>
+		   	</div>
+	  	<div class="bottom_borders"><div><div/></div>
+	</div>
+	</div>	
+	
+	<!--  
+		### Widget Intelligence ###  
+		This method execution is required
+	-->
+	<script>
+		//This method determinie if widget live in main o rigth holder
+		widgetPosition();
+		changeBackground();
+	</script>
+	
+</apex:component>

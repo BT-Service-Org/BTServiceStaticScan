@@ -1,0 +1,105 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <template if:false={isLoading}>
+        <table if:false={isError} class="assessment-table">
+            <thead>
+                <tr>
+                <th>Assessments</th>
+                <th>Function Points</th>
+                <th>Complexity</th>
+                <th>Completion Progress</th>
+                <th width="60">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--<tr>
+                    <td colspan="4" class="title">Engagement Assessment</td>
+                </tr>-->
+                <template if:false={hideNonFsTable}>
+                <tr>
+                    <td class="title">
+                        <lightning-formatted-url  value={overallEngScopeData.d2a_link} label={overallEngScopeData.work_streams} target="_self"></lightning-formatted-url>
+                    </td>
+                    <td class="title">{overallEngScopeData.functional_points} of {overallEngScopeData.total_functional_points}</td>
+                    
+                    <td class="title"> 
+                        <c-sep-complexity-indicator value={overallEngScopeData.complexity_Points}> </c-sep-complexity-indicator>
+                    </td>
+                    <td class="title">
+                        <c-sep-assessment-completion-progress class="assess" totalaverage={overallEngScopeData.completion_progress} is-assessment="true"></c-sep-assessment-completion-progress>
+                    </td>
+                    <td class="title"></td>
+                </tr>
+                </template>
+                <tr>
+                    <td colspan="5" class="title" style="border-right: none;">
+                        Workstream Assessment(s)
+                    </td>
+                    <!--
+                    <td style="border-left: none;background: #f3f3f3;">
+                        <lightning-button
+                            variant="brand"
+                            label="New"
+                            aria-haspopup="dialog"
+                            title="Start a new Assessment"
+                            onclick={handleAssessmentModal}
+                        >
+                        </lightning-button>
+                    </td> 
+                    -->
+                </tr>
+                <template for:each={gridData} for:item="record">
+                    <tr key={record.id}>
+                        <td>
+                            <lightning-button-icon 
+                                icon-name={record.gridExpandIcon} 
+                                variant="bare" 
+                                alternative-text="Expand" 
+                                title="Expand" 
+                                data-recordid={record.id}
+                                class="slds-m-right_xx-small"
+                                onclick={toggleChildRow}>
+                            </lightning-button-icon>
+                            {record.work_streams}
+                        </td>
+                        <td>{record.functional_points} of {record.TotalPossibleFunctionPoints_progress}  </td>
+                        <td> 
+                            <c-sep-complexity-indicator value={record.complexity_Points}> </c-sep-complexity-indicator>
+                        </td>
+                        <td>
+                            <c-sep-assessment-completion-progress totalaverage={record.completion_progress} is-assessment="true"></c-sep-assessment-completion-progress>
+                        </td>
+                        <td>
+                            <lightning-button-menu alternative-text="Show menu">
+                                <lightning-menu-item value={record.id} data-stream-name={record.work_streams} label="Add Domain" onclick={handleAddNewDomain}></lightning-menu-item>
+                                <lightning-menu-item value={record.id} data-stream-name={record.work_streams} label="Archive Domain" onclick={handleArchiveDomain}></lightning-menu-item>
+                                <lightning-menu-item value={record.id} data-stream-name={record.work_streams} label="Restore Domain" onclick={handleRestoreDomain}></lightning-menu-item>
+                            </lightning-button-menu>
+                        </td>
+                    </tr>
+                    <template for:each={record._children} for:item="domain">
+                        <template if:true={record.displayChild}>
+                            <tr key={domain.id}>
+                                <td class="record-title">
+                                    <lightning-formatted-url value={domain.d2a_link} label={domain.work_streams} target="_self"></lightning-formatted-url>
+                                </td>  
+                                <td>{domain.functional_points} of {domain.total_functional_points}</td>
+                                <td>
+                                    <c-sep-complexity-indicator value={domain.complexity_Points}> </c-sep-complexity-indicator>
+                                </td>
+                                <td>
+                                    <c-sep-assessment-completion-progress totalq={domain.totalQ} answeredq={domain.answeredQ} is-assessment="false"></c-sep-assessment-completion-progress>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </template>
+                    </template>
+                </template>
+            </tbody>
+        </table>
+    </template>
+
+</template>

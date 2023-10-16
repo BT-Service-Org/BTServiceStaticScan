@@ -1,0 +1,11 @@
+.print-banner {
+    margin: auto;
+    background: #F8AF2F40;
+    border-radius: 5px;
+    color: #032D60;
+}
+
+.info-icon {
+    --lwc-colorTextIconDefault: #032D60;
+    margin-left: 25px;
+}

@@ -1,0 +1,16 @@
+<design:component  label="Collection User Profile Grid">
+    <design:attribute name="collectionFilterTitle" label="Title" default="My Collections"/>
+    <design:attribute name="showCollectionFilterTitle" label="Show Title" default="true"/>
+    <design:attribute name="collectionFilter" label="Collection Filter" datasource="My Collections, Followed Collections, Shared with me" default="My Collections" description="Filter Collection List"/>        
+    
+    <design:attribute name="showSort" label="Show Sort" default="true"/>
+    <design:attribute name="showShareCollection" label="Show Collection Share Button" default="true"/>
+    <design:attribute name="showCollectionTitle" label="Show Collection Title" default="true"/>
+
+    <design:attribute name="showCollectionFollowers" label="Show Collection Followers" default="true"/>
+    <design:attribute name="showCollectionContentCount" label="Show Collection Content Count" default="true"/>
+    
+    <design:attribute name="showCollectionDescription" label="Show Collection Description" default="true"/>
+    <design:attribute name="showCollectionLastUpdatedDate" label="Show Collection Last Update Date" default="true"/>
+    <design:attribute name="showCollectionCreatedDate" label="Show Collection Created Date" default="true"/>
+</design:component>

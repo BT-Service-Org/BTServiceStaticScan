@@ -1,0 +1,51 @@
+.THIS .left-col {
+    width: 67%;
+    margin-right: 25px;
+}
+
+.THIS .page {
+    width: 95% !important;
+    width: auto !important;
+}
+@media screen and (max-width:1500px) and (min-width:1300px) {
+    .THIS .left-col {
+        width: 66%;
+    }
+}
+
+@media screen and (max-width:1300px) and (min-width:720px) {
+    .THIS .right-col {
+        width: 100%;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .THIS .left-col {
+        width: 100%;
+        margin: auto;
+    }
+
+    .THIS .right-col>span>div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .THIS .right-col>span>div>div {
+        width: 49%;
+    }
+}
+
+@media screen and (max-width:720px) {
+    .THIS .right-col {
+        width: 100%;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .THIS .left-col {
+        width: 100%;
+        margin: auto;
+    }
+}

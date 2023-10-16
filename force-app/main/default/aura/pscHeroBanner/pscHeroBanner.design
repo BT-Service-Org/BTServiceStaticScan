@@ -1,0 +1,14 @@
+<design:component label="PSC Hero Banner">
+    <design:attribute name="title" label="Greeting Text" description="Greeting Text"/>
+    <design:attribute name="subTitleOne" label="Sub Title One" />
+    <design:attribute name="subTitleTwo" label="Sub Title Two" />
+    <design:attribute name="name" label="Name Of Search Box" />
+    <design:attribute name="enableQuerySuggestAddon" label="Enable Search As Type" />
+    
+    <design:attribute name="placeholder" label="Placeholder Text" />
+    <design:attribute name="searchHub" label="Search Hub" />
+    <design:attribute name="searchPageName" label="Search Page Name" />
+    <design:attribute name="heroBannerType" label="Hero Banner Type" datasource="Wide, Narrow"/>
+    <design:attribute name="backgroundImageUrl" label="Background Image Url"/>
+    <design:attribute name="pageType" label="Page Type" datasource="PSC Page, Community Page, Methodology"/>
+</design:component>

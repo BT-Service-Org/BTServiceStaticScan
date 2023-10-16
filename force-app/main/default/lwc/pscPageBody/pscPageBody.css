@@ -1,0 +1,215 @@
+.section-container {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.section-title {
+    background-color: white;
+    font-family: 'ITC Avant Garde Gothic Pro';
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.004em;
+    color: #032D60; 
+}
+
+.section-card {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    padding: 14px;
+    min-height: 150px;
+    justify-content: space-between;
+}
+
+.section-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-items: baseline;
+    letter-spacing: 0.01rem;
+    color: #032D60;
+}
+.section-border {
+    
+}
+
+
+.section33 {
+    width: 33%;
+}
+
+.section50 {
+    width: 50%;
+}
+
+.section75 {
+    width: 75%;
+}
+
+.section100 {
+    width: 100%;
+}
+
+a {
+    font-size: 10px !important;
+}
+
+.page_section_header {
+    display: flex;
+}
+
+.author {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+    color: #032D60;
+    font-size: 14px;
+}
+
+.my-icon {
+    --sds-c-icon-color-foreground-default: #032D60;
+    margin-right: 6px;
+}
+
+.publish_date {
+    color: #032D60;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.publish_date:hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.slds-popover_tooltip {
+    width: max-content;
+    max-width: var(--slds-c-tooltip-sizing-max-width, var(--sds-c-tooltip-sizing-max-width, var(--lwc-sizeMedium, 20rem)));
+    background-color: #0070D2;
+    border: 0;
+    position: absolute;
+    top: -65px;
+    left: -15px;
+    margin-top: 15px;
+    visibility: hidden;
+}
+
+.publish_date:hover .slds-popover_tooltip {
+    visibility: visible;
+}
+
+.publish_date {
+    margin-bottom: 10px;
+}
+
+.image25 {
+width:25% !important;
+}
+.content75 {
+    width:75% !important;
+}
+
+.contentfont25 {
+    font-size: 14px !important;
+    line-height: 24px;
+}
+.image33 {
+    width:33% !important;
+}
+
+.content65 {
+    width:65% !important;
+}
+.contentfont50 {
+    font-size: 16px !important;
+    line-height: 24px;
+}
+
+.image50 {
+    width:50% !important;
+    line-height: 18px;
+}
+
+.content50 {
+    width:55% !important;
+}
+
+.contentfont75 {
+    font-size: 18px !important;
+    line-height: 24px;
+}
+.full_img {
+    display: block;
+    width: auto;
+    height: fit-content;
+    margin: 10px 0px;
+}
+
+.full_img img {
+    border-radius: 8px;
+    max-height: 420px;
+}
+
+.flex-col {
+    flex-direction: column;
+    box-shadow: none;
+}
+.imagedefault {
+    width: 70px;
+    height: fit-content;
+}
+.contentDefault {
+    width: 100% !important;
+}
+
+.contentfont100{
+    font-size: 22px !important;
+    line-height: 40px;
+}
+.sectiondefault {
+    font-size: 22px !important;
+    line-height: 40px;
+}
+.media {
+    margin: 15px auto;
+}
+
+.viewAll {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 11px 24px 2px 24px;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.0012em;
+    color: #0070D2;
+  }
+  .viewAll a {
+    font-size: 16px !important;
+  }
+  
+  .viewAll a:hover {
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .viewAll a:focus-visible {
+    text-decoration: none;
+  }
+
+  .community_page{
+    border-bottom: 1px solid #bebbbb;
+  }
+
+  .feature {
+    width: 33%;
+  }

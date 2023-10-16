@@ -1,0 +1,48 @@
+<apex:page id="TeamDetailMarkupBottom" controller="TeamsDetailController">
+</div>
+	 <iframe name="iframeUpload" id = 'iframeUpload__Ann' style="display:none;position:absolute;"></iframe>
+	<!-- End Announcement Overlay  -->
+	<script>
+		/*if (Prototype.Browser.IE){
+			resizeAnnouncements();
+		}*/
+	</script>
+	<apex:outputpanel rendered="{!userPermissionsWiki.canCreate}">
+		<c:WikiNewPageWidget />
+	</apex:outputpanel>
+	<script>
+		/* scripts to reset the hieght of the lower bar so that it show correctly at the bottom of it all */
+		// setTimeout('redim();', 2000);
+		window.onload = footerBug; 
+		function footerBug(){
+			setTimeout('footer();', 500);
+			
+		}
+		
+		function footer(){
+			var rc = $$('.rightCol')[0].getHeight();
+			var cc = $$('.centerCol')[0].getHeight();
+			var sidebar = $('teamMemberID').getHeight();
+			if(rc > cc && sidebar +160 < rc){
+			    $$('.centerCol')[0].style.height = rc+'px';
+			}
+			else if(sidebar +160 > cc && sidebar +160 > rc)
+			{
+				$$('.centerCol')[0].style.height = sidebar+160+'px';
+			}
+			else 
+			{
+				$$('.centerCol')[0].style.height = 'auto';
+			}
+		}
+		
+		function Done (){
+			pageLoaded = true;
+		}
+		
+			
+		
+		
+		window.onload = Done();
+	</script>
+</apex:page>

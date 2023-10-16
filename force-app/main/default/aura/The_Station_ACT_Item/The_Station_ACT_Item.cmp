@@ -1,0 +1,47 @@
+<aura:component >
+	<aura:attribute name="course" type="ACTWrapper"/>
+    <aura:attribute name="compassIcon" type="String" default="{!$Resource.CompassIcon}"/>
+
+
+  <article class="slds-card">
+    <div class="slds-card__body slds-card__body_inner">  
+        <div class="">
+            <div  class=" slds-progress-bar " aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.course.progress}" role="progressbar" >
+                  <span class="slds-progress-bar__value" style="{!'width:' + v.course.progress + '%;'}"> </span>         
+            </div>
+            <div class="rate-style " >
+              {!v.course.progress}%
+            </div>
+            <div class="">
+                <aura:if isTrue="{!v.course.isCompleted}">
+                    <!-- content renders if true --> 
+                      <div class="slds-box slds-box_xx-small completed-box-style slds-float_right">
+                        <p class="slds-text-align_center completed-text-style slds-table_fixed-layout">Completed</p>
+                      </div>
+                    <aura:set attribute="else">    
+                      <!-- content renders if false -->
+                      <aura:if isTrue="{! lessthan(v.course.daysLeft, 0)}">
+                        <div class="slds-box slds-box_xx-small overdue-box-style slds-float_right">
+                          <p class="slds-text-align_center completed-text-style slds-table_fixed-layout">Overdue</p>
+                        </div>
+                        <aura:set attribute="else">
+                          <div class="slds-box slds-box_xx-small  slds-float_right">
+                            <p class="slds-text-align_center slds-table_fixed-layout">{!v.course.daysLeft}</p>
+                          </div>
+                        </aura:set>
+                      </aura:if>
+                      
+                  </aura:set>
+                </aura:if> 
+            </div>
+     	</div>
+        
+        
+        <div class="slds-media__figure">       
+            <img src="{!v.compassIcon}" class="compassIcon" />
+        </div>
+      <h2 class="slds-card__header-title">{!v.course.name}</h2>
+      <h2 class="desc-Style">{!v.course.description}</h2>
+    </div>
+  </article>    
+</aura:component>

@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-grid">
+        <div class="slds-col slds-size_1-of-12 slds-p-around_x-small text-align_center">
+            <lightning-button-icon icon-name="utility:arrowup" class="slds-m-right_x-small"></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:arrowdown"></lightning-button-icon>
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-p-around_x-small">
+            <lightning-input type="text" value={property.label} variant="label-hidden" onkeyup={handleLabelKeyUp}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-p-around_x-small">
+            <lightning-combobox
+                value={property.dataType}
+                options={dataTypeOptions}
+                onchange={handleDataTypeChange}
+                variant="label-hidden">
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-p-around_x-small">
+            <lightning-input type="text" value={property.defaultValue} variant="label-hidden" onkeyup={handleDefaultValueKeyUp}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-12 slds-p-around_x-small text-align_center">
+            <lightning-button-icon icon-name="utility:close" onclick={handleDeleteClick}></lightning-button-icon>
+        </div>
+    </div>
+</template>

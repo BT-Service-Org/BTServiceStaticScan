@@ -1,0 +1,27 @@
+<template>
+    <c-psc-modal onclosedialog={closeModal}>
+        <h2 slot="header" id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate header ITC_font">New Content Request</h2>
+        <p slot="tagline" class="salesforce_font">You can initiate a request for new content by submitting the form below.</p>
+        <lightning-record-edit-form object-api-name="Content_Requests__c" record-type-id={recordTypeId} onload={handleLoad}
+            onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit} style="width:100%">
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading......" size="medium" variant="brand">
+                </lightning-spinner>
+            </template>
+            <lightning-input-field field-name="Name" required> </lightning-input-field>
+            <lightning-input-field field-name="Description__c" required> </lightning-input-field>
+            <lightning-input-field field-name="Product__c" > </lightning-input-field>
+            <lightning-input-field field-name="Target_Audience__c" > </lightning-input-field>
+            <lightning-input-field field-name="Industry__c" > </lightning-input-field>
+            <lightning-file-upload name="ContentFile" onuploadfinished={handleUploadFinished}>
+            </lightning-file-upload>
+            <div class="action_button" >
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}>
+                </lightning-button>
+                <lightning-button type="submit" label="Submit" variant="brand"
+                    style="display: inline-block;">
+                </lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </c-psc-modal>
+</template>

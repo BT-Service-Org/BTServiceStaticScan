@@ -1,0 +1,81 @@
+<apex:page sidebar="false" controller="ProjectTimelineController" tabStyle="Team__c">
+    
+    <!-- ### Common Stylesheet & JS Include ### -->     
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/commonLayout.css')}" />
+    <script src="{!URLFOR($Resource.TeamsResources, 'inc/js/common.js')}"></script> 
+    
+    <!-- ### SWFObject Include ### -->  
+    <script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/swfobject.js')}"></script>  
+    
+    <!-- ### Ajax Toolkit Include ### -->
+    <script src="/soap/ajax/12.0/connection.js" type="text/javascript" />
+    
+    <style>
+        /* Clear Faux Bar*/
+        body {
+            background: white !important;
+        }
+        
+        /* Gantt Wrapper */
+        div.ganttWrapper{
+            margin: 10px; 
+        }
+        
+        /* Search title fix*/
+        div.header div.searchBox div div div.search_box_input div.legend{
+            left: -20px;
+        }
+    </style>
+    
+    <div class="header" style="height:58px;">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Team</h1>
+                <h2 class="arial_black">Timeline</h2>
+            </div>      
+        </div>      
+        <!-- Search Box Container (always Centered) -->
+        <div class="searchBox">
+            <div>
+                <div>
+                    <!-- Search Form -->
+                    <form action="/apex/TeamSearchResult" method="get">
+                        <div class="search_box_input f_left">
+                            <div class="legend">
+                                Find Teams 
+                            </div>
+                            <input type="text" value="Enter keyword or name" name="key" onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+                        </div><input type="submit" value="Search" class="search_btn f_left"/>
+                    </form><!-- Advanced Search Link -->
+                    <!-- <div class="advanced_search_cont">
+                        <a href="javascript:;">Advanced Search</a>
+                    </div> -->
+                </div>
+           </div>
+        </div>  
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt="" />
+            </div>
+        </div>      
+    </div>
+    
+    <div class="ganttWrapper">
+       
+        <embed  src="{!$Resource.Gantt}" 
+                play="true" 
+                bgcolor="#f3f3ec" 
+                width="100%" 
+                height="650"
+                name="FlexSalesforce" 
+                align="middle"
+                flashvars="session_id={!$Api.Session_ID}&server_url={!$Api.Partner_Server_URL_130}&Project={!project.Id}&Team={!team.Id}"
+                loop="false" 
+                allowScriptAccess="always"
+                type="application/x-shockwave-flash"
+                pluginspage="http://www.adobe.com/go/getflashplayer"
+        /> 
+    </div>
+</apex:page>

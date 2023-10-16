@@ -1,0 +1,15 @@
+<template>
+    <div class="engagement-type" if:true={formsData}>
+        <h1 class="section__header ITC_font" tabindex="0" aria-label={pscEnagagementTypeTitle}>{pscEnagagementTypeTitle}</h1>
+        <p class="section-text salesforce_font">{pscEnagagementTypeDescription}</p>
+        <div class="engagements">
+            <template for:each={formsData} for:item="item">
+                <div key={item.title} class="engagement">
+                    <c-psc-methodology-home-form-child form-title={item.title} form-data={item.methodologyFormList} records-to-display={maxRecords}>
+                    </c-psc-methodology-home-form-child>
+                </div>
+            </template>
+        </div>
+    </div>
+
+</template>

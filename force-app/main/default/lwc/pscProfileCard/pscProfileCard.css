@@ -1,0 +1,211 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 2px rgb(24 24 24 / 8%), 0px 2px 4px 1px rgb(24 24 24 / 16%);
+    border-radius: 8px;
+    margin: auto;
+    width: 100%;
+}
+
+.profile_card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: auto;
+    padding: 24px 20px 8px;
+    width: 100%;
+}
+
+.profile_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile_img {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    border-radius: 70px;
+}
+
+.user_name {
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    letter-spacing: 0.0262em;
+    color: #2E2E2E;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 300px;
+    overflow: hidden;
+}
+
+.user_designation {
+    font-size: 12px;
+    color: #444;
+    letter-spacing: 0.0262em;
+    margin-top: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 250px;
+    overflow: hidden;
+}
+
+.user_contribution {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 25px;
+    justify-content: space-between;
+}
+
+.contribution {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contribution_count {
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: -0.004em;
+    color: #2E844A;
+}
+
+.contribution_desc {
+    font-size: 12px;
+    color: #444;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.user_Acheivements {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.user_Acheivements img {
+    width: 100px;
+}
+.levelbadge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.levelbadge img {
+    width: 65px;
+}
+.levelbadge p {
+    margin-top: 10px;
+}
+.badges p {
+    margin-top: 10px;
+}
+.totalpoints {
+    font-size: 20px;
+}
+.badgesinfo {
+    color: #585858;
+    max-width: 350px;
+    font-size: 14px;
+
+}
+.next_level {
+    color: #0070d2;
+    font-weight: 600;
+    font-size: 15px;
+}
+.score_info {
+    margin-top: 20px;
+}
+.level_reached {
+    color: #0070d2;
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 10px;
+}
+.user_badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.badges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+}
+
+.level_badges {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.badge_label {
+    font-size: 14px;
+    width: 100px;
+    word-break: break-word;
+    text-align: center;
+}
+
+.badge_head {
+    font-size: 16px;
+    color: #032D60;
+    margin-bottom: 14px;
+}
+
+.all-Badges {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    color: #032D60;
+}
+
+.btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 10px;
+    width: 100%;
+    height: 56px;
+    background: #0070D2;
+    box-shadow: 0px -1px 0px #C9C9C9;
+    color: #fff;
+    cursor: pointer;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.arrow {
+    font-size: 18px;
+    margin-left: 6px;
+}
+
+.ITC_font a {
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0.0562em;
+    color: #FFFFFF;
+}
+
+.btn a:hover {
+    text-decoration: none;
+}

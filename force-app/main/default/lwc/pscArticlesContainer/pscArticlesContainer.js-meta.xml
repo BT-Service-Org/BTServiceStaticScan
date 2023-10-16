@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isExposed>true</isExposed>
+    <masterLabel>PSC Article Container</masterLabel>
+    <description>PSC Article Container</description>
+    <capabilities>
+        <capability>lightningCommunity__RelaxedCSP</capability>
+    </capabilities>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="containerTitle" type="String" label="Container Title" required="true" datasource="My Bookmarks,Recent Search, Recently Published Content,Recommendations, My Knowledge Article, My Reusable Assets"/>
+            <property name="maxNoOfResults" type="String" label="Max number of results" required="true" default="5"/>
+            <property name="noResultLabel" type="String" label="No Result Label" default="No Article Found"/>
+            <property name="showAllPageAPIName" type="String" label="Show All Navigation Page API Name" default="All_Bookmarks__c"/>
+            <property name="showFavorite" type="Boolean" label="Show Favorite?"/>
+            <property name="showFooterFromMeta" type="Boolean" label="Show Footer?"/>
+        </targetConfig>
+     </targetConfigs>       
+</LightningComponentBundle>

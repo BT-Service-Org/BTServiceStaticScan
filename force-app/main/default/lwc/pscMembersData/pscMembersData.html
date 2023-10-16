@@ -1,0 +1,28 @@
+<template>
+    <div class="spinner-container" if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    </div>
+
+    <div class="member-card-container" if:false={showSpinner}>
+        <p if:false={members.length} class="ITC_font text-center">{noRecordsMessage}</p>
+        <div class="display-members-section" if:true={members.length}>
+            <template for:each={members} for:item="member">
+                <div key={member.Id} class="member-card slds-grid">
+                    <div if:true={member.psc_Team_Member__r.MediumPhotoUrl} class="slds-col slds-size_1-of-3 img-container">
+                        <img class="member-image" alt="Profile Photo" src={member.psc_Team_Member__r.MediumPhotoUrl}>
+                    </div>
+    
+                    <div class="member-details slds-p-left_medium slds-col slds-size_2-of-3">
+                        <div class="member-name">
+                            <a href={member.profileURL}>
+                                <p class="ITC_font">{member.psc_Team_Member__r.Name}</p>
+                            </a>
+                        </div>
+                        <p class="salesforce_font community_role">{member.communityRole}</p>
+                        <p class="salesforce_font community_title">{member.memberRole}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,54 @@
+.THIS.container {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 3px -1px #000000;
+}
+
+.THIS .logo-section {
+    width: 5rem;
+}
+
+.THIS .info-section {
+    width: 100%;
+}
+
+.THIS .icon {
+    width: 50px;
+    height: 50px;
+}
+
+.THIS .type {
+    color: #706E6B;
+}
+
+.THIS .name {
+    width: calc(100% - 100px);
+    font-family: StationWOFFFontsBold;
+    color: #0070D2;
+}
+
+.THIS .description {
+    color: #706E6B;
+    font-weight: 800;  
+}
+
+.THIS .progress {
+    border-radius: 2rem;
+    color: white;
+    float: right;
+}
+
+.THIS .in-progress {
+    background: #036FD2;
+}
+
+.THIS .completed {
+    background: #1D8049;
+    font-family: StationWOFFFontsBold;
+}
+
+.THIS .tag {
+    background: #EFEFEF;
+    color: #706E6B;
+    border-radius: 2rem;
+}

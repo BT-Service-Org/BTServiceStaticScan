@@ -1,0 +1,34 @@
+.badge {
+    padding: 3px 10px 3px 10px;
+    border-radius: 10px;
+    color: #ffffff;
+    background-color: #e0e0e0;
+}
+
+.badge.never {
+    background-color: #e0e0e0;
+}
+
+.badge.low {
+    background-color: #69b34c;
+}
+
+.badge.low-medium {
+    background-color: #acb334;
+}
+
+.badge.medium {
+    background-color: #fab733;
+}
+
+.badge.medium-high {
+    background-color: #ff8e15;
+}
+
+.badge.high {
+    background-color: #ff4e11;
+}
+
+.badge.always {
+    background-color: #ff0d0d;
+}

@@ -1,0 +1,41 @@
+<template>
+    <div>
+        <template if:false={hideTitle}>
+            <div class="title">
+                <div if:true={showEditBuzzWordsButton} class="slds-float_right">
+                    <button onclick={handleEditClick}>Edit</button>
+                </div>
+            </div>
+        </template>
+        <template if:true={noBuzzWords}>
+            <div class="default-message">
+                Not enough information to provide buzz words, yet.
+            </div>
+        </template>
+        <lightning-accordion allow-multiple-sections-open>
+            <template for:each={buzzWords} for:item="buzzWord">
+                <lightning-accordion-section key={buzzWord.id} name={buzzWord.id} label={buzzWord.label}>
+                    <span slot="actions">
+                        <c-solution-finder-probability-badge if:true={buzzWord.probability} probability={buzzWord.probability}></c-solution-finder-probability-badge>
+                    </span>
+                    <span if:true={buzzWord.definition}>
+                        <a if:true={buzzWord.url} href={buzzWord.url} target="_blank" class="slds-float_right slds-m-left_x-small">
+                            <lightning-icon icon-name="utility:new_window" size="x-small" style='opacity: 0.35;'></lightning-icon>
+                        </a>
+                        {buzzWord.definition}
+                        <template for:each={buzzWord.details} for:item="detail">
+                            <div key={detail.url} class="slds-border_top slds-p-top_x-small slds-m-top_x-small">
+                                <a if:true={detail.url} href={detail.url} target="_blank" class="slds-float_right slds-m-left_x-small">
+                                    <lightning-icon icon-name="utility:new_window" size="x-small" style='opacity: 0.35;'></lightning-icon>
+                                </a>
+                                <div if:true={detail.label}>
+                                    {detail.label}
+                                </div>
+                            </div>
+                        </template>
+                    </span>
+                </lightning-accordion-section>
+            </template>    
+        </lightning-accordion>
+    </div>
+</template>

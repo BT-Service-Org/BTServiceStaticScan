@@ -1,0 +1,583 @@
+<apex:page showHeader="false" sidebar="false">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <script src="http://www.developerforce.com/assets/developerforcesite/common/js/jqall.js" type="text/javascript"></script>
+        <script src="http://www.developerforce.com/assets/developerforcesite/common/js/sf.js" type="text/javascript"></script>
+        <link class="user" href="http://www.developerforce.com/assets/developerforcesite/common/css/styles.css" rel="stylesheet" type="text/css" />
+        <link class="user" href="http://www.developerforce.com/assets/developerforcesite/common/css/styles_print.css" rel="stylesheet" type="text/css" />
+        <link class="user" href="http://www.developerforce.com/assets/developerforcesite/common/css/ie6_2.css" rel="stylesheet" type="text/css" />
+
+        <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
+        <meta HTTP-EQUIV="Expires" content="Mon, 01 Jan 1990 12:00:00 GMT" />
+        <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+
+        <title>Services Central</title>
+        
+            <span id="j_id0:j_id1:j_id2:j_id23">
+                <span id="j_id0:j_id1:j_id2:j_id23:j_id24:j_id25"></span>
+            </span>        
+        
+        <style>
+            
+            /* This is needed (from Guillermo) to fix bug in Calendar styling. Otherwise it fails to render properly if titles are short Jon 2009-April-29 */
+            .cal_date {
+                width:0px;
+                height:0px;
+            }
+            
+            .cal_day {
+                margin-top:10px;
+                padding-top:0px;
+            }
+            
+            .cal_month {
+                padding-top:0px;
+                margin-top:20px;
+                padding-bottom:0px;
+                margin-bottom:0px;
+            }
+            
+            * html .separator {
+                padding-bottom:0px;
+                padding-top:0px;
+            }
+            
+            .more_button .container {
+                margin:0;
+            }
+            
+            /* GL: added this to fix the border issue with the Technical Library box in ie7 */
+            #toplevelsidebar_wide  #sidenav .inner {
+                width:225px;
+            }
+            
+            /* GL: Added to decrease the font size in the left navigation menu */
+            #sidenav ul.links li a {
+                font-size:11px;
+            }
+            
+        </style>
+    
+    </head>
+    
+    <body class="" id="">
+    
+        <div class="" id="pagewrap">
+
+            <span id="j_id0:j_id1:j_id2:j_id44">
+    
+                <div id="header">
+                    <a href=""><img alt="servicescentral" class="logo" height="58" src="{!URLFOR($Resource.ProServLogo)}" width="274" /></a>
+        
+                        <div class="nav">
+                            <ul class="button_list">
+                                <li class="join">   
+                                    <a href="https://login.salesforce.com/">
+                                        <span class="button">
+                                            <span class="rightside">Production Login</span>
+                                        </span>
+                                    </a>
+                                </li>
+                
+                                <li class="join">               
+                                    <a href="https://test.salesforce.com/">
+                                        <span class="button">
+                                            <span class="rightside">Sandbox Login</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                </div>
+            </span>
+                    
+            <div id="content">
+            
+                <span id="j_id0:j_id1:j_id2:j_id57">
+                    
+                    <!-- START OF TOP NAVIGATION MENU--->
+                    <div id="nav">
+                        <ul class="sf-menu" id="home">
+                            
+                            <!--RESOURCES MENU --->
+                            <li>
+                                <a class="primary" href=""><span class="nav_text">Resources</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Content</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Demoforce</a></li>
+                                    <li><a href="">Concur</a></li>
+                                    <li class="nav_sep"><a href="">QuickArrow</a></li>
+                                    <li><a href="">New Release Information</a></li>
+                                    <li><a href="">Best Practices</a></li>
+                                    <li><a href="">AppExchange</a></li>
+                                    <li><a href="">IdeaExchange</a></li>
+                                    <li><a href="">Salesforce Blogs</a></li>
+                                    <li class="nav_sep"><a href="">DeveloperForce</a></li>
+                                    <li><a href="">Training &amp; Certification</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Other Tools</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- METHODOLOGY MENU --->
+                            <!-- ADD TRAINING COMPONENT FOR EACH STAGE--->
+                            <li>
+                                <a class="primary" href=""><span class="nav_text">Methodology</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Regional "Kits"</a> <span class="nav_top_right"></span></li>
+                                    <li class="nav_sep"><a href="">All Stages</a></li>
+                                    <li><a href="">PreSales</a></li>
+                                    <li><a href="">Plan</a></li>
+                                    <li><a href="">Analyze</a></li>
+                                    <li><a href="">Design</a></li>
+                                    <li><a href="">Validate</a></li>
+                                    <li><a href="">Deploy</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Complete</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- OPERATIONS MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">Operations</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Process Overview</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Paper/Contract Requirements</a></li>
+                                    <li><a href="">Time Management &amp; Forecasting</a></li>
+                                    <li><a href="">Expense Reporting &amp; Billing</a></li>
+                                    <li><a href="">Opportunity Management</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Project Health Check &amp; Red Accounts</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- HR INFO MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">HR Info</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">New Hire Onboarding</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Employee Career Development</a></li>
+                                    <li><a href="">Expense Reporting &amp; Billing</a></li>
+                                    <li><a href="">Employee Benefits &amp; Payroll</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Employee Rewards &amp; Recognition</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- VERTICALS MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">Verticals</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Financial Services</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Telecommunications</a></li>
+                                    <li><a href="">High Tech</a></li>
+                                    <li><a href="">Manufacturing</a></li>
+                                    <li><a href="">Pharma</a></li>
+                                    <li><a href="">Automotive</a></li>
+                                    <li><a href="">Consumer Goods</a></li>
+                                    <li><a href="">Government</a></li>
+                                    <li><a href="">Higher Education</a></li>
+                                    <li><a href="">Life Sciences</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Media</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- SALES CLOUD MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">Sales Cloud</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Applications/Solutions</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Sample Client Deliverables</a></li>
+                                    <li><a href="">Case Studies</a></li>
+                                    <li><a href="">Customer Success Stories</a></li>
+                                    <li><a href="">Go-Live Announcements</a></li>
+                                    <li><a href="">Services Packages</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Specialty Groups</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- SERVICE CLOUD MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">Service Cloud</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Applications/Solutions</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Sample Client Deliverables</a></li>
+                                    <li><a href="">Case Studies</a></li>
+                                    <li><a href="">Customer Success Stories</a></li>
+                                    <li><a href="">Go-Live Announcements</a></li>
+                                    <li><a href="">Services Packages</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Specialty Groups</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- CUSTOM CLOUD MENU --->
+                            <li>
+                                <a class="primary" href="http://blog.sforce.com/"><span class="nav_text">Custom Cloud</span><span class="nav_primary_top_right"></span></a>
+                                <ul>
+                                    <li class="firstli"><span class="nav_top_left"></span> <a href="">Applications/Solutions</a> <span class="nav_top_right"></span></li>
+                                    <li><a href="">Sample Client Deliverables</a></li>
+                                    <li><a href="">Case Studies</a></li>
+                                    <li><a href="">Customer Success Stories</a></li>
+                                    <li><a href="">Go-Live Announcements</a></li>
+                                    <li><a href="">Services Packages</a></li>
+                                    <li class="lastli"><span class="nav_bot_left"></span> <a class="lasta" href="">Specialty Groups</a> <span class="nav_bot_right"></span></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!-- END OF TOP NAVIGATION MENU--->
+                </span>
+                
+                <div id="toplevelsidebar_wide">
+                
+                    <span id="j_id0:j_id1:j_id2:j_id63">
+
+                        <div id="startbuilding">
+                            <h1>Welcome to Services Central!</h1>
+                                <div class="txt">
+                                    Services Central is a site dedicated to helping Professional Services Consulting find Methodology Documentation &amp; Templates, Operations materials, Packaged Services, New Release info, and other information relevant to Consulting, including info in the Professional Services Content Workspace, other Content workspaces, and salesforce.com sites.
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <!-- CSM LINKS
+                                <div class="listcontainer">
+                                    <ul class="green_arrow_list">
+                                        <li><a href="https://sites.google.com/a/salesforce.com/csm-central/">CSM Central</a></li>
+                                        <li><a href="">CSM Content</a></li>
+                                    </ul>
+                                </div>
+                                -->
+                        </div>
+                        
+                        <span id="startbuilding_bottom"></span>
+                    </span>
+                    
+                    <span id="j_id0:j_id1:j_id2:j_id66">
+
+                        <div id="sidenav">
+    
+                            <div class="inner">
+                                <h1>Technical Library</h1>
+                                    <div class="txt">
+                                        Access reference documentation, core
+                                        articles and tools.
+                                    </div>
+
+                                    <ul class="green_arrow_list">
+                                        <li><a href="">Documentation</a></li>
+                                        <li><a href="">Core Resources</a></li>
+                                        <li><a href="">Tools</a></li>           
+                                    </ul>
+        
+                                <strong class="browseresources">Browse resources by functional category:</strong>
+                            </div>
+
+                            <ul class="links">
+                                <li>
+                                    <a href="">
+                                        <span class="icon integration"></span>
+                                        <span class="h3">Integration</span>
+                                        Web Service APIs and toolkits for integration.                              
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <span class="icon logic"></span>
+                                        <span class="h3">App Logic</span>
+                                        The Apex programming language, workflow and formulas for logic.                             
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <span class="icon userinterface"></span>
+                                        <span class="h3">User Interface</span>
+                                        Visualforce MVC and metadata-drive user interfaces.                             
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">         
+                                        <span class="icon database"></span>
+                                        <span class="h3">Database</span>
+                                        Data persistence, reporting and analytics.                              
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <span class="icon distribution"></span>
+                                        <span class="h3">App Distribution</span>
+                                        Bundle logic, interface and services for distribution.                              
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <span class="icon websites"></span>
+                                        <span class="h3">Websites</span>
+                                        Public websites and apps with optional user registration and login.                             
+                                    </a>
+                                </li>       
+                            </ul>
+                            <span class="bottom"></span>                        
+                        </div>
+                    </span>
+                    
+                    <img alt="force.combutton" src="{!URLFOR($Resource.NoSoftware)}" />
+                </div>
+        
+                <div id="main_homepage">
+                
+                    <div id="blog_cal_wrap">
+                    
+                        <span id="j_id0:j_id1:j_id2:j_id104">
+                            
+                            <span id="j_id0:j_id1:j_id2:j_id104:j_id105:j_id106">
+                                
+                                <div id="blogposts">
+                                    
+                                    <div class="inner">
+                                        <h1>What's New 1</h1>
+                                        
+                                        <h2><a href="">Do you want to learn more about Flash Builder for Force.com?</a></h2>
+                                        <div class="txt">
+                                            <strong>by Nick Simha  (2009-11-02)</strong><br />
+                                            Don't miss the tech talk later today to learn more about building  Rich Internet Applications (RIA) with Adobe Flash Builder for Force.com.
+                                        </div>
+                                        <div class="separator"></div>
+                                        
+                                        <h2><a href="">How do I enable Additional Salesforce Features?</a></h2>
+                                        <div class="txt">
+                                            <strong>by Randy Kidd  (2009-11-02)</strong><br />
+                                            Multi-Currency, Territory Management, Person Accounts and more - learn how to activate these features.
+                                        </div>
+                                        <div class="separator"></div>
+                
+                                        <h2><a href="">Default Task Type to Email when sending an email</a></h2>
+                                        <div class="txt">
+                                            <strong>by Rasmus Mencke  (2009-10-30)</strong><br />
+                                            Overriding the default task type with a simple trigger.
+                                        </div>
+                                        <span class="endofinner"></span>
+            
+                                    </div>
+                                        
+                                    <a class="more_button" href=""><span class="container"><span class="rightside">More What's New</span></span></a>
+        
+                                </div>
+                            </span>
+                        </span>
+                        
+                        <span id="j_id0:j_id1:j_id2:j_id116">
+                        
+                            <div id="calendar">
+                            
+                                <div class="inner">
+                                    <h1>Calendar 1</h1>
+                                    
+                                    <div class="cal_month">
+                                        <h1>November</h1>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>17</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="">ProServ Offsite</a></h2>San Francisco
+                                                </div>
+                                            </div>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>18</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="http://www.salesforce.com/dreamforce/DF09/site/develop/?d=70130000000JEcF">Dreamforce</a></h2>San Francisco
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                    <div class="cal_month">
+                                        <h1>December</h1>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>7</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="https://www.salesforce.com/form/contact/contactme_dev401.jsp">Building Applications with Force.com and Visualforce (Training)</a></h2>New York, San Mateo
+                                                </div>
+                                            </div>
+                                    </div>
+        
+                                    <span class="endofinner"></span>
+                                </div>
+                                
+                                <a class="more_button" href=""><span class="container"><span class="rightside">More Events</span></span></a>
+                            </div>
+                        </span>
+                    </div>
+                    
+                    <span id="j_id0:j_id1:j_id2:j_id87">
+                    
+                        <span id="j_id0:j_id1:j_id2:j_id87:j_id88:j_id89">
+
+                            <div id="featuredcontent">
+                            
+                                <div class="inner">
+                                    <h1>Latest Go-Live Announcements</h1>
+                
+                                    <div class="bundle first_bundle">
+                                        <h2><a href="">Something Cool</a></h2>
+                                        <div class="txt">
+                                            A look at some really cool work by Professional Services.
+                                        </div>
+                                    </div>
+                
+                                    <div class="bundle">
+                                        <h2><a href="">Something Cool</a></h2>
+                                        <div class="txt">
+                                            A look at some really cool work by Professional Services.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bundle last_bundle">
+                                        <h2><a href="">Something Cool</a></h2>
+                                        <div class="txt">
+                                            A look at some really cool work by Professional Services.
+                                        </div>
+                                    </div>
+            
+                                    <span class="endofinner"></span>
+                                </div>
+                                
+                                <a class="more_button" href=""><span class="container"><span class="rightside">More Go-Live Announcements</span></span></a>
+                            </div>
+                        </span>
+                    </span> 
+
+                    <div id="blog_cal_wrap">
+                    
+                        <span id="j_id0:j_id1:j_id2:j_id104">
+                            
+                            <span id="j_id0:j_id1:j_id2:j_id104:j_id105:j_id106">
+                                
+                                <div id="blogposts">
+                                    
+                                    <div class="inner">
+                                        <h1>What's New 2</h1>
+                                        
+                                        <h2><a href="">Do you want to learn more about Flash Builder for Force.com?</a></h2>
+                                        <div class="txt">
+                                            <strong>by Nick Simha  (2009-11-02)</strong><br />
+                                            Don't miss the tech talk later today to learn more about building  Rich Internet Applications (RIA) with Adobe Flash Builder for Force.com.
+                                        </div>
+                                        <div class="separator"></div>
+                                        
+                                        <h2><a href="">How do I enable Additional Salesforce Features?</a></h2>
+                                        <div class="txt">
+                                            <strong>by Randy Kidd  (2009-11-02)</strong><br />
+                                            Multi-Currency, Territory Management, Person Accounts and more - learn how to activate these features.
+                                        </div>
+                                        <div class="separator"></div>
+                
+                                        <h2><a href="">Default Task Type to Email when sending an email</a></h2>
+                                        <div class="txt">
+                                            <strong>by Rasmus Mencke  (2009-10-30)</strong><br />
+                                            Overriding the default task type with a simple trigger.
+                                        </div>
+                                        <span class="endofinner"></span>
+            
+                                    </div>
+                                        
+                                    <a class="more_button" href=""><span class="container"><span class="rightside">More What's New</span></span></a>
+        
+                                </div>
+                            </span>
+                        </span>
+                        
+                        <span id="j_id0:j_id1:j_id2:j_id116">
+                        
+                            <div id="calendar">
+                            
+                                <div class="inner">
+                                    <h1>Calendar 2</h1>
+                                    
+                                    <div class="cal_month">
+                                        <h1>November</h1>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>17</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="">ProServ Offsite</a></h2>San Francisco
+                                                </div>
+                                            </div>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>18</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="http://www.salesforce.com/dreamforce/DF09/site/develop/?d=70130000000JEcF">Dreamforce</a></h2>San Francisco
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                    <div class="cal_month">
+                                        <h1>December</h1>
+                                            <div class="cal_day">
+                                                <div class="cal_date">
+                                                    <h2>7</h2>
+                                                </div>
+                                                <div class="cal_event">
+                                                    <h2><a href="https://www.salesforce.com/form/contact/contactme_dev401.jsp">Building Applications with Force.com and Visualforce (Training)</a></h2>New York, San Mateo
+                                                </div>
+                                            </div>
+                                    </div>
+        
+                                    <span class="endofinner"></span>
+                                </div>
+                                
+                                <a class="more_button" href=""><span class="container"><span class="rightside">More Events</span></span></a>
+                            </div>
+                        </span>
+                    </div>           
+
+
+            
+                </div>
+                
+                <span id="endofcontent"><!--**************--></span>
+            </div>
+            
+            <span id="j_id0:j_id1:j_id2:j_id148">
+
+                <div id="footer">
+                                   
+                    <div class="nav">
+                        <span>United States </span>|<a href="http://www.salesforce.com">1-800-no-software</a>|<a href="http://www.salesforce.com/company/privacy.jsp">Privacy Statement</a>|<a href="http://www.salesforce.com/company/security.jsp">Security Statement</a> <br />
+                    </div>
+             
+                    <div class="fineprint">
+                        <div class="bottom">
+                    
+                            <div class="copyright">
+                                &copy; Copyright 2000-2009 salesforce.com, inc. Web-based Customer Relationship Management (CRM) Software-as-a-Service (SaaS).
+                                <br />
+                                All rights reserved Various trademarks held by their respective owners.
+                            </div>
+                            
+                            <div class="address">
+
+                                Salesforce.com, inc. The Landmark @ One Market, Suite 300, San Francisco, CA, 94105, United States
+                                <br />
+                                General Enquiries: 415-901-7000 | Fax: 415-901-7040 | Sales: 1-800-no-software
+                            </div>
+                    
+                        </div>
+                    </div>
+            
+                </div>
+            </span>
+            
+        </div><!--***********-->       
+
+    </body>
+
+</html>
+
+
+</apex:page>

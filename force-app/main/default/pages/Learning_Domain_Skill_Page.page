@@ -1,0 +1,21 @@
+<apex:page standardController="Learning_Domain_Skill__c" extensions="Learning_Domain_Skill_Extension" >
+
+    <apex:form id="Learning_Domain_Skills_Form" forceSSL="true">
+            <apex:pageMessages id="error"/>
+            <apex:pageBlock title="Skill Information" mode="edit">
+                <apex:pageBlockButtons location="bottom" >
+                    <apex:commandButton action="{!save}" value="Save"/>
+                    <apex:commandButton action="{!cancel}" value="Cancel" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection columns="1"> 
+                <apex:inputField value="{!Learning_Domain_Skill__c.Category__c}" />
+                
+                <apex:inputField value="{!Learning_Domain_Skill__c.Skill__c}" />
+                <apex:inputField value="{!Learning_Domain_Skill__c.Primary_Judge__c}" />                
+                <apex:selectList value="{!Learning_Domain_Skill__c.Candidate_E_Mail_Template__c}">
+                    <apex:selectOptions value="{!templateOptions}"/>
+                </apex:selectList>                      
+            </apex:pageBlockSection> 
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

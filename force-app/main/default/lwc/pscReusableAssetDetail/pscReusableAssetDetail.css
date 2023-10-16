@@ -1,0 +1,253 @@
+.article_detail {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    margin-top: 20px
+}
+
+.article_body {
+    width: 74%;
+}
+
+.article_tags {
+    width: 26%;
+}
+
+.article_page {
+    margin-top: 10px;
+    margin-right: 4%;
+    border: 0.2px solid #CAC3C3;
+    border-radius: 8px;
+    background-color: white;
+    width: 85%;
+    margin: auto;
+
+}
+
+.my-icon {
+    --sds-c-icon-color-foreground-default: #032D60;
+}
+
+.title {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.004em;
+    color: #032D60;
+    text-transform: capitalize;
+}
+
+.summary {
+    color: #032D60;
+    font-size: 21px;
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+
+.publish_date {
+    color: #3E3E3C;
+    font-size: 14px;
+    line-height: 18px;
+
+}
+
+.publish_date:hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.article_published {
+    display: flex;
+    align-items: end;
+}
+
+.article_info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.slds-popover_tooltip {
+    width: max-content;
+    max-width: var(--slds-c-tooltip-sizing-max-width, var(--sds-c-tooltip-sizing-max-width, var(--lwc-sizeMedium, 20rem)));
+    background-color: #0070D2;
+    border: 0;
+    position: absolute;
+    top: -65px;
+    left: -15px;
+    margin-top: 15px;
+    visibility: hidden;
+
+}
+
+.slds-popover__body {
+    padding: 6px 6px;
+}
+
+.publish_date:hover .slds-popover_tooltip {
+    visibility: visible;
+}
+
+.salesforceWay_img img {
+    width: 50%;
+    margin-left: 10px;
+}
+
+.salesforceWay_img:hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.curation_img img {
+    height: 24px;
+}
+
+.curationLevel {
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.curationLevel:hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.curationLevel:hover .slds-popover_tooltip {
+    visibility: visible;
+    font-family: 'ITC Avant Garde Gothic Pro', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.slds-icon_container {
+    margin-right: 10px;
+}
+
+.author {
+    display: flex;
+}
+
+.author span {
+    margin-right: 10px;
+}
+
+.article_header {
+    display: flex;
+    justify-content: space-between;
+    color: #032D60;
+    font-size: 14px;
+    line-height: 33px;
+
+}
+
+.backArrow {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: auto;
+    margin-top: 20px;
+    width: 85%;
+    margin-bottom: 10px;
+}
+
+.backArrow p {
+    font-size: 14px;
+    color: #032D60;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.back_arrow {
+    font-size: 16px;
+    color: #032D60;
+}
+
+.badges {
+    display: inline;
+}
+
+.badge-value {
+    --sds-c-badge-color-background: #EEF4FF;
+}
+
+.icons {
+    display: flex;
+    position: relative;
+}
+
+.article_categories {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background: #CFE9FE;
+    border-radius: 12px;
+}
+
+.article_categories span {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: 100%;
+}
+
+@media screen and (max-width:1024px) {
+    .article_categories span {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .title {
+        font-size: 24px;
+        line-height: 36px;
+    }
+
+    .icons {
+        justify-content: space-between;
+        width: 75px;
+    }
+
+    .article_page {
+        margin: auto;
+        width: 100%;
+
+    }
+
+    .article_published {
+        display: flex;
+        align-items: baseline;
+        flex-direction: column;
+    }
+
+    .article_body {
+        width: 100%;
+    }
+
+    .curationLevel {
+        margin-top: 5px;
+    }
+
+    .article_categories {
+        flex-direction: column;
+    }
+
+    .article_detail {
+        flex-direction: column;
+    }
+
+    .article_tags {
+        width: 100%;
+    }
+
+    .article_categories span {
+        width: 100%;
+    }
+
+    .article_info {
+        flex-direction: column;
+    }
+
+    .author {
+        flex-direction: column;
+    }
+}

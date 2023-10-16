@@ -1,0 +1,131 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="StationindividualProfileController" access="global">  
+    
+    <!--Attributes-->
+    <aura:attribute name="connectedUser" type="User"/>
+    <aura:attribute name="viewMode" type="boolean" default="false"/>
+    <aura:attribute name="updateMode" type="boolean" default="false"/>
+    <aura:attribute name="deleteMode" type="boolean" default="false"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="modalTitle" type="String"/>
+    <aura:attribute name="builderUrl" type="String" default="https://sfservices--bedrockuat--sitestudio.cs8.force.com/sfsites/picasso/core/config/commeditor.jsp"/>
+    <!--Handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="refreshMainPhoto" event="c:The_Station_EventRefreshUserPhoto" action="{!c.refreshMainPhoto}"></aura:handler>
+
+    <lightning:layout multipleRows="true">
+        
+    
+        <!--1 : User Photo -->
+        <lightning:layoutItem size="12" 
+                              smallDeviceSize="12" 
+                              mediumDeviceSize="4" 
+                              largeDeviceSize="3" 
+                              padding="around-small">
+            <lightning:layout multipleRows="false">
+            <lightning:layoutItem class="profilePhoto" padding="around-small" size="11">
+                    <c:The_Station_UserPhoto aura:id="userPhoto"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-align-bottom" padding="around-small" size="1">
+                    <div class="photoMenuButton">
+                        <lightning:buttonMenu alternativeText="Show menu" onselect="{!c.handleSelect}">
+                            <lightning:menuItem value="1" label="View" />
+                            <lightning:menuItem value="2" label="Update" />
+                            <lightning:menuItem value="3" label="Delete" />
+                        </lightning:buttonMenu>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        
+        
+        <!--2 : UserInfo + Community Button -->
+        <lightning:layoutItem size="12" 
+                              smallDeviceSize="12" 
+                              mediumDeviceSize="8" 
+                              largeDeviceSize="9" 
+                              padding="around-small">
+            <lightning:layout multipleRows="true">
+                
+                <!--2.1 : User Infos Section -->
+                <lightning:layoutItem size="12" 
+                                      smallDeviceSize="12" 
+                                      mediumDeviceSize="12" 
+                                      largeDeviceSize="9" 
+                                      padding="around-small">
+                    
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" 
+                                              smallDeviceSize="12" 
+                                              mediumDeviceSize="6" 
+                                              largeDeviceSize="6" 
+                                              padding="around-small">
+                            <div class="slds-tile__title slds-truncate " id="haha" >
+                                <h2>Name</h2>
+                            </div>
+                            <div class="slds-tile__detail BlueColumn">
+                                <h2 class="slds-truncate">{!v.connectedUser.Name}</h2>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" 
+                                              smallDeviceSize="12" 
+                                              mediumDeviceSize="6" 
+                                              largeDeviceSize="6" 
+                                              padding="around-small">
+                            <div class="slds-tile__title slds-truncate">
+                                <h2>Department</h2>
+                            </div>
+                            <div class="slds-tile__detail GreyColumn" >                        
+                                <h2>{!v.connectedUser.Department}</h2>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" 
+                                              smallDeviceSize="12" 
+                                              mediumDeviceSize="6" 
+                                              largeDeviceSize="6" 
+                                              padding="around-small">
+                            <div class="slds-tile__title slds-truncate">
+                                <h2>Email</h2>
+                            </div>
+                            <div class="slds-tile__detail BlueColumn" >
+                                <h2>{!v.connectedUser.Email}</h2>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" 
+                                              smallDeviceSize="12" 
+                                              mediumDeviceSize="6" 
+                                              largeDeviceSize="6" 
+                                              padding="around-small">
+                            <div class="slds-tile__title slds-truncate">
+                                <h2>Job Title</h2>
+                            </div>
+                            <div class="slds-tile__detail GreyColumn" >
+                                <h2>{!v.connectedUser.Title}</h2>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+
+                <!--2.2 : Community Builder Button -->
+                <lightning:layoutItem class="buttonContainer"
+                                      size="12" 
+                                      smallDeviceSize="12" 
+                                      mediumDeviceSize="12" 
+                                      largeDeviceSize="3" 
+                                      padding="around-small">
+                    <lightning:button class="communityBuilderButton" label="Community Builder" title="Community Builder" onclick="{!c.openCommunityBuilder}"/>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+
+        </lightning:layoutItem>        
+    </lightning:layout>
+    
+    <!--[Hidden by default] MODAL: USER PHOTO-->
+    <c:The_Station_ModalUserPhoto viewMode="{!v.viewMode}" 
+                                  updateMode="{!v.updateMode}" 
+                                  deleteMode="{!v.deleteMode}" 
+                                  isModalOpen="{!v.isModalOpen}"    
+                                  modalTitle="{!v.modalTitle}" />
+    <!---->
+    
+</aura:component>

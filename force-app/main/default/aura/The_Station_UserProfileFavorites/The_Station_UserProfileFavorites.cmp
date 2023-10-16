@@ -1,0 +1,20 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" controller="The_Station_ContentFavoriteController" access="global">
+    <aura:attribute name="backgroundColor" type="string" default="Light 1"/>
+    <aura:attribute name="favoriteContentRecords" type="List" default="[]"/>
+    <aura:attribute name="displayAsAccordion" type="boolean" default="true" />
+    <aura:attribute name="runningUser" type="User"/>
+    <aura:attribute name="displayEmptyMessage" type="boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.displayEmptyMessage}">
+            <div>
+                No favorites yet, go create some...
+            </div>
+        <aura:set attribute="else">
+            <aura:iteration var="sp" items="{!v.favoriteContentRecords}" indexVar="index">
+                <c:StationContentPiece contentpiece="{!sp}" backgroundTheme="{!v.backgroundColor}" asAccordion="{!v.displayAsAccordion}" runningUser="{!v.runningUser}"/>
+            </aura:iteration>        
+        </aura:set>
+    </aura:if>
+
+</aura:component>

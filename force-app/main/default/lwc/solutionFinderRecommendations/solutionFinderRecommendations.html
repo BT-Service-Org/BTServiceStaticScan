@@ -1,0 +1,27 @@
+<template>
+    <div>
+        <template if:false={hideTitle}>
+            <div class="title">
+                <div if:true={showEditRecommendationsButton} class="slds-float_right">
+                    <button onclick={handleEditClick}>Edit</button>
+                </div>
+                <a if:true={showCompare} href={compareUrl} target="_blank">
+                    <button onclick={handleCompareClick}>Compare</button>
+                </a>
+            </div>
+        </template>
+        <template if:true={noRecommendations}>
+            <div class="default-message">
+                Not enough information to provide recommendations, yet.
+            </div>
+        </template>
+        <lightning-accordion allow-multiple-sections-open>
+            <template for:each={recommendations} for:item="recommendation">
+                <lightning-accordion-section key={recommendation.id} name={recommendation.id} label={recommendation.solutionLabel}>
+                    <c-solution-finder-recommendation project={project} selected-option={selectedOption} recommendation={recommendation}
+                        onsave={handleSave}></c-solution-finder-recommendation>
+                </lightning-accordion-section>
+            </template>    
+        </lightning-accordion>
+    </div>
+</template>

@@ -1,0 +1,33 @@
+<apex:component controller="RecentTeamsMemberJoinedController">
+    <script>
+		function trunkText(text, len){
+			if(text.length > len){
+				text = text.substring(0, len) + '...';
+			}
+			document.write(text);
+		}    
+    </script>   
+    <div class="box_round forwidget mySmallWidget" style="width: 216px;">
+        <div class="header_blue">
+            <div><div><h4>Teams that my Team Mates are joining</h4></div></div>
+        </div>
+        <div class="box_content">
+            <div>
+                <ul class="recentTeams">        
+                <apex:repeat value="{!recentTeams}" var="recent">                 
+                    <li>
+                        <img width="29" src="{!IF(recent.picture == null, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_small.gif'), recent.picture)}" />
+                        <div>
+	                        <a href="/apex/TeamsRedirect?id={!recent.team.Id}"><script>trunkText("{!recent.team.Name}", 23)</script></a><br />
+	                        <span>Created by <a href="/apex/PeopleProfileDisplay?id={!recent.createdby.Id}"><script>trunkText('{!recent.createdby.Name}', 15)</script></a></span>
+	                    </div>
+                    </li>
+                </apex:repeat>
+                </ul>
+            </div>   
+        </div>
+        <div class="bottom_borders">
+            <div><div></div></div>
+        </div>
+    </div>
+</apex:component>

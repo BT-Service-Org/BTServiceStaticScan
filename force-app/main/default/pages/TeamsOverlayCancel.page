@@ -1,0 +1,23 @@
+<apex:page sidebar="false" showHeader="false">
+<div id="cancelOverlay" style="display:none;">
+	  <!-- Title of Dialog -->
+  <div class="modalTitle">
+	  <div class="title">Cancel</div>
+	  <div class="closeEvent">
+		  <a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.BlogsResources, 'images/common/icons/close_dialog.gif')}" alt="Close Window" title="Close Window" /></a>
+	  </div>
+  </div>
+  <!-- Content  -->
+  <div class="modalContent">
+	  <!-- Dialog Body  -->
+	  <div class="modalMessage padding_30px bottom_border_gray">
+		  Are you sure you want to cancel? <br />
+	  </div>
+	  <!--Actions  -->
+	  <div class="actions">
+		  <a href="javascript:history.go(-1); javascript: modal.close();" class="button">Ok</a>
+		  <a href="javascript: modal.close();"  class="button gray">Cancel</a>
+	  </div>
+  </div><!-- END Modal Content -->
+</div>
+</apex:page>

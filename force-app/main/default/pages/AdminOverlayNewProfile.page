@@ -1,0 +1,43 @@
+<apex:page sidebar="false" showHeader="false">
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/newTeamProfile.css')}" />	
+	
+	<div id="newTeamProfile" style="display:none;">
+		<div class="modalTitle">
+			<div class="title">New Team Profile</div>
+			<div class="closeEvent">
+				<a href="Javascript:;" onclick="modal.close();"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/close.gif')}" alt="Close Window" title="Close Window" /></a>
+			</div>
+		</div>
+		<div class="modalContent">
+			<div class="requireLegend"><span class="infoText">= Required Information</span></div>
+			<!-- Dialog Body  -->
+			<div class="modalMessage padding_Tables bottom_border_gray">
+				<table border="0" class="editInfoTables">
+					<tr>
+						<td align="right" class="labelTitle">Team Profile Name</td>
+						<td><div class="requireInput"></div></td>
+						<td>
+							<input id="teamProfileName" class="teamRoleInput" value="" type="text" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right" valign="top" class="labelTitle">
+							<div class="divDesc">Description</div>
+						</td>
+						<td></td>
+						<td>
+							<textarea id="teamProfileDescription" rows="2" cols="40" style="width:350px !important;" class="teamRoleInputTxtArea" type="text">  </textarea>
+						</td>
+					</tr>
+				</table>	
+			</div>
+			<div class="divButtons">
+				<span id="saveProfileEvent">
+					<a href="javascript:;" class="button" onclick="createNewProfile();">Save and continue to setup a profile</a>				
+				</span>
+				<a href="javascript:;" onclick="modal.close();" class="button gray">Cancel</a>
+			</div>
+		</div>
+	</div>
+</apex:page>

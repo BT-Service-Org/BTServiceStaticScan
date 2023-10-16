@@ -1,0 +1,9 @@
+<aura:component>
+    <aura:attribute name="contentId" type="String"/>
+    <aura:attribute name="contentName" type="String"/>
+    <aura:attribute name="contentEvent" type="String"/>
+    <aura:attribute name="refreshValue" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:flow aura:id="ContentRecordEdit" onstatuschange="{!c.handleStatusChange}"/>
+</aura:component>

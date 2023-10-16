@@ -1,0 +1,59 @@
+<aura:component>
+
+	<!--Attributes-->
+	<aura:attribute name="domain" type="Object" access="public"/>
+	<aura:attribute name="assessment" type="Object" access="public"/>
+	<aura:attribute name="interview" type="Object" access="public"/>
+	<aura:attribute name="dimension" type="Object" access="public"/>
+	
+    <aura:attribute name="onSave" type="Aura.Action" access="public"/>
+    <aura:attribute name="onSubmit" type="Aura.Action" access="public"/>
+    <aura:attribute name="onCancel" type="Aura.Action" access="public"/>
+
+    <aura:attribute name="confirmModal" type="Object" access="public"/>
+
+    <!--Handlers-->
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+   	<!--Content-->
+   	<div class="slds-p-top_x-small">
+
+	   	<aura:if isTrue="{!!empty(v.dimension)}">
+
+	   		<!--Path-->
+   			<c:MAPPath data="{!v.domain.dimensions}" selectedItemId="{!v.dimension.id}" 
+   				completed="{!v.interview.completed}" onSelect="{!c.getDimension}"/>
+
+   			<!--Dimension-->
+	   		<c:MAPDimension aura:id="dimension" domain="{!v.domain}" assessment="{!v.assessment}" 
+	   			interview="{!v.interview}" dimension="{!v.dimension}" onNext="{!c.getNextDimension}" 
+	   			onPrevious="{!c.getPreviousDimension}" showQuestion="{!c.showQuestion}" onSave="{!c.saveInterview}" 
+	   			onSubmit="{!c.submitInterview}" onCancel="{!c.cancelInterview}" onClose="{!c.closeInterview}"/>
+
+		</aura:if>
+
+		<!--Confirm Modal-->
+		<aura:if isTrue="{!v.confirmModal.show}">
+		  	<section role="dialog" class="slds-modal slds-fade-in-open">
+		    	<div class="slds-modal__container">
+		      		<header class="slds-modal__header">
+		        		<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"></button>
+	    		        <h2 class="slds-text-heading_medium slds-hyphenate">Confirm</h2>
+		        	</header>
+		        	<div class="slds-modal__content slds-p-around_large">
+		        		<div class="slds-text-heading_medium">
+		        			Do you want to {!v.confirmModal.type} the interview ?
+		        		</div>
+	    			</div>
+	    			<footer class="slds-modal__footer" style="text-align:center !important;">
+	    				<button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">No</button>
+	    				<button class="slds-button slds-button_brand" onclick="{!c.closeModalAndConfirm}">Yes</button>
+	    			</footer>
+	    		</div>
+	    	</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</aura:if>
+
+	</div>
+
+</aura:component>

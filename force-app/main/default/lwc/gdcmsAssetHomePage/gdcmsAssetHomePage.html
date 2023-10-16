@@ -1,0 +1,21 @@
+<template>
+<!--     <div class="sidenav mySidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick={closeNav}
+            style="display: inline-block; padding: 0rem;">&times;</a>
+        <template for:each={navBarElements} for:item="item">
+            <a data-id={item} key={item} onclick={navigate} class="optionsFont">{item}</a>
+        </template>
+    </div> -->
+    <div class="main" style="background-color: white;">
+        <!-- <span style="font-size:30px;cursor:pointer" onclick={openNav}>&#9776;</span> -->
+        <template if:true={isCheckAsset}>
+            <c-gdcms-check-asset-status></c-gdcms-check-asset-status>
+        </template>
+        <template if:true={isAssetAccelerators}>
+            <c-gdcms-show-published-assets></c-gdcms-show-published-assets>
+        </template>
+    </div>
+    <template if:true={isModalOpen_Create}>
+        <c-gdcms-create-asset-form onclose={closeModalCreate}></c-gdcms-create-asset-form>
+    </template>
+</template>

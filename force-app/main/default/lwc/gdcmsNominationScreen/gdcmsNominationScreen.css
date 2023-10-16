@@ -1,0 +1,8 @@
+.tab-active {
+    --sds-c-tabs-scoped-color-text-active: rgb(14, 194, 225);
+}
+
+.disabledScreen {
+    pointer-events: none;
+    opacity: 0.4;
+}

@@ -1,0 +1,261 @@
+/* carousel-container */
+.carousel-container {
+    position: relative;
+    margin: auto;
+}
+
+/* Next & previous buttons */
+.next,
+.prev {
+    cursor: pointer;
+    position: absolute;
+    top: 42%;
+    padding: 7px 14px;
+    color: #0070D2;
+    font-weight: bold;
+    font-size: 15px;
+    transition: 0.6s ease;
+    border-radius: 50%;
+    user-select: none;
+    background-color: white;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    margin-right: 30px;
+
+}
+
+.prev {
+    margin-left: 30px;
+}
+
+.prev:hover {
+    border: 2px solid #0070D2;
+}
+
+.next:hover {
+    border: 2px solid #0070D2;
+}
+
+.carousel-content {
+    position: absolute;
+    left: 4%;
+    top: 0;
+    padding: 50px 35px 40px 35px;
+}
+
+/* carousel-title */
+.carousel-title {
+    font-size: 44px;
+    letter-spacing: -0.012em;
+    color: #032D60;
+
+}
+
+.carousel-description {
+    font-size: 18px;
+    letter-spacing: 0.0012em;
+    color: #032D60;
+    width: 60%;
+    height: auto;
+    margin-bottom: 14px;
+}
+
+/* Fading animation */
+.carousel-image {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+.carousel-image img {
+    width: 100%;
+    max-height: 290px;
+}
+
+.carousel-button {
+    padding: 8px 24px;
+    gap: 10px;
+    background: #0070D2;
+    border-radius: 4px;
+    color: #FFFFFF;
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.02em;
+}
+
+.carousel-button:hover {
+    cursor: pointer;
+}
+.carousel-button:focus {
+    text-decoration: none;
+}
+
+@media screen and (max-width:1336px) {
+
+    .carousel-description {
+        font-size: 17px;
+
+    }
+
+    .carousel-title {
+        font-size: 38px;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 100%;
+
+    }
+
+    .carousel-content {
+        padding: 28px 35px 20px 35px;
+    }
+
+}
+
+@media screen and (max-width:1024px) {
+
+    .carousel-description {
+        font-size: 14px;
+        margin-bottom: 0px;
+
+    }
+
+    .carousel-title {
+        font-size: 24px;
+        line-height: 40px;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 100%;
+
+    }
+
+    .carousel-content {
+        padding: 10px 22px;
+    }
+
+    .carousel-image {
+        width: 100%;
+    }
+    .carousel-image img {
+        height: 170px;
+    }
+
+    .carousel-button {
+        padding: 4px 10px;
+        margin-top: 14px;
+        font-size: 10px;
+    }
+    .next {
+        margin-right: 10px;
+    }
+    .prev {
+        margin-left: 10px;
+    }
+
+
+}
+
+@media screen and (max-width:768px) {
+    .carousel-description {
+        font-size: 10px;
+        margin-bottom: 8px;
+    }
+
+    .carousel-title {
+        font-size: 16px;
+        line-height: 32px;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 100%;
+
+    }
+
+    .carousel-content {
+        padding: 12px 24px;
+    }
+
+    .carousel-image {
+        width: 100%;
+    }
+    .carousel-image img {
+        height: 130px
+    }
+
+    .carousel-button {
+        padding: 2px 8px;
+        margin-top: 0px;
+        font-size: 8px;
+    }
+    .next {
+        right: 0;
+        margin-right: 10px;
+    }
+
+    .prev {
+        margin-left: 10px;
+    }
+
+}
+
+@media screen and (max-width:540px) {
+
+    .carousel-description {
+        font-size: 8px;
+        margin-bottom: 0px;
+    }
+
+    .carousel-title {
+        font-family: 'Salesforce Sans', sans-serif;
+        font-size: 10px;
+        line-height: 22px;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 100%;
+
+    }
+
+    .carousel-content {
+        padding: 8px 16px;
+    }
+
+    .carousel-image {
+        width: 100%;
+    }
+
+    .carousel-image img {
+        height: 110px;
+    }
+
+    .carousel-button {
+        padding: 0px 6px;
+        margin-top: 6px;
+        font-size: 7px;
+    }
+
+    .next {
+        right: 0;
+        margin-right: 10px;
+    }
+
+    .prev {
+        margin-left: 10px;
+    }
+
+    .next,
+    .prev {
+        top: 33%;
+        padding: 0px 6px;
+        font-size: 13px;
+    }
+}

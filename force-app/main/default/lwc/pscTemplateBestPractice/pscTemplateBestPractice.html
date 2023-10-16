@@ -1,0 +1,22 @@
+<template>
+    <div if:true={templateData} class="templates">
+        <template for:each={templateData} for:item="each">
+            <div class="templates-bp-resources" key={each.id}>
+                    <div class="templates-bp-title-icon-row">
+                        <p class="templates-bp-title ITC_font">{each.title}</p>
+                        <div class="templates-bp-icon-badge">
+                            <div class="templates-bp-icon">
+                                <img src={each.fileIconUrl} alt="Tool" />
+                            </div>
+                            <div class="template-link">
+                                <a href={each.linkURL} target="_blank">{each.linkName}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="templates-bp-desc-row">
+                        <p>{each.description}</p>
+                    </div>
+                </div>
+        </template>
+    </div>
+</template>

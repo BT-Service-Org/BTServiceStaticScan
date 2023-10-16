@@ -1,0 +1,18 @@
+<template>
+    <div class="slds-grid">
+        <div class="slds-row slds-size_3-of-4 slds-p-right_small">
+            <lightning-card title="Saved Configurations">
+                <lightning-accordion allow-multiple-sections-open="true">
+                    <lightning-accordion-section for:each={configurationGroups} for:item="configurationGroup" key={configurationGroup.solutionName}
+                            label={configurationGroup.solutionTitle}>
+                        <c-solution-finder-configuration-group key={configurationGroup.solutionName} configuration-group={configurationGroup}
+                            onrefresh={handleRefreshConfigurations}></c-solution-finder-configuration-group>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </lightning-card>
+        </div>
+        <div class="slds-row slds-size_1-of-4 slds-p-left_small">
+            <c-solution-finder-users project={project}></c-solution-finder-users>
+        </div>
+    </div>
+</template>

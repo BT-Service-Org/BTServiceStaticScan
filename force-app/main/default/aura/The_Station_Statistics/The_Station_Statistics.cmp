@@ -1,0 +1,71 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="StationSPController" access="global">
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:dependency resource="force:showToast" type="EVENT" />
+
+    <aura:attribute name="contentGroup" type="Station_Pages__c" />
+    <aura:attribute name="title" type="String" default="Statistics"/>
+    <aura:attribute name="subtitle" type="String" default="subtitle"/>
+    <aura:attribute name="groupList" type="List" default="[]"/>
+    <aura:attribute name="intTitleFontSize" type="String" default="42px"/>
+    <aura:attribute name="intTitleAlignment" type="String" default="Center"/>
+    <aura:attribute name="intSubtitleFontSize" type="String" default="42px"/>
+    <aura:attribute name="intStatFontSize" type="String" default="42px"/>
+    <aura:attribute name="intStatDetailFontSize" type="String" default="42px"/>
+
+    <!-- DESIGN ATTRIBUTES-->
+    <aura:attribute name="backgroundColor" type="String"/>
+    <aura:attribute name="contentGroupId" type="String" default=""/>
+    <aura:attribute name="showGroupTitle" type="Boolean" default="true"/>
+    <aura:attribute name="titleFontSize" type="Integer" default="42" />
+    <aura:attribute name="titleAlignment" type="String" default="Center" />
+    <aura:attribute name="subtitleFontSize" type="Integer" default="28"/>
+    <aura:attribute name="statFontSize" type="Integer" default="92"/>
+    <aura:attribute name="statDetailFontSize" type="Integer" default="22"/>
+    <!--
+    <aura:attribute name="subtitleFontSize" type="Integer"/>
+    
+    <aura:attribute name="statDetailFontSize" type="Integer"/>
+    <aura:attribute name="contentAlignment" type="String"/>
+-->
+    <!-- DESIGN ATTRIBUTES-->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div aura:id="parent">
+        <div class="main-container">
+            <aura:if isTrue="{!v.showGroupTitle}">
+                <div class="main-title" style="{!v.intTitleFontSize + v.intTitleAlignment}">
+                    {!v.title}
+                </div>
+            </aura:if>
+            <div class="main-sub-title" style="{!v.intSubtitleFontSize + v.intTitleAlignment}">
+                {!v.subtitle}
+            </div>
+            <div class="button-container">
+                <button aura:id="feedback-button" class="slds-button buttonTheme-light1" onclick="{!c.onFeedbackButtonFlow}" data-cpID="{!v.contentGroup.Id}" data-cpName="{!v.contentGroup.Name}" data-cpOwnerID="{!v.contentGroup.OwnerId}" data-cpOwner="{!v.contentGroup.OwnerId.Name__c}" type="Statistic">Give Feedback</button>                                    
+            </div>
+            <div class="stat-outer-container slds-col">
+                <div class="slds-grid slds-gutters" style="height:100%;">
+                    <aura:iteration var="stat" items="{!v.groupList}">
+                    <!--<aura:iteration var="stat" items="10,20,30,40,50">-->
+                        <div class="stat-container">
+                            <div class="stat-value" style="{!v.intStatFontSize}" aura:id="stat-value">
+                                {!stat.content.Statistic__c}
+                            </div>
+                            <div class="stat-title" style="{!v.intStatDetailFontSize}">
+                                {!stat.content.Name}
+                            </div>
+                            <div class="stat-sub-title">
+                                {!stat.content.Description__c}
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    
+</aura:component>

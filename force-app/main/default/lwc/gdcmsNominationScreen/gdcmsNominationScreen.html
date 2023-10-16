@@ -1,0 +1,226 @@
+<template>
+    <div class="slds-var-p-around_small diableScreen">
+        <header class="slds-var-p-bottom_medium">
+            <div class="slds-text-align_center slds-text-heading_medium" style="font-weight: bolder;">Reward's
+                and
+                Recognition Nomination</div>
+        </header>
+        <section>
+            <div class="slds-notify slds-notify_alert" role="alert">
+                <span class="slds-assistive-text">info</span>
+                <h2>You can edit the Nomination at any time before the end date. At the end
+                    date the below will be considered as final submission.
+                </h2>
+            </div>
+
+            <div class={diableCSS}>
+                <div class="slds-grid slds-gutters slds-var-p-around_large" style="font-size: larger;">
+                    <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                        <p style="font-weight: bolder;">Start Date : {dates.gdc_ms_QuarterStartDate__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                        <p style="font-weight: bolder;">Quarter : {dates.gdc_ms_Quarter__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12" style="text-align: center;">
+                        <p style="font-weight: bolder;">End Date : {dates.gdc_ms_QuarterEndDate__c}</p>
+                    </div>
+                </div>
+                <div class="slds-var-p-vertical_medium">
+                    <lightning-tabset variant="vertical">
+                        <lightning-tab label="Trailblazer Award">
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-heading_medium slds-text-align_center">Trailblazer's Award
+                                        Nomination</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <label><abbr class="slds-required" title="required">* </abbr>Nominee</label>
+                                    <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c">
+                                        <lightning-messages></lightning-messages>
+                                        <lightning-input-field field-name="gdc_ms_Nominee__c" value={taNomineeId}
+                                            variant="label-hidden" class="nominationTAData"> </lightning-input-field>
+                                    </lightning-record-edit-form>
+
+                                    <!-- <template if:true={taNominee}>
+                                        <c-gdcms-custom-look-up obj-name="gdc_ms_TeamMember__c"
+                                            search-placeholder="Search Nominee" icon-name="standard:user"
+                                            filter={soqlFilter} preselect-value={taNominee}
+                                            onlookupselected={handleNomineeSelection_TA}>
+                                        </c-gdcms-custom-look-up>
+                                    </template>
+                                    <template if:false={taNominee}>
+                                        <c-gdcms-custom-look-up obj-name="gdc_ms_TeamMember__c"
+                                            search-placeholder="Search Nominee" icon-name="standard:user"
+                                            filter={soqlFilter} onlookupselected={handleNomineeSelection_TA}>
+                                        </c-gdcms-custom-look-up>
+                                    </template> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-align_center slds-var-p-around_large">
+                                        <h1 class="slds-text-heading_small">Examples of Nomination
+                                            Criteria for
+                                            Trailblazers Award</h1>
+                                        <br>
+                                        <p>Please choose AT LEAST TWO of the below examples and give a detailed
+                                            description
+                                            for
+                                            each
+                                            example. You may describe more than three but at least three must be filled
+                                            in
+                                            for
+                                            the
+                                            nominee to be considered.
+                                        </p>
+                                        <br>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="DriveGDCGoalsAsPerVision"
+                                        label="Drive GDC goals as per vision" variant="label-inline"
+                                        placeholder={placeholderText.DriveGDCGoalsAsPerVision}
+                                        value={trailblazerAward.gdc_ms_DriveGDCGoalsAsPerVision__c}
+                                        class="nominationTAData"></lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="TeamPlayerRecognisedMentor"
+                                        label="Team player & Recognised mentor" variant="label-inline"
+                                        placeholder={placeholderText.TeamPlayerRecognisedMentor}
+                                        value={trailblazerAward.gdc_ms_TeamPlayerRecognisedMentor__c}
+                                        class="nominationTAData" required>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="MeasurableContributionToGDC"
+                                        label="Measurable contribution to GDC" variant="label-inline"
+                                        placeholder={placeholderText.MeasurableContributionToGDC}
+                                        value={trailblazerAward.gdc_ms_MeasurableContributionToGDC__c}
+                                        class="nominationTAData">
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                <lightning-button variant="brand" name="taSave" label="Save" onclick={handleSave}
+                                    class=" slds-align_absolute-center"></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-tab>
+                        <lightning-tab label="Customer Success Team Award">
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-heading_medium slds-text-align_center">Customer Success Team
+                                        Award
+                                        Nomination</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <label><abbr class="slds-required" title="required">* </abbr>Nominee</label>
+
+                                    <lightning-record-edit-form object-api-name="gdc_ms_Nomination__c">
+                                        <lightning-messages></lightning-messages>
+                                        <lightning-input-field field-name="gdc_ms_SuccessTeamName__c"
+                                            value={csaNomineeId} variant="label-hidden" class="nominationCSAData">
+                                        </lightning-input-field>
+                                    </lightning-record-edit-form>
+
+                                    <template if:false={uploadImage}>
+                                        <div class="slds-p-around_large">
+                                            <lightning-button variant="brand" label="Upload Company Image"
+                                            name="compnayImageButton" onclick={handleCompnayImage}
+                                            class=" slds-align_absolute-center"></lightning-button>
+                                        </div>
+                                    </template>
+                                    <template if:true={uploadImage}>
+                                        <section role="dialog" tabindex="-1" aria-modal="true"
+                                            aria-labelledby="modal-heading-01"
+                                            class="slds-modal slds-fade-in-open slds-modal_medium">
+                                            <div class="slds-modal__container">
+                                                <div class="slds-modal__content slds-p-around_medium"
+                                                    id="modal-content-id-1">
+                                                    <c-gdcms-upload-company-logo record-id={csaNomineeId} show-cancel="false"></c-gdcms-upload-company-logo>
+                                                </div>
+                                                <div class="slds-modal__footer">
+                                                    <button class="slds-button slds-button_neutral"
+                                                        aria-label="Cancel and close" onclick={handleCompnayImage}>Close</button>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                                    </template>
+                                    <!-- <c-gdcms-custom-look-up obj-name="gdc_ms_TeamMember__c"
+                                        search-placeholder="Search Nominee" icon-name="standard:user"
+                                        filter={soqlFilter} preselect-value={csaNominee}
+                                        onlookupselected={handleNomineeSelection_CSA}>
+                                    </c-gdcms-custom-look-up> -->
+
+
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12">
+                                    <div class="slds-text-align_center slds-var-p-around_large">
+                                        <h1 class="slds-text-heading_small">Examples of Nomination
+                                            criteria for Customer Success Award</h1>
+                                        <br>
+                                        <p>Please choose AT LEAST TWO of the below examples and give a detailed
+                                            description
+                                            for
+                                            each example. You may describe more than three but at least three must be
+                                            filled
+                                            in
+                                            for the nominee to be considered.</p>
+                                        <br>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="DemonstrateWinAsTeamCharacteristic_Team"
+                                        label="Demonstrate Win as a team characteristic" variant="label-inline"
+                                        placeholder={placeholderText.DemonstrateWinAsTeamCharacteristic_Team}
+                                        value={customersuccessAward.gdc_ms_WinAsTeamCharacteristic__c}
+                                        class="nominationCSAData" required>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="CustomerAppreciationHighCSATScore"
+                                        label="Customer Appreciation OR High CSAT score" variant="label-inline"
+                                        placeholder={placeholderText.CustomerAppreciationHighCSATScore}
+                                        value={customersuccessAward.gdc_ms_CustomerAppreciationHighCSATScore__c}
+                                        class="nominationCSAData">
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-textarea name="ProjectComplexityValueDelivered"
+                                        label="Project complexity & Value delivered" variant="label-inline"
+                                        placeholder={placeholderText.ProjectComplexityValueDelivered}
+                                        value={customersuccessAward.gdc_ms_ProjectComplexityValueDelivered__c}
+                                        class="nominationCSAData" required>
+                                    </lightning-textarea>
+                                </lightning-layout-item>
+                                <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                    <lightning-layout>
+                                        <lightning-layout-item flexibility="auto" padding="around-small" size="6">
+                                            <!-- <lightning-input name="TeamName" type="text" label="Team Name"
+                                                value={customersuccessAward.gdc_ms_TeamName__c}
+                                                class="nominationCSAData" required>
+                                            </lightning-input> -->
+                                            <lightning-input type="text" name="TeamOwner" label="Team Owner"
+                                                value={customersuccessAward.gdc_ms_TeamOwner__c}
+                                                class="nominationCSAData" required>
+                                            </lightning-input>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item flexibility="auto" padding="around-small" size="6">
+                                            <lightning-input type="number" name="TeamSize" label="Team Size"
+                                                value={customersuccessAward.gdc_ms_TeamSize__c}
+                                                class="nominationCSAData" required>
+                                            </lightning-input>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                                <lightning-button variant="brand" label="Save" name="csaSave" onclick={handleSave}
+                                    class=" slds-align_absolute-center"></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</template>

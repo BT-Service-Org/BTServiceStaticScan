@@ -1,0 +1,32 @@
+.THIS .slds-text-heading_large{
+    color : 00396b;
+    font : font-family;
+}
+
+.THIS .slds-truncate{
+    display: block;
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    height : 50px;
+    display : table-cell;
+    vertical-align : middle;
+    size : token(textSize);
+    color : black;
+    
+}
+
+.THIS .headerColor{
+    color : token(blackTitles);   
+}
+
+.THIS .link {
+    color: #1F45FC;
+}
+
+.THIS .LinkPosition{
+    margin-top : 20px;
+    margin-right : 10px;
+}

@@ -1,0 +1,130 @@
+<apex:page controller="WikiPageHistoryController" id="WikiPageHistory" sidebar="false" >
+	
+	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}" />
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+	<script src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>	
+	<script src="{!URLFOR($Resource.FCKeditor, 'fckeditor/fckeditor.js')}"></script>
+	
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiPage.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiPageHistory.css')}" />
+
+	<div class="BodyPage">
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   HEADER    - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		
+		<div class="header">
+			<!-- Page Section -->
+			<div class="page_section">
+				<div>
+					<h1 class="arial_black">Wiki</h1>
+					<h2 class="arial_black">Pages</h2>
+				</div>		
+			</div>		
+			<!-- Search Box Container (always Centered) -->
+			<div class="searchBox">
+				<div>
+					<div>
+						<!-- Search Form -->
+						<form action="">
+							<div class="search_box_input f_left">
+								<div class="legend">Find Wiki pages</div>
+								<input type="text" value="Enter keyword or name" name="" onclick="ActionSearchInput();" onfocus="setValue('');" onblur="setValue('Enter keyword or name');"/>								
+							</div>
+							<input type="button" value="Search" class="search_btn f_left" /> 								
+						</form>
+						<!-- Advanced Search Link -->
+						<!-- <div class="advanced_search_cont">							
+							<a href="javascript:;" >Advanced Search</a>
+						</div> -->							
+					</div>
+				</div>
+			</div>
+			<!-- Help for this page -->
+			<div class="help">
+				<div>
+					<a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/help_icon.gif')}" alt="" />
+				</div>
+			</div>
+		</div>	
+		<apex:outputpanel id="breadCrumbringPanel">
+			<div style="padding-bottom:22px;" class="breadCrumbring">
+				<apex:outputLabel escape="false" value="{!wikiSiteName} &nbsp {!breadCrumbing}" /><apex:outputLabel value="{!infoWiki.Name}"/><br>
+			</div>
+		</apex:outputpanel>
+		
+		<div style="margin-top:-21px;" class="MainPage">
+			<!-- - - - - - - - - - - - - - - - - - - - - -->	
+			<!-- - - - - - - - 	PAGE BODY  - - - - - - - -->
+			<!-- - - - - - - - - - - - - - - - - - - - - -->
+			
+			<div class="bodyPage" style="height:500px;">	
+				<apex:outPutPanel id="historyPanel">
+					<div class="bodyPageHeaderName">
+						Page: {!infoWiki.Name}
+					</div>
+					<apex:form id="historyForm">
+						<table style="margin-top:5px;" cellpadding="5px" cellspacing="0" class="highPriorityCasesTable">
+							<tr>
+								<th>
+									<apex:commandLink action="{!sortBy}" value="Version" rerender="historyPanel" >
+										<apex:param name="sb" value="V" />
+									</apex:commandLink>
+									&nbsp;
+									<apex:outputpanel id="sortV_down" rendered="{!IF(sortBy == 'V_down',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" />
+									</apex:outputpanel>
+									<apex:outputpanel id="sortV_up" rendered="{!IF(sortBy == 'V_up',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_top.gif')}" />
+									</apex:outputpanel>
+								</th>
+								<th>
+									<apex:commandLink action="{!sortBy}" value="Last Updated By" rerender="historyPanel">
+										<apex:param name="sb" value="LUB" />
+									</apex:commandLink>
+									&nbsp;
+									<apex:outputpanel id="sortLUB_down" rendered="{!IF(sortBy == 'LUB_down',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" />
+									</apex:outputpanel>	
+									<apex:outputpanel id="sortLUB_up" rendered="{!IF(sortBy == 'LUB_up',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_top.gif')}" />
+									</apex:outputpanel>					
+								</th>
+								<th>
+									<apex:commandLink action="{!sortBy}" value="Updated" rerender="historyPanel" >
+										<apex:param name="sb" value="U" />
+									</apex:commandLink>
+									&nbsp;
+									<apex:outputpanel id="sortU_down" rendered="{!IF(sortBy == 'U_down',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" />
+									</apex:outputpanel>
+									<apex:outputpanel id="sortU_up" rendered="{!IF(sortBy == 'U_up',true,false)}">
+										<apex:image styleclass="twistImg" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_top.gif')}" />
+									</apex:outputpanel>
+								</th>
+							</tr>
+							<tr>
+								<td><a  class="Subject" href="javascript:;">Current v3.0</a></td>
+								<td nowrap="true"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />&nbsp;<a href="javascript:;">Richard Rogers</a></td>
+								<td>2/25/2008 4:35 PM</td>
+							</tr>
+							<tr>
+								<td><a  class="Subject" href="javascript:;">v2.0</a></td>
+								<td nowrap="true"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />&nbsp;<a href="javascript:;">Richard Rogers</a></td>
+								<td>2/25/2008 4:34 PM</td>
+							</tr>
+							<tr>
+								<td><a  class="Subject" href="javascript:;">v1.0</a></td>
+								<td nowrap="true"><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" />&nbsp;<a href="javascript:;">Richard Rogers</a></td>
+								<td>2/25/2008 4:33 PM</td>
+							</tr>
+						</table>
+					</apex:form>
+				</apex:outPutPanel>
+			</div>
+		</div>
+	</div>
+</apex:page>

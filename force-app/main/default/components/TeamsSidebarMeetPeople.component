@@ -1,0 +1,61 @@
+<apex:component controller="TeamsSidebarMeetPeopleController">
+<style>
+	div.box_round_blue div.header.auto {
+		
+		height:auto;
+		position:relative;
+		width:100%;
+	}
+	
+	div.box_round_blue div.header.auto div {
+		background:url( {!URLFOR($Resource.TeamsResources, 'images/layout/rc_boxes/lc_header_leftborder_lightblue.png')} ) no-repeat left top;
+		height:auto;
+		width:100%;
+	}
+	
+	div.box_round_blue div.header.auto div div {
+		background:url( {!URLFOR($Resource.TeamsResources, 'images/layout/rc_boxes/rc_header_rightborder_lightblue.png')} ) no-repeat right top;
+		color:#FFFFFF;
+		height:auto;
+		width:100%;
+	}
+	
+	div.box_round_blue div.header.auto div div h3{
+		padding: 6px 0pt 4px 13px;
+	}
+	
+	.box_content .item  {
+		width: 84px;
+		overflow: hidden;
+		position: relative;
+		float: left;
+		margin: 7px 3px 15px;
+		text-align: center;
+		font-size: 11px;
+		
+	}
+</style>
+	<div class="box_round_blue">
+		<!-- Header -->
+		<div class="header auto">
+			<div><div><h3>Meet people from your company</h3></div></div>
+		</div>
+		<!-- Rounded Box Content -->
+		<div class="box_content">
+			<apex:repeat value="{!UserList}" var="item">
+				<div class="item">
+					<div class="pic">
+						<a href="/apex/PeopleProfileDisplay?id={!item.Id}">
+							<img alt="" width="54" height="54" src="{!IF(item.Picture == 'null',(URLFOR($Resource.commonResources, '/images/placeholders/unknownperson.jpg')) ,item.Picture)}"  />
+						</a>
+					</div>
+					<a href="/apex/PeopleProfileDisplay?id={!item.Id}">{!item.name}</a>
+
+					
+				</div>
+			</apex:repeat>
+			
+		</div>
+		<div class="bottom_borders"><div><div></div></div></div> 
+	</div>
+</apex:component>

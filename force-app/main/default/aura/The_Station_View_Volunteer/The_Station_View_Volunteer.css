@@ -1,0 +1,41 @@
+.THIS {
+    background-color: #53668A!important;   
+}
+.THIS .forwardIconStyle svg {
+    border-color:white;/*white: the arrow's border Color*/
+    color: white;  /*white: the arrow's border Color*/ 
+}
+
+.THIS .titleColor {
+    color: white; /*Title Color*/
+}
+.THIS .titleLogo {
+    width: 40px; 
+    height: 40px; 
+    margin-top: 0px;
+}
+
+.THIS .scrollable-content::-webkit-scrollbar {
+    width:12px;     
+}
+.THIS .scrollable-content::-webkit-scrollbar-thumb {
+    
+    background: rgba(235  , 235  , 235 , 0.09); /* transparent */
+    border-radius: 30px;
+}
+
+.THIS .secodTitle{
+    color: white;
+    font-style: gras;
+    font-size : 15px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.THIS .no-data-message{
+    font-size: 15px;
+    color: #1180c0;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 150px;
+}

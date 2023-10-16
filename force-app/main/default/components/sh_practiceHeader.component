@@ -1,0 +1,105 @@
+<apex:component >
+<!-- links to be replaced:
+  1. Image - Locked Flag: http://www.serviceshub.com/wp-content/themes/salesforce-services/images/svg/icon-locked-flag.svg
+  2. Link: http://www.serviceshub.com  
+  3. Image - SF Logo: http://www.serviceshub.com/wp-content/themes/salesforce-services/images/svg/salesforce-logo.svg
+  Dynamic Content: 
+  1. Text - Practice Name
+  2. Text - Practice Title
+  3. Text - Practice information
+  4. Link - to Org62 Chatter Group
+  5. Link - Link to Vidyard overview video
+  6. Image - Hero Image Link
+-->
+  <!-- Attribute Definitions -->
+  <apex:attribute description="" name="practiceName" type="String" required="true"/>
+  <apex:attribute description=""  name="practiceTitle" type="String" required="true"/>
+  <apex:attribute description=""  name="practiceInfo" type="String" required="true"/>
+  <apex:attribute description=""  name="org62ChatterGroupId" type="String" required="true"/>
+  <apex:attribute description=""  name="overviewVideoJS" type="String" required="true"/>
+  <apex:attribute description=""  name="overviewVideoJSFunc" type="String" required="true"/>
+  <apex:attribute description=""  name="heroImage" type="String" required="true"/>
+  <apex:attribute description=""  name="heroImageAlt" type="String" required="true"/>
+  <apex:attribute description=""  name="externalVideoLink" type="String" required="false"/>
+  <apex:attribute description=""  name="practice2" type="sh_Practice__c" required="false"/>
+  <apex:attribute description=""  name="haveTwoHeroImages" type="Boolean" required="true"/>
+  <apex:attribute description="" name="domainVariable" type="String" required="true"/>
+
+ <header class="site-header container-fluid" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+  <div class="wrap">
+    <img class="locked-flag" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/icon-locked-flag.svg')}" alt="Internal Use Only"/>
+    <div class="menu-search-buttons">
+      <div id="search-button" class="header-menu-button search-button"></div>
+      <div id="show-navigation-button" class="header-menu-button show-navigation-button"></div>
+    </div>
+    <div class="container">
+      <a href="{!domainVariable}/sh_home" class="sf-home">
+        <span class="sf-logo-wrapper">
+          <img class="sf-logo" src="{!URLFOR($Resource.ServicesHubContent, 'Content/images/salesforce-logo.svg')}" alt="Salesforce.com" />
+          <span class="sf-logo-accomp-text logo-accomp-text-static">SERVICES</span>
+          <span class="sf-logo-accomp-text sf-logo-accomp-text-white logo-accomp-text" >&nbsp;{!practiceName}</span>        
+        </span>
+      </a>
+    </div>
+    
+    <div id="hero-slider-wrapper" class="hero-slider-wrapper">                                                                                                                       
+     <div class="single-slick-slide">
+      <span class="hero-slide">
+        <span class="hero-slide-content">
+          <span class="container">
+            <span class="row">
+              <div class="col-md-2 col-md-offset-1">
+                <h2 class="wrapper-header">{!practiceTitle}</h2>
+                <p>
+                  {!practiceInfo}<br />
+                  <apex:outputPanel layout="inline" style="font-size:10pt;" rendered="{!(externalVideoLink != null)}">
+                    <a href="{!externalVideoLink}" target="_blank">Click here for external video link</a><br/>
+                  </apex:outputPanel>
+                  <apex:outputPanel layout="none" rendered="{!(org62ChatterGroupId != null)}">
+                    <a href="https://org62.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g={!org62ChatterGroupId}" target="_blank">visit Chatter page here</a>
+                  </apex:outputPanel>
+                </p>
+              </div>
+              <apex:outputPanel layout="block" styleClass="col-md-3 col-md-offset-1" rendered="{!(overviewVideoJS != null)}">
+                <div class="content-link-button">
+                  <script type="text/javascript" id="vidyard_embed_code_{!overviewVideoJS}" src="//play.vidyard.com/{!overviewVideoJS}.js?v=3.1&type=lightbox"></script>
+                  <div class="sf-hero-link-button sf-vidyard-play-target" onclick="{!overviewVideoJSFunc}();">
+                    <div class="sf-hero-link-icon sf-hero-link-icon-play-button"></div>
+                    <p class="content-text">Overview Video</p>
+                  </div>            
+                </div>
+              </apex:outputPanel>
+            </span> <!-- end span class=row -->
+          </span> <!-- end span class=container -->
+        </span> <!-- end span class=hero-slide-content -->
+        <img width="1400" height="842" src="{!URLFOR($Resource.ServicesHubContent, heroImage)}" class="attachment-post-thumbnail wp-post-image" alt="{!heroImageAlt}" />
+      </span> <!-- end span class=hero-slide -->
+     </div> <!-- end div class=single-slick-slide -->                                                                                    
+     <apex:outputPanel layout="block" styleClass="single-slick-slide" rendered="{!haveTwoHeroImages}">
+       <span class="hero-slide">
+         <span class="hero-slide-content">
+           <span class="container">
+             <span class="row">
+               <div class="col-md-2 col-md-offset-1">
+                 <h2>{!practice2.Practice_Title__c}</h2>
+                 <p>{!practice2.Practice_Info__c}</p>
+               </div>
+               <apex:outputPanel layout="block" styleClass="col-md-3 col-md-offset-1" rendered="{!(practice2.Overview_Video_JS__c != null)}">
+                 <div class="content-link-button">
+                   <script type="text/javascript" id="vidyard_embed_code_{!practice2.Overview_Video_JS__c}" src="//play.vidyard.com/{!practice2.Overview_Video_JS__c}.js?v=3.1&type=lightbox"></script>
+                   <div class="sf-hero-link-button sf-vidyard-play-target" onclick="{!practice2.Overview_Video_JS_Function__c}();">
+                     <div class="sf-hero-link-icon sf-hero-link-icon-play-button"></div>
+                     <p class="content-text">Overview Video</p>
+                   </div>            
+                 </div>
+               </apex:outputPanel>
+             </span>
+           </span>
+         </span>
+         <img width="1400" height="842" src="{!URLFOR($Resource.ServicesHubContent, practice2.Hero_Image__c)}" class="attachment-post-thumbnail wp-post-image" alt="{!practice2.Hero_Image__c}" />                                
+       </span>
+      </apex:outputPanel>
+    </div><!-- End div class=hero-slide-wrapper -->
+  </div> <!-- End div class=wrap -->
+ </header>
+</apex:component>

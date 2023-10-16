@@ -1,0 +1,522 @@
+<template>
+    <template if:true={showtablecomp}>
+    <template if:true={myskillsview}>  
+        <template if:true={tableLoadingState}>
+            <lightning-layout>
+                <lightning-layout-item size="4"></lightning-layout-item>
+                <lightning-layout-item size="4" class="slds-m-top_x-large">
+                    
+                    <lightning-progress-bar value={ratedskillcount} size="large" ></lightning-progress-bar>
+                    <div class="slds-text-align_center" style="font-style: italic;" >
+                        <div class="slds-form-element__label">{ratedskillcount} skills rated out of 100 skills max</div>
+                        <br>
+                        <div class="slds-form-element__label">{label.AddSkillsMsg} <a onclick={changeListView}>{label.ClickHereMsg} </a></div>
+                    </div>
+                    
+                    
+                </lightning-layout-item>
+                <lightning-layout-item size="4"></lightning-layout-item>
+            </lightning-layout>
+        </template>
+    </template>
+    <lightning-layout >
+        <template if:false={showmyteam}> 
+            <lightning-layout-item size="3"></lightning-layout-item>
+        </template>
+        <template if:true={showmyteam}> 
+            <lightning-layout-item size="1"></lightning-layout-item>
+        </template>
+        <lightning-layout-item size="2" >
+            <lightning-combobox
+                                name="skill-rating"
+                                label=""
+                                value={searchField}
+                                options={searchFieldOptions}
+                                data-name="searchField"
+                                onchange={handlefilterChange}
+                                class="slds-m-top_large"
+                                variant="label-hidden"
+                                disabled={listViewDisabled}
+                                >
+            </lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size="4">
+            <lightning-input type="search" disabled={listViewDisabled} placeholder="Search.." value={searchterm} onchange={filterListView} class="slds-m-top_large slds-m-right_small slds-m-bottom_small" variant="label-hidden"></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="3"> 
+            <template if:true={showmyteam}> 
+                <c-lwc-multi-lookup iconname="standard:user" include-records={servicesOrgUserIds} objectname="user" labelname="Select User" onselected={handleselectedUsers}></c-lwc-multi-lookup>
+            </template>
+        </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout class="slds-text-align_center slds-m-top_medium slds-m-bottom_medium" >
+        <lightning-layout-item size="4"></lightning-layout-item>
+        <lightning-layout-item size="4" >
+            <template if:false={showmyteam}>  
+                <lightning-button variant="brand" label="Submit" title="Submit" onclick={submit} class="slds-m-left_x-small" disabled={showSubmitbutton}></lightning-button>
+            </template>
+            
+            <template if:true={myskillsview}>  
+                <lightning-button variant="brand" label="Delete" title="Delete" onclick={deleteSkills} class="slds-m-left_x-small" disabled={isDeleteButtonDisabled}></lightning-button>
+            </template>
+            <template if:true={showmyteam}>  
+                <lightning-button variant="brand" data-name="Validate" label="Validate" title="Validate" onclick={validateSkills} class="slds-m-left_x-small" disabled={disableValButton}></lightning-button>
+                
+                <lightning-button variant="brand" data-name="Remove_Validate" label="Remove Validation" title="Remove Validation" onclick={validateSkills} class="slds-m-left_x-small" disabled={disableRemoveValButton}></lightning-button>
+            </template>
+        </lightning-layout-item>
+        <lightning-layout-item size="4" ></lightning-layout-item>
+    </lightning-layout>
+    <template if:false={findskillview}> 
+        <lightning-layout  >
+            <lightning-layout-item size="11">
+            </lightning-layout-item>
+            <lightning-layout-item size="1">
+                <div class=" slds-float_right slds-m-bottom_x-small slds-m-right_xx-small">
+                    <lightning-button-menu alternative-text="Show menu" variant="border-filled" icon-name="utility:settings" menu-alignment="right" >
+                        <lightning-menu-item value="Select Fields to Display" label="Select Fields to Display"  onclick={handleFieldSelection}></lightning-menu-item>
+                        
+                        
+                    </lightning-button-menu></div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+    
+    <div class="slds-scrollable_x" style="background-color:white;height:600px;">
+        <div class="slds-scrollable" style="height:100%;"> 
+            
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <template if:true={showCheckBox}>
+                            <th scope="col" >
+                                <div title="Select">
+                                    <input type="checkbox" 
+                                           data-id="cb1" 
+                                           onchange={allSelected}
+                                           name="checkbox" 
+                                           disabled={disableSelectAllButton}
+                                           class="selectCheckbox" 
+                                           > 
+                                </div>
+                            </th>
+                        </template>
+                        <template if:true={showmyteam}>
+                            <th scope="col">
+                                <div  title="User Name">Name&nbsp;<lightning-helptext content="User Name."></lightning-helptext></div>
+                            </th>
+                        </template>
+                        <template if:true={displayTypeFld}>
+                            <th scope="col">
+                                <div >
+                                    <a title="Type" class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="skillType" >
+                                        Type&nbsp;
+                                        <lightning-helptext content="Highest level of competency in the taxonomy.">
+                                        </lightning-helptext>
+                                        <template if:true={skillTypeSort}>
+                                            <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="skillType"></lightning-icon>
+                                            <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="skillType"></lightning-icon>
+                                        </template>
+                                    </a>
+                                </div>
+                            </th>
+                        </template>
+                        <template if:true={displayCatFld}>
+                            <th scope="col">
+                                <div > <a  title="Category" class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="skillCategory" >
+                                    Category&nbsp; 
+                                    <lightning-helptext content="Measurable skills, abilities and knowledge that identify successful against defined roles within an organisation">
+                                    </lightning-helptext>
+                                    
+                                    <template if:true={skillCategorySort}>
+                                        <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="skillCategory"></lightning-icon>
+                                        <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="skillCategory"></lightning-icon>
+                                    </template>
+                                    </a>
+                                </div>
+                            </th>
+                        </template>
+                        <template if:true={displaySNameFld}> 
+                            <th scope="col">
+                                <div > <a title="Skill Name" class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="skillName" >
+                                    Skill Name&nbsp;
+                                    <lightning-helptext content="The expected employee behavior/knowledge underpinning each Competency.">
+                                    </lightning-helptext>
+                                    <template if:true={skillNameSort}>
+                                        <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="skillName"></lightning-icon>
+                                        <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="skillName"></lightning-icon>
+                                    </template>
+                                    </a>
+                                </div>
+                            </th>
+                        </template>
+                        <template if:true={displayAspFld}>
+                            <template if:false={findskillview}>  
+                                <th scope="col"> 
+                                    <div >  <a title="Skill Rating" class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="aspirationSkill" >
+                                        Aspirational&nbsp;
+                                        <lightning-helptext content={label.asphelptext}>
+                                        </lightning-helptext>
+                                        <template if:true={SkillAspSort}>
+                                            <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="aspirationSkill">
+                                            </lightning-icon>
+                                            <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="aspirationSkill">
+                                                
+                                            </lightning-icon>
+                                        </template>
+                                        </a>
+                                    </div>
+                                </th>
+                            </template>
+                        </template>
+                        <template if:true={displaySkillRatingFld}> 
+                            <th scope="col">
+                                <div >  <a title="Skill Rating" class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="expertiseRating" >
+                                    Skill Rating&nbsp;<lightning-button-icon size="medium" icon-name="utility:description" variant="bare" alternative-text="Skill Rating Description" onclick={openSkillRatingDescriptionModal}></lightning-button-icon>
+                                    <template if:true={expertiseRatingSort}>
+                                        <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="expertiseRating"></lightning-icon>
+                                        <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="expertiseRating"></lightning-icon>
+                                    </template>
+                                    </a>
+                                </div>
+                            </th>
+                        </template>
+                        <template if:true={displaySLastUpdateFld}> 
+                            <template if:true={showCheckBox}>
+                                <th scope="col">
+                                    
+                                    <div>
+                                        
+                                        <a class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="skilllastupdate" >
+                                            Skill Rating Last Update
+                                            <lightning-helptext   content="Indicates the date/time you last rated this skill.">
+                                            </lightning-helptext>
+                                            <template if:true={SkillRatingLastUpdateSort}>
+                                                <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="skilllastupdate">
+                                                </lightning-icon>
+                                                <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="skilllastupdate">
+                                                    
+                                                </lightning-icon>
+                                            </template>
+                                        </a>
+                                        
+                                    </div>
+                                    
+                                </th>
+                            </template>
+                        </template>
+                        <template if:true={displayEVFld}>
+                            <template if:true={showCheckBox}>  
+                                <th  scope="col">
+                                    <div >     
+                                        
+                                        <template if:true={showmyteam}>                 
+                                            <a class="slds-th__action slds-text-link_reset" role="button"  tabindex="0" onclick={sorttableData} name="expertiseCertified" >
+                                                Validated
+                                                <lightning-helptext content="Indicates whether a skill has been validated by your manager, which they have the ability to do within the app. We recommend discussing skills during your quarterly check-in and requesting validation if aligned.">
+                                                </lightning-helptext>
+                                                <template if:true={expertiseCertifiedSort}>
+                                                    <lightning-icon icon-name="utility:arrowup" size="x-small" if:true={validateClmUpBool} name="expertiseCertified">
+                                                    </lightning-icon>
+                                                    <lightning-icon icon-name="utility:arrowdown" size="x-small" if:true={validateClmDWBool} name="expertiseCertified">
+                                                        
+                                                    </lightning-icon>
+                                                </template>
+                                            </a>
+                                            
+                                        </template>
+                                        <template if:false={showmyteam}>  
+                                            
+                                            <div title="Validated">Validated&nbsp;<lightning-helptext content="Indicates whether a skill has been validated by your manager, which they have the ability to do within the app. We recommend discussing skills during your quarterly check-in and requesting validation if aligned."></lightning-helptext></div>
+                                            
+                                        </template>
+                                    </div>
+                                </th>
+                            </template>
+                        </template>
+                    </tr>
+                </thead>
+                
+                
+                <!-- Table body start -->
+                
+                <tbody>
+                    <template if:true={tableLoadingState}>
+                        <template for:each={userSkills} for:item="userSkill" for:index="index">
+                            <tr class="slds-hint-parent inputRows" key={userSkill.id}>
+                                <template if:true={showCheckBox}>
+                                    <td class="slds-col slds-size_1-of-12"> 
+                                        <lightning-input 
+                                                         type="checkbox" 
+                                                         label="checkbox" 
+                                                         data-id={userSkill.skillId}
+                                                         data-userid={userSkill.userId}
+                                                         data-validated={userSkill.expertiseCertified}
+                                                         variant="label-hidden" 
+                                                         name="checkbox" 
+                                                         data-class="selectedcheckbox"
+                                                         class="checkbox"  onchange={changeSelectAll}>           
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                                <template if:true={showmyteam}>
+                                    <th scope="row" data-label="Type" class="slds-col slds-size_2-of-12">
+                                        {userSkill.userName}
+                                    </th>
+                                </template>
+                                <template if:true={displayTypeFld}>
+                                    <th scope="row" data-label="Type" class="slds-col slds-size_2-of-12">
+                                        {userSkill.skillType}
+                                    </th>
+                                </template>
+                                <template if:true={displayCatFld}>
+                                    <td data-label="Category" class="slds-col slds-size_2-of-12">
+                                        {userSkill.skillCategory}
+                                        <template if:true={showCheckBox}>
+                                            <template if:true={userSkill.focusSkill}>
+                                                <span class="circlecls slds-m-left_x-small" style="color: green;">F</span>
+                                            </template>
+                                        </template>  
+                                    </td>
+                                </template>
+                                <template if:true={displaySNameFld}>
+                                    <td data-label="Skill Name" class="slds-col slds-size_2-of-12">
+                                        <div class="slds-truncate">
+                                            
+                                            <a  title="Click here to view the learning resources" role="button"  tabindex="0" onclick={navigateToSkillRelatedListView} name={userSkill.skillViewId} >
+                                                {userSkill.skillName}
+                                                
+                                            </a>                         
+                                            <template if:true={showCheckBox}>
+                                                <template if:true={userSkill.displayATag}>
+                                                    <span class="circlecls slds-m-left_x-small">A</span>
+                                                </template>
+                                            </template>                         
+                                            
+                                            
+                                        </div>
+                                    </td>
+                                </template>
+                                <template if:true={displayAspFld}>  
+                                    <template if:true={myskillsview}> 
+                                        
+                                        <td data-label="Aspirational Skill" class="slds-col slds-size_2-of-12"> 
+                                            <span class="field-tip">
+                                                <lightning-input  disabled={userSkill.disableAspToggle} data-rating={userSkill.expertiseRating} data-index={index} data-id={userSkill.skillId} data-user={userSkill.userId} data-skill={userSkill.skillExternalId} data-name="aspirationalskill" type="toggle"   data-change="false" checked={userSkill.aspirationSkill} onchange={handleChange}  message-toggle-active="" message-toggle-inactive="">
+                                                </lightning-input>
+                                                <template if:false={userSkill.aspirationSkill}> 
+                                                    <span class="tip-content" >
+                                                        <lightning-formatted-rich-text value={aspirationToggleMsg}>
+                                                            
+                                                        </lightning-formatted-rich-text>
+                                                    </span>
+                                                </template> 
+                                            </span> 
+                                        </td>
+                                    </template>
+                                    <template if:true={showmyteam}> 
+                                        
+                                        <td data-label="Aspirational Skill" class="slds-col slds-size_2-of-12"> 
+                                            <span class="field-tip">
+                                                <lightning-input  disabled={showmyteam} data-rating={userSkill.expertiseRating} data-index={index} data-id={userSkill.skillId} data-user={userSkill.userId} data-skill={userSkill.skillExternalId} data-name="aspirationalskill" type="toggle"   data-change="false" checked={userSkill.aspirationSkill} onchange={handleChange}  message-toggle-active="" message-toggle-inactive="">
+                                                </lightning-input>
+                                                <template if:false={userSkill.aspirationSkill}> 
+                                                    <span class="tip-content" >
+                                                        <lightning-formatted-rich-text value={aspirationToggleMsg}>
+                                                            
+                                                        </lightning-formatted-rich-text>
+                                                    </span>
+                                                </template> 
+                                            </span> 
+                                        </td>
+                                    </template>
+                                </template>
+                                <template if:true={displaySkillRatingFld}>
+                                    <td data-label="Skill Rating" class="slds-col slds-size_2-of-12">
+                                        <template if:false={userSkill.skillId}>
+                                            
+                                            <lightning-combobox
+                                                                required="true"
+                                                                name="skill-rating"
+                                                                label=""
+                                                                value={userSkill.expertiseRating}
+                                                                placeholder="Select Rating"
+                                                                options={userSkillOptions}
+                                                                variant="label-hidden"
+                                                                onchange={handleChange}
+                                                                data-id={userSkill.skillId}
+                                                                data-user={userSkill.userId}
+                                                                data-skill={userSkill.skillExternalId}
+                                                                data-aspiration={userSkill.aspirationSkill}
+                                                                data-index={index}
+                                                                data-name="expertiseRating"
+                                                                data-change="false"
+                                                                disabled={showmyteam} >
+                                            </lightning-combobox>
+                                        </template>
+                                        
+                                        <template if:true={userSkill.skillId}>
+                                            
+                                            <lightning-combobox
+                                                                name="skill-rating"
+                                                                label=""
+                                                                value={userSkill.expertiseRating}
+                                                                placeholder="Select Rating"
+                                                                options={userSkillOptionsExisting}
+                                                                variant="label-hidden"
+                                                                onchange={handleChange}
+                                                                data-id={userSkill.skillId}
+                                                                data-user={userSkill.userId}
+                                                                data-skill={userSkill.skillExternalId}
+                                                                data-aspiration={userSkill.aspirationSkill}
+                                                                data-index={index}
+                                                                data-name="expertiseRating"
+                                                                data-change="false"
+                                                                disabled={showmyteam} >
+                                            </lightning-combobox>
+                                        </template>
+                                        
+                                    </td>
+                                </template>
+                                <template if:true={displaySLastUpdateFld}>
+                                    <template if:true={showCheckBox}>
+                                        <td data-label="Skill Rating Last Update" > <!--class={myTeamSkillcheckboxpadding} -->
+                                            <div > {userSkill.skilllastupdate}  <!--class={myTeamSkillcheckboxpaddingcell} -->
+                                            </div>
+                                        </td>
+                                    </template>
+                                </template>
+                                <template if:true={displayEVFld}>
+                                    <template if:true={showCheckBox}>
+                                        <td   style="text-align:center;"  data-label="Expertise Validated" >
+                                            <lightning-input                             
+                                                             data-id={userSkill.skillId}
+                                                             type="checkbox" label="" 
+                                                             checked={userSkill.expertiseCertified}
+                                                             data-class="validatecheckbox"
+                                                             data-change="false"
+                                                             disabled={showCheckBox} >
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                </template>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={tableLoadingState}>
+                        <lightning-spinner alternative-text="Loading" variant="brand" size="large"></lightning-spinner>
+                    </template>
+                </tbody>
+                
+                <!-- Table body End -->
+                
+            </table>
+            
+            <br>
+            <template if:true={showSearchMsg}>
+                <div     style="text-align:center;" > {SkillResultSearchMsg} <a href="#" onclick={changeListView}> Find Skills</a> </div>
+            </template>
+            <template if:true={showAllSkillsSearchMsg}>
+                <div style="text-align:center;" > {skillNoResultMsg}</div>
+            </template>
+            
+        </div>
+    </div>
+    
+    <lightning-layout class="slds-text-align_center slds-m-top_medium" >
+        <lightning-layout-item size="4"></lightning-layout-item>
+        <lightning-layout-item size="4" >
+            <template if:false={showmyteam}>  
+                <lightning-button variant="brand" label="Submit" title="Submit" onclick={submit} class="slds-m-left_x-small" disabled={showSubmitbutton}></lightning-button>
+            </template>
+            <template if:true={myskillsview}>  
+                <lightning-button variant="brand" label="Delete" title="Delete" onclick={deleteSkills} class="slds-m-left_x-small" disabled={isDeleteButtonDisabled}></lightning-button>
+            </template>
+            <template if:true={showmyteam}>  
+                <lightning-button variant="brand" data-name="Validate" label="Validate" title="Validate" onclick={validateSkills} class="slds-m-left_x-small" disabled={disableValButton}></lightning-button>
+                
+                <lightning-button variant="brand" data-name="Remove_Validate" label="Remove Validation" title="Remove Validation" onclick={validateSkills} class="slds-m-left_x-small" disabled={disableRemoveValButton}></lightning-button>
+            </template>
+        </lightning-layout-item>
+        <lightning-layout-item size="4" ></lightning-layout-item>
+    </lightning-layout>
+    <template if:true={modalOpen}>
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal} >
+                            <lightning-icon icon-name="utility:close" size="medium"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                            {modalHeaderH2Text}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-text-align_center" >
+                            <h2>
+                                {modalBodyH2Text}
+                            </h2>
+                            <p>
+                                {modalBodyText}
+                            </p>
+                        </div>
+                        <template if:true={modalBodySkillRatingText}>
+                            <ul>
+                                
+                                <li><span style="font-weight: bold;">1- Entry</span>: (limited awareness) - You have the level of experience gained in a classroom and/or experimental scenarios or as a trainee on-the-job. You are expected to need help when performing this skill.</li>
+                                <li><span style="font-weight: bold;">2- Intermediate</span>: (practical application) - You are able to successfully complete tasks in this competency as requested. Help from an expert may be required from time to time, but you can usually perform the skill independently.</li>
+                                <li><span style="font-weight: bold;">3- Advanced</span>: (applied theory) - You can perform the actions associated with this skill without assistance. </li>
+                                <li><span style="font-weight: bold;">4- Specialist</span>: (go to person for team) You are recognized within your immediate organization as "a person to ask" when difficult questions arise regarding this skill.</li>
+                                <li><span style="font-weight: bold;">5- Expert</span>: (recognized authority) - You are known as a world-class expert in this area. You can educate others, provide guidance, troubleshoot and answer questions related to this area of expertise and the field where the skill is used.</li>
+                            </ul>
+                        </template>
+                        <template if:true={modalBodyTableFields}>
+                            <lightning-dual-listbox name="languages"
+                                                    label=""
+                                                    source-label="Available"
+                                                    selected-label="Selected"
+                                                    options={options}
+                                                    value={_selected}
+                                                    onchange={handleChange1}
+                                                    disable-reordering="true"
+                                                    required-options={requiredOptions}>
+                            </lightning-dual-listbox>
+                        </template>
+                       
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button-group>
+                            <template if:true={showOkbutton}>  
+                               <lightning-button label="Ok" variant="neutral" onclick={closeModal}></lightning-button>
+                            </template>
+                             <template if:true={showConfirmButtonDisabled}>	
+                                <lightning-button label="Add Skills"  variant="neutral" onclick={confirmSkills}></lightning-button>
+                             </template>    
+                            <template if:true={showCancelbutton}> 
+                               <lightning-button label="Cancel" variant="neutral" onclick={closeModal}></lightning-button>
+                            </template>
+                            <template if:true={showConfirmBatch}>
+                                <lightning-button label="Confirm"  variant="neutral" onclick={invokeSkillsBatchJS}></lightning-button>
+                            </template>
+                            
+                            <template if:true={showContinue}>
+                                <lightning-button label="Continue" variant="brand" onclick={confirmSkillDelete} ></lightning-button>
+                            </template>
+                            <template if:true={showValidateContinue}>
+                                <lightning-button label="Continue" variant="brand" onclick={confirmSkillvalidate} ></lightning-button>
+                            </template>
+                            <template if:true={modalBodyTableFields}>
+                                <lightning-button label="Save" variant="brand" onclick={saveFieldSelection} ></lightning-button>
+                            </template>
+                        </lightning-button-group>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <c-skills-modal-popup-component isshowmodal={showLRpopup} onclose={handleModalClosed} parentid={rowskillId}></c-skills-modal-popup-component>
+</template>
+</template>

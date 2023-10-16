@@ -1,0 +1,23 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false">
+
+     <apex:composition template="PlatformAcademyTemplate"> 
+     
+         <apex:define name="mainContent">
+           <div class="hero-unit">
+            <h2>Welcome to the Platform Academy</h2>
+            <p>Congratulations on your nomination/enrollment to the platform academy. We want to make this the 
+            best academy experience and as part of that we would like you to take the weeks leading to the academy
+            to get up to speed on several platform topics. <br/>
+            We have setup this pre-work portal where which is the central repository for all content/video etc. on
+            core platform topics that we will be applying during your onsite academy on October 1st to 3. <br/>
+            Go ahead and click into the various topics and start going through the video/deck etc. Once you feel 
+            you have completed the prework for a topic, we'll have short quiz and also require you to upload a
+            mind-map that explains your understanding. Get started now !!!!</p>
+            <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+          </div>
+         </apex:define>
+     </apex:composition> 
+
+ 
+
+</apex:page>

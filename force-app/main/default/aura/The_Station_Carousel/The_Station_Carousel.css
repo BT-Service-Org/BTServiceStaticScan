@@ -1,0 +1,375 @@
+.THIS input {
+  color: black !important;
+}
+
+.THIS.container-full-width {
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.THIS.backgroundColor-light1 {
+  background-color: #ffffff;
+  color: #21466f;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-light2 {
+  background-color: #f8f8f8;
+  color: #21466f;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark1 {
+  background-color: #54698d !important;
+  color: #ffffff;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS.backgroundColor-dark2 {
+  background-color: #21466f !important;
+  color: #ffffff;
+  position: relative;
+  margin-bottom: -1.5rem;
+}
+
+.THIS .buttonTheme-light1 {
+  padding-left: 20px;
+  padding-right: 20px;
+  /*padding-top:3px;
+  padding-bottom:3px;*/
+  font-weight: bold;
+  background-color: #018eda !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-light2 {
+  padding-left: 20px;
+  padding-right: 20px;
+  /*padding-top:3px;
+  padding-bottom:3px;*/
+  font-weight: bold;
+  background-color: #018eda !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-dark1 {
+  padding-left: 20px;
+  padding-right: 20px;
+  /*padding-top:3px;
+  padding-bottom:3px;*/
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #54698d !important;
+  color: #ffffff;
+}
+
+.THIS .buttonTheme-dark2 {
+  padding-left: 20px;
+  padding-right: 20px;
+  /*padding-top:3px;
+  padding-bottom:3px;*/
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  background-color: #21466f !important;
+  color: #ffffff;
+}
+
+.THIS .slds-button_neutral {
+  /*color: #FFFFFF;*/
+  /*color: var(--languageColor);*/
+  font-weight: bold;
+  border: var(--buttonBorder);
+  background-color: var(--buttonBackground);
+  height: var(--buttonHeight);
+  color: #FFFFFF;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  justify-content: center;
+}
+
+.THIS .slds-button_icon-border {
+  width: var(--buttonHeight);
+  height: var(--buttonHeight);
+  border-width: 2px;
+}
+
+.THIS .main-container {
+  margin-left: 4vw;
+  margin-right: 4vw;
+  margin-bottom: 1.5rem;
+}
+
+.THIS .main-title {
+  margin-left: 50px;
+  margin-right: 50px;
+  background: none;
+  line-height: 2;
+  padding-top: 20px;
+}
+
+.THIS .sub-title {
+  margin-left: 50px;
+  margin-right: 50px;
+  background: none;
+  line-height: 2;
+}
+
+.THIS .column-outer-container {
+  padding-top: 2rem;
+  vertical-align: top;
+  margin-left: 50px;
+  margin-right: 50px;
+  background: none;
+}
+
+.THIS .item-left-padding {
+  padding-left: 1rem;
+}
+
+.THIS .item-left-padding_large {
+  padding-left: 2rem;
+}
+
+.THIS .item-right-padding {
+  padding-right: 1rem;
+}
+
+.THIS .item-right-padding_large {
+  padding-right: 2rem;
+}
+
+.THIS .item-container {
+  background: none;
+  margin-bottom: 4rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.THIS .item-image {
+  border-radius: 4px;
+  background: #ffffff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 6px;
+  position: relative;
+  height: 113px !important;
+  width: 200px !important;
+  margin-top: .5rem !important;
+  margin-bottom: .5rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  /* aspect clamp if needed */
+  display: flex;
+  overflow: hidden;
+}
+
+.THIS .item-image img {
+  max-height: 113px !important;
+  max-width: 200px !important;
+  margin: auto;
+}
+
+.THIS .item-img {
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.THIS .item-copy {
+  background: none;
+}
+
+.THIS .item-title {
+  font-size: 16px;
+  line-height: 1.5;
+  background: none;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.THIS .share-icon {
+  position: absolute;
+  top: -3px;
+  right: -0.25rem;
+  cursor: pointer;
+}
+
+.THIS .item-subtitle {
+  line-height: 30px;
+  letter-spacing: 0.61px;
+  font-size: 22px;
+  font-weight: bold;
+  background: none;
+  margin-bottom: 8px;
+}
+
+.THIS .item-description {
+  font-size: 15px;
+  letter-spacing: 0.56px;
+  line-height: 24px;
+  background: none;
+  margin-bottom: 14px;
+}
+
+.THIS .button-container {
+  background: none;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+
+.THIS .item-richtext-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.THIS .wrapper {
+  width: 100%;
+  text-align: center;
+}
+.THIS .slick-list {
+  height: 260px;
+}
+.THIS .slick-next,
+.THIS .slick-prev {
+  top: 70%;
+}
+.THIS .slick-next {
+  right: -60px;
+}
+.THIS .slick-prev {
+  left: -60px;
+}
+.THIS .carousel {
+  width: 90%;
+  margin: 0px auto;
+}
+.THIS .slick-slide {
+  margin: 10px;
+  height: 180px;
+  width: 200px;
+}
+.THIS .slick-dots {
+  position: relative;
+  bottom: 13px;
+}
+.THIS .slick-next,
+.THIS .slick-prev {
+  height: 40px;
+  width: 40px;
+  z-index: 50;
+}
+.THIS .slick-next::before,
+.THIS .slick-prev::before {
+  font-size: 36px;
+  color: var(--carouselNavigationColor);
+}
+.THIS .slick-dots li button::before {
+  font-size: 12px;
+  color: var(--carouselNavigationColor);
+}
+.THIS .slds-dropdown__item > a {
+  padding: .25rem 0.5rem;
+}
+.THIS .slds-dropdown__item{
+  line-height: 1;
+}
+.THIS .share-button > button {
+  background: transparent;
+  border: none;
+}
+.THIS .share-button > button svg, .THIS .slds-button_icon-more:active .slds-button__icon, .THIS .slds-button_icon-more:hover .slds-button__icon {
+  fill: var(--carouselNavigationColor);
+}
+.THIS .item-title-url {
+  display: inline-block;
+  width: 200px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  height: 80px;
+}
+.THIS .share-button {
+  position: absolute;
+  float: right;
+  top: -3px;
+}
+
+
+
+
+
+
+/* Adding CSS for Unapproved Content */
+.THIS .flag {
+  position: relative;
+  width: 100px;                                                                    
+  right: 0;
+  /*cursor: pointer;*/
+  margin-left:100px;
+}
+
+.THIS .flag-text {
+  z-index: 9;
+  position: absolute;
+  color: white;
+  font-size: .75rem;
+  height: 25px;
+  margin-left: 10px;
+  max-width: 125px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/*
+.THIS .flag:hover .flag-popover {
+  display: block
+}
+*/
+.THIS .flag-popover {
+max-width: 190px;
+margin-top: 15px;
+background: #16315F;
+color: #FFFFFF;
+display: none;                                                                        
+}
+
+.THIS .shape {
+  width: 90px;
+  height: 25px;
+  right:0;
+  background-color: #66AB48;
+  position: absolute;
+  z-index: 9;
+  display: inline-block;
+}
+
+.THIS .shape::after {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-top: 25px solid #66AB48;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}
+
+.THIS .shape::before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-bottom: 25px solid #66AB48;
+  border-left: 25px solid transparent;
+  position: absolute;
+  left: -25px;
+}

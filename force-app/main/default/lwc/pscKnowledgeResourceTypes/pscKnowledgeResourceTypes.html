@@ -1,0 +1,22 @@
+<template>
+    <template if:true={KnowledgeData}>
+        <div class="KnowledgeHeader KnowledgeHeader--big">
+            <img src={KnowledgeData.bannerURL} tabindex="-1" alt={KnowledgeData.pageName}/>
+            <div class="product product--lit">
+                <p >
+                    <a href={KnowledgeData.backNvgnURL} class="backNav ITC_font ">
+                        <span class="back-icon" if:true={KnowledgeData.backNvgnLabel}>&#8592;</span>
+                        <span>{KnowledgeData.backNvgnLabel}</span>
+                    </a>
+                </p>
+                <h1 class="KnowledgeHeader__text ITC_font" tabindex="0" aria-label={KnowledgeData.pageName}>
+                    {KnowledgeData.pageName}
+                </h1>
+                <p class="KnowledgeHeader__title salesforce_font" tabindex="-1">
+                    {KnowledgeData.description}
+                </p>
+            </div>
+        </div>
+        <c-psc-product-resources resources={KnowledgeData.resourceTypes}></c-psc-product-resources>
+    </template>
+</template>

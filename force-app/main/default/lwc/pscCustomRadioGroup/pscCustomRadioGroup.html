@@ -1,0 +1,23 @@
+<template>
+    <template if:true={field.required}>
+        <abbr title="required" class="slds-required">*</abbr>
+    </template>
+    <label for={field.fieldName} class="slds-m-top_small labelClass">{field.fieldLabel}</label>
+    <template for:each={options} for:item="option" for:index="index">
+        <template if:false={option.otherInput}>
+            <div key={option.name}>
+                <input type="radio" name={field.fieldName} class="slds-m-around_x-small" value={option.value} onchange={radioChange} required > 
+                <label for={field.fieldName} class="slds-m-top_small labelClass">{option.label}</label>
+            </div>
+        </template>
+        <template if:true={option.otherInput}>
+            <div class="slds-grid" key={option.name}>
+                <div class="slds-size_1-of-6">
+                    <input type="radio" name={field.fieldName} class="slds-m-around_x-small" value={option.value} onchange={radioChange}>
+                    <label for={field.fieldName} class="slds-m-top_small labelClass">{option.label}</label>
+                </div>
+                <lightning-input class="slds-size_5-of-6" data-id="otherInput" type="text" variant="label-hidden" required={otherInputRequired} maxlength="255" disabled={otherInputDisabled} onchange={handleOtherInput}></lightning-input>
+            </div>
+        </template>
+    </template>
+</template>

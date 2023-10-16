@@ -1,0 +1,751 @@
+<apex:page sidebar="false" tabStyle="Team__c">
+		
+		<!-- Javascript -->
+		<script>
+			// Common Resource Url 
+			var globalCommonResourcesPath = '{!URLFOR($Resource.commonResources)}';
+		</script>
+		
+	   	<!-- Prototype + Scriptaculous -->
+		<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"></script>
+		<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"></script>
+		<script type="text/javascript" src="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"></script>
+		
+		<!--  Growl  -->
+		<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/growls/proto-growl/growl.js')}"></script>
+		
+	   	<!-- Common Js for All Sections -->
+		<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"></script>
+	      
+	      <!-- CSS de TS -->
+		<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+		<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+		<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />	
+		<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamMemberList.css')}" />	
+		<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamListContributorMemberView.css')}" />	
+
+
+	<script>	
+		
+		function showDiv() {
+			var popup;
+	        popup = document.getElementById('downList');
+			if(popup.style.display == "block"){				
+				  popup.style.display = "none";		
+			}
+			else{
+				  popup.style.display = "block";				
+			}
+	      
+		}
+		function showDivBottom() {
+			var popup;
+	        popup = document.getElementById('downListBottom');
+			if(popup.style.display == "block"){				
+				  popup.style.display = "none";		
+			}
+			else{
+				  popup.style.display = "block";				
+			}	      
+		}
+		
+		function overList(li){
+	       if(li.className != 'hover'){
+	               li.className = 'hover';
+	       } else {
+	               li.className = '';
+	       }
+		}
+		
+	
+	window.onload=function() {
+				
+		 $('admin').onclick = function() {
+		 	 Growl.Bezel({
+			 	title: 'Teams',			 	
+				text: 'Admin List View',
+				image: '{!URLFOR($Resource.TeamsResources, 'images/layout/pic.gif')}',
+			 	top:'100'
+			 });
+			 
+			 // Hide other Sections and show the chosen one
+			  
+ 			
+			 $('teamsMembersList').style.display = 'none';
+			 $('teamsMembersContributorMemberView').style.display = 'none';
+			 $('teamsListAdminView').style.display = '';			 
+		 	return false;	 	
+		 };
+		 
+		 $('member').onclick = function() {
+		 	 Growl.Bezel({
+			 	title: 'Teams',			 	
+				text: 'Member List View',
+				image: '{!URLFOR($Resource.TeamsResources, 'images/layout/pic.gif')}',
+			 	top:'100'
+			 });
+			 
+			 // Hide other Sections and show the chosen one
+			  
+ 			
+			 $('teamsMembersList').style.display = '';
+			 $('teamsMembersContributorMemberView').style.display = 'none';
+			 $('teamsListAdminView').style.display = 'none';			 
+		 	return false;	 	
+		 };
+		 
+		 $('contributor').onclick = function() {
+		 	 Growl.Bezel({
+			 	title: 'Teams',			 	
+				text: 'Contributor List View',
+				image: '{!URLFOR($Resource.TeamsResources, 'images/layout/pic.gif')}',
+			 	top:'100'
+			 });
+			 
+			 // Hide other Sections and show the chosen one
+			  
+ 			
+			 $('teamsMembersList').style.display = 'none';
+			 $('teamsMembersContributorMemberView').style.display = '';
+			 $('teamsListAdminView').style.display = 'none';			 
+		 	return false;	 	
+		 };
+		 
+	}
+		
+	</script>
+	<div class="toplinks">
+		<a  href="javascript:;" id="admin">Team List Admin</a>&nbsp;-&nbsp;<a href="javascript:;" id="member">Team Member List</a>&nbsp;-&nbsp;<a  href="javascript:;" id="contributor">Team Contributor List</a>
+	</div>
+    <!-- Header -->
+    <div class="header">
+        <!-- Page Section -->
+        <div class="page_section">
+            <div>
+                <h1 class="arial_black">Team</h1>
+                <h2 class="arial_black">Tasks</h2>
+            </div>
+        </div>
+		<!-- Search Box Container (always Centered) -->
+	    <div class="searchBox">
+	        <div>
+	            <div>
+	                <!-- Search Form -->
+	                <form onsubmit="return checkSearchLength();" action="/apex/TeamSearchResult" method="get">
+	                    <div class="search_box_input f_left">
+	                        <div class="legend">
+	                            Find Teams 
+	                        </div>
+	                        <input type="text" value="Enter keyword or name" name="key"  onfocus="setValue('');"  onblur="if(getValue(this)==''){ setValue('Enter keyword or name'); }"/>
+	                    </div><input type="submit" value="Search" class="search_btn f_left"/>
+	                </form><!-- Advanced Search Link -->
+	                <!-- <div class="advanced_search_cont">
+	                    <a href="javascript:;">Advanced Search</a>
+	                </div> -->
+	            </div>
+	       </div>
+	    </div>	
+        <!-- Help for this page -->
+        <div class="help">
+            <div>
+                <a href="javascript:;">Help for this page</a>&nbsp; <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/help_icon.gif')}" alt=""/>
+            </div>
+        </div>
+    </div><!-- Sidebar -->
+    <div class="sidebar">
+        <div class="box_round_blue">
+            <!-- Header -->
+            <div class="header">
+                <div>
+                    <div>
+                        <h3>Team Name 1</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Rounded Box Content -->
+            <div class="box_content">
+                <div class="f_left">
+                    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/pic.gif')}" class="imgLeft"/>
+                </div class="f_right">
+                <div class="text_box_description">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc adipiscing posuere elit ... (<a><span class="text_link_underlineColor">more</span></a>)
+                </div>
+            </div>
+            <div class="bottom_borders">
+                <div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box_round_blue">
+            <!-- Header -->
+            <div class="header">
+                <div>
+                    <div>
+                        <h3>Team Admins</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Rounded Box Content -->
+            <div class="box_content">
+            	<div class="team_detail_marginTop"></div>
+                <!-- Repeat Members -->
+                <div class="team_detail_commentedItemLeft">
+                    <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, 'images/layout/user.jpg')}"/>
+                    <div class="team_detail_commentedItemText">
+                        <a ><span class="text_link_underlineColor">Charly Brown</span></a>
+                        <img class="imgState"src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/offline.gif')}"/>
+                    </div>
+                    <div class='team_detail_commentedItemDesc'>
+                        is working...
+                    </div>
+                </div>
+                <!-- Repeat Members  -->
+                <div class="team_detail_commentedItemLeft">
+                    <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, 'images/layout/user.jpg')}"/>
+                    <div class="team_detail_commentedItemText">
+                        <a href="#"><span class="text_link_underlineColor">Charly Brown</span></a>
+                        <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+                    </div>
+                    <div class='team_detail_commentedItemDesc'>
+                        is working...
+                    </div>
+                </div>
+                <!-- Repeat Members  -->
+                <div class="team_detail_commentedItemLeft">
+                    <img class="imgSmallLeft" src="{!URLFOR($Resource.TeamsResources, 'images/layout/user.jpg')}"/>
+                    <div class="team_detail_commentedItemText">
+                        <a href="#"><span class="text_link_underlineColor">Charly Brown</span></a>
+                        <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/offline.gif')}"/>
+                    </div>
+                    <div class='team_detail_commentedItemDesc'>
+                        is working...
+                    </div>
+                </div>
+                <div style="margin-bottom:15px">
+                </div>
+            </div>
+            <div class="bottom_borders">
+                <div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Div -->
+    <div class="main_cont">
+        <div>
+            <div class="main_cont">
+                <div>
+                     <div class="holder"> 
+                     
+                      	<!-- teamsMembersContributorMemberView -->
+                     	<div id="teamsMembersContributorMemberView" style="display:none;">
+              		 		<table>
+                     		 	<tr>
+                     		 		<td class="teamTitleButton" >Members</td>
+									<td style="padding-left: 100px; width: 300px;" ><a class="blackbtn"><span>Web meeting</span></a><a class="blackbtn"><span>Conference call</span></a></td>
+								</tr>
+							</table>
+							<div class="border_body_top">
+		                    	&nbsp;
+		                   	</div>
+		                   	<table>
+		                   		<tr>
+									<td  width="10px"><span class="imgArrowMargin">&nbsp;</span></td>
+									<td class="member_title_filter" width="90px">Filter</td>  
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<td >
+										<ul class="letterFilter" style="clear:both;position:relative;overflow:hidden;">
+											<li>
+												<a value="ALL" class="AllBtn">ALL</a>
+											</li>
+											<li >
+												<a class="contains"  value="" >A</a>	
+												<a class="contains"  value="" >B</a>
+												<a class="containsBold"  value="" >C</a>	
+												<a class="contains"  value="" >D</a>
+												<a class="contains"  value="" >E</a>	
+												<a class="contains"  value="" >F</a>
+												<a class="containsBold"  value="" >G</a>	
+												<a class="contains"  value="" >H</a>
+												<a class="containsBold"  value="" >I</a>	
+												<a class="contains"  value="" >J</a>
+												<a class="contains"  value="" >K</a>	
+												<a class="contains"  value="" >L</a>	
+												<a class="contains"  value="" >M</a>	
+												<a class="contains"  value="" >N</a>
+												<a class="contains"  value="" >O</a>	
+												<a class="containsBold"  value="" >P</a>
+												<a class="contains"  value="" >Q</a>	
+												<a class="contains"  value="" >R</a>
+												<a class="contains"  value="" >S</a>	
+												<a class="contains"  value="" >T</a>
+												<a class="containsBold"  value="" >U</a>	
+												<a class="containsBold"  value="" >V</a>
+												<a class="containsBold"  value="" >W</a>	
+												<a class="contains"  value="" >X</a>
+												<a class="contains"  value="" >Y</a>	
+												<a class="contains"  value="" >Z</a>								
+											</li>						
+										</ul>									
+									</td>
+								</tr>
+								<tr><td colspan="5" ></td></tr>
+							</table>   
+							<div class="pagination" style="border-top:1px solid #D1D1D1;padding-top:4px;margin:0px 30px 0px 7px;width:782px">
+								<div class="pages">
+									<ul>
+										<li class="prev"><a href="javascript:;">Previous Page</a></li>
+										<li>(1</li>
+										<li>-</li>
+										<li>5)</li>
+										<li class="next">Next Page</li>
+									</ul>								
+								</div>
+							</div>                
+		                    <table cellspacing="0" cellpadding="0" class="pageList">
+		                    	<thead>
+		                            <tr>
+		                            	<td  width="40px"><input type="checkbox" /> </td>
+		                            	<td  colspan="2" class="member_title_description" width="210px">
+		                                    Name
+		                                </td>                               
+										 <td  class="member_title_description" width="110px">
+		                                    Company
+		                                </td>
+		                                <td class="member_title_description" width="170px">
+		                                    Title
+		                                </td>
+		                                <td class="member_title_description" width="100px">
+		                                    Team Profile
+		                                </td>
+									    <td class="member_title_description" width="160px">
+		                                    Team Role
+		                                </td>
+		                            </tr>
+		                        </thead>
+		                        <!-- Description  -->
+		                        <tbody>
+		                            <tr>
+		                            	<td  width="40px"><input type="checkbox" /> </td>
+		                            	<td  width="33px">
+		                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/temp/team.gif')}" alt="" />
+		                                </td>
+		                                <td  class="member_detail_description">
+		                                    <span class="text_link_underlineColor">Bob White </span>
+		                                   <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+										      <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+									</td>                             
+		                                <td class="member_detail_description">
+		                                  ABC .inc
+		                                </td>
+		                                <td  class="member_detail_description">
+		                                    Director, Hosted Contact Management Solutions
+		                                </td>
+										<td class="member_detail_description">
+		                                   Member
+		                                </td>
+										<td class="member_detail_description">
+		                                    tmayne@abc.comOwner of SBDF Implementation
+		                                </td>
+		                            </tr>  
+								<!-- Repeat  --> 
+									  <tr>
+		                            	<td  width="40px"><input type="checkbox" /> </td>
+		                            	<td  width="33px">
+		                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/temp/team.gif')}" alt="" />
+		                                </td>
+		                                <td  class="member_detail_description">
+		                                    <span class="text_link_underlineColor">Bob White </span>
+		                                   <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+										      <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+									</td>                             
+		                                <td class="member_detail_description">
+		                                  ABC .inc
+		                                </td>
+		                                <td  class="member_detail_description">
+		                                    Director, Hosted Contact Management Solutions
+		                                </td>
+										<td class="member_detail_description">
+		                                   Member
+		                                </td>
+										<td class="member_detail_description">
+		                                    tmayne@abc.comOwner of SBDF Implementation
+		                                </td>
+		                            </tr>
+		                            </tbody>
+				                    </table>                          
+				                    
+				                   <div class="pagination">
+											<div class="pages">
+												<ul>
+												<li class="prev"><a href="javascript:;">Previous Page</a></li>
+												<li>(1</li>
+												<li>-</li>
+												<li>5)</li>
+												<li class="next">Next Page</li>
+												</ul>								
+											</div>						
+										</div> 						
+									<div class="divblackbtn" >
+									</div>
+									<div style="padding-left:300px">
+										<a class="blackbtn"><span>Web meeting</span></a><a class="blackbtn"><span>Conference call</span></a>
+									</div>
+                     	</div>
+                     	<!-- TeamsMembersList -->                   
+                     	<div id="teamsMembersList" style="display:none;">
+                     		<table>
+                     		  	<tr>
+                     		  		<td class="teamTitleButton">Members of {Teams Name}</td>
+									<td>
+										<a class="blackbutton">	New Member</a>
+										<a class="blackbutton">	Web Meeting</a>
+										<a class="blackbuttonBig">Conference call</a>								
+									</td>	
+								</tr>
+							</table>
+							<div class="border_body_top">&nbsp;</div> 
+							<table>
+								<tr>
+									<td  width="10px"><span class="imgArrowMargin">&nbsp;</span></td>
+									<td class="member_title_filter" width="90px">Filter</td>  
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<td>
+										<ul class="letterFilter" style="clear:both;position:relative;overflow:hidden;">
+											<li><a value="ALL" class="AllBtn">ALL</a></li>
+											<li>
+												<a class="contains"  value="" >A</a>	
+												<a class="contains"  value="" >B</a>
+												<a class="containsBold"  value="" >C</a>	
+												<a class="contains"  value="" >D</a>
+												<a class="contains"  value="" >E</a>	
+												<a class="contains"  value="" >F</a>
+												<a class="containsBold"  value="" >G</a>	
+												<a class="contains"  value="" >H</a>
+												<a class="containsBold"  value="" >I</a>	
+												<a class="contains"  value="" >J</a>
+												<a class="contains"  value="" >K</a>	
+												<a class="contains"  value="" >L</a>	
+												<a class="contains"  value="" >M</a>	
+												<a class="contains"  value="" >N</a>
+												<a class="contains"  value="" >O</a>	
+												<a class="containsBold"  value="" >P</a>
+												<a class="contains"  value="" >Q</a>	
+												<a class="contains"  value="" >R</a>
+												<a class="contains"  value="" >S</a>	
+												<a class="contains"  value="" >T</a>
+												<a class="containsBold"  value="" >U</a>	
+												<a class="containsBold"  value="" >V</a>
+												<a class="containsBold"  value="" >W</a>	
+												<a class="contains"  value="" >X</a>
+												<a class="contains"  value="" >Y</a>	
+												<a class="contains"  value="" >Z</a>								
+											</li>						
+										</ul>									
+									</td>
+								</tr>
+								<tr><td colspan="5" ></td></tr>
+							</table>   
+							<div class="pagination" style="border-top:1px solid #D1D1D1;padding-top:4px;margin:0px 6px 0px 6px">
+								<div class="pages">
+									<ul>
+									<li class="prev"><a href="javascript:;">Previous Page</a></li>
+									<li>(1</li>
+									<li>-</li>
+									<li>5)</li>
+									<li class="next">Next Page</li>
+									</ul>								
+								</div>
+							</div>                
+                      		<table cellspacing="0" cellpadding="0" class="pageList">
+	                        	<thead>
+		                            <tr>
+		                            	<td class="member_title_descriptionNoUnderline" width="40px">&nbsp;</td>
+		                            	<td class="member_title_description" width="20px">Name</td>
+		                                <td  width="90px"><span class="imgArrow">&nbsp;</span></td>
+										<td colspan="2" class="member_title_description" width="215px">Title</td>
+		                                <td colspan="2" class="member_title_description" width="240px">Team Role</td>
+		                                <td class="member_title_description" width="110px">Business Phone</td>
+									    <td class="member_title_description" width="140px">Email</td>
+		                            </tr>
+		                        </thead>
+		                        <!-- Description  -->
+		                        <tbody>
+		                            <tr>
+		                            	<td style=";padding-right:5px;">
+		                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/user.jpg')}" alt="" />
+		                                </td>
+		                                <td colspan="2" class="member_detail_description">
+		                                   	<span class="member_detail_description_underline">Bob White </span>
+		                                   	<img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+											<img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+										</td>
+										<td colspan="2" class="member_detail_description">
+		                                   Director, Hosted Contact Management Solutions
+		                                </td>
+		                                <td colspan="2" class="member_detail_description">
+		                                    Owner of SFDC implementation
+		                                </td>
+										<td class="member_detail_description">
+		                                    (609) 274-9700
+		                                </td>
+										<td class="member_detail_description_underline">
+		                                    tmayne@abc.com
+		                                </td>
+		                            </tr>
+		                         	<!-- Repeat 2-->
+		 							<tr>
+		                            	<td style=";padding-right:5px;">
+		                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/user.jpg')}" alt="" />
+		                                </td>
+		                                <td colspan="2" class="member_detail_description">
+		                                    <span class="member_detail_description_underline">Bob White </span>
+		                                   <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+										      <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+										
+										</td>
+		                                
+		                                <td colspan="2" class="member_detail_description">
+		                                   Director, Hosted Contact Management Solutions
+		                                </td>
+		                                <td colspan="2" class="member_detail_description">
+		                                    Owner of SFDC implementation
+		                                </td>
+										<td class="member_detail_description">
+		                                    (609) 274-9700
+		                                </td>
+										<td class="member_detail_description_underline">
+		                                    tmayne@abc.com
+		                                </td>
+		                            </tr>
+		                       </tbody>
+		                    </table>                          
+	                    	
+	                   		<div class="pagination">
+								<div class="pages">
+									<ul>
+									<li class="prev"><a href="javascript:;">Previous Page</a></li>
+									<li>(1</li>
+									<li>-</li>
+									<li>5)</li>
+									<li class="next">Next Page</li>
+									</ul>								
+								</div>
+							</div>
+						</div>             	
+                     	
+                     	<!-- TeamsListAdminView -->
+                     	<div id="teamsListAdminView" style="display:none;">
+                     	
+	                        <table><tr><td class="teamTitleButton" >                        	
+								 Members 							
+	                        </td>
+							<td width="500px;">
+								<ul class="buttonList" >
+									<li ><a class="blackbtn"><span>New</span></a></li>	
+									<li ><a class="blackbtn"><span>Remove</span></a></li>	
+									<li  onclick="javascript:showDiv();"   >
+										<a class="blackbtn"><span>Edit Team Profile | &nbsp; <img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/arrowWhite.gif')}"/></span></a>
+										<ul id="downList" style="display:none">
+											<li  onmouseover="javascript:overList(this);"   onmouseout="overList(this);" >Member</li>
+											<li  onmouseover="javascript:overList(this);" onmouseout="overList(this);" >Contributor</li>
+											<li  onmouseover="javascript:overList(this);" onmouseout="overList(this);" style="border-top:1px #999999 solid;">Team Administrator</li>
+										</ul>
+									</li>									
+									<li ><a class="blackbtn"><span>Web meeting</span></a></li>	
+									<li ><a class="blackbtn"><span>Conference call</span></a></li>	
+								</ul>								
+							</td>						
+							</tr>
+							</table> 
+							
+	                        <div class="border_body_top">
+	                            &nbsp;
+	                        </div> 
+							<table><tr>
+									<td  width="10px">
+	                                    <span class="imgArrowMargin">&nbsp;</span>
+	                                </td>
+									<td class="member_title_filter" width="90px">
+	                                    Filter
+	                                </td>  
+									 </tr>
+							</table>
+							<table>
+								<tr>								
+									<td>									
+										<ul class="letterFilter" style="clear:both;position:relative;overflow:hidden;">
+											<li>
+												<a value="ALL" class="AllBtn">ALL</a>
+											</li>
+											<li >
+												<a class="contains"  value="" >A</a>	
+												<a class="contains"  value="" >B</a>
+												<a class="containsBold"  value="" >C</a>	
+												<a class="contains"  value="" >D</a>
+												<a class="contains"  value="" >E</a>	
+												<a class="contains"  value="" >F</a>
+												<a class="containsBold"  value="" >G</a>	
+												<a class="contains"  value="" >H</a>
+												<a class="containsBold"  value="" >I</a>	
+												<a class="contains"  value="" >J</a>
+												<a class="contains"  value="" >K</a>	
+												<a class="contains"  value="" >L</a>	
+												<a class="contains"  value="" >M</a>	
+												<a class="contains"  value="" >N</a>
+												<a class="contains"  value="" >O</a>	
+												<a class="containsBold"  value="" >P</a>
+												<a class="contains"  value="" >Q</a>	
+												<a class="contains"  value="" >R</a>
+												<a class="contains"  value="" >S</a>	
+												<a class="contains"  value="" >T</a>
+												<a class="containsBold"  value="" >U</a>	
+												<a class="containsBold"  value="" >V</a>
+												<a class="containsBold"  value="" >W</a>	
+												<a class="contains"  value="" >X</a>
+												<a class="contains"  value="" >Y</a>	
+												<a class="contains"  value="" >Z</a>								
+											</li>						
+										</ul>									
+									</td>
+								</tr>
+								<tr><td colspan="5" ></td></tr>
+							</table>   
+							<div class="pagination" style="border-top:1px solid #D1D1D1;padding-top:4px;margin:0px 30px 0px 7px;width:782px">
+								<div class="pages">
+									<ul>
+									<li class="prev"><a href="javascript:;">Previous Page</a></li>
+									<li>(1</li>
+									<li>-</li>
+									<li>5)</li>
+									<li class="next">Next Page</li>
+									</ul>								
+								</div>
+							
+							</div>                
+	                      <table cellspacing="0" cellpadding="0" class="pageList">
+	                        <thead>
+	                            <tr>
+	                            	<td  width="30px"><input type="checkbox"  /> </td>
+									<td  colspan="1" class="member_title_description" width="90px">
+	                                    Action
+	                                </td>
+	                            	<td  colspan="1" class="member_title_description" width="160px">
+	                                    Name
+	                                </td>                               
+									 <td  class="member_title_description" width="110px">
+	                                    Company
+	                                </td>
+	                                <td class="member_title_description" width="150px">
+	                                    Title
+	                                </td>
+	                                <td class="member_title_description" width="90px">
+	                                    Team Profile
+	                                </td>
+								    <td class="member_title_description" width="130px">
+	                                    Team Role
+	                                </td>
+	                            </tr>
+	                        </thead>
+	                        <!-- Description  -->
+	                        <tbody>
+	                            <tr>
+	                            	<td  width="40px"><input type="checkbox" class="checkbox" /> </td>
+									 <td  class="member_detail_description">
+	                                    <span class="text_link_underlineColor">Edit</span><span class="explain"></span>&nbsp; | &nbsp;<span class="text_link_underlineColor">Remove </span>
+	                               	</td>    
+	                            	<td class="member_detail_description"  >
+	                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" alt="" />&nbsp;
+	                                
+	                                    <span class="text_link_underlineColor">Bob White </span>
+	                                   <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+									      <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+								</td>                             
+	                                <td class="member_detail_description">
+	                                  ABC .inc
+	                                </td>
+	                                <td  class="member_detail_description">
+	                                    Director, Hosted Contact Management Solutions
+	                                </td>
+									<td class="member_detail_description">
+	                                   Member
+	                                </td>
+									<td class="member_detail_description">
+	                                    Owner of SBDF Implementation
+	                                </td>
+	                            </tr>  
+							     <!-- Repeat -->
+								 
+								     <tr>
+	                            	<td  width="40px"><input type="checkbox" class="checkbox" /> </td>
+									 <td  class="member_detail_description">
+	                                    <span class="text_link_underlineColor">Edit</span><span class="explain"></span>&nbsp; | &nbsp;<span class="text_link_underlineColor">Remove </span>
+	                               	</td>    
+	                            	<td class="member_detail_description"  >
+	                                    <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}" alt="" />&nbsp;
+	                                
+	                                    <span class="text_link_underlineColor">Bob White </span>
+	                                   <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}"/>
+									      <img class="imgState" src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}"/>
+								</td>                             
+	                                <td class="member_detail_description">
+	                                  ABC .inc
+	                                </td>
+	                                <td  class="member_detail_description">
+	                                    Director, Hosted Contact Management Solutions
+	                                </td>
+									<td class="member_detail_description">
+	                                   Member
+	                                </td>
+									<td class="member_detail_description">
+	                                    Owner of SBDF Implementation
+	                                </td>
+	                            </tr>
+                        	</tbody>
+	                    </table>
+	                    <div class="pagination">
+							<div class="pages">
+									<ul>
+									<li class="prev"><a href="javascript:;">Previous Page</a></li>
+									<li>(1</li>
+									<li>-</li>
+									<li>5)</li>
+									<li class="next">Next Page</li>
+									</ul>								
+								</div>						
+							</div>
+						<div class="divblackbtn" >
+						</div>
+						<div class="divblackbtnAdminView">
+								<ul class="buttonList" >
+								<li ><a class="blackbtn"><span>New</span></a></li>	
+								<li ><a class="blackbtn"><span>Remove</span></a></li>	
+								<li  onclick="javascript:showDivBottom();"   >
+										<a class="blackbtn"><span>Edit Team Profile | &nbsp; <img alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/arrowWhite.gif')}"/></span></a>
+										<ul id="downListBottom" style="display:none">
+											<li  onmouseover="javascript:overList(this);"   onmouseout="overList(this);" >Member</li>
+											<li  onmouseover="javascript:overList(this);" onmouseout="overList(this);" >Contributor</li>
+											<li  onmouseover="javascript:overList(this);" onmouseout="overList(this);" style="border-top:1px #999999 solid;">Team Administrator</li>
+										</ul>
+									</li>	
+								<li ><a class="blackbtn"><span>Web meeting</span></a></li>	
+								<li ><a class="blackbtn"><span>Conference call</span></a></li>							
+							</ul>
+						</div>
+					</div>					    
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
+</apex:page>

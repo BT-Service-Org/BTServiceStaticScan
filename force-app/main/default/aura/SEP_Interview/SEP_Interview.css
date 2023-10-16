@@ -1,0 +1,16 @@
+.THIS td, .THIS th{
+	width: 10%;
+}
+.THIS th{
+	text-align: center;
+}
+.THIS .slds-popover_feature, .THIS .slds-popover__body, .THIS .slds-popover__body .slds-text-heading_small{ 
+	padding: 0 !important;
+	margin: 0 !important;
+}
+.THIS .slds-popover__body{ 
+	padding: 5px 10px !important;
+}
+.THIS .close-button{
+	color: white;
+}

@@ -1,0 +1,123 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="StationindividualProfileController" access="global">  
+    <aura:attribute name="cases" type="List" />
+    <aura:attribute name="url" type="String" />
+    <aura:attribute name='recType' type='String' default="The Station Content Request" />
+    <aura:attribute name='contentType' type='String' default="None"/>
+    <aura:attribute name="checked" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:layout>
+        <lightning:layoutItem alignmentBump="left" class="slds-text-heading_medium" >
+            <div class="LinkPosition">
+                <aura:if isTrue="{!v.recType != 'The Station SI Case'}">
+                    <!-- <strong> <a href="{!v.url + '/lightning/o/Case/list?filterName=00B30000003BqUtEAK'}" style="text-decoration: none; text-transform: uppercase;" class="link">All Cases ></a></strong>
+                    <aura:set attribute="else">
+                        <strong> <a href="{!v.url + '/lightning/o/Strategic_Initiative_c__x/list'}" style="text-decoration: none; text-transform: uppercase;" class="link">All Cases ></a></strong>
+                    </aura:set> -->
+                </aura:if>
+                
+            </div>
+        </lightning:layoutItem >
+    </lightning:layout>
+    <div style="float:right; margin-right:30px;">
+    <lightning:input type="toggle" label="Show Closed Cases" name="showclosed" checked="{!v.checked}" onchange="{!c.handleToggleChanged}"/>
+    </div>
+    <div style="height : 20px;margin-top:20px;"></div>
+    <div class="slds-border_left slds-border_right">
+        <table class="slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-table slds-table_fixed-layout" role="grid">
+            <thead>
+                <tr >
+                    <aura:if isTrue="{!and(v.recType != 'The Station SI Case', v.recType != 'SI Case and Content Request')}">
+                        
+                        <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small slds-is-sortable"><div class="slds-truncate headerColor" title="Content Name"><h2>Name</h2></div></th>
+                        <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small slds-is-sortable"><div class="slds-truncate headerColor" title="Description"><h2>Description</h2></div></th>
+                        <th scope="col" class="slds-p-right_xx-small slds-is-sortable"><div class="slds-truncate headerColor" title="Type"><h2>Asset Type</h2></div></th>
+                        <th scope="col" class="slds-p-right_xx-small slds-is-sortable">
+                            <div class="slds-truncate headerColor" title="Case Number"><h2>Case Number</h2></div>
+                        </th>
+                        <th scope="col" class="slds-p-left_xx-small slds-is-sortable"><div class="slds-truncate headerColor" title="Created"><h2>Created</h2></div></th>
+                        <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small slds-is-sortable"><div class="slds-truncate headerColor" title="Status"><h2>Status</h2></div></th>
+                        
+
+                        <aura:set attribute="else">
+                            <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small"><div class="slds-truncate headerColor" title="Strategic Initiative"><h2>Name</h2></div></th>
+                            <!-- <th scope="col" class="slds-p-right_xx-small"><div class="slds-truncate headerColor" title="Type"><h2>Case Type</h2></div></th> -->
+                            <th scope="col" class="slds-p-left_xx-small"><div class="slds-truncate headerColor" title="Asset Type"><h2>Asset Type</h2></div></th>
+                            <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small"><div class="slds-truncate headerColor" title="Team/Program"><h2>Program/Team</h2></div></th>
+                            <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small"><div class="slds-truncate headerColor" title="Created"><h2>Created</h2></div></th>
+                            <th scope="col" class="slds-p-right_xx-small slds-p-left_xx-small"><div class="slds-truncate headerColor" title="Status"><h2>Status</h2></div></th>
+                        </aura:set>
+                    </aura:if>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.cases}" var="case">
+                    <tr>
+                        <!--{!case.wrappedType} | {!v.recType}-->
+                        <aura:if isTrue="{!and(v.recType != 'The Station SI Case', v.recType != 'SI Case and Content Request') }">
+                            <aura:if isTrue="{!case.wrappedType == 'Case'}">
+                                <!-- CASE -->
+                                <td style="max-width: 240px;" class="slds-truncate slds-p-left_x-small slds-p-right_xx-small"><div title="{!case.wcase.Subject}"><a target="_blank" class="link" href="{!v.url +'/lightning/r/Case/'+ case.wcase.Id +'/view'}">{!case.wcase.Subject}</a></div></td>
+                                <td style="width: 500px;" class="slds-truncate slds-p-right_xx-small slds-p-left_xx-small"><div title="{!case.wcase.Subject}">{!case.wcase.Description}</div></td>
+                                <td style="width: 200px;" class="slds-truncate slds-p-right_xx-small slds-p-left_xx-small"><div title="{!case.wcase.Type}">{!case.wcase.Type}</div></td>
+                                <td class="slds-p-right_large slds-truncate" scope="row"><div title="{!case.wcase.CaseNumber}"> {!case.wcase.CaseNumber}</div></td>
+                                <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wcase.CreatedDate}"><lightning:formattedDateTime  value="{!case.wcase.CreatedDate}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/></div></td>
+                                <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wcase.Status}">{!case.wcase.Status}</div></td>
+                                
+                                <aura:set attribute="else">
+                                    <!-- SI -->
+                                    <td style="max-width: 240px;" class="slds-truncate slds-p-left_x-small slds-p-right_xx-small" ><div title="{!case.wsi.Name__c}"><a target="_blank" class="link" href="{!'https://org62.lightning.force.com/lightning/r/Strategic_Initiative_c__x/'+ case.wsi.ExternalId +'/view'}"> {!case.wsi.Name__c}</a></div></td>    
+                                    <td style="width: 500px;" class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wsi.Request_Description__c}">{!case.wsi.Request_Description__c}</div></td>
+                                    <aura:if isTrue="{!case.wsi.Ticket_Number_c__c}">
+                                        <td class="slds-p-right slds-truncate" scope="row"><div title="{!case.wsi.Ticket_Number_c__c}">{!case.wsi.Ticket_Number_c__c}</div></td>
+                                        <aura:set attribute="else">
+                                            <td class="slds-p-right slds-truncate" scope="row"><div title="{!case.wsi.Ticket_Number_c__c}">---</div></td>
+                                        </aura:set>
+                                    </aura:if>
+                                    
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small" ><div title="{!case.wsi.Status_c__c}">{!case.wsi.Status_c__c}</div></td>
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wsi.CreatedDate__c}"><lightning:formattedDateTime  value="{!case.wsi.CreatedDate__c}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/></div></td>
+                                    
+                                </aura:set>
+                            </aura:if>
+
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!case.wrappedType == 'Case'}">
+                                
+                                    <td class="slds-truncate slds-p-right_xx-small slds-p-left_xx-small" ><div title="{!case.wcase.Subject}"><a target="_blank" class="link" href="{!v.url +'/lightning/r/Case/'+ case.wcase.Id +'/view'}"> {!case.wcase.Subject}</a></div></td>
+                                    <td class="slds-p-right_xx-small slds-truncate"><div title="{!case.wcase.TheStation_Request_Type__c}">{!case.wcase.TheStation_Request_Type__c}</div></td>   
+                                    <td style="max-width: 160px;" class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wcase.TheStation_Asset_Type__c}">{!case.wcase.TheStation_Asset_Type__c}</div></td> 
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small" ><div title="{!case.wcase.Status}">{!case.wcase.Status}</div></td>
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wcase.Station_Product__c}">{!case.wcase.Station_Product__c}</div></td>
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wcase.CreatedDate}"><lightning:formattedDateTime  value="{!case.wcase.CreatedDate}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/></div></td>
+
+                                <aura:set attribute="else">
+                                <!-- SI -->
+                                <td class="slds-truncate slds-p-right_xx-small slds-p-left_xx-small" ><div title="{!case.wsi.Name__c}"><a target="_blank" class="link" href="{!'https://org62.lightning.force.com/lightning/r/Strategic_Initiative_c__x/'+ case.wsi.ExternalId +'/view'}"> {!case.wsi.Name__c}</a></div></td>
+                                <!-- <td class="slds-p-right_xx-small slds-truncate"><div title="{!case.wsi.Type_c__c}">{!case.wsi.Type_c__c}</div></td>    -->
+                                <td style="max-width: 160px;" class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wsi.Creative_Deliverables_c__c}">{!case.wsi.Creative_Deliverables_c__c}</div></td> 
+                                <aura:if isTrue="{!and(case.wsi.Team_Program_Area_c__c, case.wsi.Program_Sub_Area_c__c)}">
+                                    <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wsi.Team_Program_Area_c__c + ' ' + case.wsi.Program_Sub_Area_c__c}">{!case.wsi.Team_Program_Area_c__c + ' - ' + case.wsi.Program_Sub_Area_c__c}</div></td>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!case.wsi.Program_Sub_Area_c__c}">
+                                            <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{! case.wsi.Program_Sub_Area_c__c}">{!case.wsi.Program_Sub_Area_c__c}</div></td>
+                                            <aura:set attribute="else">
+                                                <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{! case.wsi.Team_Program_Area_c__c}">{!case.wsi.Team_Program_Area_c__c}</div></td>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:set>
+                                    
+                                </aura:if>
+                                
+                                <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small"><div title="{!case.wsi.CreatedDate__c}"><lightning:formattedDateTime  value="{!case.wsi.CreatedDate__c}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/></div></td>
+                                <td class="slds-truncate slds-p-left_xx-small slds-p-right_xx-small" ><div title="{!case.wsi.Status_c__c}">{!case.wsi.Status_c__c}</div></td>
+
+                                </aura:set>
+                            </aura:if>
+                            </aura:set>
+                        </aura:if>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

@@ -1,0 +1,54 @@
+<template>
+    <p class="salesforce_font skill_group" if:true={groupName}>{groupName}</p>
+    <div class="skills-group">
+        <div for:each={skillsData} for:item="skill" key={skill.label} if:true={skillsData}>
+            <div class="skill-container">
+
+                <p class="salesforce_font skill-label" data-id={skill.skillId} onclick={showModal}> {skill.label}</p>
+                <div class="skill-bar">
+                    <div style="width:60%;height:16px;">
+                        <div style="width:100%;display:flex;">
+                            <div style={skill.curlevelFill} class="currentLevel" if:true={skill.curLevel}><p >{skill.curLevel}</p></div>
+                            <div style={skill.curtargetFill} class="targetLevel" if:true={skill.showTarget}><p >{skill.tgtLevel}</p></div>
+                        </div>
+                    </div>
+                   
+                    <div class="skill-valid">
+                        <span if:true={skill.validated} class="validation_icon">&nbsp;&check;</span>
+                    </div>
+
+                </div>
+
+                <c-psc-modal show-footer="true">
+                    <lightning-spinner alternative-text="Loading" size="small" if:true={showSpinner}></lightning-spinner>
+                    <div if:true={showResources}>
+                       <h2 slot="header" id="modal-heading-01"
+                          class="slds-text-heading_medium slds-hyphenate header ITC_font modal_head">{skillName}
+                       </h2>
+                      <template for:each={learningResources} for:item="resource" if:true={learningResources}>
+                        <div key ={resource.Id} class="learning_resource">
+                            <a href={resource.Learning_Resource__r.Link__c} target="_blank" class="ITC_font">{resource.Learning_Resource__r.Name}</a>
+                            <lightning-formatted-rich-text value={resource.Learning_Resource__r.Description__c}></lightning-formatted-rich-text>
+                            <p><span class="ITC_font" style="color:#3a414a">Duration </span> <span style="color: rgb(115 118 121);
+                                font-weight: 600;">{resource.Learning_Resource__r.Duration__c}</span></p>
+                        </div>
+                      </template>
+                       
+                      
+                    </div>
+
+                    <div if:false={showResources}>
+                        <h2 slot="header" id="modal-heading-02"
+                          class="slds-text-heading_medium slds-hyphenate header ITC_font modal_head">{skillName}
+                       </h2>
+                       <h3>There are no learning resources available for this skill.</h3>
+                    </div>
+                   
+                 </c-psc-modal>
+
+
+
+            </div>
+        </div>
+    </div>
+</template>
